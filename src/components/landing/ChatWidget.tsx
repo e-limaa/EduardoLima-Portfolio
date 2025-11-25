@@ -4,10 +4,10 @@ import { Send, User, Bot, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import exampleImage from 'figma:asset/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png';
+import exampleImage from '../../assets/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png';
 
 // URL do Webhook do n8n - Substitua pela sua URL de produção
-const WEBHOOK_URL = "https://n8n.elimaj.com.br/webhook/40af2497-91cb-4f71-ad2c-d4a61abb5e7a";
+const WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "YOUR_N8N_WEBHOOK_URL_HERE";
 
 interface Message {
   id: string;
@@ -71,18 +71,18 @@ export const ChatWidget = () => {
     try {
       // Verificar se a URL do webhook está configurada
       if (WEBHOOK_URL === "YOUR_N8N_WEBHOOK_URL_HERE") {
-          // Simulação caso o webhook não esteja configurado
-          setTimeout(() => {
-            const botResponse: Message = {
-                id: (Date.now() + 1).toString(),
-                text: "O Chat está configurado para n8n, mas a URL do Webhook ainda não foi definida no código.",
-                sender: "bot",
-                timestamp: new Date(),
-            };
-            setMessages((prev) => [...prev, botResponse]);
-            setIsTyping(false);
-          }, 1000);
-          return;
+        // Simulação caso o webhook não esteja configurado
+        setTimeout(() => {
+          const botResponse: Message = {
+            id: (Date.now() + 1).toString(),
+            text: "O Chat está configurado para n8n, mas a URL do Webhook ainda não foi definida no código.",
+            sender: "bot",
+            timestamp: new Date(),
+          };
+          setMessages((prev) => [...prev, botResponse]);
+          setIsTyping(false);
+        }, 1000);
+        return;
       }
 
       const response = await fetch(WEBHOOK_URL, {
@@ -90,9 +90,9 @@ export const ChatWidget = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
-            message: currentInput,
-            sessionId: sessionId 
+        body: JSON.stringify({
+          message: currentInput,
+          sessionId: sessionId
         }),
       });
 
@@ -101,7 +101,7 @@ export const ChatWidget = () => {
       }
 
       const data = await response.json();
-      
+
       // Tenta extrair a mensagem de diferentes formatos comuns de resposta do n8n
       const botText = data.text || data.message || data.output || data.response || "Desculpe, não entendi a resposta do servidor.";
 
@@ -158,7 +158,7 @@ export const ChatWidget = () => {
       </div>
 
       {/* Messages */}
-      <div 
+      <div
         ref={scrollAreaRef}
         className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
       >
@@ -170,11 +170,10 @@ export const ChatWidget = () => {
             className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${
-                msg.sender === "user"
-                  ? "bg-blue-600 text-white rounded-br-none"
-                  : "bg-white/10 text-white/90 rounded-bl-none border border-white/5"
-              }`}
+              className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.sender === "user"
+                ? "bg-blue-600 text-white rounded-br-none"
+                : "bg-white/10 text-white/90 rounded-bl-none border border-white/5"
+                }`}
             >
               {msg.text.split('\n').map((line, i) => {
                 const trimmed = line.trim();
@@ -193,10 +192,10 @@ export const ChatWidget = () => {
                   const match = trimmed.match(/^(\d+\.)\s+(.*)/);
                   if (match) {
                     return (
-                        <div key={i} className="flex items-start gap-2 ml-1 mb-1">
-                            <span className="font-mono opacity-60 shrink-0">{match[1]}</span>
-                            <span>{match[2]}</span>
-                        </div>
+                      <div key={i} className="flex items-start gap-2 ml-1 mb-1">
+                        <span className="font-mono opacity-60 shrink-0">{match[1]}</span>
+                        <span>{match[2]}</span>
+                      </div>
                     );
                   }
                 }
@@ -206,18 +205,18 @@ export const ChatWidget = () => {
             </div>
           </motion.div>
         ))}
-        
+
         {isTyping && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex justify-start"
           >
-             <div className="bg-white/10 p-3 rounded-2xl rounded-bl-none border border-white/5 flex gap-1 items-center h-10 w-16 justify-center">
-                <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"></span>
-             </div>
+            <div className="bg-white/10 p-3 rounded-2xl rounded-bl-none border border-white/5 flex gap-1 items-center h-10 w-16 justify-center">
+              <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"></span>
+            </div>
           </motion.div>
         )}
       </div>
@@ -230,11 +229,11 @@ export const ChatWidget = () => {
           placeholder="Digite sua mensagem..."
           className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-blue-500/50 focus-visible:border-blue-500/50"
         />
-        <Button 
-            type="submit" 
-            size="icon" 
-            className="bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)]"
-            disabled={!inputValue.trim() || isTyping}
+        <Button
+          type="submit"
+          size="icon"
+          className="bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)]"
+          disabled={!inputValue.trim() || isTyping}
         >
           <Send className="h-4 w-4" />
         </Button>

@@ -253,13 +253,8 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
                 className="flex gap-8 overflow-x-auto pb-8 pt-4 cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
                 style={{
                     scrollbarWidth: 'none',
-                    msOverflowStyle: 'none',
-                    paddingLeft: `${padding}px`,
-                    paddingRight: '16px' // Default right padding, will be overridden by last item's margin if needed, but here we use padding on the container or the item?
-                    // Actually, we want the last item to have padding-right equal to 'padding'.
-                    // But we can't easily set padding-right on the container if we want the scroll to work nicely with snap.
-                    // A common trick is to use a pseudo-element or just padding-right on the container.
-                    // Let's set paddingRight on the container to match paddingLeft.
+                    paddingLeft: '84px',
+                    paddingRight: '16px'
                 }}
             >
                 {loading ? (

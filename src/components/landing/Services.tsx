@@ -3,10 +3,10 @@ import { motion } from "motion/react";
 import { PenTool, Layout, Smartphone, Box } from "lucide-react";
 import { TextReveal } from "./TextReveal";
 import { InteractiveGrid } from "./InteractiveGrid";
-import services3dImage from "figma:asset/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.png";
-import designSystem3dImage from "figma:asset/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.png";
-import mobileExp3dImage from "figma:asset/0fd29a5a04bdb70fda1a96b5dccc2cb95458d271.png";
-import visualStrategy3dImage from "figma:asset/f8254b1f94d7f936b0be7dfd62c50373257cfd12.png";
+import services3dImage from "../../assets/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.png";
+import designSystem3dImage from "../../assets/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.png";
+import mobileExp3dImage from "../../assets/0fd29a5a04bdb70fda1a96b5dccc2cb95458d271.png";
+import visualStrategy3dImage from "../../assets/f8254b1f94d7f936b0be7dfd62c50373257cfd12.png";
 
 const services = [
   {

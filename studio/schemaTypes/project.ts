@@ -8,7 +8,7 @@ export default defineType({
         { name: 'header', title: 'Header & Card Info', options: { collapsible: true, collapsed: false } },
         { name: 'details', title: 'Project Details', options: { collapsible: true, collapsed: false } },
         { name: 'content', title: 'Case Study Content', options: { collapsible: true, collapsed: true } },
-        { name: 'system', title: 'System / Legacy', options: { collapsible: true, collapsed: true } },
+
     ],
     fields: [
         // Header
@@ -112,12 +112,5 @@ export default defineType({
             fieldset: 'content',
         }),
 
-        // System
-        defineField({
-            name: 'id',
-            title: 'Legacy ID',
-            type: 'number',
-            fieldset: 'system',
-        }),
     ],
 })
