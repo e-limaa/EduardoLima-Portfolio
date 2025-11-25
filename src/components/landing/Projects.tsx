@@ -127,6 +127,7 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
     const scrollRef = useRef<HTMLDivElement>(null);
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
+    const [padding, setPadding] = useState(16);
 
     useEffect(() => {
         const loadProjects = async () => {
@@ -143,13 +144,57 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
     }, []);
 
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollLeft = 0;
-        }
+        const updatePadding = () => {
+            const width = window.innerWidth;
+            let containerMaxWidth = width; // Default to full width if < sm
+            let containerPadding = 16; // Default px-4
+
+            if (width >= 1536) { // 2xl
+                containerMaxWidth = 1536;
+                containerPadding = 48; // px-12 (3rem)
+            } else if (width >= 1280) { // xl
+                containerMaxWidth = 1280;
+                containerPadding = 48;
+            } else if (width >= 1024) { // lg
+                containerMaxWidth = 1024;
+                containerPadding = 48;
+            } else if (width >= 768) { // md
+                containerMaxWidth = 768;
+                containerPadding = 16;
+            } else if (width >= 640) { // sm
+                containerMaxWidth = 640;
+                containerPadding = 16;
+            }
+
+            // Calculate left offset of the container
+            // (Viewport Width - Container Max Width) / 2 + Container Padding
+            const calculatedPadding = Math.max(16, (width - containerMaxWidth) / 2 + containerPadding);
+            setPadding(calculatedPadding);
+        };
+
+        updatePadding();
+        window.addEventListener('resize', updatePadding);
+        return () => window.removeEventListener('resize', updatePadding);
+    }, []);
+
+    useEffect(() => {
+        const resetScroll = () => {
+            if (scrollRef.current) {
+                scrollRef.current.scrollTo({ left: 0, behavior: 'instant' });
+            }
+        };
+
+        // Attempt immediate reset
+        resetScroll();
+
+        // Force reset after a short delay to override browser scroll restoration
+        const timer = setTimeout(resetScroll, 500);
+
+        return () => clearTimeout(timer);
     }, [projects]);
 
-    // Using the first 4 projects for the landing page
-    const featuredProjects = projects.slice(0, 4);
+    // Using the first 5 projects for the landing page
+    const featuredProjects = projects.slice(0, 5);
 
     return (
         <section className="pt-16 pb-8 md:pt-32 bg-black relative overflow-hidden">
@@ -158,9 +203,6 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
 
             {/* Noise Overlay */}
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
-
-            {/* Background Glow */}
-
 
             <div className="container mx-auto px-4 lg:px-12 mb-10 md:mb-20">
                 <div className="border-b border-white/10 pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
@@ -206,9 +248,19 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
 
             {/* Horizontal Scroll Container */}
             <div
+                key="projects-carousel-reset"
                 ref={scrollRef}
-                className="flex gap-8 overflow-x-auto pb-8 pt-4 snap-x snap-mandatory cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden pl-4 md:pl-[calc((100vw-768px)/2+1rem)] lg:pl-[calc((100vw-1024px)/2+3rem)] xl:pl-[calc((100vw-1280px)/2+3rem)] 2xl:pl-[calc((100vw-1536px)/2+3rem)] pr-4"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                className="flex gap-8 overflow-x-auto pb-8 pt-4 cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                    paddingLeft: `${padding}px`,
+                    paddingRight: '16px' // Default right padding, will be overridden by last item's margin if needed, but here we use padding on the container or the item?
+                    // Actually, we want the last item to have padding-right equal to 'padding'.
+                    // But we can't easily set padding-right on the container if we want the scroll to work nicely with snap.
+                    // A common trick is to use a pseudo-element or just padding-right on the container.
+                    // Let's set paddingRight on the container to match paddingLeft.
+                }}
             >
                 {loading ? (
                     <div className="w-full flex justify-center py-20 text-zinc-500">Carregando projetos...</div>
@@ -229,7 +281,8 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
                 {/* "More" Card */}
                 <div
                     onClick={onViewAll}
-                    className="min-w-[200px] md:min-w-[250px] flex items-center justify-center snap-center shrink-0 relative group cursor-pointer pr-4 md:pr-[calc((100vw-768px)/2+1rem)] lg:pr-[calc((100vw-1024px)/2+3rem)] xl:pr-[calc((100vw-1280px)/2+3rem)] 2xl:pr-[calc((100vw-1536px)/2+3rem)]"
+                    className="min-w-[200px] md:min-w-[250px] flex items-center justify-center snap-center shrink-0 relative group cursor-pointer"
+                    style={{ paddingRight: `${padding}px` }}
                 >
                     <div className="text-center group-hover:scale-110 transition-transform duration-500">
                         <p className="text-zinc-500 mb-4 text-xl font-light font-mono">Ver mais</p>
