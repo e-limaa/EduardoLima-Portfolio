@@ -2,23 +2,18 @@ import { client, urlFor } from "./sanity";
 import { Project } from "./sanity-types";
 
 export const getProjects = async (): Promise<Project[]> => {
-  return await client.fetch(`*[_type == "project"]{
+  return await client.fetch(`*[_type == "project"] | order(order asc) {
     ...,
     "category": categoryRef->title
   }`);
 };
 
-export const getProjectById = async (id: string | number): Promise<Project | undefined> => {
-  // If id is numeric (legacy), we might need to handle it differently or assume it's not in Sanity yet
-  // For now, we'll try to fetch by _id. 
-  // Note: Sanity IDs are strings. If the app passes a number, we convert it to string.
-  // Ideally, the app should be updated to use string IDs everywhere.
-  const query = `*[_type == "project" && id == $id][0]{
+export const getProjectById = async (id: string): Promise<Project | undefined> => {
+  const query = `*[_type == "project" && _id == $id][0]{
     ...,
     "category": categoryRef->title
   }`;
-  // We parse to int because the schema expects a number
-  return await client.fetch(query, { id: parseInt(id.toString()) });
+  return await client.fetch(query, { id });
 };
 
 export const getImageUrl = (image: any): string => {

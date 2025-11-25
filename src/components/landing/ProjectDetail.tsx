@@ -5,26 +5,29 @@ import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { TextReveal } from "./TextReveal";
 import { InteractiveGrid } from "./InteractiveGrid";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "../ui/dialog";
-import { getProjectById, getImageUrl } from "../../lib/project-service";
+import { getProjectById, getImageUrl, getProjects } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";
 
 interface ProjectDetailProps {
-    projectId: number | string;
+    projectId: string;
     onBack: () => void;
-    onNext: (nextId: number) => void;
-    onPrev: (prevId: number) => void;
+    onNext: (nextId: string) => void;
+    onPrev: (prevId: string) => void;
 }
 
 export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDetailProps) => {
     const [project, setProject] = useState<Project | null>(null);
+    const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadProject = async () => {
+        const loadData = async () => {
             setLoading(true);
             try {
-                const data = await getProjectById(projectId);
-                setProject(data || null);
+                const allProjects = await getProjects();
+                setProjects(allProjects);
+                const current = allProjects.find(p => p._id === projectId);
+                setProject(current || null);
             } catch (error) {
                 console.error("Failed to load project", error);
             } finally {
@@ -32,9 +35,13 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
             }
         };
 
-        loadProject();
+        loadData();
         window.scrollTo(0, 0);
     }, [projectId]);
+
+    const currentIndex = projects.findIndex(p => p._id === projectId);
+    const nextProject = projects[currentIndex + 1] || projects[0];
+    const prevProject = projects[currentIndex - 1] || projects[projects.length - 1];
 
     if (loading) {
         return (
@@ -53,10 +60,10 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
         <div className="min-h-screen bg-black text-zinc-100 relative overflow-x-hidden selection:bg-blue-500/30">
             <InteractiveGrid variant="subtle" />
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none fixed"></div>
-            
+
             {/* Navigation Bar */}
             <nav className="fixed top-0 left-0 right-0 z-50 p-6 lg:px-12 flex justify-between items-center bg-gradient-to-b from-black via-black/80 to-transparent">
-                <button 
+                <button
                     onClick={onBack}
                     className="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10"
                 >
@@ -65,15 +72,14 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                 </button>
 
                 <div className="flex gap-2">
-                    <button 
-                        // Lógica de navegação simplificada para o exemplo. Idealmente o pai passaria o ID correto ou buscaria o próximo/anterior via API
-                        onClick={() => onPrev(Number(project._id) > 1 ? Number(project._id) - 1 : 6)}
+                    <button
+                        onClick={() => prevProject && onPrev(prevProject._id)}
                         className="w-10 h-10 rounded-full border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-white hover:text-black transition-colors group"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                     </button>
-                    <button 
-                         onClick={() => onNext(Number(project._id) < 6 ? Number(project._id) + 1 : 1)}
+                    <button
+                        onClick={() => nextProject && onNext(nextProject._id)}
                         className="w-10 h-10 rounded-full border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-white hover:text-black transition-colors group"
                     >
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -84,8 +90,8 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
             {/* Hero Section */}
             <header className="relative w-full h-[70vh] md:h-[80vh] mt-0">
                 <div className="absolute inset-0 w-full h-full">
-                     <ImageWithFallback 
-                        src={mainImageUrl} 
+                    <ImageWithFallback
+                        src={mainImageUrl}
                         alt={project.title}
                         className="w-full h-full object-cover opacity-60"
                     />
@@ -103,14 +109,14 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                                 {project.category}
                             </span>
                         </motion.div>
-                        
+
                         <TextReveal>
                             <h1 className="text-5xl md:text-8xl font-bold text-white mb-6 tracking-tighter max-w-4xl">
                                 {project.title}
                             </h1>
                         </TextReveal>
 
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.6 }}
@@ -146,7 +152,7 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
                     {/* Main Content */}
                     <div className="lg:col-span-8 flex flex-col gap-16">
-                        
+
                         {/* Overview */}
                         <section>
                             <h3 className="text-2xl font-bold text-white mb-6">Visão Geral</h3>
@@ -179,7 +185,7 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                                 {project.gallery?.map((img, idx) => {
                                     const imgUrl = getImageUrl(img);
                                     return (
-                                        <motion.div 
+                                        <motion.div
                                             key={idx}
                                             initial={{ opacity: 0, y: 20 }}
                                             whileInView={{ opacity: 1, y: 0 }}
@@ -190,8 +196,8 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                                             <Dialog>
                                                 <DialogTrigger asChild>
                                                     <div className="cursor-zoom-in w-full h-full">
-                                                        <ImageWithFallback 
-                                                            src={imgUrl} 
+                                                        <ImageWithFallback
+                                                            src={imgUrl}
                                                             alt={`${project.title} galeria ${idx + 1}`}
                                                             className="w-full h-auto hover:scale-105 transition-transform duration-700"
                                                         />
@@ -205,8 +211,8 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                                                         Visualização ampliada da imagem {idx + 1} da galeria do projeto {project.title}.
                                                     </DialogDescription>
                                                     <div className="relative flex items-center justify-center w-full h-full">
-                                                        <ImageWithFallback 
-                                                            src={imgUrl} 
+                                                        <ImageWithFallback
+                                                            src={imgUrl}
                                                             alt={`${project.title} galeria ${idx + 1} full`}
                                                             className="w-auto h-auto max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl"
                                                         />
@@ -239,8 +245,8 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                                     Tecnologias
                                 </h3>
                                 <div className="flex flex-wrap gap-3">
-                                    {project.stack.map((tech) => (
-                                        <span 
+                                    {project.stack?.map((tech) => (
+                                        <span
                                             key={tech}
                                             className="px-4 py-2 rounded-full bg-zinc-900 border border-white/10 text-zinc-300 text-sm hover:bg-zinc-800 transition-colors cursor-default"
                                         >
@@ -261,15 +267,15 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                     </div>
                 </div>
             </main>
-            
+
             {/* Next Project Teaser Footer */}
-            <div 
+            <div
                 className="w-full py-20 border-t border-white/10 bg-zinc-900/50 cursor-pointer group relative overflow-hidden"
-                onClick={() => onNext(Number(project._id) < 6 ? Number(project._id) + 1 : 1)}
+                onClick={() => nextProject && onNext(nextProject._id)}
             >
-                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                 
-                 <div className="container mx-auto px-4 lg:px-12 text-center">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+
+                <div className="container mx-auto px-4 lg:px-12 text-center">
                     <span className="text-zinc-500 uppercase tracking-widest font-mono text-sm mb-4 block">Próximo Projeto</span>
                     <h2 className="text-4xl md:text-6xl font-bold text-white group-hover:scale-105 transition-transform duration-500">
                         Ver Próximo
@@ -279,7 +285,7 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
                             <ArrowRight className="w-6 h-6" />
                         </div>
                     </div>
-                 </div>
+                </div>
             </div>
         </div>
     );

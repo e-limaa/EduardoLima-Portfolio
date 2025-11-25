@@ -1,0 +1,38 @@
+# npm audit report
+
+glob  10.2.0 - 10.4.5
+Severity: high
+glob CLI: Command injection via -c/--cmd executes matches with shell:true - https://github.com/advisories/GHSA-5j98-mcp5-4vw2
+fix available via `npm audit fix --force`
+Will install sanity@3.95.0, which is a breaking change
+node_modules/@architect/utils/node_modules/glob
+node_modules/glob
+  @architect/hydrate  >=3.2.1
+  Depends on vulnerable versions of @architect/inventory
+  Depends on vulnerable versions of @architect/utils
+  Depends on vulnerable versions of glob
+  node_modules/@architect/hydrate
+    @sanity/runtime-cli  8.3.0 || 8.4.0 || >=9.0.0
+    Depends on vulnerable versions of @architect/hydrate
+    Depends on vulnerable versions of @architect/inventory
+    node_modules/@sanity/runtime-cli
+      @sanity/cli  >=3.95.1-next.0.e2f839b19a
+      Depends on vulnerable versions of @sanity/runtime-cli
+      node_modules/@sanity/cli
+        sanity  3.94.1-next.0.6739e10a32 - 3.94.1 || >=3.95.1-next.0.e2f839b19a
+        Depends on vulnerable versions of @sanity/cli
+        node_modules/sanity
+  @architect/utils  >=3.1.7
+  Depends on vulnerable versions of glob
+  node_modules/@architect/utils
+    @architect/inventory  >=3.4.4-RC.0
+    Depends on vulnerable versions of @architect/utils
+    node_modules/@architect/inventory
+
+7 high severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force

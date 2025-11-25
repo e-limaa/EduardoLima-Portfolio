@@ -113,7 +113,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project, index: num
     );
 };
 
-export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, onProjectClick?: (id: number) => void }) => {
+export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, onProjectClick?: (id: string) => void }) => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -121,8 +121,8 @@ export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, o
         const loadProjects = async () => {
             try {
                 const data = await getProjects();
-                const sorted = data.sort((a: any, b: any) => (a.id || 0) - (b.id || 0));
-                setProjects(sorted);
+                // Sorting is now handled by the backend query
+                setProjects(data);
             } catch (error) {
                 console.error("Failed to load projects", error);
             } finally {
@@ -166,7 +166,7 @@ export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, o
                                 key={project._id}
                                 project={project}
                                 index={index}
-                                onClick={() => onProjectClick && onProjectClick(Number((project as any).id))}
+                                onClick={() => onProjectClick && onProjectClick(project._id)}
                             />
                         ))}
                     </div>

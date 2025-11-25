@@ -8,7 +8,7 @@ export interface SanityImage {
 }
 
 export interface Project {
-  _id: string | number; // Compatibilidade com dados atuais (number) e Sanity (string)
+  _id: string;
   title: string;
   slug: { current: string };
   category: string;
@@ -19,7 +19,7 @@ export interface Project {
   challenge: string;
   solution: string;
   // Permitir string (URL direta atual) ou objeto SanityImage
-  mainImage: string | SanityImage; 
+  mainImage: string | SanityImage;
   gallery: Array<string | SanityImage>;
   metric: string;
   color: string;

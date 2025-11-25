@@ -38,9 +38,12 @@ const ProjectCard = ({ project, index, onClick }: { project: Project, index: num
 
     return (
         <motion.div
-            className="relative group min-w-[280px] md:min-w-[400px] h-[400px] md:h-[500px] rounded-3xl overflow-hidden bg-zinc-900 border border-white/10 snap-center cursor-none"
+            className="relative group min-w-[280px] md:min-w-[400px] h-[400px] md:h-[500px] rounded-3xl overflow-hidden bg-zinc-900 border border-white/10 snap-start cursor-none"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+            viewport={{ once: true, margin: "-50px" }}
             whileHover={{ y: -10 }}
-            transition={{ duration: 0.5, ease: "circOut" }}
             onMouseMove={handleMouseMove}
             onClick={onClick}
             onMouseEnter={(e) => {
@@ -120,7 +123,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project, index: num
     );
 };
 
-export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void, onProjectClick?: (id: number) => void }) => {
+export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void, onProjectClick?: (id: string) => void }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
@@ -129,10 +132,7 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
         const loadProjects = async () => {
             try {
                 const data = await getProjects();
-                // Sort by ID to maintain order if needed, or rely on Sanity order
-                // Assuming data has 'id' field from our patch
-                const sorted = data.sort((a: any, b: any) => (a.id || 0) - (b.id || 0));
-                setProjects(sorted);
+                setProjects(data);
             } catch (error) {
                 console.error("Failed to load projects", error);
             } finally {
@@ -141,6 +141,12 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
         };
         loadProjects();
     }, []);
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollLeft = 0;
+        }
+    }, [projects]);
 
     // Using the first 4 projects for the landing page
     const featuredProjects = projects.slice(0, 4);
@@ -202,18 +208,18 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
             <div
                 ref={scrollRef}
                 className="flex gap-8 overflow-x-auto pb-8 pt-4 snap-x snap-mandatory cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden pl-4 md:pl-[calc((100vw-768px)/2+1rem)] lg:pl-[calc((100vw-1024px)/2+3rem)] xl:pl-[calc((100vw-1280px)/2+3rem)] 2xl:pl-[calc((100vw-1536px)/2+3rem)] pr-4"
-                style={{ scrollBehavior: 'smooth', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {loading ? (
                     <div className="w-full flex justify-center py-20 text-zinc-500">Carregando projetos...</div>
                 ) : (
                     <>
                         {featuredProjects.map((project, index) => (
-                            <div key={project._id} className="snap-center shrink-0">
+                            <div key={project._id} className="snap-start shrink-0">
                                 <ProjectCard
                                     project={project}
                                     index={index}
-                                    onClick={() => onProjectClick && onProjectClick(Number((project as any).id))}
+                                    onClick={() => onProjectClick && onProjectClick(project._id)}
                                 />
                             </div>
                         ))}
@@ -236,4 +242,3 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
         </section>
     );
 };
-
