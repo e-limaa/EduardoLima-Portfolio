@@ -26,7 +26,7 @@ export const ChatWidget = () => {
     },
     {
       id: "2",
-      text: "Pergunte qualquer coisa sobre meu trabalho, processo criativo ou disponibilidade.",
+      text: "Pergunte qualquer coisa sobre meu trabalho, processo criativo ou experiência.",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -171,8 +171,8 @@ export const ChatWidget = () => {
           >
             <div
               className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.sender === "user"
-                  ? "bg-blue-600 text-white rounded-br-none"
-                  : "bg-zinc-100 dark:bg-white/10 text-zinc-800 dark:text-white/90 rounded-bl-none border border-zinc-200 dark:border-white/5"
+                ? "bg-blue-600 text-white rounded-br-none"
+                : "bg-zinc-100 dark:bg-white/10 text-zinc-800 dark:text-white/90 rounded-bl-none border border-zinc-200 dark:border-white/5"
                 }`}
             >
               {msg.text.split('\n').map((line, i) => {
