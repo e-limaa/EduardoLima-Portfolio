@@ -10,11 +10,12 @@ import { BrandMarquee } from "./components/landing/BrandMarquee";
 import { Services } from "./components/landing/Services";
 import { ProjectsPage } from "./components/landing/ProjectsPage";
 import { ProjectDetail } from "./components/landing/ProjectDetail";
+import { ThemeProvider } from "./components/theme-provider";
 
 export default function App() {
   const [view, setView] = useState<'home' | 'projects' | 'project-detail'>('home');
   const [previousView, setPreviousView] = useState<'home' | 'projects'>('home');
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
   const handleNavigate = (id: string) => {
     if (view !== 'home') {
@@ -34,7 +35,7 @@ export default function App() {
     }
   };
 
-  const handleProjectClick = (id: string) => {
+  const handleProjectClick = (id: number) => {
     setPreviousView(view === 'project-detail' ? previousView : view as 'home' | 'projects');
     setSelectedProjectId(id);
     setView('project-detail');
@@ -53,8 +54,8 @@ export default function App() {
     switch (view) {
       case 'project-detail':
         return (
-          <ProjectDetail
-            projectId={selectedProjectId || ""}
+          <ProjectDetail 
+            projectId={selectedProjectId || 1} 
             onBack={() => setView(previousView)}
             onNext={(id) => setSelectedProjectId(id)}
             onPrev={(id) => setSelectedProjectId(id)}
@@ -62,8 +63,8 @@ export default function App() {
         );
       case 'projects':
         return (
-          <ProjectsPage
-            onBack={() => setView('home')}
+          <ProjectsPage 
+            onBack={() => setView('home')} 
             onProjectClick={handleProjectClick}
           />
         );
@@ -74,12 +75,12 @@ export default function App() {
             <div id="hero">
               <Hero />
             </div>
-
+            
             <BrandMarquee />
 
             <div id="projects">
-              <Projects
-                onViewAll={() => setView('projects')}
+              <Projects 
+                onViewAll={() => setView('projects')} 
                 onProjectClick={handleProjectClick}
               />
             </div>
@@ -87,7 +88,7 @@ export default function App() {
             <div id="services">
               <Services />
             </div>
-
+            
             <div id="story">
               <Storytelling />
             </div>
@@ -105,15 +106,21 @@ export default function App() {
   };
 
   return (
-    <div className="bg-black min-h-screen w-full text-zinc-100 selection:bg-blue-500/30 overflow-x-hidden font-sans">
-      <MouseSpotlight />
-
-      {/* Navbar only visible on Home and Projects list, not on Detail (Detail has its own nav) */}
-      {view !== 'project-detail' && <Navbar onNavigate={handleNavigate} />}
-
-      <main className="relative z-10">
-        {renderContent()}
-      </main>
-    </div>
+    <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
+      {/* ALTERADO: Aplicação de classes de tema dinâmicas 
+          - bg-background e text-foreground mapeiam para as variáveis CSS que mudam com o tema 
+          - transition-colors permite a troca suave entre dark/light mode
+      */}
+      <div className="min-h-screen w-full bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden font-sans transition-colors duration-300">
+        <MouseSpotlight />
+        
+        {/* Navbar only visible on Home and Projects list, not on Detail (Detail has its own nav) */}
+        {view !== 'project-detail' && <Navbar onNavigate={handleNavigate} />}
+        
+        <main className="relative z-10">
+          {renderContent()}
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }

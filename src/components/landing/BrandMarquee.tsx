@@ -7,7 +7,7 @@ const brands = [
 
 export const BrandMarquee = () => {
   return (
-    <div className="w-full py-10 bg-black border-y border-white/5 overflow-hidden relative z-20">
+    <div className="w-full py-10 bg-white dark:bg-black border-y border-zinc-200 dark:border-white/5 overflow-hidden relative z-20 transition-colors duration-300">
       <div className="flex">
         <motion.div
           initial={{ x: 0 }}
@@ -17,7 +17,7 @@ export const BrandMarquee = () => {
         >
           {[...brands, ...brands, ...brands].map((brand, i) => (
             <div key={i} className="flex items-center gap-4 opacity-30 hover:opacity-80 transition-opacity cursor-default">
-              <span className="text-lg md:text-2xl font-bold text-white font-mono tracking-tighter">
+              <span className="text-lg md:text-2xl font-bold text-black dark:text-white font-mono tracking-tighter">
                 {brand}
               </span>
             </div>

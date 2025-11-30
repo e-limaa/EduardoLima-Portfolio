@@ -4,7 +4,7 @@ import { Send, User, Bot, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import exampleImage from '../../assets/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png';
+import exampleImage from 'figma:asset/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png';
 
 // URL do Webhook do n8n - Substitua pela sua URL de produção
 const WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "YOUR_N8N_WEBHOOK_URL_HERE";
@@ -132,27 +132,27 @@ export const ChatWidget = () => {
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="w-full max-w-md bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[480px] md:h-[580px]"
+      className="w-full max-w-md bg-white/80 dark:bg-black/40 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[480px] md:h-[580px]"
     >
       {/* Header */}
-      <div className="p-4 border-b border-white/5 flex items-center justify-between bg-white/5">
+      <div className="p-4 border-b border-zinc-200 dark:border-white/5 flex items-center justify-between bg-zinc-50/50 dark:bg-white/5">
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar className="h-10 w-10 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
               <AvatarImage src={exampleImage} />
               <AvatarFallback>AI</AvatarFallback>
             </Avatar>
-            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-black"></span>
+            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white dark:border-black"></span>
           </div>
           <div>
-            <h3 className="font-medium text-white text-sm">Edu - AI Assistant</h3>
-            <p className="text-xs text-white/50 flex items-center gap-1">
+            <h3 className="font-medium text-foreground text-sm">Edu - AI Assistant</h3>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
               Online
             </p>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="text-white/50 hover:text-white hover:bg-white/10">
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/10">
           <MoreHorizontal className="h-5 w-5" />
         </Button>
       </div>
@@ -160,7 +160,7 @@ export const ChatWidget = () => {
       {/* Messages */}
       <div
         ref={scrollAreaRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
+        className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-white/10 scrollbar-track-transparent"
       >
         {messages.map((msg) => (
           <motion.div
@@ -171,8 +171,8 @@ export const ChatWidget = () => {
           >
             <div
               className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.sender === "user"
-                ? "bg-blue-600 text-white rounded-br-none"
-                : "bg-white/10 text-white/90 rounded-bl-none border border-white/5"
+                  ? "bg-blue-600 text-white rounded-br-none"
+                  : "bg-zinc-100 dark:bg-white/10 text-zinc-800 dark:text-white/90 rounded-bl-none border border-zinc-200 dark:border-white/5"
                 }`}
             >
               {msg.text.split('\n').map((line, i) => {
@@ -212,22 +212,22 @@ export const ChatWidget = () => {
             animate={{ opacity: 1, y: 0 }}
             className="flex justify-start"
           >
-            <div className="bg-white/10 p-3 rounded-2xl rounded-bl-none border border-white/5 flex gap-1 items-center h-10 w-16 justify-center">
-              <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-              <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-              <span className="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"></span>
+            <div className="bg-zinc-100 dark:bg-white/10 p-3 rounded-2xl rounded-bl-none border border-zinc-200 dark:border-white/5 flex gap-1 items-center h-10 w-16 justify-center">
+              <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/50 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/50 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/50 rounded-full animate-bounce"></span>
             </div>
           </motion.div>
         )}
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSendMessage} className="p-3 border-t border-white/10 bg-white/5 flex gap-2">
+      <form onSubmit={handleSendMessage} className="p-3 border-t border-zinc-200 dark:border-white/10 bg-zinc-50/50 dark:bg-white/5 flex gap-2">
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Digite sua mensagem..."
-          className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-blue-500/50 focus-visible:border-blue-500/50"
+          className="bg-white dark:bg-black/20 border-zinc-200 dark:border-white/10 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-white/30 focus-visible:ring-blue-500/50 focus-visible:border-blue-500/50"
         />
         <Button
           type="submit"

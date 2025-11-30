@@ -54,20 +54,20 @@ export const Storytelling = () => {
   const [activeId, setActiveId] = useState<number>(1);
 
   return (
-    <section className="relative py-12 md:py-24 bg-black overflow-hidden flex flex-col items-center justify-center">
+    <section className="relative py-12 md:py-24 bg-background overflow-hidden flex flex-col items-center justify-center transition-colors duration-300">
       
       {/* Header Minimalista */}
       <div className="container mx-auto px-4 lg:px-12 mb-12 md:mb-24 flex justify-between items-end relative z-10">
          <div>
-            <span className="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-2 block">
+            <span className="text-xs font-mono text-muted-foreground tracking-widest uppercase mb-2 block">
                 03 — TIMELINE
             </span>
-            <h2 className="text-4xl md:text-6xl font-bold text-white">
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground">
                 DNA Criativo
             </h2>
          </div>
          <div className="hidden md:block text-right">
-             <p className="text-zinc-500 text-sm max-w-[200px]">
+             <p className="text-muted-foreground text-sm max-w-[200px]">
                  Explore as fases que moldaram minha metodologia.
              </p>
          </div>
@@ -76,7 +76,7 @@ export const Storytelling = () => {
       {/* Vertical Timeline Container */}
       <div className="container mx-auto px-4 lg:px-12 relative z-10 max-w-5xl">
         {/* Central Vertical Line */}
-        <div className="absolute left-8 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-800 to-transparent transform -translate-x-1/2" />
+        <div className="absolute left-8 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-300 dark:via-zinc-800 to-transparent transform -translate-x-1/2" />
 
         {timelineData.map((item, index) => {
           const isEven = index % 2 === 0;
@@ -99,13 +99,13 @@ export const Storytelling = () => {
                     <span className={`text-sm font-mono font-bold tracking-widest uppercase mb-2 block ${item.color}`}>
                         {item.year}
                     </span>
-                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
                         {item.title}
                     </h3>
-                    <h4 className="text-lg text-zinc-400 mb-4 font-light">
+                    <h4 className="text-lg text-muted-foreground mb-4 font-light">
                         {item.subtitle}
                     </h4>
-                    <p className="text-zinc-500 leading-relaxed text-sm md:text-base">
+                    <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
                         {item.description}
                     </p>
                  </div>
@@ -113,7 +113,7 @@ export const Storytelling = () => {
 
               {/* Center Point */}
               <div className="absolute left-8 lg:left-1/2 transform -translate-x-1/2 flex items-center justify-center z-20">
-                 <div className={`w-12 h-12 rounded-full border border-zinc-800 bg-black flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_-5px_rgba(0,0,0,0.5)] ${item.color}`}>
+                 <div className={`w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 bg-background flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_-5px_rgba(0,0,0,0.5)] dark:shadow-none ${item.color}`}>
                     <div className={`absolute inset-0 bg-current opacity-10 rounded-full blur-lg group-hover:opacity-30 transition-opacity duration-500`} />
                     <item.icon className="w-5 h-5" />
                  </div>
@@ -121,12 +121,12 @@ export const Storytelling = () => {
 
               {/* Right Side (Desktop) - Visual/Image */}
               <div className={`w-full lg:w-1/2 lg:pl-16 ${isEven ? 'lg:order-3 lg:pl-16' : 'lg:pr-16 lg:text-right'}`}>
-                  <div className={`relative ml-16 lg:ml-0 rounded-2xl overflow-hidden border border-white/10 aspect-video md:aspect-[4/3] group-hover:border-white/20 transition-colors duration-500`}>
+                  <div className={`relative ml-16 lg:ml-0 rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 aspect-video md:aspect-[4/3] group-hover:border-blue-500/50 dark:group-hover:border-white/20 transition-colors duration-500 shadow-sm dark:shadow-none`}>
                       <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} opacity-20 mix-blend-soft-light z-10`} />
                       <ImageWithFallback
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
+                        className="w-full h-full object-cover opacity-80 dark:opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-100 dark:group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
                       />
                   </div>
               </div>

@@ -37,11 +37,11 @@ export const Hero = () => {
         transition={{ duration: 0.8 }}
         className="fixed top-6 left-0 right-0 z-50 pointer-events-none"
       >
-         <div className="container mx-auto px-4 lg:px-12 text-center lg:text-left">
-            <span className="text-xl font-bold text-white tracking-tight pointer-events-auto inline-block">
-                Eduardo Lima<span className="text-blue-500">.</span>
-            </span>
-         </div>
+          <div className="container mx-auto px-4 lg:px-12 text-center lg:text-left">
+             <span className="text-xl font-bold text-foreground tracking-tight pointer-events-auto inline-block">
+                 Eduardo Lima<span className="text-blue-600 dark:text-blue-500">.</span>
+             </span>
+          </div>
       </motion.div>
 
       <div className="container mx-auto px-4 lg:px-12 z-10 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 items-center relative">
@@ -69,15 +69,15 @@ export const Hero = () => {
         {/* Text Content Column */}
         {/* Order: Mobile 2, Desktop 1 (Left) */}
         <div className="col-span-1 lg:col-span-5 flex flex-col gap-6 text-center lg:text-left pointer-events-none z-20 order-2 lg:order-1 -mt-20 lg:mt-0">
-          <div className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[0.9] pointer-events-auto">
+          <div className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto">
             <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2">
-               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400 hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">Curiosidade.</span>
+               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">Curiosidade.</span>
             </TextReveal>
             <TextReveal delay={0.2} className="-mb-3 md:-mb-6 pb-2">
-               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-600 leading-[1.0] md:leading-[1.15]">Design.</span>
+               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-700 via-zinc-500 to-zinc-300 dark:from-zinc-200 dark:via-zinc-400 dark:to-zinc-600 leading-[1.0] md:leading-[1.15]">Design.</span>
             </TextReveal>
             <TextReveal delay={0.3} className="-mb-3 md:-mb-6 pb-2">
-               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 leading-[1.0] md:leading-[1.15]">Impacto.</span>
+               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 leading-[1.0] md:leading-[1.15]">Impacto.</span>
             </TextReveal>
           </div>
           
@@ -85,7 +85,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-lg md:text-xl text-zinc-400 max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
+            className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
           >
             Unindo a precisão do design system com a audácia da inteligência artificial. 
             Criando interfaces que respiram e contam histórias.
@@ -104,8 +104,8 @@ export const Hero = () => {
                 Ver Projetos
                 <ArrowRight className="w-4 h-4" />
              </a>
-             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <span className="text-sm text-zinc-300">Senior UI/UX</span>
+             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-sm hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+                <span className="text-sm text-zinc-600 dark:text-zinc-300">Senior UI/UX</span>
              </div>
           </motion.div>
         </div>

@@ -8,11 +8,11 @@ import { ContactFormModal } from "./ContactFormModal";
 
 export const CTA = () => {
   return (
-    <footer className="relative pt-16 pb-12 md:pt-32 bg-black overflow-hidden border-t border-white/10">
+    <footer className="relative pt-16 pb-12 md:pt-32 bg-zinc-50 dark:bg-black overflow-hidden border-t border-zinc-200 dark:border-white/10 transition-colors duration-300">
       {/* Background Elements */}
       <InteractiveGrid variant="subtle" />
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-blue-900/10 blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-blue-500/5 dark:bg-blue-900/10 blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         
@@ -20,12 +20,12 @@ export const CTA = () => {
            {/* Status removed */}
 
             <TextReveal className="flex justify-center flex-wrap gap-x-4">
-                <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter mb-2">
+                <h2 className="text-4xl md:text-7xl font-bold text-zinc-900 dark:text-white tracking-tighter mb-2">
                 Vamos criar algo
                 </h2>
             </TextReveal>
             <TextReveal className="flex justify-center" delay={0.1}>
-                <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter">
+                <h2 className="text-4xl md:text-7xl font-bold text-zinc-900 dark:text-white tracking-tighter">
                 memorável?
                 </h2>
             </TextReveal>
@@ -35,7 +35,7 @@ export const CTA = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 1 }}
-              className="text-xl md:text-2xl text-zinc-500 max-w-xl mx-auto mt-8 mb-12 font-light leading-relaxed"
+              className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-500 max-w-xl mx-auto mt-8 mb-12 font-light leading-relaxed"
             >
               Estou disponível para novos projetos e colaborações.
               Entre em contato e vamos discutir como posso ajudar a elevar seu produto.
@@ -51,7 +51,7 @@ export const CTA = () => {
               <ContactFormModal>
                 <Button 
                     size="lg" 
-                    className="bg-white text-black hover:bg-zinc-200 hover:scale-105 transition-all duration-300 rounded-full px-8 h-14 text-base font-bold shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                    className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 hover:scale-105 transition-all duration-300 rounded-full px-8 h-14 text-base font-bold shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 >
                     <Mail className="mr-2 h-4 w-4" />
                     Fale Comigo
@@ -81,19 +81,19 @@ export const CTA = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="border-t border-zinc-200 dark:border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12">
-                 <div className="text-2xl font-bold tracking-tighter text-white">
-                    Eduardo Lima<span className="text-blue-500">.</span>
+                 <div className="text-2xl font-bold tracking-tighter text-zinc-900 dark:text-white">
+                    Eduardo Lima<span className="text-blue-600 dark:text-blue-500">.</span>
                  </div>
                  <div className="flex gap-6">
-                    <a href="#" className="text-zinc-500 hover:text-white transition-colors text-sm uppercase tracking-wider font-mono">Github</a>
-                    <a href="#" className="text-zinc-500 hover:text-white transition-colors text-sm uppercase tracking-wider font-mono">Instagram</a>
-                    <a href="#" className="text-zinc-500 hover:text-white transition-colors text-sm uppercase tracking-wider font-mono">Twitter</a>
+                    <a href="#" className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors text-sm uppercase tracking-wider font-mono">Github</a>
+                    <a href="#" className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors text-sm uppercase tracking-wider font-mono">Instagram</a>
+                    <a href="#" className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors text-sm uppercase tracking-wider font-mono">Twitter</a>
                  </div>
             </div>
 
-            <div className="text-zinc-600 font-mono text-xs uppercase tracking-widest text-center md:text-right">
+            <div className="text-zinc-500 dark:text-zinc-600 font-mono text-xs uppercase tracking-widest text-center md:text-right">
                 <p>© {new Date().getFullYear()} Design Portfolio</p>
                 <p className="mt-1">Developed with React & Tailwind</p>
             </div>
