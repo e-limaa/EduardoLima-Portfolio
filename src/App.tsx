@@ -54,8 +54,8 @@ export default function App() {
     switch (view) {
       case 'project-detail':
         return (
-          <ProjectDetail 
-            projectId={selectedProjectId || 1} 
+          <ProjectDetail
+            projectId={selectedProjectId || 1}
             onBack={() => setView(previousView)}
             onNext={(id) => setSelectedProjectId(id)}
             onPrev={(id) => setSelectedProjectId(id)}
@@ -63,8 +63,8 @@ export default function App() {
         );
       case 'projects':
         return (
-          <ProjectsPage 
-            onBack={() => setView('home')} 
+          <ProjectsPage
+            onBack={() => setView('home')}
             onProjectClick={handleProjectClick}
           />
         );
@@ -75,12 +75,12 @@ export default function App() {
             <div id="hero">
               <Hero />
             </div>
-            
+
             <BrandMarquee />
 
             <div id="projects">
-              <Projects 
-                onViewAll={() => setView('projects')} 
+              <Projects
+                onViewAll={() => setView('projects')}
                 onProjectClick={handleProjectClick}
               />
             </div>
@@ -88,7 +88,7 @@ export default function App() {
             <div id="services">
               <Services />
             </div>
-            
+
             <div id="story">
               <Storytelling />
             </div>
@@ -113,10 +113,10 @@ export default function App() {
       */}
       <div className="min-h-screen w-full bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden font-sans transition-colors duration-300">
         <MouseSpotlight />
-        
+
         {/* Navbar only visible on Home and Projects list, not on Detail (Detail has its own nav) */}
         {view !== 'project-detail' && <Navbar onNavigate={handleNavigate} />}
-        
+
         <main className="relative z-10">
           {renderContent()}
         </main>
