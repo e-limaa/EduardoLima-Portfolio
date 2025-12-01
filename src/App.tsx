@@ -15,7 +15,7 @@ import { ThemeProvider } from "./components/theme-provider";
 export default function App() {
   const [view, setView] = useState<'home' | 'projects' | 'project-detail'>('home');
   const [previousView, setPreviousView] = useState<'home' | 'projects'>('home');
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
   const handleNavigate = (id: string) => {
     if (view !== 'home') {
@@ -35,7 +35,7 @@ export default function App() {
     }
   };
 
-  const handleProjectClick = (id: number) => {
+  const handleProjectClick = (id: string) => {
     setPreviousView(view === 'project-detail' ? previousView : view as 'home' | 'projects');
     setSelectedProjectId(id);
     setView('project-detail');

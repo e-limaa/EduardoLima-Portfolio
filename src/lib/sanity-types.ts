@@ -24,4 +24,5 @@ export interface Project {
   metric: string;
   color: string;
   stack: string[];
+  order?: number;
 }

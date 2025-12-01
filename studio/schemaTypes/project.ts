@@ -57,6 +57,13 @@ export default defineType({
             description: 'e.g., "from-blue-600 to-blue-400"',
             fieldset: 'header',
         }),
+        defineField({
+            name: 'order',
+            title: 'Order',
+            type: 'number',
+            description: 'Used to sort projects. Lower numbers appear first.',
+            fieldset: 'header',
+        }),
 
         // Details
         defineField({
