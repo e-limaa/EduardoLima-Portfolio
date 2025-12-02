@@ -47,7 +47,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
 
     return (
         <motion.div
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-zinc-950 text-white overflow-hidden"
+            className="fixed inset-0 h-[100dvh] z-[100] flex flex-col items-center justify-center bg-zinc-950 text-white overflow-hidden"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
         >
@@ -66,7 +66,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                 </motion.h1>
 
                 <motion.p
-                    className="text-zinc-500 text-sm md:text-base mb-12 whitespace-nowrap"
+                    className="text-zinc-500 text-sm md:text-base mb-12 whitespace-normal md:whitespace-nowrap"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.8 }}
