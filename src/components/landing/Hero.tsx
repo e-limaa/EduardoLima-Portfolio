@@ -143,6 +143,7 @@ export const Hero = () => {
         <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Scroll</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-500 to-transparent"></div>
       </motion.div>
+
     </section>
   );
 };

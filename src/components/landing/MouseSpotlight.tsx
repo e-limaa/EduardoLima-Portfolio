@@ -3,7 +3,7 @@ import { motion, useSpring } from 'motion/react';
 
 export const MouseSpotlight = () => {
   const [mounted, setMounted] = useState(false);
-  
+
   // Use spring for smooth trailing effect like in the reference
   const mouseX = useSpring(0, { stiffness: 100, damping: 30 });
   const mouseY = useSpring(0, { stiffness: 100, damping: 30 });
@@ -24,7 +24,7 @@ export const MouseSpotlight = () => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none z-0 mix-blend-screen"
+      className="fixed top-0 left-0 w-[500px] h-[500px] bg-blue-500/05 rounded-full blur-[120px] pointer-events-none z-0 mix-blend-screen"
       style={{ x: mouseX, y: mouseY }}
     />
   );

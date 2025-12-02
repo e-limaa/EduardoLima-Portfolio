@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { AnimatePresence } from "motion/react";
 import { Hero } from "./components/landing/Hero";
 import { Storytelling } from "./components/landing/Storytelling";
 import { Projects } from "./components/landing/Projects";
@@ -11,11 +12,14 @@ import { Services } from "./components/landing/Services";
 import { ProjectsPage } from "./components/landing/ProjectsPage";
 import { ProjectDetail } from "./components/landing/ProjectDetail";
 import { ThemeProvider } from "./components/theme-provider";
+import { AudioPlayer } from "./components/landing/AudioPlayer";
+import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 
 export default function App() {
   const [view, setView] = useState<'home' | 'projects' | 'project-detail'>('home');
   const [previousView, setPreviousView] = useState<'home' | 'projects'>('home');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [hasEntered, setHasEntered] = useState(false);
 
   const handleNavigate = (id: string) => {
     if (view !== 'home') {
@@ -112,12 +116,18 @@ export default function App() {
           - transition-colors permite a troca suave entre dark/light mode
       */}
       <div className="min-h-screen w-full bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden font-sans transition-colors duration-300">
+        <AnimatePresence>
+          {!hasEntered && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
+        </AnimatePresence>
+
         <MouseSpotlight />
 
         {/* Navbar only visible on Home and Projects list, not on Detail (Detail has its own nav) */}
         {view !== 'project-detail' && <Navbar onNavigate={handleNavigate} />}
 
-        <main className="relative z-10">
+        <AudioPlayer shouldPlay={hasEntered} />
+
+        <main className="relative z-10" key={hasEntered ? "entered" : "loading"}>
           {renderContent()}
         </main>
       </div>
