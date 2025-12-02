@@ -63,9 +63,9 @@ export const Hero = () => {
               className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)]"
             >
               {/* HEVC for iOS/Safari (Alpha Channel Support) */}
-              <source src="https://audio-assets.vercel.app/Edu-video.mov" type='video/quicktime; codecs="hvc1"' />
+              <source src="https://audio-assets.vercel.app/Edu-video.hevc_1.mp4" type='video/quicktime; codecs="hvc1"' />
               {/* WebM for Chrome/Edge/Firefox/Android */}
-              <source src="https://audio-assets.vercel.app/Edu-video.webm" type="video/webm" />
+              {/*<source src="https://audio-assets.vercel.app/Edu-video.webm" type="video/webm" />*/}
             </video>
           </motion.div>
         </div>
