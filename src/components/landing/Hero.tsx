@@ -55,18 +55,22 @@ export const Hero = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="relative lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
           >
+            {/* Mobile Fallback Image (PNG) */}
+            <img
+              src="https://audio-assets.vercel.app/Edu-image.png"
+              alt="Eduardo Lima"
+              className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] block md:hidden"
+            />
+
+            {/* Desktop Video (WebM) */}
             <video
+              src="https://audio-assets.vercel.app/Edu-video.webm"
               autoPlay
               loop
               muted
               playsInline
-              className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)]"
-            >
-              {/* HEVC for iOS/Safari (Alpha Channel Support) */}
-              <source src="https://audio-assets.vercel.app/Edu-video.hevc_1.mp4" type='video/quicktime; codecs="hvc1"' />
-              {/* WebM for Chrome/Edge/Firefox/Android */}
-              {/*<source src="https://audio-assets.vercel.app/Edu-video.webm" type="video/webm" />*/}
-            </video>
+              className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
+            />
           </motion.div>
         </div>
 
