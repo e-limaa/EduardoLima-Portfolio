@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Send, User, Bot, MoreHorizontal } from "lucide-react";
+import { Send, User, Bot } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -152,9 +152,7 @@ export const ChatWidget = () => {
             </p>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/10">
-          <MoreHorizontal className="h-5 w-5" />
-        </Button>
+
       </div>
 
       {/* Messages */}
