@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, useMotionValue } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { TextReveal } from "./TextReveal";
@@ -12,25 +12,16 @@ const ProjectCard = ({ project, index, onClick }: { project: Project, index: num
     const mouseY = useMotionValue(0);
     const [isHovered, setIsHovered] = useState(false);
 
-    // Faster spring for snappier movement and less "floaty" entrance
-    const cursorX = useSpring(mouseX, { stiffness: 500, damping: 28 });
-    const cursorY = useSpring(mouseY, { stiffness: 500, damping: 28 });
-
     function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // If this is the first move (just entered), snap to position immediately
+        mouseX.set(x);
+        mouseY.set(y);
+
         if (!isHovered) {
-            // Note: MotionValue.set jumps immediately, but spring interpolates.
-            // To minimize the "fly-in" effect, we just ensure we update before setting hover state
-            mouseX.set(x);
-            mouseY.set(y);
             setIsHovered(true);
-        } else {
-            mouseX.set(x);
-            mouseY.set(y);
         }
     }
 
@@ -56,8 +47,8 @@ const ProjectCard = ({ project, index, onClick }: { project: Project, index: num
                 <motion.div
                     className="hidden md:flex absolute pointer-events-none z-50 w-12 h-12 rounded-full bg-blue-600/90 backdrop-blur-sm items-center justify-center shadow-lg shadow-blue-600/20"
                     style={{
-                        left: cursorX,
-                        top: cursorY,
+                        left: mouseX,
+                        top: mouseY,
                         x: "-50%",
                         y: "-50%",
                     }}
