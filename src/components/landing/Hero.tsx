@@ -77,6 +77,17 @@ export const Hero = () => {
         {/* Text Content Column */}
         {/* Order: Mobile 2, Desktop 1 (Left) */}
         <div className="col-span-1 lg:col-span-5 flex flex-col gap-6 text-center lg:text-left pointer-events-none z-20 order-2 lg:order-1 -mt-20 lg:mt-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.8 }}
+            className="flex justify-center lg:justify-start"
+          >
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-sm hover:bg-black/10 dark:hover:bg-white/10 transition-colors mb-4 pointer-events-auto">
+              <span className="text-sm text-zinc-600 dark:text-zinc-300 font-medium">Senior UI/UX</span>
+            </div>
+          </motion.div>
+
           <div className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto">
             <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2">
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">Curiosidade.</span>
@@ -112,9 +123,7 @@ export const Hero = () => {
               Ver Projetos
               <ArrowRight className="w-4 h-4" />
             </a>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-sm hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
-              <span className="text-sm text-zinc-600 dark:text-zinc-300">Senior UI/UX</span>
-            </div>
+
           </motion.div>
         </div>
 
