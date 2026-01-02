@@ -4,6 +4,10 @@ import { Play, Pause, SkipForward, Volume2, VolumeX, Music } from "lucide-react"
 
 const PLAYLIST = [
     {
+        title: "Awake - Tycho",
+        src: "https://audio-assets.vercel.app/Tycho-Awake.mp3",
+    },
+    {
         title: "Photosynthesis",
         src: "https://audio-assets.vercel.app/Carbon Based Lifeforms - Photosynthesis.mp3",
     },
