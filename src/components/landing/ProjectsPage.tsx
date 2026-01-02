@@ -170,7 +170,7 @@ export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, o
                             key={project._id}
                             project={project}
                             index={index}
-                            onClick={() => onProjectClick && onProjectClick(project._id)}
+                            onClick={() => onProjectClick && onProjectClick(project.slug.current)}
                         />
                     ))}
                 </div>

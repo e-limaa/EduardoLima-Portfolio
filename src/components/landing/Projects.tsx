@@ -175,7 +175,7 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
                             key={project._id}
                             project={project}
                             index={index}
-                            onClick={() => onProjectClick && onProjectClick(project._id)}
+                            onClick={() => onProjectClick && onProjectClick(project.slug.current)}
                         />
                     ))}
                 </div>

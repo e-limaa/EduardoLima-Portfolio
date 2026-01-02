@@ -1,37 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, ArrowRight, Layers, Calendar, User, Building2 } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { TextReveal } from "./TextReveal";
 import { InteractiveGrid } from "./InteractiveGrid";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "../ui/dialog";
-import { getProjectById, getImageUrl, getAdjacentProjects } from "../../lib/project-service";
+import { getProjectBySlug, getImageUrl, getAdjacentProjects } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";
 
-
-interface ProjectDetailProps {
-    projectId: string | number;
-    onBack: () => void;
-    onNext: (nextId: string) => void;
-    onPrev: (prevId: string) => void;
-}
-
-export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDetailProps) => {
+export const ProjectDetail = () => {
+    const { slug } = useParams<{ slug: string }>();
+    const navigate = useNavigate();
     const [project, setProject] = useState<Project | null>(null);
     const [loading, setLoading] = useState(true);
     const [navigation, setNavigation] = useState<{ prevId: string | null, nextId: string | null }>({ prevId: null, nextId: null });
+
+    const projectSlug = slug || "";
 
     useEffect(() => {
         const loadProject = async () => {
             setLoading(true);
             try {
-                const idStr = String(projectId);
-                const [data, nav] = await Promise.all([
-                    getProjectById(idStr),
-                    getAdjacentProjects(idStr)
-                ]);
+                if (!projectSlug) return;
+
+                // Fetch project by slug
+                const data = await getProjectBySlug(projectSlug);
                 setProject(data || null);
-                setNavigation(nav);
+
+                // For navigation, we need the adjacent projects. 
+                // But getAdjacentProjects expects an ID currently (based on previous signature).
+                // Let's pass the fetched project's ID to it if we got data.
+                if (data?._id) {
+                    const nav = await getAdjacentProjects(data._id);
+                    setNavigation(nav);
+                }
             } catch (error) {
                 console.error("Failed to load project", error);
             } finally {
@@ -41,7 +44,19 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
 
         loadProject();
         window.scrollTo(0, 0);
-    }, [projectId]);
+    }, [projectSlug]);
+
+    const handleBack = () => {
+        navigate(-1);
+    }
+
+    const handleNext = (nextId: string) => {
+        navigate(`/project/${nextId}`);
+    }
+
+    const handlePrev = (prevId: string) => {
+        navigate(`/project/${prevId}`);
+    }
 
     if (loading) {
         return (
@@ -64,7 +79,7 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
             {/* Navigation Bar */}
             <nav className="fixed top-0 left-0 right-0 z-50 p-6 lg:px-12 flex justify-between items-center bg-gradient-to-b from-background via-background/80 to-transparent">
                 <button
-                    onClick={onBack}
+                    onClick={handleBack}
                     className="group flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors bg-background/50 backdrop-blur-md px-4 py-2 rounded-full border border-zinc-200 dark:border-white/10"
                 >
                     <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -73,14 +88,14 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
 
                 <div className="flex gap-2">
                     <button
-                        onClick={() => navigation.prevId && onPrev(navigation.prevId)}
+                        onClick={() => navigation.prevId && handlePrev(navigation.prevId)}
                         disabled={!navigation.prevId}
                         className="w-10 h-10 rounded-full border border-zinc-200 dark:border-white/10 bg-background/50 backdrop-blur-md flex items-center justify-center hover:bg-foreground hover:text-background transition-colors group text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                     </button>
                     <button
-                        onClick={() => navigation.nextId && onNext(navigation.nextId)}
+                        onClick={() => navigation.nextId && handleNext(navigation.nextId)}
                         disabled={!navigation.nextId}
                         className="w-10 h-10 rounded-full border border-zinc-200 dark:border-white/10 bg-background/50 backdrop-blur-md flex items-center justify-center hover:bg-foreground hover:text-background transition-colors group text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -273,7 +288,7 @@ export const ProjectDetail = ({ projectId, onBack, onNext, onPrev }: ProjectDeta
             {/* Next Project Teaser Footer */}
             <div
                 className="w-full py-20 border-t border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer group relative overflow-hidden transition-colors"
-                onClick={() => navigation.nextId && onNext(navigation.nextId)}
+                onClick={() => navigation.nextId && handleNext(navigation.nextId)}
             >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 dark:via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
 
