@@ -93,7 +93,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project, index: num
                         </motion.span>
                     </div>
 
-                    <h3 className="text-4xl md:text-5xl font-bold text-white mb-2 transition-colors duration-300">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 transition-colors duration-300">
                         {project.title}
                     </h3>
 
@@ -155,7 +155,7 @@ export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, o
                     </button>
 
                     <TextReveal>
-                        <h1 className="text-5xl md:text-8xl font-bold text-foreground mb-6 tracking-tighter">
+                        <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tighter">
                             Todos os Projetos
                         </h1>
                     </TextReveal>

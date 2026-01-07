@@ -128,7 +128,7 @@ export const ProjectDetail = () => {
                         </motion.div>
 
                         <TextReveal>
-                            <h1 className="text-5xl md:text-8xl font-bold text-foreground mb-6 tracking-tighter max-w-4xl">
+                            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tighter max-w-4xl">
                                 {project.title}
                             </h1>
                         </TextReveal>

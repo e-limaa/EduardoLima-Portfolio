@@ -92,7 +92,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project, index: num
                         </motion.span>
                     </div>
 
-                    <h3 className="text-4xl md:text-6xl font-bold text-white mb-2 transition-colors duration-300">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 transition-colors duration-300">
                         {project.title}
                     </h3>
 
