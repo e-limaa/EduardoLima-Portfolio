@@ -137,7 +137,7 @@ export const ProjectDetail = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.6 }}
-                            className="flex flex-wrap gap-8 md:gap-16 mt-8 border-t border-zinc-200 dark:border-white/10 pt-8 text-sm md:text-base"
+                            className="flex flex-wrap items-center w-full gap-8 md:gap-16 mt-8 border-t border-zinc-200 dark:border-white/10 pt-8 text-sm md:text-base"
                         >
                             <div className="flex flex-col gap-2">
                                 <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">Cliente</span>
@@ -154,10 +154,33 @@ export const ProjectDetail = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
+                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">Tecnologias</span>
+                                <div className="flex flex-wrap gap-2 text-foreground">
+                                    <Layers className="w-4 h-4 text-muted-foreground mt-1" />
+                                    <div className="flex flex-wrap gap-2">
+                                        {/* Hardcoded items + Project specific */}
+                                        {project.stack?.map((tech, i, arr) => (
+                                            <span key={tech}>
+                                                {tech}{i < arr.length - 1 && <span className="text-muted-foreground/40 ml-2">|</span>}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2">
                                 <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">Ano</span>
                                 <div className="flex items-center gap-2 text-foreground">
                                     <Calendar className="w-4 h-4 text-muted-foreground" />
                                     {project.year}
+                                </div>
+                            </div>
+
+                            <div className={`flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r ${project.color} shadow-lg ml-auto`}>
+                                <span className="font-sans text-white/90 text-sm font-medium">{project.metricLabel || "Métrica Chave"}</span>
+                                <div className="w-px h-3 bg-white/40" />
+                                <div className="font-sans text-white font-bold text-sm leading-none">
+                                    {project.metric}
                                 </div>
                             </div>
                         </motion.div>
@@ -166,14 +189,14 @@ export const ProjectDetail = () => {
             </header>
 
             <main className="container mx-auto px-4 lg:px-12 py-20">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+                <div className="flex flex-col gap-16">
                     {/* Main Content */}
-                    <div className="lg:col-span-8 flex flex-col gap-16">
+                    <div className="flex flex-col gap-16">
 
                         {/* Overview */}
                         <section>
                             <h3 className="text-2xl font-bold text-foreground mb-6">Visão Geral</h3>
-                            <div className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed">
+                            <div className="text-xl text-muted-foreground font-light leading-relaxed">
                                 {/* Aqui entraria o componente <PortableText value={project.description} /> se viesse do Sanity */}
                                 {project.description}
                             </div>
@@ -242,45 +265,14 @@ export const ProjectDetail = () => {
                             </div>
                         </section>
 
-                    </div>
+                        {/* CTA Section - Moved from Sidebar */}
+                        <section className="pt-16 border-t border-zinc-200 dark:border-white/10 flex flex-col items-center text-center">
+                            <p className="text-muted-foreground mb-4">Interessado em construir algo similar?</p>
+                            <a href="#contact" className="inline-flex items-center gap-2 text-foreground font-bold hover:gap-3 transition-all text-xl">
+                                Iniciar um Projeto <ArrowRight className="w-5 h-5" />
+                            </a>
+                        </section>
 
-                    {/* Sidebar */}
-                    <div className="lg:col-span-4 relative">
-                        <div className="sticky top-32 space-y-12">
-                            {/* Metric */}
-                            <div className="p-8 rounded-2xl bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900 dark:to-black border border-zinc-200 dark:border-white/10 shadow-sm dark:shadow-none">
-                                <span className="block text-muted-foreground text-sm uppercase tracking-widest font-mono mb-2">Métrica Chave</span>
-                                <div className={`text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${project.color}`}>
-                                    {project.metric}
-                                </div>
-                            </div>
-
-                            {/* Stack */}
-                            <div>
-                                <h3 className="flex items-center gap-2 text-lg font-bold text-foreground mb-6">
-                                    <Layers className="w-5 h-5 text-muted-foreground" />
-                                    Tecnologias
-                                </h3>
-                                <div className="flex flex-wrap gap-3">
-                                    {project.stack.map((tech) => (
-                                        <span
-                                            key={tech}
-                                            className="px-4 py-2 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 text-muted-foreground dark:text-zinc-300 text-sm hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors cursor-default"
-                                        >
-                                            {tech}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* CTA */}
-                            <div className="pt-8 border-t border-zinc-200 dark:border-white/10">
-                                <p className="text-muted-foreground mb-4">Interessado em construir algo similar?</p>
-                                <a href="#contact" className="inline-flex items-center gap-2 text-foreground font-bold hover:gap-3 transition-all">
-                                    Iniciar um Projeto <ArrowRight className="w-4 h-4" />
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </main>

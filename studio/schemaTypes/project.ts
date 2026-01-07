@@ -45,8 +45,14 @@ export default defineType({
             fieldset: 'header',
         }),
         defineField({
+            name: 'metricLabel',
+            title: 'Metric Label',
+            type: 'string',
+            fieldset: 'header',
+        }),
+        defineField({
             name: 'metric',
-            title: 'Metric',
+            title: 'Metric Value',
             type: 'string',
             fieldset: 'header',
         }),
