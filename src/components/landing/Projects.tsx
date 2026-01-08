@@ -153,23 +153,19 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
                                 Projetos
                             </h2>
                         </TextReveal>
-                        <p className="text-muted-foreground text-lg max-w-md mt-4">
+                        <p className="text-muted-foreground text-lg w-full mt-4">
                             Uma seleção de trabalhos que definem minha abordagem.
                         </p>
                     </div>
 
                     <div className="flex flex-col items-end gap-6 relative z-10">
                         <span className="text-muted-foreground font-mono text-sm hidden md:block">01 — PROJECTS</span>
-
-                        <div className="hidden md:flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-                            <span className="text-xs text-muted-foreground uppercase tracking-widest font-mono">Navegue</span>
-                        </div>
                     </div>
+
                 </div>
 
                 {/* Grid Container */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 no-cursor-trail">
                     {featuredProjects.map((project, index) => (
                         <ProjectCard
                             key={project._id}

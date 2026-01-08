@@ -108,6 +108,17 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                     </AnimatePresence>
                 </div>
             </div>
+
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2, duration: 1 }}
+                className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-20 px-4"
+            >
+                <p className="text-[10px] md:text-xs text-zinc-600 font-mono">
+                    Experiência imersiva com áudio. Controle disponível no canto inferior.
+                </p>
+            </motion.div>
         </motion.div>
     );
 };

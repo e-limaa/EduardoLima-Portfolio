@@ -7,6 +7,11 @@ export interface SanityImage {
   alt?: string;
 }
 
+export interface SolutionBlock {
+  _type: 'solution';
+  text: string;
+}
+
 export interface Project {
   _id: string;
   title: string;
@@ -20,7 +25,7 @@ export interface Project {
   solution: string;
   // Permitir string (URL direta atual) ou objeto SanityImage
   mainImage: string | SanityImage;
-  gallery: Array<string | SanityImage>;
+  gallery: Array<string | SanityImage | SolutionBlock>;
   metricLabel?: string;
   metric: string;
   color: string;

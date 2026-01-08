@@ -121,7 +121,22 @@ export default defineType({
             name: 'gallery',
             title: 'Gallery',
             type: 'array',
-            of: [{ type: 'image' }],
+            of: [
+                { type: 'image' },
+                {
+                    type: 'object',
+                    name: 'solution',
+                    title: 'Solution Block',
+                    fields: [
+                        {
+                            name: 'text',
+                            title: 'Content',
+                            type: 'text',
+                            rows: 5
+                        }
+                    ]
+                }
+            ],
             fieldset: 'content',
         }),
 

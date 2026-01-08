@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight, Layers, Calendar, User, Building2 } from "lucide
 import { useParams, useNavigate } from "react-router-dom";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { TextReveal } from "./TextReveal";
-import { InteractiveGrid } from "./InteractiveGrid";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "../ui/dialog";
 import { getProjectBySlug, getImageUrl, getAdjacentProjects } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";
@@ -72,9 +71,7 @@ export const ProjectDetail = () => {
     const mainImageUrl = getImageUrl(project.mainImage);
 
     return (
-        <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden selection:bg-blue-500/30 transition-colors duration-300">
-            <InteractiveGrid variant="subtle" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none fixed"></div>
+        <div className="min-h-screen bg-black text-foreground relative overflow-x-hidden selection:bg-blue-500/30 transition-colors duration-300">
 
             {/* Navigation Bar */}
             <nav className="fixed top-0 left-0 right-0 z-50 p-6 lg:px-12 flex justify-between items-center bg-gradient-to-b from-background via-background/80 to-transparent">
@@ -112,7 +109,7 @@ export const ProjectDetail = () => {
                         alt={project.title}
                         className="w-full h-full object-cover opacity-60"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/30" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
                 </div>
 
                 <div className="absolute bottom-0 left-0 w-full z-10">
@@ -128,7 +125,7 @@ export const ProjectDetail = () => {
                         </motion.div>
 
                         <TextReveal>
-                            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tighter max-w-4xl">
+                            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-6 tracking-tighter">
                                 {project.title}
                             </h1>
                         </TextReveal>
@@ -202,36 +199,46 @@ export const ProjectDetail = () => {
                             </div>
                         </section>
 
-                        {/* Challenge & Solution */}
-                        <div className="grid md:grid-cols-2 gap-12">
-                            <section className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-2xl">
-                                <h3 className="text-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">O Desafio</h3>
-                                <div className="text-muted-foreground leading-relaxed">
-                                    {project.challenge}
-                                </div>
-                            </section>
-                            <section className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-2xl">
-                                <h3 className="text-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">A Solução</h3>
-                                <div className="text-muted-foreground leading-relaxed">
-                                    {project.solution}
-                                </div>
-                            </section>
-                        </div>
+                        {/* Challenge */}
+                        <section className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg">
+                            <h3 className="text-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">O Desafio</h3>
+                            <div className="text-muted-foreground leading-relaxed">
+                                {project.challenge}
+                            </div>
+                        </section>
 
-                        {/* Gallery */}
+                        {/* Gallery & Mixed Content */}
                         <section>
-                            <h3 className="text-2xl font-bold text-foreground mb-8">Galeria</h3>
                             <div className="grid gap-8">
-                                {project.gallery?.map((img, idx) => {
-                                    const imgUrl = getImageUrl(img);
+                                {project.gallery?.map((item, idx) => {
+                                    // Handle Solution Block
+                                    if (typeof item === 'object' && '_type' in item && item._type === 'solution') {
+                                        return (
+                                            <motion.section
+                                                key={`solution-${idx}`}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg my-8"
+                                            >
+                                                <h3 className="text-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">A Solução</h3>
+                                                <div className="text-muted-foreground leading-relaxed">
+                                                    {item.text}
+                                                </div>
+                                            </motion.section>
+                                        );
+                                    }
+
+                                    // Handle Images
+                                    const imgUrl = getImageUrl(item);
                                     return (
                                         <motion.div
-                                            key={idx}
+                                            key={`gallery-${idx}`}
                                             initial={{ opacity: 0, y: 20 }}
                                             whileInView={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: idx * 0.1 }}
+                                            transition={{ delay: 0.1 }}
                                             viewport={{ once: true }}
-                                            className="rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10"
+                                            className="rounded-lg overflow-hidden border border-zinc-200 dark:border-white/10"
                                         >
                                             <Dialog>
                                                 <DialogTrigger asChild>

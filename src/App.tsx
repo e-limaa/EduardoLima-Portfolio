@@ -15,6 +15,7 @@ import { ProjectDetail } from "./components/landing/ProjectDetail";
 import { ThemeProvider } from "./components/theme-provider";
 import { AudioPlayer } from "./components/landing/AudioPlayer";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
+import { CursorTrail } from "./components/ui/CursorTrail";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ export default function App() {
           {!hasEntered && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
         </AnimatePresence>
 
+        <CursorTrail />
         <MouseSpotlight />
 
         <AudioPlayer shouldPlay={hasEntered} />
