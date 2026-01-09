@@ -130,6 +130,20 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
         loadProjects();
     }, []);
 
+    useEffect(() => {
+        const loadProjects = async () => {
+            try {
+                const data = await getProjects();
+                setProjects(data);
+            } catch (error) {
+                console.error("Failed to load projects", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadProjects();
+    }, []);
+
     // Display first 6 projects for the grid layout (3 per row * 2 rows ideally)
     const featuredProjects = projects.slice(0, 6);
 
