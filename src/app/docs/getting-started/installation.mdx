@@ -1,0 +1,72 @@
+import { Button } from '@antigravity/ds';
+
+# Installation
+
+The Antigravity Design System is a managed dependency that provides a unified language for our portfolio products.
+
+## Requirements
+
+- **Node**: >= 18.0.0
+- **React**: >= 18.0.0
+- **Tailwind CSS**: >= 3.0.0
+
+## Installation
+
+Install the package alongside its peer dependencies:
+
+```bash
+npm install @antigravity/ds class-variance-authority clsx tailwind-merge @radix-ui/react-slot
+```
+
+## Setup
+
+### 1. Import Global Styles
+
+In your root layout or entry file (e.g., `main.tsx`, `app/layout.tsx`):
+
+```tsx
+import "@antigravity/ds/styles/globals.css";
+import "@antigravity/ds/styles/tokens.css";
+```
+
+### 2. Configure Tailwind
+
+Update `tailwind.config.js` to inherit the system's design tokens.
+
+```js
+// tailwind.config.js
+import { antigravityPreset } from "@antigravity/ds/tailwind";
+
+export default {
+  content: [
+    "./src/**/*.{ts,tsx}",
+    "./node_modules/@antigravity/ds/dist/**/*.{js,mjs}"
+  ],
+  presets: [antigravityPreset],
+};
+```
+
+## First Working Example
+
+Once installed, you can use components immediately.
+
+<div className="p-6 border rounded-lg my-4 bg-background flex gap-4 items-center">
+  <Button variant="primary">Hello World</Button>
+  <Button variant="secondary">Secondary Action</Button>
+</div>
+
+```tsx
+import { Button } from "@antigravity/ds";
+
+export default function App() {
+  return (
+    <Button variant="primary">Hello World</Button>
+  );
+}
+```
+
+## What NOT to Do
+
+- **❌ Do not create local "Button" wrappers**: Use the DS Button directly.
+- **❌ Do not use arbitrary values**: Avoid `w-[37px]`. Use token classes like `w-9`.
+- **❌ Do not edit `node_modules`**: The system is read-only.

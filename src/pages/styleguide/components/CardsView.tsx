@@ -6,9 +6,9 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "../../../components/ui/card";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
+} from "@antigravity/ds";
+import { Button } from "@antigravity/ds";
+import { Input } from "@antigravity/ds";
 import { Label } from "../../../components/ui/label";
 
 export default function CardsView() {

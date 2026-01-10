@@ -27,6 +27,26 @@ import InputsView from "./pages/styleguide/components/InputsView";
 import CardsView from "./pages/styleguide/components/CardsView";
 import BadgesView from "./pages/styleguide/components/BadgesView";
 
+// Docs Imports
+const DocsInstallation = React.lazy(() => import('./app/docs/getting-started/installation.mdx'));
+// Unused placeholders can be kept if we plan to use them, but linter complains.
+// Let's comment them out or remove them. For now, removing unused to silence linter.
+// const DocsUsage = React.lazy(() => import('./app/docs/getting-started/usage-basics.mdx'));
+// const DocsColors = React.lazy(() => import('./app/docs/foundations/colors.mdx'));
+// const DocsTypography = React.lazy(() => import('./app/docs/foundations/typography.mdx'));
+// const DocsSpacing = React.lazy(() => import('./app/docs/foundations/spacing.mdx'));
+// const DocsRadius = React.lazy(() => import('./app/docs/foundations/radius.mdx'));
+const DocsShadow = React.lazy(() => import('./app/docs/foundations/shadow.mdx'));
+const DocsA11y = React.lazy(() => import('./app/docs/foundations/accessibility.mdx'));
+
+// const DocsCompOverview = React.lazy(() => import('./app/docs/components/overview.mdx'));
+// const DocsButton = React.lazy(() => import('./app/docs/components/button.mdx'));
+// const DocsInput = React.lazy(() => import('./app/docs/components/input.mdx'));
+// const DocsCard = React.lazy(() => import('./app/docs/components/card.mdx'));
+const DocsVersioning = React.lazy(() => import('./app/docs/governance/versioning.mdx'));
+const DocsLifecycle = React.lazy(() => import('./app/docs/governance/lifecycle.mdx'));
+const DocsContributing = React.lazy(() => import('./app/docs/governance/contributing.mdx'));
+
 const LandingPage = () => {
   const navigate = useNavigate();
 
@@ -113,15 +133,32 @@ export default function App() {
             {/* Design System Routes */}
             <Route path="/design-system" element={<StyleGuideLayout />}>
               <Route index element={<Overview />} />
-              <Route path="foundation/colors" element={<ColorsView />} />
+
+              {/* Getting Started */}
+              <Route path="installation" element={<DocsInstallation />} />
+
+              {/* Foundation - Mix of old and new */}
+              <Route path="foundation/colors" element={<ColorsView />} /> {/* Keep visual view for now */}
               <Route path="foundation/typography" element={<TypographyView />} />
               <Route path="foundation/spacing" element={<SpacingView />} />
               <Route path="foundation/radius" element={<RadiusView />} />
-              <Route path="components/buttons" element={<ButtonsView />} />
+
+              {/* Foundation - New MDX placeholders */}
+              <Route path="foundation/shadows" element={<DocsShadow />} />
+              <Route path="foundation/accessibility" element={<DocsA11y />} />
+
+              {/* Components */}
+              <Route path="components/buttons" element={<ButtonsView />} /> {/* Keep visual view */}
               <Route path="components/inputs" element={<InputsView />} />
               <Route path="components/cards" element={<CardsView />} />
               <Route path="components/badges" element={<BadgesView />} />
-              {/* Fallback for other routes not yet implemented */}
+
+              {/* Governance */}
+              <Route path="governance/versioning" element={<DocsVersioning />} />
+              <Route path="governance/lifecycle" element={<DocsLifecycle />} />
+              <Route path="governance/contributing" element={<DocsContributing />} />
+
+              {/* Fallback */}
               <Route path="*" element={<Overview />} />
             </Route>
           </Routes>

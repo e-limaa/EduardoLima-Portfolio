@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Box, Palette, Terminal, Zap } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@antigravity/ds';
 import { Link } from 'react-router-dom';
 
 export const Overview = () => {

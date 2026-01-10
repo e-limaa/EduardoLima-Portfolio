@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Send, User, Bot } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "@antigravity/ds";
+import { Input } from "@antigravity/ds";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import exampleImage from 'figma:asset/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png';
 

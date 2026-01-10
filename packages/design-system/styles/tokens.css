@@ -1,0 +1,65 @@
+/**
+ * THIS FILE IS AUTO-GENERATED. DO NOT EDIT MANUALY.
+ * Source: packages/design-system/tokens/*.json
+ */
+
+:root {
+
+    /* Semantic - Light */
+    --background-default: #f4f4f5;
+    --background-surface: #ffffff;
+    --background-muted: #f4f4f5;
+    --background-popover: #ffffff;
+    --background-input: #e4e4e7;
+    --text-primary: #18181b;
+    --text-secondary: #3f3f46;
+    --text-muted: #71717a;
+    --text-inverse: #ffffff;
+    --border-default: #e4e4e7;
+    --border-input: #e4e4e7;
+    --action-primary-background: #2563eb;
+    --action-primary-foreground: #ffffff;
+    --action-primary-hover: #3b82f6;
+    --action-secondary-background: #e4e4e7;
+    --action-secondary-foreground: #18181b;
+    --action-destructive-background: #ef4444;
+    --action-destructive-foreground: #fafafa;
+    --action-accent-background: #2563eb;
+    --action-accent-foreground: #ffffff;
+    --action-ring: #2563eb;
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+}
+
+.dark {
+    /* Semantic - Dark */
+    --background-default: #000000;
+    --background-surface: #09090b;
+    --background-muted: #18181b;
+    --background-popover: #09090b;
+    --background-input: #27272a;
+    --text-primary: #fafafa;
+    --text-secondary: #d4d4d8;
+    --text-muted: #a1a1aa;
+    --text-inverse: #18181b;
+    --border-default: #27272a;
+    --border-input: #27272a;
+    --action-primary-background: #2563eb;
+    --action-primary-foreground: #ffffff;
+    --action-primary-hover: #3b82f6;
+    --action-secondary-background: #27272a;
+    --action-secondary-foreground: #fafafa;
+    --action-destructive-background: #7f1d1d;
+    --action-destructive-foreground: #fafafa;
+    --action-accent-background: #3b82f6;
+    --action-accent-foreground: #ffffff;
+    --action-ring: #2563eb;
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+}

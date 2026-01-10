@@ -6,7 +6,7 @@ import { TextReveal } from "./TextReveal";
 import { InteractiveGrid } from "./InteractiveGrid";
 import { getProjects, getImageUrl } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";
-import { Button } from "../ui/button";
+import { Button } from "@antigravity/ds";
 
 const ProjectCard = ({ project, index, onClick }: { project: Project, index: number, onClick?: () => void }) => {
     const mouseX = useMotionValue(0);

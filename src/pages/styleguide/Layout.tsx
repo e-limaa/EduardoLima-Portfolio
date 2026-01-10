@@ -1,7 +1,8 @@
 import React from 'react';
+import { DocsMDXProvider } from '@/components/mdx/mdx-provider';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Moon, Sun, Menu, X, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Moon, Sun, Menu, ArrowLeft } from 'lucide-react';
+import { Button } from '@antigravity/ds';
 import { useTheme } from '@/components/theme-provider';
 import { navigation } from '@design-system/docs/styleguide/navigation';
 import { cn } from '@/lib/utils';
@@ -89,6 +90,7 @@ export const StyleGuideLayout = () => {
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col h-full overflow-hidden">
+
                 <header className="flex-shrink-0 flex h-16 items-center gap-4 border-b border-border bg-background/80 px-6 backdrop-blur">
                     <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsMobileMenuOpen(true)}>
                         <Menu size={20} />
@@ -109,7 +111,9 @@ export const StyleGuideLayout = () => {
                 </header>
 
                 <main className="flex-1 overflow-y-auto p-6 lg:p-12 max-w-5xl mx-auto w-full animate-in fade-in duration-500 slide-in-from-bottom-4">
-                    <Outlet />
+                    <DocsMDXProvider>
+                        <Outlet />
+                    </DocsMDXProvider>
                 </main>
             </div>
         </div>

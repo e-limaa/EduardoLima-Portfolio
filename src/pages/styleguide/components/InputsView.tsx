@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Input } from "../../../components/ui/input";
+import { Input } from "@antigravity/ds";
 import { Label } from "../../../components/ui/label";
 
 export default function InputsView() {

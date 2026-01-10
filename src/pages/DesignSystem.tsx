@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowLeft, Palette, Type, Box, Layers, Moon, Sun } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../components/ui/button";
+import { Button } from "@antigravity/ds";
 import { Badge } from "../components/ui/badge";
 import { useTheme } from "../components/theme-provider";
 import semanticTokens from '@design-system/tokens/semantic.json';

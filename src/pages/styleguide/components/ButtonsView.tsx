@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@antigravity/ds';
 import { Loader2, Mail, ArrowUpRight } from 'lucide-react';
 
 const VariantSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -103,7 +103,7 @@ export const ButtonsView = () => {
                 <div className="grid lg:grid-cols-2 gap-8">
                     <div className="space-y-4">
                         <h3 className="font-medium text-sm text-muted-foreground uppercase">Importação</h3>
-                        <CodeBlock code={`import { Button } from "@/components/ui/button"`} />
+                        <CodeBlock code={`import { Button } from "@antigravity/ds"`} />
 
                         <h3 className="font-medium text-sm text-muted-foreground uppercase pt-4">Exemplos Práticos</h3>
                         <CodeBlock code={`// Primary Action

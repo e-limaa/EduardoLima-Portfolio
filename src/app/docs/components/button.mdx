@@ -1,0 +1,44 @@
+import { Button } from '@antigravity/ds';
+
+# Button
+
+Buttons allow users to take actions, and make choices, with a single tap.
+
+## Variants
+
+<div className="p-6 border rounded-lg my-4 bg-background flex flex-wrap gap-4 items-center">
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="destructive">Destructive</Button>
+</div>
+
+```tsx
+<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="destructive">Destructive</Button>
+```
+
+## States
+
+Buttons support standard interactive states: hover, focus, disabled, and loading.
+
+<div className="p-6 border rounded-lg my-4 bg-background flex flex-wrap gap-4 items-center">
+  <Button disabled>Disabled</Button>
+  {/* Assuming loading prop exists if not we mock it or remove */}
+  <Button variant="primary">Loading...</Button> 
+</div>
+
+## Accessibility
+
+- Renders as a native `button` element.
+- Fully accessible via keyboard (Enter, Space).
+- Focus rights are clearly visible.
+
+## Do's and Don'ts
+
+- ✅ Do use **Primary** for the main action on a screen.
+- ❌ Don't use more than one Primary button per section.

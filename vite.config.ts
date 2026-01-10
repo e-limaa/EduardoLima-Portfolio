@@ -3,11 +3,18 @@ import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 
+import mdx from '@mdx-js/rollup';
+import remarkGfm from 'remark-gfm';
+
 const __dirname = path.resolve();
 
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    { enforce: 'pre', ...mdx({ remarkPlugins: [remarkGfm], providerImportSource: "@mdx-js/react" }) },
+    react(),
+    tailwindcss()
+  ],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
@@ -56,6 +63,7 @@ export default defineConfig({
       '@radix-ui/react-accordion@1.2.3': '@radix-ui/react-accordion',
       '@': path.resolve(__dirname, './src'),
       '@design-system': path.resolve(__dirname, './packages/design-system'),
+      '@antigravity/ds': path.resolve(__dirname, './packages/design-system/src/index.ts'),
     },
   },
   build: {

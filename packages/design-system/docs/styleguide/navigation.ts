@@ -29,4 +29,12 @@ export const navigation = [
             { title: 'Badges', href: '/design-system/components/badges', icon: Box },
         ],
     },
+    {
+        title: 'Governance',
+        items: [
+            { title: 'Versioning', href: '/design-system/governance/versioning', icon: ShieldCheck },
+            { title: 'Lifecycle', href: '/design-system/governance/lifecycle', icon: ShieldCheck },
+            { title: 'Contributing', href: '/design-system/governance/contributing', icon: ShieldCheck },
+        ],
+    },
 ];

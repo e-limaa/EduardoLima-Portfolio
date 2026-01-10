@@ -7,10 +7,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Input } from "../ui/input";
+import { Input } from "@antigravity/ds";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
+import { Button } from "@antigravity/ds";
 
 export function ContactFormModal({ children }: { children: React.ReactNode }) {
   return (
@@ -34,7 +35,7 @@ export function ContactFormModal({ children }: { children: React.ReactNode }) {
             <Label htmlFor="phone" className="text-zinc-300">Telefone</Label>
             <Input id="phone" placeholder="(00) 00000-0000" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
           </div>
-           <div className="grid gap-2">
+          <div className="grid gap-2">
             <Label htmlFor="company" className="text-zinc-300">Empresa</Label>
             <Input id="company" placeholder="Nome da empresa" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
           </div>
@@ -44,9 +45,9 @@ export function ContactFormModal({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex justify-end mt-4">
             <Button type="submit" className="w-full bg-white text-black hover:bg-zinc-200 font-bold">
-                Enviar mensagem
+              Enviar mensagem
             </Button>
-        </div>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

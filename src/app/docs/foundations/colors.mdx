@@ -1,0 +1,20 @@
+import { ColorPalette } from '../components/ColorPalette';
+
+# Colors
+
+Our color system is **intent-based**. This means we define colors by *what they do* (e.g., `action-primary`), not *what they look like* (e.g., `blue-500`).
+
+## Palette
+
+<ColorPalette />
+
+## Usage Rules
+
+### Safe Usage
+
+- Always use the semantic tokens (`bg-primary`, `text-primary-foreground`) instead of raw hex values.
+- Ensure text contrast passes WCAG AA standards (our tokens are designed to do this automatically).
+
+### Brand Colors
+
+Brand colors should be used sparingly for primary actions or key visual moments. Do not overuse them for backgrounds.
