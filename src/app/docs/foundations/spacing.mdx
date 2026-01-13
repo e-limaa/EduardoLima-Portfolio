@@ -1,3 +1,50 @@
+
 # Spacing
 
-Coming soon.
+Our spacing scale is the foundation of vertical and horizontal rhythm. It ensures consistency in margins, padding, sizing, and layout.
+
+## Scale
+
+We use the standard Tailwind spacing scale.
+
+<div className="border rounded-xl border-border bg-card p-8 my-6">
+  <div className="flex items-center gap-8 pb-4 border-b border-border text-xs font-semibold uppercase text-muted-foreground tracking-wider mb-4">
+    <div className="w-24">Token</div>
+    <div className="flex-1">Value</div>
+    <div className="hidden md:block w-1/3">Visual</div>
+  </div>
+
+  <SpacingRow token="1" value="0.25rem (4px)" />
+  <SpacingRow token="2" value="0.5rem (8px)" />
+  <SpacingRow token="3" value="0.75rem (12px)" />
+  <SpacingRow token="4" value="1rem (16px)" />
+  <SpacingRow token="6" value="1.5rem (24px)" />
+  <SpacingRow token="8" value="2rem (32px)" />
+  <SpacingRow token="12" value="3rem (48px)" />
+  <SpacingRow token="16" value="4rem (64px)" />
+</div>
+
+export const SpacingRow = ({ token, value }) => (
+  <div className="flex items-center gap-8 py-4 border-b border-border last:border-0 hover:bg-muted/50 transition-colors px-2 -mx-2 rounded-lg">
+    <div className="w-24 flex-shrink-0">
+      <p className="font-mono text-sm font-semibold">{token}</p>
+    </div>
+    <div className="flex-1">
+       <p className="font-mono text-xs text-muted-foreground">{value}</p>
+    </div>
+    <div className="hidden md:block w-1/3">
+      <div className="h-4 bg-primary/20 rounded border border-primary/30" style={{ width: value.split('(')[1].replace(')', '') }}></div>
+    </div>
+  </div>
+);
+
+## Usage Guidelines
+
+<DoDontContainer>
+  <DoDont type="do" title="Use the scale">
+    Always use standard values like `p-4`, `m-6`, `gap-2`.
+  </DoDont>
+  <DoDont type="dont" title="Magic Numbers">
+     Avoid arbitrary values like `margin: 19px` or `w-[123px]` unless absolutely necessary for pixel-perfect overlays.
+  </DoDont>
+</DoDontContainer>

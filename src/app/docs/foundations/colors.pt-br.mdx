@@ -1,0 +1,48 @@
+import { ColorPalette } from '@/app/docs/components/ColorPalette';
+
+<DocsPageHeader
+  title="Cores"
+  description="Nosso sistema de cores baseado em intenção e papéis semânticos."
+  status="stable"
+/>
+
+## Cores Primárias
+
+Usadas para ações principais, destaques e identidade da marca.
+
+<ColorPalette
+  colors={[
+    { name: 'Primary', value: 'hsl(var(--primary))', variable: '--primary' },
+    { name: 'Primary Foreground', value: 'hsl(var(--primary-foreground))', variable: '--primary-foreground' },
+  ]}
+/>
+
+## Cores de Superfície
+
+Usadas para fundos de páginas, cartões e elementos estruturais.
+
+<ColorPalette
+  colors={[
+    { name: 'Background', value: 'hsl(var(--background))', variable: '--background' },
+    { name: 'Foreground', value: 'hsl(var(--foreground))', variable: '--foreground' },
+    { name: 'Card', value: 'hsl(var(--card))', variable: '--card' },
+    { name: 'Card Foreground', value: 'hsl(var(--card-foreground))', variable: '--card-foreground' },
+  ]}
+/>
+
+## Estados e Feedback
+
+Cores funcionais para indicar estados do sistema.
+
+<ColorPalette
+  colors={[
+    { name: 'Destructive', value: 'hsl(var(--destructive))', variable: '--destructive' },
+    { name: 'Destructive Foreground', value: 'hsl(var(--destructive-foreground))', variable: '--destructive-foreground' },
+    { name: 'Muted', value: 'hsl(var(--muted))', variable: '--muted' },
+    { name: 'Muted Foreground', value: 'hsl(var(--muted-foreground))', variable: '--muted-foreground' },
+  ]}
+/>
+
+<Callout type="info" title="Acessibilidade">
+  Todas as combinações de cores padrão (fundo + texto) passam no teste de contraste WCAG AA.
+</Callout>

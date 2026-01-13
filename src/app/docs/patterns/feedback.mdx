@@ -1,0 +1,50 @@
+import { Button, Card, CardContent } from '@antigravity/ds';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
+
+<DocsPageHeader 
+  title="Feedback" 
+  description="Patterns for communicating system status to the user." 
+  status="draft" 
+/>
+
+## Principles
+
+The system should always keep users informed about what is going on, through appropriate feedback within a reasonable amount of time.
+
+## Loading States
+
+Use loading spinners inside buttons for user-initiated actions.
+
+<ComponentPreview>
+  <div className="flex gap-4">
+    <Button disabled>
+        <span className="mr-2 animate-spin">⟳</span>
+        Saving...
+    </Button>
+    <Button variant="secondary" disabled>
+        Processing
+    </Button>
+  </div>
+</ComponentPreview>
+
+## Alerts and Messages
+
+Use semantic colors to indicate the nature of the message.
+
+<div className="grid gap-4 my-6">
+    <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-900 text-green-800 dark:text-green-300 flex gap-3 items-start">
+        <CheckCircle2 size={20} className="mt-0.5 shrink-0" />
+        <div>
+            <h4 className="font-semibold text-sm">Success</h4>
+            <p className="text-sm opacity-90">Your changes have been saved successfully.</p>
+        </div>
+    </div>
+
+     <div className="p-4 rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-900 text-red-800 dark:text-red-300 flex gap-3 items-start">
+        <AlertCircle size={20} className="mt-0.5 shrink-0" />
+        <div>
+            <h4 className="font-semibold text-sm">Error</h4>
+            <p className="text-sm opacity-90">Unable to connect to the server. Please try again.</p>
+        </div>
+    </div>
+</div>

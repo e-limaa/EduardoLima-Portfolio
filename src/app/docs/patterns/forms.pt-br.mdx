@@ -1,0 +1,54 @@
+import { Button, Input, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@antigravity/ds';
+import { Label } from '@/components/ui/label';
+
+<DocsPageHeader 
+  title="Formulários" 
+  description="Diretrizes para layouts de entrada de dados e feedback de validação." 
+  status="draft" 
+/>
+
+## Visão Geral
+
+Formulários são a principal maneira de os usuários interagirem com o sistema. Um formulário bem projetado guia o usuário, minimiza erros e cria um sentimento de confiança.
+
+## Estrutura
+
+Agrupe campos relacionados em seções ou Cards. Use uma ação primária clara no alinhamento inferior direito ou esquerdo, dependendo do contexto.
+
+<ComponentPreview>
+  <Card className="w-full max-w-lg mx-auto">
+    <CardHeader>
+        <CardTitle>Configurações de Perfil</CardTitle>
+        <CardDescription>Atualize suas informações pessoais.</CardDescription>
+    </CardHeader>
+    <CardContent className="space-y-4">
+        <div className="space-y-1.5">
+            <Label htmlFor="username">Nome de usuário</Label>
+            <Input id="username" defaultValue="@johndoe" />
+        </div>
+        <div className="space-y-1.5">
+            <Label htmlFor="email">Endereço de Email</Label>
+            <Input id="email" type="email" placeholder="john@exemplo.com" />
+            <p className="text-[0.8rem] text-muted-foreground">Não enviaremos spam.</p>
+        </div>
+    </CardContent>
+    <CardFooter className="flex justify-end gap-2">
+        <Button variant="ghost">Cancelar</Button>
+        <Button>Salvar Alterações</Button>
+    </CardFooter>
+  </Card>
+</ComponentPreview>
+
+## Validação
+
+### Validação Inline
+Mostre erros imediatamente quando a funcionalidade permitir (ex: força da senha), ou no blur para erros de formato (email).
+
+<DoDontContainer>
+  <DoDont type="do" title="Mensagens de Erro Claras">
+    "A senha deve conter pelo menos 8 caracteres" é melhor que "Senha inválida".
+  </DoDont>
+   <DoDont type="dont" title="Validar muito cedo">
+    Não mostre um erro enquanto o usuário ainda está digitando o primeiro caractere.
+  </DoDont>
+</DoDontContainer>

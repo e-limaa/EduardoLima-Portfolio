@@ -1,0 +1,50 @@
+import { ProjectCardDefaultDemo, ProjectCardGridDemo } from "../examples/project-card-demo";
+
+<DocsPageHeader
+  title="Project Card"
+  description="A highly interactive card component with mouse-tracking spotlight, image parallax, and data visualization. Used for showcasing work items."
+  status="stable"
+/>
+
+## Usage
+
+```tsx
+import { ProjectCard } from "@antigravity/ds";
+
+<ProjectCard
+  title="Project Name"
+  category="Design System"
+  image="/path/to/image.jpg"
+  metric="2024"
+  color="from-blue-500 to-cyan-500"
+  onClick={() => console.log("Clicked")}
+/>
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview>
+  <ProjectCardDefaultDemo />
+</ComponentPreview>
+
+### Grid Layout
+
+The card is designed to work perfectly within a CSS grid.
+
+<ComponentPreview>
+  <ProjectCardGridDemo />
+</ComponentPreview>
+
+## Props
+
+<TokenTable tokens={[
+  { name: 'title', value: 'string', usage: 'The name of the project' },
+  { name: 'category', value: 'string', usage: 'The project category (displayed with gradient)' },
+  { name: 'image', value: 'string', usage: 'URL for the background image' },
+  { name: 'metric', value: 'string (optional)', usage: 'Secondary data point (year, statistic)' },
+  { name: 'color', value: 'string', usage: 'Tailwind gradient classes (e.g., from-x to-y)' },
+  { name: 'onClick', value: 'function', usage: 'Click handler' },
+  { name: 'className', value: 'string', usage: 'Additional classes for container' }
+]} />

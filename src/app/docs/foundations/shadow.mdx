@@ -1,3 +1,36 @@
-# Shadows
 
-Coming soon.
+# Shadows & Elevation
+
+Elevation serves to lift elements from the background, indicating hierarchy and interactivity. We use shadows to simulate this elevation Z-axis.
+
+## Scale
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-8 p-8 bg-muted/20 rounded-xl">
+    <div className="aspect-square bg-card rounded-xl shadow-sm flex items-center justify-center border border-border">
+        <span className="text-xs font-mono text-muted-foreground">shadow-sm</span>
+    </div>
+    <div className="aspect-square bg-card rounded-xl shadow flex items-center justify-center border border-border">
+         <span className="text-xs font-mono text-muted-foreground">shadow</span>
+    </div>
+    <div className="aspect-square bg-card rounded-xl shadow-md flex items-center justify-center border border-border">
+         <span className="text-xs font-mono text-muted-foreground">shadow-md</span>
+    </div>
+    <div className="aspect-square bg-card rounded-xl shadow-lg flex items-center justify-center border border-border">
+         <span className="text-xs font-mono text-muted-foreground">shadow-lg</span>
+    </div>
+</div>
+
+## Usage
+
+- **shadow-sm**: Subtle borders, interactive states like hover on table rows.
+- **shadow (default)**: Cards, dropdowns, low-level poppers.
+- **shadow-lg**: Modals, Dialogs, Floating Action Buttons.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use for depth">
+    Use shadows to separate layers (e.g., a dropdown menu floating above a table).
+  </DoDont>
+  <DoDont type="dont" title="Overuse on flat design">
+    Don't apply deep shadows to elements that should feel flush with the surface (like internal cards sections).
+  </DoDont>
+</DoDontContainer>

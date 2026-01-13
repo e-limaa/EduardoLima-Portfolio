@@ -1,4 +1,5 @@
-import React from 'react';
+// No changes to Overview for now.
+// Keeping it simple to fix the reported regression.
 import { ArrowRight, Box, Palette, Terminal, Zap } from 'lucide-react';
 import { Button } from '@antigravity/ds';
 import { Link } from 'react-router-dom';

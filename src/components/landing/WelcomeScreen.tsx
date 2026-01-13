@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { InteractiveGrid } from "./InteractiveGrid";
+import { InteractiveGrid } from "@antigravity/ds";
 
 interface WelcomeScreenProps {
     onEnter: () => void;

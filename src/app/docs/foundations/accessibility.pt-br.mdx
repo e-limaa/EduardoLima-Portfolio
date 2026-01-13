@@ -1,0 +1,54 @@
+<DocsPageHeader
+  title="Acessibilidade"
+  description="Construindo experiências inclusivas para todos os usuários."
+  status="stable"
+/>
+
+Acessibilidade não é uma feature, é um requisito. Nosso Design System segue as diretrizes da WCAG 2.1 nível AA.
+
+## Princípios (POUR)
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+    <div className="p-4 border rounded-lg">
+        <h3 className="font-bold text-primary mb-2">Perceptível</h3>
+        <p className="text-sm text-muted-foreground">
+            A informação e a interface devem ser apresentadas de forma que os usuários possam percebê-las (visão, audição, tato).
+        </p>
+    </div>
+    <div className="p-4 border rounded-lg">
+        <h3 className="font-bold text-primary mb-2">Operável</h3>
+        <p className="text-sm text-muted-foreground">
+            Os componentes de interface e a navegação devem ser operáveis (teclado, mouse, voz).
+        </p>
+    </div>
+    <div className="p-4 border rounded-lg">
+        <h3 className="font-bold text-primary mb-2">Compreensível</h3>
+        <p className="text-sm text-muted-foreground">
+            A informação e a operação da interface devem ser compreensíveis.
+        </p>
+    </div>
+    <div className="p-4 border rounded-lg">
+        <h3 className="font-bold text-primary mb-2">Robusto</h3>
+        <p className="text-sm text-muted-foreground">
+             O conteúdo deve ser robusto o suficiente para ser interpretado por uma variedade de agentes de usuário (browsers, screen readers).
+        </p>
+    </div>
+</div>
+
+## Teclado
+
+Todos os componentes interativos devem ser acessíveis via teclado.
+
+- **Tab**: Navega para o próximo elemento focado.
+- **Enter / Space**: Ativa o elemento.
+- **Esc**: Fecha modais ou popovers.
+- **Setas**: Navega entre itens de lista (menus, radio groups).
+
+<DoDontContainer>
+  <DoDont type="do" title="Foco Visível">
+    Mantenha o `outline` de foco padrão ou estilize-o claramente (ring).
+  </DoDont>
+  <DoDont type="dont" title="Remover Outline">
+    Nunca use `outline: none` sem fornecer um estilo alternativo de foco.
+  </DoDont>
+</DoDontContainer>

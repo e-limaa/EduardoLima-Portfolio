@@ -1,3 +1,83 @@
+import { Input, Button } from '@antigravity/ds';
+import { Label } from '@/components/ui/label';
+
 # Input
 
-Coming soon.
+Inputs allow users to enter text into a UI. They typically appear in forms and dialogs.
+
+## Usage
+
+### When to use
+- For short, single-line text data (e.g., name, email, phone).
+- When looking for a specific data format that can be validated.
+
+### When not to use
+- For multiple lines of text (use **Textarea**).
+- For strict preset options (use **Select** or **Radio**).
+
+## Examples
+
+### Default
+Basic text input with a placeholder.
+
+<ComponentPreview>
+  <Input type="email" placeholder="Email" className="max-w-sm" />
+</ComponentPreview>
+
+### With Label
+Combine with `Label` for accessibility and clarity.
+
+<ComponentPreview>
+  <div className="grid w-full max-w-sm items-center gap-1.5">
+    <Label htmlFor="email-2">Email</Label>
+    <Input type="email" id="email-2" placeholder="Email" />
+  </div>
+</ComponentPreview>
+
+### With Button
+Common pattern for newsletter signups or search bars.
+
+<ComponentPreview>
+  <div className="flex w-full max-w-sm items-center gap-2">
+      <Input type="email" placeholder="Email" />
+      <Button type="submit">Subscribe</Button>
+  </div>
+</ComponentPreview>
+
+
+### Disabled
+Prevents user interaction, typically during loading or permission states.
+
+<ComponentPreview>
+  <Input disabled type="email" placeholder="Email" className="max-w-sm" />
+</ComponentPreview>
+
+## States
+
+### Error State
+Currently, error states are handled by adding `aria-invalid` or specific classes.
+
+<ComponentPreview>
+  <div className="grid w-full max-w-sm items-center gap-1.5">
+    <Label htmlFor="email-error" className="text-destructive">Email</Label>
+    <Input 
+      type="email" 
+      id="email-error" 
+      placeholder="Email" 
+      className="border-destructive focus-visible:ring-destructive/30"
+      defaultValue="invalid-email"
+    />
+    <p className="text-xs text-destructive">Please enter a valid email address.</p>
+  </div>
+</ComponentPreview>
+
+## Accessibility
+
+<DoDontContainer>
+  <DoDont type="do" title="Always use labels">
+    Visible headers or `aria-label` attributes are mandatory for screen readers.
+  </DoDont>
+  <DoDont type="dont" title="Rely on placeholder">
+    Placeholders disappear when typing. Do not use them as the only label.
+  </DoDont>
+</DoDontContainer>

@@ -1,3 +1,46 @@
+
 # Radius
 
-Coming soon.
+Border radius tokens smooth the corners of UI elements. Our system uses a smart base radius that scales automatically across components.
+
+<Callout type="info" title="Adaptive Radius">
+  Our radius system is built on variables. Changing `--radius` in `globals.css` updates the entire system (buttons, inputs, cards) instantly.
+</Callout>
+
+## Tokens
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+  <RadiusCard token="rounded-sm" value="~6px" exampleClass="rounded-sm" />
+  <RadiusCard token="rounded-md" value="~8px" exampleClass="rounded-md" />
+  <RadiusCard token="rounded-lg" value="10px (Base)" exampleClass="rounded-lg ring-2 ring-primary" />
+  <RadiusCard token="rounded-xl" value="~14px" exampleClass="rounded-xl" />
+  <RadiusCard token="rounded-2xl" value="~18px" exampleClass="rounded-2xl" />
+  <RadiusCard token="rounded-full" value="9999px" exampleClass="rounded-full" />
+</div>
+
+export const RadiusCard = ({ token, value, exampleClass }) => (
+  <div className="flex flex-col gap-4 p-6 border border-border rounded-xl bg-card">
+    <div className="flex items-center justify-between">
+      <code className="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded">{token}</code>
+      <span className="text-xs text-muted-foreground font-mono">{value}</span>
+    </div>
+    <div className="flex items-center justify-center p-8 bg-muted/50 rounded-lg border border-dashed border-border h-32">
+      <div className={`w-16 h-16 bg-primary shadow-sm flex items-center justify-center ${exampleClass}`}>
+      </div>
+    </div>
+  </div>
+);
+
+## Usage Guidelines
+
+`rounded-md` is typically used for small interactive elements like Buttons and Inputs inside cards.
+`rounded-lg` or `rounded-xl` is used for containers like Cards, Dialogs, and Popovers.
+
+<DoDontContainer>
+  <DoDont type="do" title="Nest Radii Correctly">
+    Inner elements should generally have less radius than their containers to look visually concentric.
+  </DoDont>
+  <DoDont type="dont" title="Mix Shapes">
+    Avoid mixing fully rounded (pill) buttons with sharp rectangular inputs in the same group.
+  </DoDont>
+</DoDontContainer>

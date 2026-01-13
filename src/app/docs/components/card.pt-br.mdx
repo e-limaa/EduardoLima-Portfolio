@@ -1,0 +1,63 @@
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    Button,
+    Input
+} from "@antigravity/ds";
+import { Label } from '@/components/ui/label';
+
+<DocsPageHeader
+  title="Card"
+  description="Cards contêm conteúdo e ações sobre um único assunto. São containers flexíveis que agrupam informações relacionadas."
+  status="stable"
+/>
+
+## Anatomia
+
+Cards são compostos de slots primitivos que você pode compor:
+- `CardHeader`: Container de título e descrição.
+- `CardContent`: O corpo principal.
+- `CardFooter`: Área de ações.
+
+## Exemplos
+
+### Card Simples
+Um layout padrão para fluxos de criação ou resumos.
+
+<ComponentPreview>
+  <Card className="w-[350px]">
+    <CardHeader>
+      <CardTitle>Criar projeto</CardTitle>
+      <CardDescription>Faça deploy do seu novo projeto em um clique.</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <form>
+        <div className="grid w-full items-center gap-4">
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="name">Nome</Label>
+            <Input id="name" placeholder="Nome do seu projeto" />
+          </div>
+        </div>
+      </form>
+    </CardContent>
+    <CardFooter className="flex justify-between">
+      <Button variant="outline">Cancelar</Button>
+      <Button variant="default">Deploy</Button>
+    </CardFooter>
+  </Card>
+</ComponentPreview>
+
+## Diretrizes de Uso
+
+<DoDontContainer>
+  <DoDont type="do" title="Agrupar conteúdo relacionado">
+    Use cards para separar entidades distintas (ex: um Projeto, um Usuário, um Método de Pagamento).
+  </DoDont>
+  <DoDont type="dont" title="Sobrecarregar com ações">
+    Mantenha o rodapé simples. Se um card tem muitas ações, considere uma página dedicada.
+  </DoDont>
+</DoDontContainer>

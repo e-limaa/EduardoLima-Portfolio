@@ -1,0 +1,56 @@
+<DocsPageHeader
+  title="Localization"
+  description="Governance rules for internationalization, translation workflows, and structural parity."
+  status="stable"
+/>
+
+## Overview
+
+We support **English (en)** and **Portuguese (pt-br)**.
+English is the **Source of Truth**. All documentation must be written in English first.
+
+## Governance Rules
+
+<DoDontContainer>
+  <DoDont type="do" title="Maintain 1:1 Parity">
+    Every page in English MUST have a corresponding `.pt-br.mdx` file. The structure (headings, examples) must match exactly.
+  </DoDont>
+  <DoDont type="dont" title="Drift Content">
+    Do not add examples or sections to the Portuguese version that do not exist in the English version.
+  </DoDont>
+</DoDontContainer>
+
+## Translation Standards
+
+### What to Translate
+- Page Title and Description.
+- All body text (paragraphs, lists).
+- Usage Guidelines.
+- Example labels (e.g. "Create Project" -> "Criar Projeto").
+- `DoDont` titles and descriptions.
+
+### What NOT to Translate
+- **Component Names**: `ProjectCard` stays `ProjectCard`.
+- **Prop Names**: `variant="default"` stays `variant="default"`.
+- **Code Blocks**: Import statements and code examples must remain in English/Technical syntax.
+- **File Paths**: `/src/components/...`
+
+## Fallback Policy
+
+If a translation triggers a critical build error or is incomplete:
+1.  The `.pt-br.mdx` file may import the English component as a temporary fallback.
+2.  This exception must be documented in the **Known Issues** or **Roadmap** section.
+3.  Users will see English content but remain on the Portuguese URL/Context.
+
+## Structural Integrity
+
+We enforce structural parity via automated checks. A build will fail if:
+- An English file exists without a corresponding Portuguese file.
+- `registry.ts` points to a missing file.
+
+## Routing Strategy
+
+Currently, we use a **State-Based** routing strategy via `LanguageProvider`.
+- **Pros**: Seamless switching without page reloads; maintains scroll position; simpler URL structure.
+- **Cons**: Deep linking to a specific language requires additional logic (currently defaults to user preference/browser).
+- **Recommendation**: Retain state-based routing for this SPA. Future improvements may add a URL query parameter `?lang=pt-br` for sharing, rather than full path prefixes.

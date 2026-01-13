@@ -1,44 +1,85 @@
 import { Button } from '@antigravity/ds';
 
-# Button
+<DocsPageHeader 
+  title="Button" 
+  description="Buttons trigger actions or events, such as submitting a form, opening a dialog, or canceling an action." 
+  status="stable" 
+/>
 
-Buttons allow users to take actions, and make choices, with a single tap.
+<ComponentPlayground
+  controls={[
+    { name: 'variant', type: 'select', options: ['default', 'secondary', 'destructive', 'outline', 'ghost', 'link'], defaultValue: 'default' },
+    { name: 'size', type: 'select', options: ['default', 'sm', 'lg', 'icon'], defaultValue: 'default' },
+    { name: 'disabled', type: 'boolean', defaultValue: false },
+    { name: 'children', type: 'text', defaultValue: 'Button' }
+  ]}
+  codeTemplate={(props) => `
+import { Button } from '@antigravity/ds';
 
-## Variants
+export default function Example() {
+  return (
+    <Button 
+      variant="${props.variant}" 
+      size="${props.size}"${props.disabled ? ' \n      disabled' : ''}
+    >
+      ${props.children}
+    </Button>
+  );
+}
+  `}
+>
+  {(props) => (
+    <Button {...props} onClick={() => alert('Clicked!')} />
+  )}
+</ComponentPlayground>
 
-<div className="p-6 border rounded-lg my-4 bg-background flex flex-wrap gap-4 items-center">
-  <Button variant="primary">Primary</Button>
-  <Button variant="secondary">Secondary</Button>
-  <Button variant="outline">Outline</Button>
-  <Button variant="ghost">Ghost</Button>
-  <Button variant="destructive">Destructive</Button>
-</div>
+## Usage
 
-```tsx
-<Button variant="primary">Primary</Button>
-<Button variant="secondary">Secondary</Button>
-<Button variant="outline">Outline</Button>
-<Button variant="ghost">Ghost</Button>
-<Button variant="destructive">Destructive</Button>
-```
+### Primary (Default)
+The single most important action on a page or region.
 
-## States
+<ComponentPreview>
+  <Button variant="default">Create Project</Button>
+</ComponentPreview>
 
-Buttons support standard interactive states: hover, focus, disabled, and loading.
+### Secondary & Outline
+For actions of secondary importance or to reduce visual weight when multiple buttons are present.
 
-<div className="p-6 border rounded-lg my-4 bg-background flex flex-wrap gap-4 items-center">
-  <Button disabled>Disabled</Button>
-  {/* Assuming loading prop exists if not we mock it or remove */}
-  <Button variant="primary">Loading...</Button> 
-</div>
+<ComponentPreview>
+  <div className="flex gap-4">
+    <Button variant="secondary">Save Draft</Button>
+    <Button variant="outline">Cancel</Button>
+    <Button variant="ghost">Export</Button>
+  </div>
+</ComponentPreview>
+
+### Destructive
+For actions that remove or destroy data.
+
+<ComponentPreview>
+  <Button variant="destructive">Delete Account</Button>
+</ComponentPreview>
+
+### Loading State
+Use the loading state to indicate an asynchronous action is in progress. This prevents double-submission.
+
+<ComponentPreview>
+  <Button variant="default" disabled>
+    <span className="mr-2 animate-spin">⟳</span>
+    Saving...
+  </Button>
+</ComponentPreview>
 
 ## Accessibility
 
-- Renders as a native `button` element.
-- Fully accessible via keyboard (Enter, Space).
-- Focus rights are clearly visible.
+- **Keyboard Support**: Buttons are natively accessible. Users can navigate to them via `Tab` and activate them with `Enter` or `Space`.
+- **ARIA**: Ensure buttons that don't look like buttons (e.g. icons) have `aria-label` if they lack text.
 
-## Do's and Don'ts
-
-- ✅ Do use **Primary** for the main action on a screen.
-- ❌ Don't use more than one Primary button per section.
+<DoDontContainer>
+  <DoDont type="do" title="Clear Labels">
+    Use action verbs like "Save", "Delete", "Create".
+  </DoDont>
+  <DoDont type="dont" title="Vague text">
+    Avoid "Click here" or "Submit" without context.
+  </DoDont>
+</DoDontContainer>

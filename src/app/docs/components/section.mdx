@@ -1,0 +1,59 @@
+import { Section, InteractiveGrid } from '@antigravity/ds';
+
+<DocsPageHeader 
+  title="Section" 
+  description="The fundamental building block for page layout, incorporating standardized spacing, background grid, and noise texture." 
+  status="draft" 
+/>
+
+<ComponentPlayground
+  controls={[
+    { name: 'variant', type: 'select', options: ['default', 'subtle'], defaultValue: 'subtle' },
+    { name: 'grid', type: 'boolean', defaultValue: true },
+    { name: 'noise', type: 'boolean', defaultValue: true },
+    { name: 'container', type: 'boolean', defaultValue: true },
+  ]}
+  codeTemplate={(props) => `
+import { Section } from '@antigravity/ds';
+
+export default function Example() {
+  return (
+    <Section 
+      variant="${props.variant}"
+      grid={${props.grid}}
+      noise={${props.noise}}
+      container={${props.container}}
+    >
+      <div className="py-20 text-center">
+        <h2 className="text-3xl font-bold mb-4">Section Content</h2>
+        <p className="text-muted-foreground">This content is automatically wrapped in a container.</p>
+      </div>
+    </Section>
+  );
+}
+  `}
+>
+  {(props) => (
+    <div className="border rounded-lg overflow-hidden relative min-h-[400px]">
+        <Section {...props} className="absolute inset-0">
+            <div className="py-20 text-center relative z-10">
+                <h2 className="text-3xl font-bold mb-4">Section Content</h2>
+                <p className="text-muted-foreground">This content is automatically wrapped in a container.</p>
+            </div>
+        </Section>
+    </div>
+  )}
+</ComponentPlayground>
+
+## Interactive Grid
+
+The `Section` component uses `InteractiveGrid` internally, but you can also use it standalone for custom layouts (like Footers).
+
+<ComponentPreview>
+  <div className="relative h-[300px] w-full overflow-hidden border rounded-lg bg-background">
+     <InteractiveGrid variant="subtle" />
+     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <span className="text-muted-foreground">Hover me to see the spotlight effect</span>
+     </div>
+  </div>
+</ComponentPreview>

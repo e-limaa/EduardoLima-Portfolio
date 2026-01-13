@@ -1,3 +1,61 @@
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    Button,
+    Input
+} from "@antigravity/ds";
+import { Label } from "@/components/ui/label";
+
 # Card
 
-Coming soon.
+Cards contain content and actions about a single subject. They are flexible containers that grouped related information.
+
+## Anatomy
+
+Cards are composed of primitive slots that you can compose:
+- `CardHeader`: Title and description container.
+- `CardContent`: The main body.
+- `CardFooter`: Actions area.
+
+## Examples
+
+### Simple Card
+A standard layout for creation flows or summaries.
+
+<ComponentPreview>
+  <Card className="w-[350px]">
+    <CardHeader>
+      <CardTitle>Create project</CardTitle>
+      <CardDescription>Deploy your new project in one-click.</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <form>
+        <div className="grid w-full items-center gap-4">
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" placeholder="Name of your project" />
+          </div>
+        </div>
+      </form>
+    </CardContent>
+    <CardFooter className="flex justify-between">
+      <Button variant="outline">Cancel</Button>
+      <Button variant="default">Deploy</Button>
+    </CardFooter>
+  </Card>
+</ComponentPreview>
+
+## Usage Guidelines
+
+<DoDontContainer>
+  <DoDont type="do" title="Group related content">
+    Use cards to separate distinct entities (e.g., a Project, a User, a Payment Method).
+  </DoDont>
+  <DoDont type="dont" title="Overload with actions">
+    Keep the footer simple. If a card has too many actions, consider a dedicated page.
+  </DoDont>
+</DoDontContainer>

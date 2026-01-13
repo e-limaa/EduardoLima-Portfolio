@@ -13,39 +13,20 @@ import { Services } from "./components/landing/Services";
 import { ProjectsPage } from "./components/landing/ProjectsPage";
 import { ProjectDetail } from "./components/landing/ProjectDetail";
 import { ThemeProvider } from "./components/theme-provider";
+import { LanguageProvider } from "./components/language-provider";
 import { AudioPlayer } from "./components/landing/AudioPlayer";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { CursorTrail } from "./components/ui/CursorTrail";
+import { DocsPageLoader } from "./components/docs-page-loader";
 import { StyleGuideLayout } from "./pages/styleguide/Layout";
 import { Overview } from "./pages/styleguide/Overview";
-import { ColorsView } from "./pages/styleguide/foundation/ColorsView";
-import { TypographyView } from "./pages/styleguide/foundation/TypographyView";
-import { SpacingView } from "./pages/styleguide/foundation/SpacingView";
-import { RadiusView } from "./pages/styleguide/foundation/RadiusView";
-import { ButtonsView } from "./pages/styleguide/components/ButtonsView";
-import InputsView from "./pages/styleguide/components/InputsView";
-import CardsView from "./pages/styleguide/components/CardsView";
-import BadgesView from "./pages/styleguide/components/BadgesView";
 
-// Docs Imports
-const DocsInstallation = React.lazy(() => import('./app/docs/getting-started/installation.mdx'));
-// Unused placeholders can be kept if we plan to use them, but linter complains.
-// Let's comment them out or remove them. For now, removing unused to silence linter.
-// const DocsUsage = React.lazy(() => import('./app/docs/getting-started/usage-basics.mdx'));
-// const DocsColors = React.lazy(() => import('./app/docs/foundations/colors.mdx'));
-// const DocsTypography = React.lazy(() => import('./app/docs/foundations/typography.mdx'));
-// const DocsSpacing = React.lazy(() => import('./app/docs/foundations/spacing.mdx'));
-// const DocsRadius = React.lazy(() => import('./app/docs/foundations/radius.mdx'));
-const DocsShadow = React.lazy(() => import('./app/docs/foundations/shadow.mdx'));
-const DocsA11y = React.lazy(() => import('./app/docs/foundations/accessibility.mdx'));
+// Legacy Views (Being replaced)
+// import { TypographyView } from "./pages/styleguide/foundation/TypographyView";
+// import { SpacingView } from "./pages/styleguide/foundation/SpacingView";
+// import { RadiusView } from "./pages/styleguide/foundation/RadiusView";
 
-// const DocsCompOverview = React.lazy(() => import('./app/docs/components/overview.mdx'));
-// const DocsButton = React.lazy(() => import('./app/docs/components/button.mdx'));
-// const DocsInput = React.lazy(() => import('./app/docs/components/input.mdx'));
-// const DocsCard = React.lazy(() => import('./app/docs/components/card.mdx'));
-const DocsVersioning = React.lazy(() => import('./app/docs/governance/versioning.mdx'));
-const DocsLifecycle = React.lazy(() => import('./app/docs/governance/lifecycle.mdx'));
-const DocsContributing = React.lazy(() => import('./app/docs/governance/contributing.mdx'));
+import { docsRegistry } from './app/docs/registry';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -110,60 +91,52 @@ export default function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
-      {/* ALTERADO: Aplicação de classes de tema dinâmicas 
+      <LanguageProvider defaultLanguage="en" storageKey="portfolio-language">
+        {/* ALTERADO: Aplicação de classes de tema dinâmicas 
           - bg-background e text-foreground mapeiam para as variáveis CSS que mudam com o tema 
           - transition-colors permite a troca suave entre dark/light mode
       */}
-      <div className="min-h-screen w-full bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden font-sans transition-colors duration-300">
-        <AnimatePresence>
-          {!hasEntered && !isDesignSystem && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
-        </AnimatePresence>
+        <div className="min-h-screen w-full bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden font-sans transition-colors duration-300">
+          <AnimatePresence>
+            {!hasEntered && !isDesignSystem && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
+          </AnimatePresence>
 
-        <CursorTrail />
-        <MouseSpotlight />
+          <CursorTrail />
+          <MouseSpotlight />
 
-        {!isDesignSystem && <AudioPlayer shouldPlay={hasEntered} />}
+          {!isDesignSystem && <AudioPlayer shouldPlay={hasEntered} />}
 
-        <main className="relative z-10" key={hasEntered ? "entered" : "loading"}>
-          <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/projects" element={<ProjectsPage onBack={() => navigate(-1)} onProjectClick={(slug) => navigate(`/project/${slug}`)} />} />
-            <Route path="/project/:slug" element={<ProjectDetail />} />
+          <main className="relative z-10" key={hasEntered ? "entered" : "loading"}>
+            <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/projects" element={<ProjectsPage onBack={() => navigate(-1)} onProjectClick={(slug) => navigate(`/project/${slug}`)} />} />
+              <Route path="/project/:slug" element={<ProjectDetail />} />
 
-            {/* Design System Routes */}
-            <Route path="/design-system" element={<StyleGuideLayout />}>
-              <Route index element={<Overview />} />
+              {/* Design System Routes */}
+              <Route path="/design-system" element={<StyleGuideLayout />}>
+                <Route index element={<Overview />} />
 
-              {/* Getting Started */}
-              <Route path="installation" element={<DocsInstallation />} />
+                {/* Registry-driven Docs Routes */}
+                {docsRegistry.map((doc) => {
+                  // relative path for child route: remove /design-system/ prefix
+                  const relativePath = doc.href.replace('/design-system/', '');
+                  // Removed direct Component destructuring
+                  return (
+                    <Route
+                      key={doc.href}
+                      path={relativePath}
+                      element={<DocsPageLoader doc={doc} />}
+                    />
+                  );
+                })}
 
-              {/* Foundation - Mix of old and new */}
-              <Route path="foundation/colors" element={<ColorsView />} /> {/* Keep visual view for now */}
-              <Route path="foundation/typography" element={<TypographyView />} />
-              <Route path="foundation/spacing" element={<SpacingView />} />
-              <Route path="foundation/radius" element={<RadiusView />} />
-
-              {/* Foundation - New MDX placeholders */}
-              <Route path="foundation/shadows" element={<DocsShadow />} />
-              <Route path="foundation/accessibility" element={<DocsA11y />} />
-
-              {/* Components */}
-              <Route path="components/buttons" element={<ButtonsView />} /> {/* Keep visual view */}
-              <Route path="components/inputs" element={<InputsView />} />
-              <Route path="components/cards" element={<CardsView />} />
-              <Route path="components/badges" element={<BadgesView />} />
-
-              {/* Governance */}
-              <Route path="governance/versioning" element={<DocsVersioning />} />
-              <Route path="governance/lifecycle" element={<DocsLifecycle />} />
-              <Route path="governance/contributing" element={<DocsContributing />} />
-
-              {/* Fallback */}
-              <Route path="*" element={<Overview />} />
-            </Route>
-          </Routes>
-        </main>
-      </div>
+                {/* Fallback */}
+                <Route path="*" element={<Overview />} />
+              </Route>
+            </Routes>
+          </main>
+        </div>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

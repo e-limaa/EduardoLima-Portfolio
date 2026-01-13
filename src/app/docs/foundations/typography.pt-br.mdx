@@ -1,0 +1,101 @@
+<DocsPageHeader
+  title="Tipografia"
+  description="A tipografia dá voz à interface. Usamos a Inter como nossa fonte principal para garantir legibilidade, neutralidade e estética limpa em todos os dispositivos."
+  status="stable"
+/>
+
+## Escala Tipográfica
+
+Nossa escala é limitada a um conjunto de tamanhos predefinidos para garantir consistência.
+
+### Cabeçalhos
+Usados para títulos de páginas, cabeçalhos de seção e conteúdo enfatizado.
+
+<div className="border rounded-xl border-border bg-card px-8 my-6">
+    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
+        <div className="md:w-1/4 space-y-1">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H1 Display</p>
+            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-4xl / 5xl</p>
+        </div>
+        <div className="md:w-3/4">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                A rápida raposa marrom
+            </h1>
+        </div>
+    </div>
+    
+    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
+        <div className="md:w-1/4 space-y-1">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H2 Seção</p>
+            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-3xl</p>
+        </div>
+        <div className="md:w-3/4">
+            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                Pula sobre o cão preguiçoso
+            </h2>
+        </div>
+    </div>
+
+    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
+        <div className="md:w-1/4 space-y-1">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H3 Subseção</p>
+            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-2xl</p>
+        </div>
+        <div className="md:w-3/4">
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                Design Systems são produtos
+            </h3>
+        </div>
+    </div>
+</div>
+
+### Corpo & Texto
+Usado para a maioria do conteúdo da UI.
+
+<div className="border rounded-xl border-border bg-card px-8 my-6">
+    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
+        <div className="md:w-1/4 space-y-1">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">P Body</p>
+            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-base / leading-7</p>
+        </div>
+        <div className="md:w-3/4">
+             <p className="leading-7">
+                A tipografia é o elemento mais onipresente na UI. Uma boa escala cria ritmo natural e hierarquia. Usamos line-height relaxado para parágrafos longos para melhorar a legibilidade.
+            </p>
+        </div>
+    </div>
+
+    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
+        <div className="md:w-1/4 space-y-1">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Pequeno</p>
+            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-sm</p>
+        </div>
+         <div className="md:w-3/4">
+            <p className="text-sm font-medium leading-none">Endereço de email</p>
+            <p className="text-sm text-muted-foreground mt-2">Digite seu email para continuar.</p>
+        </div>
+    </div>
+
+     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
+        <div className="md:w-1/4 space-y-1">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Muted</p>
+            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-muted-foreground</p>
+        </div>
+        <div className="md:w-3/4">
+            <p className="text-base text-muted-foreground">
+                Texto secundário que não deve competir com o conteúdo principal.
+            </p>
+        </div>
+    </div>
+</div>
+
+## Diretrizes de Uso
+
+<DoDontContainer>
+  <DoDont type="do" title="Estabeleça Hierarquia">
+     Use `H1`, `H2`, `H3` claramente para delinear a estrutura da página para leitores de tela.
+  </DoDont>
+  <DoDont type="dont" title="Misturar Fontes Manualmente">
+    Evite importar fontes personalizadas. Mantenha-se na stack de fontes do sistema fornecida pela `Inter`.
+  </DoDont>
+</DoDontContainer>

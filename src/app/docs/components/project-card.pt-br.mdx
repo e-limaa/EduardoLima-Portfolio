@@ -1,0 +1,50 @@
+import { ProjectCardDefaultDemo, ProjectCardGridDemo } from "../examples/project-card-demo";
+
+<DocsPageHeader
+  title="Card de Projeto"
+  description="Um card interativo complexo com efeito spotlight, paralaxe de imagem e visualização de dados. Usado para exibir itens do portfólio."
+  status="stable"
+/>
+
+## Uso
+
+```tsx
+import { ProjectCard } from "@antigravity/ds";
+
+<ProjectCard
+  title="Nome do Projeto"
+  category="Design System"
+  image="/caminho/para/imagem.jpg"
+  metric="2024"
+  color="from-blue-500 to-cyan-500"
+  onClick={() => console.log("Clicado")}
+/>
+```
+
+## Exemplos
+
+### Padrão
+
+<ComponentPreview>
+  <ProjectCardDefaultDemo />
+</ComponentPreview>
+
+### Layout em Grid
+
+O card foi projetado para funcionar perfeitamente dentro de um grid CSS.
+
+<ComponentPreview>
+  <ProjectCardGridDemo />
+</ComponentPreview>
+
+## Props
+
+<TokenTable tokens={[
+  { name: 'title', value: 'string', usage: 'O nome do projeto' },
+  { name: 'category', value: 'string', usage: 'A categoria do projeto (exibida com gradiente)' },
+  { name: 'image', value: 'string', usage: 'URL para a imagem de fundo' },
+  { name: 'metric', value: 'string (opcional)', usage: 'Ponto de dados secundário (ano, estatística)' },
+  { name: 'color', value: 'string', usage: 'Classes de gradiente Tailwind (ex: from-x to-y)' },
+  { name: 'onClick', value: 'function', usage: 'Manipulador de clique' },
+  { name: 'className', value: 'string', usage: 'Classes adicionais para o container' }
+]} />

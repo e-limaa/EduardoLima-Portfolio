@@ -1,0 +1,85 @@
+import { Input, Button } from '@antigravity/ds';
+import { Label } from '@/components/ui/label';
+
+<DocsPageHeader
+    title="Input"
+    description="Inputs permitem que usuários insiram texto na UI. Eles tipicamente aparecem em formulários e diálogos."
+    status="stable"
+/>
+
+## Uso
+
+### Quando usar
+- Para dados de texto curtos e de uma linha (ex: nome, email, telefone).
+- Quando buscar um formato de dados específico que pode ser validado.
+
+### Quando não usar
+- Para múltiplas linhas de texto (use **Textarea**).
+- Para opções predefinidas estritas (use **Select** ou **Radio**).
+
+## Exemplos
+
+### Padrão
+Input de texto básico com placeholder.
+
+<ComponentPreview>
+  <Input type="email" placeholder="Email" className="max-w-sm" />
+</ComponentPreview>
+
+### Com Rótulo
+Combine com `Label` para acessibilidade e clareza.
+
+<ComponentPreview>
+  <div className="grid w-full max-w-sm items-center gap-1.5">
+    <Label htmlFor="email-2">Email</Label>
+    <Input type="email" id="email-2" placeholder="Email" />
+  </div>
+</ComponentPreview>
+
+### Com Botão
+Padrão comum para assinaturas de newsletter ou barras de pesquisa.
+
+<ComponentPreview>
+  <div className="flex w-full max-w-sm items-center gap-2">
+      <Input type="email" placeholder="Email" />
+      <Button type="submit">Inscrever-se</Button>
+  </div>
+</ComponentPreview>
+
+
+### Desabilitado
+Previne interação do usuário, tipicamente durante estados de carregamento ou permissão.
+
+<ComponentPreview>
+  <Input disabled type="email" placeholder="Email" className="max-w-sm" />
+</ComponentPreview>
+
+## Estados
+
+### Estado de Erro
+Atualmente, estados de erro são manipulados adicionando `aria-invalid` ou classes específicas.
+
+<ComponentPreview>
+  <div className="grid w-full max-w-sm items-center gap-1.5">
+    <Label htmlFor="email-error" className="text-destructive">Email</Label>
+    <Input 
+      type="email" 
+      id="email-error" 
+      placeholder="Email" 
+      className="border-destructive focus-visible:ring-destructive/30"
+      defaultValue="invalid-email"
+    />
+    <p className="text-xs text-destructive">Por favor digite um email válido.</p>
+  </div>
+</ComponentPreview>
+
+## Acessibilidade
+
+<DoDontContainer>
+  <DoDont type="do" title="Sempre use rótulos">
+    Cabeçalhos visíveis ou atributos `aria-label` são obrigatórios para leitores de tela.
+  </DoDont>
+  <DoDont type="dont" title="Confiar no placeholder">
+    Placeholders desaparecem ao digitar. Não os use como único rótulo.
+  </DoDont>
+</DoDontContainer>

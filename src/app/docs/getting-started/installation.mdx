@@ -1,6 +1,10 @@
 import { Button } from '@antigravity/ds';
 
-# Installation
+<DocsPageHeader 
+  title="Installation" 
+  description="How to install, configure, and integrate the Antigravity Design System into your project." 
+  status="stable" 
+/>
 
 The Antigravity Design System is a managed dependency that provides a unified language for our portfolio products.
 
@@ -17,6 +21,8 @@ Install the package alongside its peer dependencies:
 ```bash
 npm install @antigravity/ds class-variance-authority clsx tailwind-merge @radix-ui/react-slot
 ```
+
+---
 
 ## Setup
 
@@ -43,30 +49,55 @@ export default {
     "./node_modules/@antigravity/ds/dist/**/*.{js,mjs}"
   ],
   presets: [antigravityPreset],
+  darkMode: ["class"],
+  // ... other config
 };
 ```
+
+---
 
 ## First Working Example
 
 Once installed, you can use components immediately.
 
-<div className="p-6 border rounded-lg my-4 bg-background flex gap-4 items-center">
-  <Button variant="primary">Hello World</Button>
-  <Button variant="secondary">Secondary Action</Button>
-</div>
+<ComponentPreview>
+  <div className="flex gap-4 items-center justify-center p-8">
+    <Button variant="default">Hello World</Button>
+    <Button variant="secondary">Secondary Action</Button>
+  </div>
+</ComponentPreview>
 
 ```tsx
 import { Button } from "@antigravity/ds";
 
 export default function App() {
   return (
-    <Button variant="primary">Hello World</Button>
+    <div className="flex gap-4">
+      <Button variant="default">Hello World</Button>
+      <Button variant="secondary">Secondary Action</Button>
+    </div>
   );
 }
 ```
 
-## What NOT to Do
+---
 
-- **❌ Do not create local "Button" wrappers**: Use the DS Button directly.
-- **❌ Do not use arbitrary values**: Avoid `w-[37px]`. Use token classes like `w-9`.
-- **❌ Do not edit `node_modules`**: The system is read-only.
+## Common Mistakes
+
+<DoDontContainer>
+  <DoDont type="do" title="Use System Components">
+     Always import primitives like `Button` or `Input` directly from `@antigravity/ds`. This ensures you get the latest accessibility fixes and design updates.
+  </DoDont>
+  <DoDont type="dont" title="Create Local Wrappers">
+    Do not wrap DS components in local "convenience" wrappers (e.g., `MyButton`). This breaks the update path and doubles the maintenance burden.
+  </DoDont>
+</DoDontContainer>
+
+<DoDontContainer>
+  <DoDont type="do" title="Use Token Classes">
+     Use standardized sizing tokens like `w-9`, `h-9` or `p-4`.
+  </DoDont>
+  <DoDont type="dont" title="Use Arbitrary Values">
+    Avoid magic numbers like `w-[37px]`. If a token doesn't exist, question if the design deviation is necessary.
+  </DoDont>
+</DoDontContainer>

@@ -1,0 +1,35 @@
+
+> landing-page-portfolio@0.1.0 build
+> npm run build:tokens --prefix packages/design-system && vite build
+
+
+> @antigravity/ds@0.1.0 build:tokens
+> node scripts/build-tokens.js
+
+✅ Tokens built successfully to /Users/ejorge/Desktop/EduardoLima-Portfolio/packages/design-system/styles/tokens.css
+✅ TypeScript tokens built successfully to /Users/ejorge/Desktop/EduardoLima-Portfolio/packages/design-system/src/tokens/index.ts
+vite v6.3.5 building for production...
+transforming...
+
+/grid-pattern.svg referenced in /grid-pattern.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 2453 modules transformed.
+✗ Build failed in 7.65s
+error during build:
+src/app/docs/components/badge.pt-br.mdx (1:9): "Badge" is not exported by "packages/design-system/src/index.ts", imported by "src/app/docs/components/badge.pt-br.mdx".
+file: /Users/ejorge/Desktop/EduardoLima-Portfolio/src/app/docs/components/badge.pt-br.mdx:1:9
+
+1: import { Badge } from "@antigravity/ds";
+            ^
+2: 
+3: <DocsPageHeader
+
+    at getRollupError (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at error (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
+    at Module.error (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:16956:16)
+    at Module.traceVariable (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:17412:29)
+    at ModuleScope.findVariable (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:15076:39)
+    at FunctionScope.findVariable (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:5649:38)
+    at FunctionBodyScope.findVariable (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:5649:38)
+    at Identifier.bind (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:5423:40)
+    at CallExpression.bind (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:2809:28)
+    at CallExpression.bind (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:12123:15)

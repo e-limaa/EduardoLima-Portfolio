@@ -1,0 +1,80 @@
+import { Button } from "@antigravity/ds";
+
+<DocsPageHeader
+  title="Instalação"
+  description="Como instalar e configurar o Design System."
+  status="stable"
+/>
+
+## Pré-requisitos
+
+Certifique-se de que seu projeto está usando as seguintes versões (ou superiores):
+
+- Node.js 18+
+- React 18+
+- Tailwind CSS 3.3+
+
+## Instalando o Pacote
+
+```bash
+npm install @antigravity/ds
+# ou
+yarn add @antigravity/ds
+```
+
+## Configuração
+
+### 1. Adicionar ao Tailwind
+
+Adicione o preset do nosso Design System ao seu `tailwind.config.js` para herdar todos os tokens e cores.
+
+```js
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./src/**/*.{ts,tsx}",
+    "./node_modules/@antigravity/ds/dist/**/*.{js,ts,jsx,tsx}" // Importante!
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require("@tailwindcss/typography"),
+     // Outros plugins
+  ],
+}
+```
+
+### 2. Importar Estilos Globais
+
+No arquivo raiz do seu projeto (ex: `App.tsx` ou `main.tsx`), importe o CSS:
+
+```tsx
+import "@antigravity/ds/styles/globals.css";
+import "@antigravity/ds/styles/tokens.css";
+```
+
+## Exemplo de Uso
+
+Agora você pode usar os componentes em qualquer lugar:
+
+<ComponentPreview>
+    <div className="flex gap-4 items-center">
+        <Button>Clique aqui</Button>
+        <Button variant="secondary">Secundário</Button>
+    </div>
+</ComponentPreview>
+
+```tsx
+import { Button } from "@antigravity/ds";
+
+export default function Page() {
+  return (
+    <div className="p-10">
+      <Button onClick={() => alert("Funcionou!")}>
+        Clique aqui
+      </Button>
+    </div>
+  )
+}
+```

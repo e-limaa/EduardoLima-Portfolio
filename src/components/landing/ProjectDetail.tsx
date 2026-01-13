@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { ArrowLeft, ArrowRight, Layers, Calendar, User, Building2 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
-import { TextReveal } from "./TextReveal";
+import { TextReveal } from "@antigravity/ds";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "../ui/dialog";
 import { getProjectBySlug, getImageUrl, getAdjacentProjects } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";

@@ -1,0 +1,47 @@
+<DocsPageHeader
+  title="Raio (Radius)"
+  description="Tokens de raio de borda suavizam os cantos dos elementos da interface. Nosso sistema usa um raio base inteligente que escala automaticamente entre os componentes."
+  status="stable"
+/>
+
+<Callout type="info" title="Raio Adaptativo">
+  Nosso sistema de raio é construído sobre variáveis. Alterar `--radius` em `globals.css` atualiza todo o sistema (botões, inputs, cartões) instantaneamente.
+</Callout>
+
+## Tokens
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+  <RadiusCard token="rounded-sm" value="~6px" exampleClass="rounded-sm" />
+  <RadiusCard token="rounded-md" value="~8px" exampleClass="rounded-md" />
+  <RadiusCard token="rounded-lg" value="10px (Base)" exampleClass="rounded-lg ring-2 ring-primary" />
+  <RadiusCard token="rounded-xl" value="~14px" exampleClass="rounded-xl" />
+  <RadiusCard token="rounded-2xl" value="~18px" exampleClass="rounded-2xl" />
+  <RadiusCard token="rounded-full" value="9999px" exampleClass="rounded-full" />
+</div>
+
+export const RadiusCard = ({ token, value, exampleClass }) => (
+  <div className="flex flex-col gap-4 p-6 border border-border rounded-xl bg-card">
+    <div className="flex items-center justify-between">
+      <code className="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded">{token}</code>
+      <span className="text-xs text-muted-foreground font-mono">{value}</span>
+    </div>
+    <div className="flex items-center justify-center p-8 bg-muted/50 rounded-lg border border-dashed border-border h-32">
+      <div className={`w-16 h-16 bg-primary shadow-sm flex items-center justify-center ${exampleClass}`}>
+      </div>
+    </div>
+  </div>
+);
+
+## Diretrizes de Uso
+
+`rounded-md` é tipicamente usado para pequenos elementos interativos como Botões e Inputs dentro de cartões.
+`rounded-lg` ou `rounded-xl` é usado para containers como Cartões, Diálogos e Popovers.
+
+<DoDontContainer>
+  <DoDont type="do" title="Aninhar Raios Corretamente">
+    Elementos internos devem geralmente ter menos raio que seus containers para parecerem visualmente concêntricos.
+  </DoDont>
+  <DoDont type="dont" title="Misturar Formas">
+    Evite misturar botões totalmente arredondados (pílula) com inputs retangulares no mesmo grupo.
+  </DoDont>
+</DoDontContainer>

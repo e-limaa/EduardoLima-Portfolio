@@ -1,0 +1,60 @@
+<DocsPageHeader
+  title="Contribuindo"
+  description="Como propor, construir e lançar mudanças no Design System."
+  status="stable"
+/>
+
+O Design System é um produto vivo que evolui com as necessidades do time. Aceitamos contribuições de todos.
+
+## Workflow
+
+<div className="relative border-l-2 border-border ml-4 space-y-12 my-12">
+    <div className="relative pl-8">
+        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
+        <h3 className="font-bold text-lg mb-2">1. Proposta</h3>
+        <p className="text-muted-foreground text-sm">
+            Antes de codar, abra uma issue ou discussão. Explique o problema.
+            Verifique se algo existente não resolve.
+        </p>
+    </div>
+
+    <div className="relative pl-8">
+        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
+        <h3 className="font-bold text-lg mb-2">2. Design & Spec</h3>
+        <p className="text-muted-foreground text-sm">
+            Defina props, variações e estados. Considere acessibilidade desde o início.
+        </p>
+    </div>
+
+    <div className="relative pl-8">
+        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
+        <h3 className="font-bold text-lg mb-2">3. Implementação</h3>
+        <p className="text-muted-foreground text-sm">
+            Construa o componente em `packages/design-system`.
+            Siga as regras de `Do / Don't`.
+        </p>
+    </div>
+
+     <div className="relative pl-8">
+        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
+        <h3 className="font-bold text-lg mb-2">4. Documentação</h3>
+        <p className="text-muted-foreground text-sm">
+            Crie uma página MDX em `apps/docs`. Inclua exemplos interativos.
+        </p>
+    </div>
+</div>
+
+## Padrões de Código
+
+- **Typescript**: Tipagem estrita. Evite `any`.
+- **Tailwind**: Use nossos tokens. Não use valores arbitrários `w-[350px]`.
+- **Exports**: Exporte do `index.ts`.
+
+<DoDontContainer>
+  <DoDont type="do" title="API Pequena">
+    Mantenha poucas props. Use composição (`slots` ou `asChild`).
+  </DoDont>
+  <DoDont type="dont" title="Regra de Negócio">
+    Nunca inclua lógica de negócio (ex: fetch de dados) no DS. Componentes devem ser apenas visuais.
+  </DoDont>
+</DoDontContainer>

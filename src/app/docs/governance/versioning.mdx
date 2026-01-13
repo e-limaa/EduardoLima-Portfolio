@@ -1,3 +1,63 @@
-# Versioning
+<DocsPageHeader
+  title="Versioning"
+  description="Our strategy for managing changes and ensuring stability across the system usage."
+  status="stable"
+/>
 
-Coming soon.
+We follow [Semantic Versioning 2.0.0](https://semver.org/) (SemVer) to manage releases. This ensures that consumers of the Design System can upgrade with confidence.
+
+## Version Format
+
+Given a version number `MAJOR.MINOR.PATCH` (e.g., `1.2.3`), increment the:
+
+1. **MAJOR** version when you make incompatible API changes.
+2. **MINOR** version when you add functionality in a backward compatible manner.
+3. **PATCH** version when you make backward compatible bug fixes.
+
+---
+
+## When to Version
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+    <div className="p-6 border rounded-xl bg-card">
+        <div className="text-3xl font-bold text-primary mb-2">Major</div>
+        <div className="text-sm font-mono text-muted-foreground mb-4">x.0.0</div>
+        <ul className="list-disc pl-4 space-y-2 text-sm text-muted-foreground">
+            <li>Renaming or removing a prop</li>
+            <li>Deleting a component</li>
+            <li>Changing a default value that alters layout</li>
+        </ul>
+    </div>
+
+    <div className="p-6 border rounded-xl bg-card">
+        <div className="text-3xl font-bold text-blue-500 mb-2">Minor</div>
+        <div className="text-sm font-mono text-muted-foreground mb-4">1.x.0</div>
+         <ul className="list-disc pl-4 space-y-2 text-sm text-muted-foreground">
+            <li>Adding a new component</li>
+            <li>Adding a new optional prop</li>
+            <li>Adding a new variant</li>
+        </ul>
+    </div>
+
+    <div className="p-6 border rounded-xl bg-card">
+        <div className="text-3xl font-bold text-green-500 mb-2">Patch</div>
+        <div className="text-sm font-mono text-muted-foreground mb-4">1.2.x</div>
+         <ul className="list-disc pl-4 space-y-2 text-sm text-muted-foreground">
+            <li>Fixing a typo in documentation</li>
+            <li>Adjusting internal implementation without visual change</li>
+            <li>Improving performance</li>
+        </ul>
+    </div>
+</div>
+
+## Deprecation Policy
+
+When a component is slated for removal, we follow a strict multi-phase process to give teams time to migrate.
+
+1.  **Mark as Deprecated**: Add a `@deprecated` TSDoc tag and a console warning in development mode.
+2.  **Grace Period**: Provide a migration guide and keep the component for at least one MAJOR version cycle.
+3.  **Removal**: Remove the component in the next MAJOR release.
+
+<Callout type="warning" title="Breaking Changes">
+  Breaking changes are **only** allowed in Major versions. Never introduce a breaking change in a Minor or Patch release.
+</Callout>

@@ -1,9 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Linkedin, Mail, Github, Instagram, ArrowUpRight } from "lucide-react";
-import { Button } from "@antigravity/ds";
-import { TextReveal } from "./TextReveal";
-import { InteractiveGrid } from "./InteractiveGrid";
+import { TextReveal, InteractiveGrid, Button } from "@antigravity/ds";
 import { ContactFormModal } from "./ContactFormModal";
 
 export const CTA = () => {

@@ -1,20 +1,56 @@
 import { ColorPalette } from '../components/ColorPalette';
 
-# Colors
+<DocsPageHeader
+  title="Colors"
+  description="Color distinguishes our brand and helps users establish a visual hierarchy. Our color system is designed to be accessible, consistent, and intent-based."
+  status="stable"
+/>
 
-Our color system is **intent-based**. This means we define colors by *what they do* (e.g., `action-primary`), not *what they look like* (e.g., `blue-500`).
+<Callout type="info" title="Intent-based system">
+  We define colors by **intent** (e.g., `background`, `action`, `critical`) rather than by hue (e.g., `blue`, `red`). This ensures that colors adapt correctly to different themes (Light/Dark) without code changes.
+</Callout>
 
-## Palette
+## Color Roles
+
+We assign specific roles to colors to communicate meaning. Using the correct role ensures consistency across the platform.
+
+### Primary & Action
+Used for the most important actions on a page. These colors should draw the user's focus.
+
+<TokenTable tokens={[
+  { name: 'primary', value: 'hsl(var(--primary))', usage: 'High-emphasis backgrounds, buttons, and icons' },
+  { name: 'primary-foreground', value: 'hsl(var(--primary-foreground))', usage: 'Text on top of primary backgrounds' }
+]} />
+
+### Backgrounds & Surfaces
+The canvas upon which content is placed.
+
+<TokenTable tokens={[
+  { name: 'background', value: 'hsl(var(--background))', usage: 'Page background' },
+  { name: 'card', value: 'hsl(var(--card))', usage: 'Component background (Cards, Popovers, Modals)' }
+]} />
+
+## Usage Guidelines
+
+### Accessibility
+
+We guarantee WCAG AA contrast ratios for all standard text pairs.
+
+<Callout type="warning" title="Contrast Check">
+  Never rely solely on color to convey meaning. Always use text labels or icons alongside status colors to support colorblind users.
+</Callout>
+
+### Do's and Don'ts
+
+<DoDontContainer>
+  <DoDont type="do" title="Use Semantic Names">
+    Use `bg-destructive` for error states or dangerous actions. This automatically handles red scaling and dark mode.
+  </DoDont>
+  <DoDont type="dont" title="Hardcode Hex Values">
+    Avoid using arbitrary hex values like `#ff0000`. These break theming and require manual maintenance.
+  </DoDont>
+</DoDontContainer>
+
+## Palette Reference
 
 <ColorPalette />
-
-## Usage Rules
-
-### Safe Usage
-
-- Always use the semantic tokens (`bg-primary`, `text-primary-foreground`) instead of raw hex values.
-- Ensure text contrast passes WCAG AA standards (our tokens are designed to do this automatically).
-
-### Brand Colors
-
-Brand colors should be used sparingly for primary actions or key visual moments. Do not overuse them for backgrounds.

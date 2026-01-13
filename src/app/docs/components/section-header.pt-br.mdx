@@ -1,0 +1,52 @@
+import { SectionHeader } from '@antigravity/ds';
+
+<DocsPageHeader 
+  title="Cabeçalho de Seção" 
+  description="Um bloco de cabeçalho consistente para seções da página, dispondo título, descrição e uma etiqueta/índice opcional." 
+  status="draft" 
+/>
+
+<ComponentPlayground
+  controls={[
+    { name: 'title', type: 'text', defaultValue: 'Minha Seção' },
+    { name: 'description', type: 'text', defaultValue: 'Uma breve descrição desta seção.' },
+    { name: 'index', type: 'text', defaultValue: '01' },
+    { name: 'label', type: 'text', defaultValue: 'RÓTULO' },
+    { name: 'align', type: 'select', options: ['left', 'center'], defaultValue: 'left' }
+  ]}
+  codeTemplate={(props) => `
+import { SectionHeader } from '@antigravity/ds';
+
+export default function Example() {
+  return (
+    <SectionHeader 
+      title="${props.title}" 
+      description="${props.description}"
+      index="${props.index}"
+      label="${props.label}"
+      align="${props.align}"
+    />
+  );
+}
+  `}
+>
+  {(props) => (
+    <div className="p-8 border rounded-lg bg-background">
+        <SectionHeader {...props} />
+    </div>
+  )}
+</ComponentPlayground>
+
+## Uso
+
+Use este componente no topo de cada seção principal (ex: Projetos, Serviços, Sobre) para manter consistência visual.
+
+### Alinhado ao Centro
+
+<ComponentPreview>
+  <SectionHeader 
+      title="Título Centralizado" 
+      description="Este é um texto alinhado ao centro para seções que precisam de um layout diferente."
+      align="center"
+  />
+</ComponentPreview>

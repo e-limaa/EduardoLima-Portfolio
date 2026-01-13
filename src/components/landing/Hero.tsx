@@ -1,8 +1,7 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ChatWidget } from "./ChatWidget";
-import { TextReveal } from "./TextReveal";
-import { InteractiveGrid } from "./InteractiveGrid";
+import { TextReveal, InteractiveGrid, Badge } from "@antigravity/ds";
 import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
@@ -91,8 +90,10 @@ export const Hero = () => {
             transition={{ delay: 0.1, duration: 0.8 }}
             className="flex justify-center lg:justify-start"
           >
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-sm hover:bg-black/10 dark:hover:bg-white/10 transition-colors mb-4 pointer-events-auto">
-              <span className="text-sm text-zinc-600 dark:text-zinc-300 font-medium">Senior UI/UX</span>
+            <div className="flex justify-center lg:justify-start">
+              <Badge variant="secondary" className="mb-4 text-sm font-medium px-4 py-1">
+                Senior UI/UX
+              </Badge>
             </div>
           </motion.div>
 

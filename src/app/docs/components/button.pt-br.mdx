@@ -1,0 +1,85 @@
+import { Button } from '@antigravity/ds';
+
+<DocsPageHeader 
+  title="Botão" 
+  description="Botões disparam ações ou eventos, como enviar um formulário, abrir um diálogo ou cancelar uma ação." 
+  status="stable" 
+/>
+
+<ComponentPlayground
+  controls={[
+    { name: 'variant', type: 'select', options: ['default', 'secondary', 'destructive', 'outline', 'ghost', 'link'], defaultValue: 'default' },
+    { name: 'size', type: 'select', options: ['default', 'sm', 'lg', 'icon'], defaultValue: 'default' },
+    { name: 'disabled', type: 'boolean', defaultValue: false },
+    { name: 'children', type: 'text', defaultValue: 'Botão' }
+  ]}
+  codeTemplate={(props) => `
+import { Button } from '@antigravity/ds';
+
+export default function Example() {
+  return (
+    <Button 
+      variant="${props.variant}" 
+      size="${props.size}"${props.disabled ? ' \n      disabled' : ''}
+    >
+      ${props.children}
+    </Button>
+  );
+}
+  `}
+>
+  {(props) => (
+    <Button {...props} onClick={() => alert('Clicado!')} />
+  )}
+</ComponentPlayground>
+
+## Uso
+
+### Primário (Padrão)
+A ação mais importante em uma página ou região.
+
+<ComponentPreview>
+  <Button variant="default">Criar Projeto</Button>
+</ComponentPreview>
+
+### Secundário & Outline
+Para ações de importância secundária ou para reduzir o peso visual quando múltiplos botões estão presentes.
+
+<ComponentPreview>
+  <div className="flex gap-4">
+    <Button variant="secondary">Salvar Rascunho</Button>
+    <Button variant="outline">Cancelar</Button>
+    <Button variant="ghost">Exportar</Button>
+  </div>
+</ComponentPreview>
+
+### Destrutivo
+Para ações que removem ou destroem dados.
+
+<ComponentPreview>
+  <Button variant="destructive">Excluir Conta</Button>
+</ComponentPreview>
+
+### Estado de Carregamento
+Use o estado de carregamento para indicar que uma ação assíncrona está em progresso. Isso previne envio duplo.
+
+<ComponentPreview>
+  <Button variant="default" disabled>
+    <span className="mr-2 animate-spin">⟳</span>
+    Salvando...
+  </Button>
+</ComponentPreview>
+
+## Acessibilidade
+
+- **Suporte a Teclado**: Botões são nativamente acessíveis. Usuários podem navegar até eles via `Tab` e ativá-los com `Enter` ou `Space`.
+- **ARIA**: Garanta que botões que não parecem botões (ex: ícones) tenham `aria-label` se não tiverem texto.
+
+<DoDontContainer>
+  <DoDont type="do" title="Rótulos Claros">
+    Use verbos de ação como "Salvar", "Excluir", "Criar".
+  </DoDont>
+  <DoDont type="dont" title="Texto Vago">
+    Evite "Clique aqui" ou "Enviar" sem contexto.
+  </DoDont>
+</DoDontContainer>

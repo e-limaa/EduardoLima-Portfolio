@@ -1,0 +1,54 @@
+import { Button, Input, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@antigravity/ds';
+import { Label } from '@/components/ui/label';
+
+<DocsPageHeader 
+  title="Forms" 
+  description="Guidelines for data entry layouts and validation feedback." 
+  status="draft" 
+/>
+
+## Overview
+
+Forms are the primary way users interact with the system. A well-designed form guides the user, minimizes errors, and creates a sense of confidence.
+
+## Structure
+
+Group related fields into sections or Cards. Use a clear primary action at the bottom right or left aligned depending on context.
+
+<ComponentPreview>
+  <Card className="w-full max-w-lg mx-auto">
+    <CardHeader>
+        <CardTitle>Profile Settings</CardTitle>
+        <CardDescription>Update your personal information.</CardDescription>
+    </CardHeader>
+    <CardContent className="space-y-4">
+        <div className="space-y-1.5">
+            <Label htmlFor="username">Username</Label>
+            <Input id="username" defaultValue="@johndoe" />
+        </div>
+        <div className="space-y-1.5">
+            <Label htmlFor="email">Email Address</Label>
+            <Input id="email" type="email" placeholder="john@example.com" />
+            <p className="text-[0.8rem] text-muted-foreground">We won't spam you.</p>
+        </div>
+    </CardContent>
+    <CardFooter className="flex justify-end gap-2">
+        <Button variant="ghost">Cancel</Button>
+        <Button>Save Changes</Button>
+    </CardFooter>
+  </Card>
+</ComponentPreview>
+
+## Validation
+
+### Inline Validation
+Show errors immediately when functionality allows (e.g., password strength), or on blur for format errors (email).
+
+<DoDontContainer>
+  <DoDont type="do" title="Clear Error Messages">
+    "Password must contain at least 8 characters" is better than "Invalid password".
+  </DoDont>
+   <DoDont type="dont" title="Validate too early">
+    Don't show an error while the user is still typing the first character.
+  </DoDont>
+</DoDontContainer>

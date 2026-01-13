@@ -1,0 +1,56 @@
+<DocsPageHeader
+  title="Localização"
+  description="Regras de governança para internacionalização, fluxos de tradução e paridade estrutural."
+  status="stable"
+/>
+
+## Visão Geral
+
+Suportamos **Inglês (en)** e **Português (pt-br)**.
+O Inglês é a **Fonte da Verdade**. Toda documentação deve ser escrita primeiro em Inglês.
+
+## Regras de Governança
+
+<DoDontContainer>
+  <DoDont type="do" title="Manter Paridade 1:1">
+    Cada página em Inglês DEVE ter um arquivo correspondente `.pt-br.mdx`. A estrutura (cabeçalhos, exemplos) deve ser idêntica.
+  </DoDont>
+  <DoDont type="dont" title="Conteúdo Divergente">
+    Não adicione exemplos ou seções na versão em Português que não existam na versão em Inglês.
+  </DoDont>
+</DoDontContainer>
+
+## Padrões de Tradução
+
+### O que Traduzir
+- Título e Descrição da página.
+- Todo o texto do corpo (parágrafos, listas).
+- Diretrizes de Uso.
+- Rótulos de exemplos (ex: "Create Project" -> "Criar Projeto").
+- Títulos e descrições de `DoDont`.
+
+### O que NÃO Traduzir
+- **Nomes de Componentes**: `ProjectCard` permanece `ProjectCard`.
+- **Nomes de Props**: `variant="default"` permanece `variant="default"`.
+- **Blocos de Código**: Imports e exemplos de código devem permanecer em Inglês/Sintaxe Técnica.
+- **Caminhos de Arquivo**: `/src/components/...`
+
+## Política de Fallback
+
+Se uma tradução causar um erro crítico de build ou estiver incompleta:
+1.  O arquivo `.pt-br.mdx` pode importar o componente em Inglês como um fallback temporário.
+2.  Essa exceção deve ser documentada.
+3.  Os usuários verão conteúdo em Inglês, mas permanecerão no contexto/URL em Português.
+
+## Integridade Estrutural
+
+Forçamos a paridade estrutural via verificações automatizadas. O build falhará se:
+- Um arquivo em Inglês existir sem um arquivo correspondente em Português.
+- `registry.ts` apontar para um arquivo inexistente.
+
+## Estratégia de Roteamento
+
+Atualmente, usamos uma estratégia de roteamento **Baseada em Estado** via `LanguageProvider`.
+- **Prós**: Troca instantânea sem recarregamento; mantém posição de scroll; estrutura de URL mais simples.
+- **Contras**: Links diretos para um idioma específico exigem lógica adicional (atualmente padroniza pela preferência do usuário/browser).
+- **Recomendação**: Manter roteamento por estado para este SPA. Melhorias futuras podem adicionar um parâmetro de query `?lang=pt-br` para compartilhamento, em vez de prefixos de caminho completos.

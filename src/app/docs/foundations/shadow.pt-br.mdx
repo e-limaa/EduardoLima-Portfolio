@@ -1,0 +1,37 @@
+<DocsPageHeader
+  title="Sombras & Elevação"
+  description="A elevação serve para levantar elementos do fundo, indicando hierarquia e interatividade. Usamos sombras para simular este eixo Z de elevação."
+  status="beta"
+/>
+
+## Escala
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-8 p-8 bg-muted/20 rounded-xl">
+    <div className="aspect-square bg-card rounded-xl shadow-sm flex items-center justify-center border border-border">
+        <span className="text-xs font-mono text-muted-foreground">shadow-sm</span>
+    </div>
+    <div className="aspect-square bg-card rounded-xl shadow flex items-center justify-center border border-border">
+         <span className="text-xs font-mono text-muted-foreground">shadow</span>
+    </div>
+    <div className="aspect-square bg-card rounded-xl shadow-md flex items-center justify-center border border-border">
+         <span className="text-xs font-mono text-muted-foreground">shadow-md</span>
+    </div>
+    <div className="aspect-square bg-card rounded-xl shadow-lg flex items-center justify-center border border-border">
+         <span className="text-xs font-mono text-muted-foreground">shadow-lg</span>
+    </div>
+</div>
+
+## Uso
+
+- **shadow-sm**: Bordas sutis, estados interativos como hover em linhas de tabela.
+- **shadow (default)**: Cartões, dropdowns, poppers de baixo nível.
+- **shadow-lg**: Modais, Diálogos, Botões de Ação Flutuante.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use para profundidade">
+    Use sombras para separar camadas (ex: um menu dropdown flutuando sobre uma tabela).
+  </DoDont>
+  <DoDont type="dont" title="Excesso em design flat">
+    Não aplique sombras profundas em elementos que devem parecer nivelados com a superfície (como seções internas de cartões).
+  </DoDont>
+</DoDontContainer>

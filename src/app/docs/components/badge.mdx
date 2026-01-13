@@ -1,0 +1,46 @@
+import { Badge } from '@/components/ui/badge';
+
+# Badge
+
+Badges are small visual indicators used to communicate status, categories, or numerical values.
+
+## Variants
+
+### Default (Primary)
+Used for the most important status or active state.
+
+<ComponentPreview>
+  <Badge>Active</Badge>
+</ComponentPreview>
+
+### Secondary
+For neutral or informational tags.
+
+<ComponentPreview>
+  <Badge variant="secondary">Draft</Badge>
+</ComponentPreview>
+
+### Outline
+Subtle emphasis key-value pairs or categories.
+
+<ComponentPreview>
+  <Badge variant="outline">Design System</Badge>
+</ComponentPreview>
+
+### Destructive
+For critical alerts, errors, or removed items.
+
+<ComponentPreview>
+  <Badge variant="destructive">Deprecated</Badge>
+</ComponentPreview>
+
+## Usage
+
+<DoDontContainer>
+  <DoDont type="do" title="Use for status">
+    Badges are perfect for statuses like "New", "Paid", "Pending".
+  </DoDont>
+  <DoDont type="dont" title="Make interactive">
+    Badges are not buttons. If you need a clickable tag, use a Button with a pill shape or verify it has `onClick` handlers and role.
+  </DoDont>
+</DoDontContainer>
