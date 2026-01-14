@@ -125,7 +125,7 @@ export const ProjectDetail = () => {
                         </motion.div>
 
                         <TextReveal>
-                            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-6 tracking-tighter">
+                            <h1 className="text-heading-lg md:text-display-lg font-bold text-foreground mb-6 tracking-tighter">
                                 {project.title}
                             </h1>
                         </TextReveal>
@@ -192,8 +192,8 @@ export const ProjectDetail = () => {
 
                         {/* Overview */}
                         <section>
-                            <h3 className="text-2xl font-bold text-foreground mb-6">Visão Geral</h3>
-                            <div className="text-xl text-muted-foreground font-light leading-relaxed">
+                            <h3 className="text-heading-md font-bold text-foreground mb-6">Visão Geral</h3>
+                            <div className="text-heading-sm text-muted-foreground font-light leading-relaxed">
                                 {/* Aqui entraria o componente <PortableText value={project.description} /> se viesse do Sanity */}
                                 {project.description}
                             </div>
@@ -201,7 +201,7 @@ export const ProjectDetail = () => {
 
                         {/* Challenge */}
                         <section className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg">
-                            <h3 className="text-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">O Desafio</h3>
+                            <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">O Desafio</h3>
                             <div className="text-muted-foreground leading-relaxed">
                                 {project.challenge}
                             </div>
@@ -221,7 +221,7 @@ export const ProjectDetail = () => {
                                                 viewport={{ once: true }}
                                                 className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg my-8"
                                             >
-                                                <h3 className="text-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">A Solução</h3>
+                                                <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">A Solução</h3>
                                                 <div className="text-muted-foreground leading-relaxed">
                                                     {item.text}
                                                 </div>
@@ -293,7 +293,7 @@ export const ProjectDetail = () => {
 
                 <div className="container mx-auto px-4 lg:px-12 text-center">
                     <span className="text-muted-foreground uppercase tracking-widest font-mono text-sm mb-4 block">Próximo Projeto</span>
-                    <h2 className="text-4xl md:text-6xl font-bold text-foreground group-hover:scale-105 transition-transform duration-500">
+                    <h2 className="text-heading-xl md:text-display-xl font-bold text-foreground group-hover:scale-105 transition-transform duration-500">
                         Ver Próximo
                     </h2>
                     <div className="mt-6 flex justify-center">

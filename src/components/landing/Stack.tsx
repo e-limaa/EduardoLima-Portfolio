@@ -17,7 +17,7 @@ export const Stack = () => {
         <Section className="py-16 md:py-32">
             <SectionHeader
                 title="Arsenal Tecnológico"
-                description="Ferramentas que potencializam minha criatividade e eficiência."
+                description="Ferramentas são meios. O diferencial está em como elas são usadas para resolver problemas reais."
                 index="04"
                 label="STACK"
             />
@@ -43,8 +43,8 @@ export const Stack = () => {
                                 >
                                     <tool.icon className="w-8 h-8" />
                                 </motion.div>
-                                <CardTitle className="text-xl font-bold text-foreground mb-3">{tool.name}</CardTitle>
-                                <CardDescription className="text-sm text-muted-foreground leading-relaxed group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                                <CardTitle className="text-heading-sm font-bold text-foreground mb-3">{tool.name}</CardTitle>
+                                <CardDescription className="text-body-sm text-muted-foreground leading-relaxed group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
                                     {tool.desc}
                                 </CardDescription>
                             </CardContent>

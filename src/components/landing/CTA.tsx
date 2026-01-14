@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import { Linkedin, Mail, Github, Instagram, ArrowUpRight } from "lucide-react";
+import { Linkedin, Mail } from "lucide-react";
 import { TextReveal, InteractiveGrid, Button } from "@antigravity/ds";
 import { ContactFormModal } from "./ContactFormModal";
 
@@ -18,22 +18,18 @@ export const CTA = () => {
           {/* Status removed */}
 
           <TextReveal className="flex justify-center flex-wrap gap-x-4">
-            <h2 className="text-4xl md:text-7xl font-bold text-zinc-900 dark:text-white tracking-tighter mb-2">
-              Vamos criar algo
+            <h2 className="text-display-lg md:text-display-2xl font-bold text-zinc-900 dark:text-white tracking-tighter mb-2">
+              Vamos criar algo que gere impacto real?
             </h2>
           </TextReveal>
-          <TextReveal className="flex justify-center" delay={0.1}>
-            <h2 className="text-4xl md:text-7xl font-bold text-zinc-900 dark:text-white tracking-tighter">
-              memorável?
-            </h2>
-          </TextReveal>
+
 
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 1 }}
-            className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-500 max-w-xl mx-auto mt-8 mb-12 font-light leading-relaxed"
+            className="text-heading-sm md:text-heading-md text-zinc-600 dark:text-zinc-500 max-w-2xl mx-auto mt-8 mb-12 font-light leading-relaxed"
           >
             Estou disponível para novos projetos e colaborações.
             Entre em contato e vamos discutir como posso ajudar a elevar seu produto.
@@ -81,7 +77,7 @@ export const CTA = () => {
         {/* Footer Bottom */}
         <div className="border-t border-zinc-200 dark:border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12">
-            <div className="text-2xl font-bold tracking-tighter text-zinc-900 dark:text-white">
+            <div className="text-heading-md font-bold tracking-tighter text-zinc-900 dark:text-white">
               Eduardo Lima<span className="text-blue-600 dark:text-blue-500">.</span>
             </div>
             <div className="flex gap-6">

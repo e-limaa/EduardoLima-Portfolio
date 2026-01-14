@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, useMotionValue } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -28,9 +28,6 @@ export const ProjectCard = ({
     const mouseY = useMotionValue(0);
     const [isHovered, setIsHovered] = useState(false);
     const [imgSrc, setImgSrc] = useState(image);
-
-    const cursorX = useSpring(mouseX, { stiffness: 500, damping: 28 });
-    const cursorY = useSpring(mouseY, { stiffness: 500, damping: 28 });
 
     function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -69,8 +66,8 @@ export const ProjectCard = ({
                 <motion.div
                     className="hidden md:flex absolute pointer-events-none z-50 w-12 h-12 rounded-full bg-blue-600/90 backdrop-blur-sm items-center justify-center shadow-lg shadow-blue-600/20"
                     style={{
-                        left: cursorX,
-                        top: cursorY,
+                        left: mouseX,
+                        top: mouseY,
                         x: "-50%",
                         y: "-50%",
                     }}

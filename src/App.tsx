@@ -22,7 +22,6 @@ import { StyleGuideLayout } from "./pages/styleguide/Layout";
 import { Overview } from "./pages/styleguide/Overview";
 
 // Legacy Views (Being replaced)
-// import { TypographyView } from "./pages/styleguide/foundation/TypographyView";
 // import { SpacingView } from "./pages/styleguide/foundation/SpacingView";
 // import { RadiusView } from "./pages/styleguide/foundation/RadiusView";
 

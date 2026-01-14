@@ -45,7 +45,7 @@ export const Hero = () => {
         className="fixed top-6 left-0 right-0 z-50 pointer-events-none"
       >
         <div className="container mx-auto px-4 lg:px-12 text-center lg:text-left">
-          <span className="text-xl font-bold text-foreground tracking-tight pointer-events-auto inline-block">
+          <span className="text-heading-sm font-semibold text-foreground tracking-tight pointer-events-auto inline-block">
             Eduardo Lima<span className="text-blue-600 dark:text-blue-500">.</span>
           </span>
         </div>
@@ -91,13 +91,13 @@ export const Hero = () => {
             className="flex justify-center lg:justify-start"
           >
             <div className="flex justify-center lg:justify-start">
-              <Badge variant="secondary" className="mb-4 text-sm font-medium px-4 py-1">
+              <Badge variant="secondary" className="mb-4 text-body-sm font-medium px-4 py-1">
                 Senior UI/UX
               </Badge>
             </div>
           </motion.div>
 
-          <div className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto">
+          <div className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto">
             <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2">
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">Curiosidade.</span>
             </TextReveal>
@@ -113,10 +113,9 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
+            className="text-body-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
           >
-            Unindo a precisão do design system com a audácia da inteligência artificial.
-            Criando interfaces que respiram e contam histórias.
+            Projeto experiências digitais unindo design, tecnologia e IA para resolver problemas reais e gerar impacto mensurável.
           </motion.p>
 
           <motion.div

@@ -1,5 +1,4 @@
-import React from "react";
-import { motion } from "motion/react";
+
 import { PenTool, Layout, Smartphone, Box } from "lucide-react";
 import { SectionHeader, Section } from "@antigravity/ds";
 import services3dImage from "figma:asset/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.png";
@@ -35,7 +34,7 @@ export const Services = () => {
     <Section id="services" className="py-16 md:py-32">
       <SectionHeader
         title="Expertise"
-        description="Metodologias refinadas ao longo de uma década de experiência."
+        description="Criação de experiências digitais orientadas a métricas, usabilidade e objetivos de negócio."
         index="02"
         label="SERVICES"
       />
@@ -57,8 +56,8 @@ export const Services = () => {
             </div>
 
             <service.icon className="w-8 h-8 text-muted-foreground group-hover:text-blue-500 transition-colors duration-500 mb-6 relative z-10" />
-            <h3 className="text-2xl font-bold text-foreground mb-4 relative z-10">{service.title}</h3>
-            <p className="text-muted-foreground leading-relaxed relative z-10">{service.desc}</p>
+            <h3 className="text-heading-md font-bold text-foreground mb-4 relative z-10">{service.title}</h3>
+            <p className="text-body-md text-muted-foreground leading-relaxed relative z-10">{service.desc}</p>
           </div>
         ))}
       </div>

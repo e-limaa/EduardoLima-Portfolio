@@ -1,4 +1,4 @@
-import React from "react";
+
 import { TextReveal } from "./text-reveal";
 import { cn } from "../lib/utils";
 
@@ -27,12 +27,12 @@ export const SectionHeader = ({
         )}>
             <div>
                 <TextReveal>
-                    <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-2">
+                    <h2 className="text-heading-lg font-semibold text-foreground mb-2">
                         {title}
                     </h2>
                 </TextReveal>
                 {description && (
-                    <p className="text-muted-foreground text-lg w-full mt-4 max-w-2xl">
+                    <p className="text-muted-foreground text-lg w-full mt-4 max-w-4xl">
                         {description}
                     </p>
                 )}

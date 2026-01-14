@@ -5,88 +5,11 @@ Typography gives a voice to the UI. We use **Inter** as our primary font family 
 
 ## Type Scale
 
-Our type scale is limited to a set of predefined sizes to ensure consistency.
+Our scale has been expanded to offer greater visual flexibility, divided into Display, Headings, and Body.
 
-### Headings
-Used for page titles, section headers, and emphasized content.
+import { TypographyDemo } from '@/components/mdx-ui/TypographyDemo';
 
-<div className="border rounded-xl border-border bg-card px-8 my-6">
-    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
-        <div className="md:w-1/4 space-y-1">
-            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H1 Display</p>
-            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-4xl / 5xl</p>
-        </div>
-        <div className="md:w-3/4">
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                The quick brown fox
-            </h1>
-        </div>
-    </div>
-    
-    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
-        <div className="md:w-1/4 space-y-1">
-            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H2 Section</p>
-            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-3xl</p>
-        </div>
-        <div className="md:w-3/4">
-            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                Jumps over the lazy dog
-            </h2>
-        </div>
-    </div>
-
-    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
-        <div className="md:w-1/4 space-y-1">
-            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H3 Subsection</p>
-            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-2xl</p>
-        </div>
-        <div className="md:w-3/4">
-            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                Design Systems are products
-            </h3>
-        </div>
-    </div>
-</div>
-
-### Body & Text
-Used for the majority of the UI content. 
-
-<div className="border rounded-xl border-border bg-card px-8 my-6">
-    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
-        <div className="md:w-1/4 space-y-1">
-            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">P Body</p>
-            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-base / leading-7</p>
-        </div>
-        <div className="md:w-3/4">
-             <p className="leading-7">
-                Typography is the most ubiquitous element in UI. A good type scale creates natural rhythm and hierarchy. We use relaxed line-height for long paragraphs to improve readability.
-            </p>
-        </div>
-    </div>
-
-    <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
-        <div className="md:w-1/4 space-y-1">
-            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Small</p>
-            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-sm</p>
-        </div>
-         <div className="md:w-3/4">
-            <p className="text-sm font-medium leading-none">Email address</p>
-            <p className="text-sm text-muted-foreground mt-2">Enter your email address to continue.</p>
-        </div>
-    </div>
-
-     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
-        <div className="md:w-1/4 space-y-1">
-            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Muted</p>
-            <p className="font-mono text-[10px] text-muted-foreground opacity-70">text-muted-foreground</p>
-        </div>
-        <div className="md:w-3/4">
-            <p className="text-base text-muted-foreground">
-                Secondary text that shouldn't compete with the main content.
-            </p>
-        </div>
-    </div>
-</div>
+<TypographyDemo />
 
 ## Usage Guidelines
 

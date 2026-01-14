@@ -97,6 +97,29 @@
     --spacing-72: 18rem;
     --spacing-80: 20rem;
     --spacing-96: 24rem;
+    /* Typography Scale */
+    --text-display-2xl: 4.5rem;
+    /* 72px */
+    --text-display-xl: 3.75rem;
+    /* 60px */
+    --text-display-lg: 3rem;
+    /* 48px */
+    --text-heading-xl: 2.25rem;
+    /* 36px */
+    --text-heading-lg: 1.875rem;
+    /* 30px */
+    --text-heading-md: 1.5rem;
+    /* 24px */
+    --text-heading-sm: 1.25rem;
+    /* 20px */
+    --text-body-lg: 1.125rem;
+    /* 18px */
+    --text-body-md: 1rem;
+    /* 16px */
+    --text-body-sm: 0.875rem;
+    /* 14px */
+    --text-caption: 0.75rem;
+    /* 12px */
 }
 
 .dark {
@@ -237,6 +260,92 @@
     body {
         @apply bg-background text-foreground transition-colors duration-300;
         font-family: var(--font-sans);
+    }
+}
+
+@layer utilities {
+
+    /* Typography Utilities */
+    .text-display-2xl {
+        font-size: var(--text-display-2xl);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+    }
+
+    .text-display-xl {
+        font-size: var(--text-display-xl);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+    }
+
+    .text-display-lg {
+        font-size: var(--text-display-lg);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+    }
+
+    .text-heading-xl {
+        font-size: var(--text-heading-xl);
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+    }
+
+    .text-heading-lg {
+        font-size: var(--text-heading-lg);
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+    }
+
+    .text-heading-md {
+        font-size: var(--text-heading-md);
+        line-height: 1.3;
+    }
+
+    .text-heading-sm {
+        font-size: var(--text-heading-sm);
+        line-height: 1.3;
+    }
+
+    .text-body-lg {
+        font-size: var(--text-body-lg);
+        line-height: 1.5;
+    }
+
+    .text-body-md {
+        font-size: var(--text-body-md);
+        line-height: 1.6;
+    }
+
+    .text-body-sm {
+        font-size: var(--text-body-sm);
+        line-height: 1.6;
+    }
+
+    .text-caption {
+        font-size: var(--text-caption);
+        line-height: 1.5;
+    }
+
+    /* Custom Scrollbar */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+    }
+
+    /* Webkit Scrollbar */
+    *::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        @apply bg-border/50 hover:bg-border transition-colors rounded-full;
+        border: 2px solid transparent;
+        background-clip: content-box;
     }
 }
 
