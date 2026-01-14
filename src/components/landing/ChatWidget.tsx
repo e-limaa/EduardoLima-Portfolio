@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Send, User, Bot } from "lucide-react";
+import { motion } from "motion/react";
+import { Send } from "lucide-react";
 import { Button } from "@antigravity/ds";
 import { Input } from "@antigravity/ds";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -145,10 +145,9 @@ export const ChatWidget = () => {
             <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white dark:border-black"></span>
           </div>
           <div>
-            <h3 className="font-medium text-foreground text-sm">Edu - AI Assistant</h3>
+            <h3 className="font-medium text-foreground text-sm">Edu Lima</h3>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              Online
+              AI Assistant
             </p>
           </div>
         </div>
@@ -229,7 +228,7 @@ export const ChatWidget = () => {
         />
         <Button
           type="submit"
-          size="icon"
+          size="icon-md"
           className="bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)]"
           disabled={!inputValue.trim() || isTyping}
         >

@@ -69,6 +69,13 @@ export const ButtonsView = () => {
                         <Button size="default">Default</Button>
                         <Button size="sm">Small (sm)</Button>
                         <Button size="icon" variant="outline" title="Icon Only"><Mail className="h-4 w-4" /></Button>
+                        <div className="flex items-end gap-2 ml-4 p-2 border border-dashed rounded-md">
+                            <Button size="icon-xs" variant="outline" title="Icon XS"><Mail className="h-3 w-3" /></Button>
+                            <Button size="icon-sm" variant="outline" title="Icon SM"><Mail className="h-4 w-4" /></Button>
+                            <Button size="icon" variant="outline" title="Icon Default"><Mail className="h-4 w-4" /></Button>
+                            <Button size="icon-md" variant="outline" title="Icon MD"><Mail className="h-4 w-4" /></Button>
+                            <Button size="icon-lg" variant="outline" title="Icon LG"><Mail className="h-5 w-5" /></Button>
+                        </div>
                     </div>
                 </VariantSection>
 
@@ -145,7 +152,7 @@ export const ButtonsView = () => {
                                     </tr>
                                     <tr className="bg-card">
                                         <td className="p-3 font-mono text-xs">size</td>
-                                        <td className="p-3 text-xs opacity-70">'default' | 'sm' | 'lg' | 'icon'</td>
+                                        <td className="p-3 text-xs opacity-70">'default' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-md' | 'icon-lg'</td>
                                         <td className="p-3 text-xs font-mono">default</td>
                                         <td className="p-3 text-xs">Tamanho do botão.</td>
                                     </tr>
