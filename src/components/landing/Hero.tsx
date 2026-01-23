@@ -98,13 +98,13 @@ export const Hero = () => {
           </motion.div>
 
           <div className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto">
-            <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2">
+            <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2" priority>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">Curiosidade.</span>
             </TextReveal>
-            <TextReveal delay={0.2} className="-mb-3 md:-mb-6 pb-2">
+            <TextReveal delay={0.2} className="-mb-3 md:-mb-6 pb-2" priority>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-700 via-zinc-500 to-zinc-300 dark:from-zinc-200 dark:via-zinc-400 dark:to-zinc-600 leading-[1.0] md:leading-[1.15]">Design.</span>
             </TextReveal>
-            <TextReveal delay={0.3} className="-mb-3 md:-mb-6 pb-2">
+            <TextReveal delay={0.3} className="-mb-3 md:-mb-6 pb-2" priority>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 leading-[1.0] md:leading-[1.15]">Impacto.</span>
             </TextReveal>
           </div>

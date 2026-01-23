@@ -5,12 +5,16 @@ export interface TextRevealProps {
     children: React.ReactNode;
     className?: string;
     delay?: number;
+    priority?: boolean;
 }
 
-export const TextReveal = ({ children, className = "", delay = 0 }: TextRevealProps) => {
+export const TextReveal = ({ children, className = "", delay = 0, priority = false }: TextRevealProps) => {
     const shouldReduceMotion = useReducedMotion();
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true });
+    const inView = useInView(ref, { once: true });
+
+    // If priority is true, we ignore inView and trigger immediately
+    const isInView = priority || inView;
 
     const y = shouldReduceMotion ? 0 : "100%";
 

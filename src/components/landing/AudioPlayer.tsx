@@ -83,6 +83,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
         >
             <audio
                 ref={audioRef}
+                preload="none"
                 src={PLAYLIST[currentTrackIndex].src}
                 onEnded={handleEnded}
             />
