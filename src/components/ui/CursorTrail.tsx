@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-export const CursorTrail = () => {
+export const CursorTrail = React.memo(() => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     // Configuration
@@ -22,6 +22,10 @@ export const CursorTrail = () => {
         let isActive = false;
         let isInitialized = false;
 
+        // Cache for expensive DOM checks
+        let lastTarget: EventTarget | null = null;
+        let lastShouldHide = false;
+
         const resizeValues = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -36,11 +40,15 @@ export const CursorTrail = () => {
                 isInitialized = true;
             }
 
-            // Check if hovering over an element that should hide the cursor trail
-            const target = e.target as HTMLElement;
-            const shouldHide = target.closest && target.closest('.no-cursor-trail');
+            // Optimize: Only verify DOM when target changes
+            if (e.target !== lastTarget) {
+                lastTarget = e.target;
+                const target = e.target as HTMLElement;
+                // Safe check for closest (in case target is not an element or detached)
+                lastShouldHide = !!(target instanceof Element && target.closest && target.closest('.no-cursor-trail'));
+            }
 
-            isActive = !shouldHide;
+            isActive = !lastShouldHide;
             mouse = { x: e.clientX + 6, y: e.clientY + 2 };
         };
         window.addEventListener("mousemove", handleMouseMove);
@@ -107,4 +115,4 @@ export const CursorTrail = () => {
             style={{ width: "100%", height: "100%" }}
         />
     );
-};
+});
