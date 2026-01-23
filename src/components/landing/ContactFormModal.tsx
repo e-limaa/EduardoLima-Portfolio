@@ -7,11 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Input } from "@antigravity/ds";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-import { Loader2 } from "lucide-react";
-import { Button } from "@antigravity/ds";
+import { Input, Button, Label, Textarea } from "@antigravity/ds";
 
 export function ContactFormModal({ children }: { children: React.ReactNode }) {
   return (
@@ -29,19 +25,19 @@ export function ContactFormModal({ children }: { children: React.ReactNode }) {
         <form className="grid gap-4 py-4" onSubmit={(e) => e.preventDefault()}>
           <div className="grid gap-2">
             <Label htmlFor="name" className="text-zinc-300">Nome</Label>
-            <Input id="name" placeholder="Seu nome" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
+            <Input id="name" name="name" autoComplete="name" placeholder="Seu nome" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="phone" className="text-zinc-300">Telefone</Label>
-            <Input id="phone" placeholder="(00) 00000-0000" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
+            <Input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="(00) 00000-0000" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="company" className="text-zinc-300">Empresa</Label>
-            <Input id="company" placeholder="Nome da empresa" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
+            <Input id="company" name="company" autoComplete="organization" placeholder="Nome da empresa" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500" />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="description" className="text-zinc-300">Descrição</Label>
-            <Textarea id="description" placeholder="Como posso ajudar?" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500 min-h-[100px]" />
+            <Textarea id="description" name="description" placeholder="Como posso ajudar?" className="bg-zinc-900 border-zinc-800 text-white focus:ring-blue-500 focus:border-blue-500 min-h-[100px]" />
           </div>
           <div className="flex justify-end mt-4">
             <Button type="submit" className="w-full bg-white text-black hover:bg-zinc-200 font-bold">

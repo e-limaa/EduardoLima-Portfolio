@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "motion/react";
 import { Linkedin, Mail } from "lucide-react";
 import { TextReveal, InteractiveGrid, Button } from "@antigravity/ds";
@@ -45,7 +44,7 @@ export const CTA = () => {
             <ContactFormModal>
               <Button
                 size="lg"
-                className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 hover:scale-105 transition-all duration-300 rounded-full px-8 h-14 text-base font-bold shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 hover:scale-105 duration-300 rounded-full px-8 h-14 text-base font-bold shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
               >
                 <Mail className="mr-2 h-4 w-4" />
                 Fale Comigo
@@ -54,7 +53,7 @@ export const CTA = () => {
 
             <Button
               size="lg"
-              className="bg-[#25D366] text-white hover:bg-[#128C7E] hover:scale-105 transition-all duration-300 rounded-full px-8 h-14 text-base font-bold shadow-[0_0_30px_rgba(37,211,102,0.3)]"
+              className="bg-[#25D366] text-white hover:bg-[#128C7E] hover:scale-105 duration-300 rounded-full px-8 h-14 text-base font-bold shadow-[0_0_30px_rgba(37,211,102,0.3)]"
               onClick={() => window.open("https://wa.me/SEU_NUMERO", "_blank")}
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="mr-2 h-5 w-5">
@@ -65,7 +64,7 @@ export const CTA = () => {
 
             <Button
               size="lg"
-              className="bg-[#0077B5] text-white hover:bg-[#006097] hover:scale-105 transition-all duration-300 rounded-full px-8 h-14 text-base font-bold shadow-[0_0_30px_rgba(0,119,181,0.3)]"
+              className="bg-[#0077B5] text-white hover:bg-[#006097] hover:scale-105 duration-300 rounded-full px-8 h-14 text-base font-bold shadow-[0_0_30px_rgba(0,119,181,0.3)]"
               onClick={() => window.open("https://linkedin.com", "_blank")}
             >
               <Linkedin className="mr-2 h-4 w-4" />

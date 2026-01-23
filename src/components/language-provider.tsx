@@ -22,8 +22,8 @@ const initialState: LanguageProviderState = {
 
 const translations: Record<Language, Record<string, string>> = {
     "en": {
-        "docs.header.title": "DS",
-        "docs.header.subtitle": "Design System Docs",
+        "docs.header.title": "Limex",
+        "docs.header.subtitle": "Limex Design System Docs",
         "docs.sidebar.back": "Back",
         "docs.sidebar.footer": "© 2026 Eduardo Lima",
 
@@ -91,8 +91,8 @@ const translations: Record<Language, Record<string, string>> = {
         "docs.usage-basics.description": "How to use the design system.",
     },
     "pt-br": {
-        "docs.header.title": "DS",
-        "docs.header.subtitle": "Documentação",
+        "docs.header.title": "Limex",
+        "docs.header.subtitle": "Documentação do Limex",
         "docs.sidebar.back": "Voltar",
         "docs.sidebar.footer": "© 2026 Eduardo Lima",
 

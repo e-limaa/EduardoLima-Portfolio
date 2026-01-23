@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "motion/react";
+import React, { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 
 export interface TextRevealProps {
     children: React.ReactNode;
@@ -8,12 +8,17 @@ export interface TextRevealProps {
 }
 
 export const TextReveal = ({ children, className = "", delay = 0 }: TextRevealProps) => {
+    const shouldReduceMotion = useReducedMotion();
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true });
+
+    const y = shouldReduceMotion ? 0 : "100%";
+
     return (
-        <div className={`overflow-hidden relative z-20 ${className}`}>
+        <div ref={ref} className={`overflow-hidden relative z-20 ${className}`}>
             <motion.div
-                initial={{ y: "100%" }}
-                whileInView={{ y: 0 }}
-                viewport={{ once: true }}
+                initial={{ y }}
+                animate={isInView ? { y: 0 } : { y }}
                 transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay }}
             >
                 {children}

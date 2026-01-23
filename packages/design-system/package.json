@@ -1,7 +1,7 @@
 {
     "name": "@antigravity/ds",
     "version": "0.1.0",
-    "description": "Design System Premium para Antigravity Portfolio",
+    "description": "Limex Design System Premium para Antigravity Portfolio",
     "main": "src/index.ts",
     "license": "MIT",
     "scripts": {

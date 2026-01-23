@@ -77,7 +77,7 @@ export const DesignSystem = () => {
                         Voltar para Home
                     </button>
                     <h1 className="text-5xl md:text-6xl font-bold tracking-tighter mb-4">
-                        Design System <span className="text-primary/50">v1.0</span>
+                        Limex Design System <span className="text-primary/50">v1.0</span>
                     </h1>
                     <p className="text-xl text-muted-foreground max-w-2xl">
                         Sistema independente, orientado a tokens e acessível.
@@ -183,7 +183,7 @@ export const DesignSystem = () => {
 
             {/* Footer */}
             <footer className="max-w-6xl mx-auto mt-32 pt-8 border-t border-border flex justify-between items-center text-xs text-muted-foreground font-mono">
-                <p>EduardoLima DS v0.1.0</p>
+                <p>Limex DS v0.1.0</p>
                 <p>Tokens: {JSON.stringify(semanticTokens.light.background.default).substring(0, 10)}... (loaded)</p>
             </footer>
         </div>
