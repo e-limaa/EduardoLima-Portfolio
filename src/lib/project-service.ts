@@ -1,11 +1,23 @@
+import useSWR from 'swr';
 import { client, urlFor } from "./sanity";
 import { Project } from "./sanity-types";
 
-export const getProjects = async (): Promise<Project[]> => {
-  return await client.fetch(`*[_type == "project"] | order(order asc) {
+const projectsQuery = `*[_type == "project"] | order(order asc) {
     ...,
     "category": categoryRef->title
-  }`);
+}`;
+
+export const getProjects = async (): Promise<Project[]> => {
+  return await client.fetch(projectsQuery);
+};
+
+export const useProjects = () => {
+  const { data, error, isLoading } = useSWR('projects', () => getProjects());
+  return {
+    projects: data || [],
+    isLoading,
+    isError: error
+  };
 };
 
 export const getProjectBySlug = async (slug: string): Promise<Project | undefined> => {
@@ -14,6 +26,15 @@ export const getProjectBySlug = async (slug: string): Promise<Project | undefine
     "category": categoryRef->title
   }`;
   return await client.fetch(query, { slug });
+};
+
+export const useProjectBySlug = (slug?: string) => {
+  const { data, error, isLoading } = useSWR(slug ? ['project', slug] : null, () => slug ? getProjectBySlug(slug) : null);
+  return {
+    project: data,
+    isLoading,
+    isError: error
+  };
 };
 
 export const getImageUrl = (image: any): string => {
@@ -42,5 +63,14 @@ export const getAdjacentProjects = async (currentId: string): Promise<{ prevId: 
   return {
     prevId: prevProject.slug?.current || prevProject._id,
     nextId: nextProject.slug?.current || nextProject._id
+  };
+};
+
+export const useAdjacentProjects = (currentId?: string) => {
+  const { data, error, isLoading } = useSWR(currentId ? ['adjacent', currentId] : null, () => currentId ? getAdjacentProjects(currentId) : null);
+  return {
+    navigation: data || { prevId: null, nextId: null },
+    isLoading,
+    isError: error
   };
 };

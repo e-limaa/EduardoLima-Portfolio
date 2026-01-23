@@ -90,6 +90,7 @@ export const ProjectCard = ({
                 <img
                     src={imgSrc}
                     alt={title}
+                    loading="lazy"
                     onError={() => setImgSrc(ERROR_IMG_SRC)}
                     className="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity duration-700 grayscale group-hover:grayscale-0"
                 />

@@ -1,32 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button, SectionHeader, Section, ProjectCard } from "@antigravity/ds";
-import { getProjects, getImageUrl } from "../../lib/project-service";
+import { getImageUrl, useProjects } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";
 
 export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void, onProjectClick?: (id: string) => void }) => {
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const loadProjects = async () => {
-            try {
-                const data = await getProjects();
-                setProjects(data);
-            } catch (error) {
-                console.error("Failed to load projects", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadProjects();
-    }, []);
+    const { projects, isLoading: loading } = useProjects();
 
     // Display first 6 projects for the grid layout (3 per row * 2 rows ideally)
     const featuredProjects = projects.slice(0, 6);
 
     if (loading) {
-        return <div className="py-20 text-center">Carregando projetos...</div>;
+        return <div className="py-20 text-center text-foreground">Carregando projetos...</div>;
     }
 
     return (

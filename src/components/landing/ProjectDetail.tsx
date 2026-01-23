@@ -5,45 +5,20 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { TextReveal } from "@antigravity/ds";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "../ui/dialog";
-import { getProjectBySlug, getImageUrl, getAdjacentProjects } from "../../lib/project-service";
+import { getImageUrl, useProjectBySlug, useAdjacentProjects } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";
 
 export const ProjectDetail = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
-    const [project, setProject] = useState<Project | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [navigation, setNavigation] = useState<{ prevId: string | null, nextId: string | null }>({ prevId: null, nextId: null });
 
-    const projectSlug = slug || "";
+    const { project, isLoading: projectLoading } = useProjectBySlug(slug);
+    const { navigation } = useAdjacentProjects(project?._id);
 
+    // Scroll to top when slug changes
     useEffect(() => {
-        const loadProject = async () => {
-            setLoading(true);
-            try {
-                if (!projectSlug) return;
-
-                // Fetch project by slug
-                const data = await getProjectBySlug(projectSlug);
-                setProject(data || null);
-
-                // For navigation, we need the adjacent projects. 
-                // But getAdjacentProjects expects an ID currently (based on previous signature).
-                // Let's pass the fetched project's ID to it if we got data.
-                if (data?._id) {
-                    const nav = await getAdjacentProjects(data._id);
-                    setNavigation(nav);
-                }
-            } catch (error) {
-                console.error("Failed to load project", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadProject();
         window.scrollTo(0, 0);
-    }, [projectSlug]);
+    }, [slug]);
 
     const handleBack = () => {
         navigate(-1);
@@ -57,7 +32,7 @@ export const ProjectDetail = () => {
         navigate(`/project/${prevId}`);
     }
 
-    if (loading) {
+    if (projectLoading) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
                 <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>

@@ -10,15 +10,17 @@ import { MouseSpotlight } from "./components/landing/MouseSpotlight";
 import { Navbar } from "./components/landing/Navbar";
 import { BrandMarquee } from "./components/landing/BrandMarquee";
 import { Services } from "./components/landing/Services";
-import { ProjectsPage } from "./components/landing/ProjectsPage";
-import { ProjectDetail } from "./components/landing/ProjectDetail";
 import { ThemeProvider } from "./components/theme-provider";
 import { LanguageProvider } from "./components/language-provider";
 import { AudioPlayer } from "./components/landing/AudioPlayer";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { CursorTrail } from "./components/ui/CursorTrail";
 import { DocsPageLoader } from "./components/docs-page-loader";
-import { StyleGuideLayout } from "./pages/styleguide/Layout";
+
+// Lazy load pages for bundle splitting
+const ProjectsPage = React.lazy(() => import("./components/landing/ProjectsPage").then(module => ({ default: module.ProjectsPage })));
+const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
+const StyleGuideLayout = React.lazy(() => import("./pages/styleguide/Layout").then(module => ({ default: module.StyleGuideLayout })));
 import { Overview } from "./pages/styleguide/Overview";
 
 // Legacy Views (Being replaced)
@@ -106,33 +108,35 @@ export default function App() {
           {!isDesignSystem && <AudioPlayer shouldPlay={hasEntered} />}
 
           <main className="relative z-10" key={hasEntered ? "entered" : "loading"}>
-            <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/projects" element={<ProjectsPage onBack={() => navigate(-1)} onProjectClick={(slug) => navigate(`/project/${slug}`)} />} />
-              <Route path="/project/:slug" element={<ProjectDetail />} />
+            <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
+              <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/projects" element={<ProjectsPage onBack={() => navigate(-1)} onProjectClick={(slug) => navigate(`/project/${slug}`)} />} />
+                <Route path="/project/:slug" element={<ProjectDetail />} />
 
-              {/* Design System Routes */}
-              <Route path="/design-system" element={<StyleGuideLayout />}>
-                <Route index element={<Overview />} />
+                {/* Design System Routes */}
+                <Route path="/design-system" element={<StyleGuideLayout />}>
+                  <Route index element={<Overview />} />
 
-                {/* Registry-driven Docs Routes */}
-                {docsRegistry.map((doc) => {
-                  // relative path for child route: remove /design-system/ prefix
-                  const relativePath = doc.href.replace('/design-system/', '');
-                  // Removed direct Component destructuring
-                  return (
-                    <Route
-                      key={doc.href}
-                      path={relativePath}
-                      element={<DocsPageLoader doc={doc} />}
-                    />
-                  );
-                })}
+                  {/* Registry-driven Docs Routes */}
+                  {docsRegistry.map((doc) => {
+                    // relative path for child route: remove /design-system/ prefix
+                    const relativePath = doc.href.replace('/design-system/', '');
+                    // Removed direct Component destructuring
+                    return (
+                      <Route
+                        key={doc.href}
+                        path={relativePath}
+                        element={<DocsPageLoader doc={doc} />}
+                      />
+                    );
+                  })}
 
-                {/* Fallback */}
-                <Route path="*" element={<Overview />} />
-              </Route>
-            </Routes>
+                  {/* Fallback */}
+                  <Route path="*" element={<Overview />} />
+                </Route>
+              </Routes>
+            </React.Suspense>
           </main>
         </div>
       </LanguageProvider>
