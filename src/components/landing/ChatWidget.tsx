@@ -17,30 +17,57 @@ interface Message {
 }
 
 export const ChatWidget = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      text: "Olá! Bem-vindo ao meu portfólio.",
-      sender: "bot",
-      timestamp: new Date(),
-    },
-    {
-      id: "2",
-      text: "Pergunte qualquer coisa sobre meu trabalho, processo criativo ou experiência.",
-      sender: "bot",
-      timestamp: new Date(),
-    },
-  ]);
+  // Inicializa mensagens carregando do localStorage ou usa o padrão
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const savedMessages = localStorage.getItem("chat_messages");
+    if (savedMessages) {
+      try {
+        const parsed = JSON.parse(savedMessages);
+        // Converte strings de data de volta para objetos Date
+        return parsed.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+      } catch (e) {
+        console.error("Failed to parse messages", e);
+      }
+    }
+    return [
+      {
+        id: "1",
+        text: "Olá! Bem-vindo ao meu portfólio.",
+        sender: "bot",
+        timestamp: new Date(),
+      },
+      {
+        id: "2",
+        text: "Pergunte qualquer coisa sobre meu trabalho, processo criativo ou experiência.",
+        sender: "bot",
+        timestamp: new Date(),
+      },
+    ];
+  });
+
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [sessionId, setSessionId] = useState("");
+
+  // Inicializa Session ID do localStorage ou cria um novo
+  const [sessionId, setSessionId] = useState(() => {
+    return localStorage.getItem("chat_session_id") ||
+      Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  });
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
+  // Salva o Session ID no localStorage
   useEffect(() => {
-    // Gerar um Session ID único quando o componente montar
-    const newSessionId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    setSessionId(newSessionId);
-  }, []);
+    localStorage.setItem("chat_session_id", sessionId);
+  }, [sessionId]);
+
+  // Salva as mensagens no localStorage sempre que mudarem
+  useEffect(() => {
+    localStorage.setItem("chat_messages", JSON.stringify(messages));
+  }, [messages]);
 
   // Efeito para scrollar para o fundo sempre que mensagens mudarem ou status de digitação mudar
   useEffect(() => {
@@ -101,9 +128,30 @@ export const ChatWidget = () => {
       }
 
       const data = await response.json();
+      console.log('n8n response:', data); // Debug para ver a estrutura retornada
 
-      // Tenta extrair a mensagem de diferentes formatos comuns de resposta do n8n
-      const botText = data.text || data.message || data.output || data.response || "Desculpe, não entendi a resposta do servidor.";
+      let botText = "Desculpe, não entendi a resposta do servidor.";
+
+      // 1. Se for array (comportamento padrão do n8n às vezes), pega o primeiro item
+      const responseData = Array.isArray(data) ? data[0] : data;
+
+      // 2. Tenta extrair de campos comuns
+      if (typeof responseData === 'string') {
+        botText = responseData;
+      } else if (typeof responseData === 'object' && responseData !== null) {
+        // Tenta encontrar o campo de texto em várias propriedades possíveis
+        const possibleContent = responseData.output || responseData.text || responseData.message || responseData.response || responseData.answer;
+
+        if (typeof possibleContent === 'string') {
+          botText = possibleContent;
+        } else if (typeof possibleContent === 'object' && possibleContent !== null) {
+          // Se o conteúdo for um objeto (ex: JSON dentro de 'output'), tenta extrair texto dele ou stringify
+          botText = (possibleContent as any).text || (possibleContent as any).message || JSON.stringify(possibleContent, null, 2);
+        } else {
+          // Fallback: se não achou campos conhecidos, stringify do objeto todo (exceto se for vazio)
+          botText = JSON.stringify(responseData, null, 2);
+        }
+      }
 
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),

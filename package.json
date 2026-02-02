@@ -67,7 +67,7 @@
     "vite": "6.3.5"
   },
   "scripts": {
-    "dev": "npm run build:tokens --prefix packages/design-system && npx @react-grab/opencode@latest && vite",
+    "dev": "npm run build:tokens --prefix packages/design-system && vite",
     "check-parity": "node scripts/check-i18n-parity.js",
     "build": "npm run check-parity && npm run build:tokens --prefix packages/design-system && vite build"
   }
