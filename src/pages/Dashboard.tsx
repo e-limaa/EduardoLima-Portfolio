@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@antigravity/ds';
-import { ScrollArea } from '@/components/ui/scroll-area';
+
 import { Input } from '@antigravity/ds';
 import { Button } from '@antigravity/ds';
 import { Search, MessageSquare, BarChart, User, Bot, ArrowLeft } from 'lucide-react';
@@ -290,8 +290,8 @@ export const Dashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-black text-foreground p-4 md:p-8">
-            <div className="max-w-[1600px] mx-auto">
+        <div className="h-screen bg-black text-foreground p-4 md:p-8 overflow-hidden flex flex-col">
+            <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col min-h-0">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-4">
@@ -378,7 +378,7 @@ export const Dashboard = () => {
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-250px)]">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
                     {/* Sidebar - Session List */}
                     <Card className="bg-zinc-900 border-zinc-800 flex flex-col h-full overflow-hidden">
                         <div className="p-4 border-b border-zinc-800">
@@ -392,7 +392,7 @@ export const Dashboard = () => {
                                 />
                             </div>
                         </div>
-                        <ScrollArea className="flex-1">
+                        <div className="flex-1 overflow-y-auto">
                             <div className="flex flex-col gap-1 p-2">
                                 {loading ? (
                                     <div className="text-center p-4 text-muted-foreground">Carregando...</div>
@@ -428,7 +428,7 @@ export const Dashboard = () => {
                                     );
                                 })}
                             </div>
-                        </ScrollArea>
+                        </div>
                     </Card>
 
                     {/* Main - Chat View */}
@@ -444,7 +444,7 @@ export const Dashboard = () => {
                                         Fechar
                                     </Button>
                                 </div>
-                                <ScrollArea className="flex-1 p-6">
+                                <div className="flex-1 overflow-y-auto p-6 scroll-smooth">
                                     <div className="flex flex-col gap-6">
                                         {activeMessages.map((msg) => {
                                             const isBot = msg.role === 'assistant';
@@ -468,7 +468,7 @@ export const Dashboard = () => {
                                             );
                                         })}
                                     </div>
-                                </ScrollArea>
+                                </div>
                             </>
                         ) : (
                             <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 gap-4">
