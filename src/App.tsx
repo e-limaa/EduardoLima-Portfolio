@@ -22,6 +22,7 @@ import { DocsPageLoader } from "./components/docs-page-loader";
 const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
 const StyleGuideLayout = React.lazy(() => import("./pages/styleguide/Layout").then(module => ({ default: module.StyleGuideLayout })));
 import { Overview } from "./pages/styleguide/Overview";
+import { Dashboard } from "./pages/Dashboard";
 
 // Legacy Views (Being replaced)
 // import { SpacingView } from "./pages/styleguide/foundation/SpacingView";
@@ -85,8 +86,10 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Check if we are in the Design System to skip intros
+  // Check if we are in the Design System or Dashboard to skip intros
   const isDesignSystem = location.pathname.startsWith('/design-system');
+  const isDashboard = location.pathname.startsWith('/dashboard');
+  const shouldSkipIntro = isDesignSystem || isDashboard;
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
@@ -97,24 +100,28 @@ export default function App() {
       */}
         <div className="min-h-screen w-full bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden font-sans transition-colors duration-300">
           <AnimatePresence>
-            {!hasEntered && !isDesignSystem && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
+            {!hasEntered && !shouldSkipIntro && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
           </AnimatePresence>
 
           <CursorTrail />
           <MouseSpotlight />
 
-          {!isDesignSystem && <AudioPlayer shouldPlay={hasEntered} />}
+          {!shouldSkipIntro && <AudioPlayer shouldPlay={hasEntered} />}
 
           <main className="relative z-10" key={hasEntered ? "entered" : "loading"}>
             <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
               <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
                 <Route path="/" element={<LandingPage />} />
 
+
                 <Route path="/project/:slug" element={<ProjectDetail />} />
+                <Route path="/dashboard" element={<Dashboard />} />
 
                 {/* Design System Routes */}
                 <Route path="/design-system" element={<StyleGuideLayout />}>
                   <Route index element={<Overview />} />
+
+
 
                   {/* Registry-driven Docs Routes */}
                   {docsRegistry.map((doc) => {
