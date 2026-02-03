@@ -290,97 +290,99 @@ export const Dashboard = () => {
     }
 
     return (
-        <div className="h-screen bg-black text-foreground p-4 md:p-8 overflow-hidden flex flex-col">
+        <div className={`bg-black text-foreground p-4 md:p-8 flex flex-col ${selectedSessionId ? 'h-screen overflow-hidden' : 'min-h-screen lg:h-screen lg:overflow-hidden'}`}>
             <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col min-h-0">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-8">
-                    <div className="flex items-center gap-4">
-                        <Button variant="ghost" className="rounded-full w-10 h-10 p-0" onClick={() => navigate('/')}>
-                            <ArrowLeft className="w-5 h-5" />
-                        </Button>
-                        <div>
-                            <h1 className="text-2xl font-bold tracking-tight">Chat Dashboard</h1>
-                            <p className="text-muted-foreground text-sm">Monitoramento de conversas do projeto Bio</p>
+                <div className={selectedSessionId ? 'hidden lg:block' : ''}>
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-4">
+                            <Button variant="ghost" className="rounded-full w-10 h-10 p-0" onClick={() => navigate('/')}>
+                                <ArrowLeft className="w-5 h-5" />
+                            </Button>
+                            <div>
+                                <h1 className="text-2xl font-bold tracking-tight">Chat Dashboard</h1>
+                                <p className="text-muted-foreground text-sm">Monitoramento de conversas do projeto Bio</p>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-4 text-sm text-muted-foreground">
+                            <Button variant="outline" size="sm" onClick={() => {
+                                localStorage.removeItem('dashboard_auth');
+                                setIsAuthenticated(false);
+                                setMessages([]);
+                            }} className="border-red-900/30 text-red-500 hover:text-red-400 hover:bg-red-900/20">
+                                Sair
+                            </Button>
+                            <div className="flex items-center gap-2">
+                                <MessageSquare className="w-4 h-4" />
+                                <span>{stats.totalSessions} Conversas</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <BarChart className="w-4 h-4" />
+                                <span>{stats.totalMessages} Mensagens</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex gap-4 text-sm text-muted-foreground">
-                        <Button variant="outline" size="sm" onClick={() => {
-                            localStorage.removeItem('dashboard_auth');
-                            setIsAuthenticated(false);
-                            setMessages([]);
-                        }} className="border-red-900/30 text-red-500 hover:text-red-400 hover:bg-red-900/20">
-                            Sair
-                        </Button>
-                        <div className="flex items-center gap-2">
-                            <MessageSquare className="w-4 h-4" />
-                            <span>{stats.totalSessions} Conversas</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <BarChart className="w-4 h-4" />
-                            <span>{stats.totalMessages} Mensagens</span>
-                        </div>
+                    {/* Analytics Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                        <Card className="bg-zinc-900 border-zinc-800">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">Total de Mensagens</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold text-white">{stats.totalMessages}</div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-zinc-900 border-zinc-800">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">Usuários</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold text-blue-400">{stats.userMessages}</div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-zinc-900 border-zinc-800">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">Bot</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold text-green-400">{stats.botMessages}</div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-zinc-900 border-zinc-800 col-span-1">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">Atividade Recente</CardTitle>
+                            </CardHeader>
+                            <CardContent className="h-[80px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <RechartsBar data={activityData}>
+                                        <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                    </RechartsBar>
+                                </ResponsiveContainer>
+                            </CardContent>
+                        </Card>
                     </div>
+
+
+                    {/* Error Alert */}
+                    {error && (
+                        <div className="bg-red-900/20 border border-red-900/50 text-red-200 p-4 rounded-lg mb-8 flex items-center justify-between">
+                            <div>
+                                <p className="font-bold">Erro ao carregar dados do Supabase</p>
+                                <p className="text-sm font-mono mt-1">{error}</p>
+                                <p className="text-xs text-red-400 mt-2">Falha na conexão com interaction_logs.</p>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={fetchMessages} className="border-red-900/50 hover:bg-red-900/30">
+                                Tentar Novamente
+                            </Button>
+                        </div>
+                    )}
                 </div>
-
-                {/* Analytics Row */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Total de Mensagens</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold text-white">{stats.totalMessages}</div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Usuários</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold text-blue-400">{stats.userMessages}</div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Bot</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold text-green-400">{stats.botMessages}</div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-zinc-900 border-zinc-800 col-span-1">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Atividade Recente</CardTitle>
-                        </CardHeader>
-                        <CardContent className="h-[80px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <RechartsBar data={activityData}>
-                                    <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                                </RechartsBar>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-                </div>
-
-
-                {/* Error Alert */}
-                {error && (
-                    <div className="bg-red-900/20 border border-red-900/50 text-red-200 p-4 rounded-lg mb-8 flex items-center justify-between">
-                        <div>
-                            <p className="font-bold">Erro ao carregar dados do Supabase</p>
-                            <p className="text-sm font-mono mt-1">{error}</p>
-                            <p className="text-xs text-red-400 mt-2">Falha na conexão com interaction_logs.</p>
-                        </div>
-                        <Button variant="outline" size="sm" onClick={fetchMessages} className="border-red-900/50 hover:bg-red-900/30">
-                            Tentar Novamente
-                        </Button>
-                    </div>
-                )}
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
                     {/* Sidebar - Session List */}
-                    <Card className="bg-zinc-900 border-zinc-800 flex flex-col h-full overflow-hidden">
+                    <Card className={`bg-zinc-900 border-zinc-800 flex flex-col h-full overflow-hidden ${selectedSessionId ? 'hidden lg:flex' : 'flex'}`}>
                         <div className="p-4 border-b border-zinc-800">
                             <div className="relative">
                                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -432,11 +434,14 @@ export const Dashboard = () => {
                     </Card>
 
                     {/* Main - Chat View */}
-                    <Card className="bg-zinc-900 border-zinc-800 col-span-1 lg:col-span-2 flex flex-col h-full overflow-hidden">
+                    <Card className={`bg-zinc-900 border-zinc-800 col-span-1 lg:col-span-2 flex flex-col h-full overflow-hidden ${selectedSessionId ? 'flex' : 'hidden lg:flex'}`}>
                         {selectedSessionId ? (
                             <>
                                 <div className="p-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center justify-between">
                                     <div className="flex items-center gap-2">
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 lg:hidden mr-1 text-zinc-400" onClick={() => setSelectedSessionId(null)}>
+                                            <ArrowLeft className="w-4 h-4" />
+                                        </Button>
                                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                                         <span className="font-mono text-sm text-zinc-400">Session: {selectedSessionId}</span>
                                     </div>
@@ -481,6 +486,6 @@ export const Dashboard = () => {
                     </Card>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
