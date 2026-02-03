@@ -15,6 +15,7 @@ interface ChatMessage {
     content: string;
     role: 'user' | 'assistant';
     created_at: string;
+    is_read: boolean;
 }
 
 // DB Interface (Row)
@@ -24,6 +25,7 @@ interface InteractionLog {
     user_message: string;
     ai_response: string;
     timestamp: string;
+    is_read: boolean;
 }
 
 export const Dashboard = () => {
@@ -34,18 +36,7 @@ export const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [passwordInput, setPasswordInput] = useState('');
     const [error, setError] = useState<string | null>(null);
-    const [lastViewed, setLastViewed] = useState<Record<string, number>>(() => {
-        const saved = localStorage.getItem('dashboard_last_viewed');
-        return saved ? JSON.parse(saved) : {};
-    });
     const navigate = useNavigate();
-
-    const handleSessionClick = (sid: string) => {
-        setSelectedSessionId(sid);
-        const newLastViewed = { ...lastViewed, [sid]: Date.now() };
-        setLastViewed(newLastViewed);
-        localStorage.setItem('dashboard_last_viewed', JSON.stringify(newLastViewed));
-    };
 
     useEffect(() => {
         const isAuth = localStorage.getItem('dashboard_auth') === 'true';
@@ -97,6 +88,7 @@ export const Dashboard = () => {
                     // User requested to use "session_id" as the grouping key
                     const sessionId = row.session_id || 'unknown';
                     const timestamp = row.timestamp;
+                    const isRead = row.is_read; // From DB
 
                     // Message 1: User
                     if (row.user_message) {
@@ -105,7 +97,8 @@ export const Dashboard = () => {
                             session_id: sessionId,
                             content: row.user_message,
                             role: 'user',
-                            created_at: timestamp
+                            created_at: timestamp,
+                            is_read: isRead
                         });
                     }
 
@@ -116,7 +109,10 @@ export const Dashboard = () => {
                             session_id: sessionId,
                             content: row.ai_response,
                             role: 'assistant',
-                            created_at: timestamp
+                            created_at: timestamp,
+                            is_read: isRead // AI messages usually considered read or don't generate badge? Let's assume user checking dashboard sees them. 
+                            // Actually, if the user (admin) hasn't seen the interaction, both are unread.
+                            // Let's inherit row.is_read for simplicity.
                         });
                     }
                 });
@@ -129,6 +125,29 @@ export const Dashboard = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Mark session as read
+    const markSessionAsRead = async (sessionId: string) => {
+        // Optimistic UI update
+        setMessages(prev => prev.map(m =>
+            m.session_id === sessionId ? { ...m, is_read: true } : m
+        ));
+
+        // Update DB
+        const { error } = await supabase
+            .from('interaction_logs')
+            .update({ is_read: true })
+            .eq('session_id', sessionId);
+
+        if (error) {
+            console.error('Error marking as read:', error);
+        }
+    };
+
+    const handleSessionClick = (sid: string) => {
+        setSelectedSessionId(sid);
+        markSessionAsRead(sid);
     };
 
     // Group messages by session
@@ -319,9 +338,9 @@ export const Dashboard = () => {
                                 ) : filteredSessions.map(([sid, msgs]) => {
                                     const lastMsg = msgs[msgs.length - 1]; // Use last message of the group
 
-                                    // Calculate unread count
-                                    const lastViewedAt = lastViewed[sid] || 0;
-                                    const unreadCount = msgs.filter(m => new Date(m.created_at).getTime() > lastViewedAt).length;
+                                    // Calculate unread count (messages where is_read is false)
+                                    // Use set to count unique interaction rows if needed, but simple filter is fine
+                                    const unreadCount = msgs.filter(m => m.is_read === false).length;
 
                                     return (
                                         <button
