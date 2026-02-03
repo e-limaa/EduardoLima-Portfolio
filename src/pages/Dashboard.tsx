@@ -43,6 +43,67 @@ export const Dashboard = () => {
         if (isAuth) {
             setIsAuthenticated(true);
             fetchMessages();
+
+            // Realtime Subscription
+            const channel = supabase
+                .channel('interaction_logs_changes')
+                .on(
+                    'postgres_changes',
+                    {
+                        event: '*', // Listen to INSERT and UPDATE
+                        schema: 'public',
+                        table: 'interaction_logs'
+                    },
+                    (payload) => {
+                        console.log('Realtime update:', payload);
+
+                        if (payload.eventType === 'INSERT') {
+                            const row = payload.new as InteractionLog;
+                            const sessionId = row.session_id || 'unknown';
+                            const timestamp = row.timestamp;
+                            const isRead = row.is_read;
+                            const newMessages: ChatMessage[] = [];
+
+                            if (row.user_message) {
+                                newMessages.push({
+                                    id: `${row.id}-user`,
+                                    session_id: sessionId,
+                                    content: row.user_message,
+                                    role: 'user',
+                                    created_at: timestamp,
+                                    is_read: isRead
+                                });
+                            }
+                            if (row.ai_response) {
+                                newMessages.push({
+                                    id: `${row.id}-ai`,
+                                    session_id: sessionId,
+                                    content: row.ai_response,
+                                    role: 'assistant',
+                                    created_at: timestamp,
+                                    is_read: isRead
+                                });
+                            }
+
+                            setMessages(prev => [...prev, ...newMessages]);
+                        } else if (payload.eventType === 'UPDATE') {
+                            const newRow = payload.new as InteractionLog;
+                            // Mostly useful for syncing is_read status across devices
+                            setMessages(prev => prev.map(msg => {
+                                // Check if this message belongs to the updated row
+                                if (msg.id.startsWith(newRow.id)) {
+                                    return { ...msg, is_read: newRow.is_read };
+                                }
+                                return msg;
+                            }));
+                        }
+                    }
+                )
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
         }
     }, []);
 
