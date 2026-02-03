@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, Layers, Calendar, User, Building2 } from "lucide
 import { useParams, useNavigate } from "react-router-dom";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { TextReveal } from "@antigravity/ds";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "../ui/dialog";
+
 import { getImageUrl, useProjectBySlug, useAdjacentProjects } from "../../lib/project-service";
 import { Project } from "../../lib/sanity-types";
 
@@ -215,32 +215,13 @@ export const ProjectDetail = () => {
                                             viewport={{ once: true }}
                                             className="rounded-lg overflow-hidden border border-zinc-200 dark:border-white/10"
                                         >
-                                            <Dialog>
-                                                <DialogTrigger asChild>
-                                                    <div className="cursor-zoom-in w-full h-full">
-                                                        <ImageWithFallback
-                                                            src={imgUrl}
-                                                            alt={`${project.title} galeria ${idx + 1}`}
-                                                            className="w-full h-auto hover:scale-105 transition-transform duration-700"
-                                                        />
-                                                    </div>
-                                                </DialogTrigger>
-                                                <DialogContent className="!max-w-[95vw] !w-fit !max-h-[95vh] !h-fit p-0 bg-transparent border-none shadow-none flex items-center justify-center outline-none [&>button]:text-white [&>button]:bg-black/50 [&>button]:border [&>button]:border-white/20 [&>button]:hover:bg-black/80 [&>button]:hover:text-white [&>button]:top-4 [&>button]:right-4 [&>button]:p-0 [&>button]:h-6 [&>button]:w-6 [&>button]:rounded-[8px] [&>button]:backdrop-blur-sm [&>button]:flex [&>button]:items-center [&>button]:justify-center">
-                                                    <DialogTitle className="sr-only">
-                                                        {project.title} - Imagem {idx + 1}
-                                                    </DialogTitle>
-                                                    <DialogDescription className="sr-only">
-                                                        Visualização ampliada da imagem {idx + 1} da galeria do projeto {project.title}.
-                                                    </DialogDescription>
-                                                    <div className="relative flex items-center justify-center w-full h-full">
-                                                        <ImageWithFallback
-                                                            src={imgUrl}
-                                                            alt={`${project.title} galeria ${idx + 1} full`}
-                                                            className="w-auto h-auto max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl"
-                                                        />
-                                                    </div>
-                                                </DialogContent>
-                                            </Dialog>
+                                            <div className="w-full h-full">
+                                                <ImageWithFallback
+                                                    src={imgUrl}
+                                                    alt={`${project.title} galeria ${idx + 1}`}
+                                                    className="w-full h-auto"
+                                                />
+                                            </div>
                                         </motion.div>
                                     );
                                 })}
@@ -256,11 +237,11 @@ export const ProjectDetail = () => {
                         </section>
 
                     </div>
-                </div>
-            </main>
+                </div >
+            </main >
 
             {/* Next Project Teaser Footer */}
-            <div
+            < div
                 className="w-full py-20 border-t border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer group relative overflow-hidden transition-colors"
                 onClick={() => navigation.nextId && handleNext(navigation.nextId)}
             >
@@ -277,7 +258,7 @@ export const ProjectDetail = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };

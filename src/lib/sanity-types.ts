@@ -25,6 +25,7 @@ export interface Project {
   solution: string;
   // Permitir string (URL direta atual) ou objeto SanityImage
   mainImage: string | SanityImage;
+  thumbnail?: string | SanityImage;
   gallery: Array<string | SanityImage | SolutionBlock>;
   metricLabel?: string;
   metric: string;

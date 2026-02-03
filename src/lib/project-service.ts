@@ -4,7 +4,8 @@ import { Project } from "./sanity-types";
 
 const projectsQuery = `*[_type == "project"] | order(order asc) {
     ...,
-    "category": categoryRef->title
+    "category": categoryRef->title,
+    thumbnail
 }`;
 
 export const getProjects = async (): Promise<Project[]> => {

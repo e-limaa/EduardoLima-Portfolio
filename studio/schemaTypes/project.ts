@@ -36,6 +36,16 @@ export default defineType({
             fieldset: 'header',
         }),
         defineField({
+            name: 'thumbnail',
+            title: 'Thumbnail',
+            type: 'image',
+            description: 'Image used for the project card in the list view. If not set, Main Image will be used.',
+            options: {
+                hotspot: true,
+            },
+            fieldset: 'header',
+        }),
+        defineField({
             name: 'mainImage',
             title: 'Main image',
             type: 'image',

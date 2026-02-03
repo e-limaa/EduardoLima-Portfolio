@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { ArrowUpRight } from "lucide-react";
-import { Button, SectionHeader, Section, ProjectCard } from "@antigravity/ds";
+import React from "react";
+import { SectionHeader, Section, ProjectCard } from "@antigravity/ds";
 import { getImageUrl, useProjects } from "../../lib/project-service";
-import { Project } from "../../lib/sanity-types";
 
-export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void, onProjectClick?: (id: string) => void }) => {
+export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => void }) => {
     const { projects, isLoading: loading } = useProjects();
 
     // Display first 6 projects for the grid layout (3 per row * 2 rows ideally)
@@ -32,7 +30,7 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
                             key={project._id}
                             title={project.title}
                             category={project.category}
-                            image={getImageUrl(project.mainImage)}
+                            image={getImageUrl(project.thumbnail || project.mainImage)}
                             metric={project.metric}
                             color={project.color}
                             onClick={() => onProjectClick && onProjectClick(project.slug.current)}
@@ -40,18 +38,7 @@ export const Projects = ({ onViewAll, onProjectClick }: { onViewAll?: () => void
                     ))}
                 </div>
 
-                {/* Bottom Action */}
-                <div className="mt-16 flex justify-center">
-                    <Button
-                        variant="outline"
-                        size="lg"
-                        onClick={onViewAll}
-                        className="group text-lg px-8 h-14 rounded-full border-zinc-200 dark:border-white/10 hover:bg-foreground hover:text-background transition-all duration-300"
-                    >
-                        Ver todos os projetos
-                        <ArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </Button>
-                </div>
+
             </div>
         </Section>
     );

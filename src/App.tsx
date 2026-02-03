@@ -18,7 +18,7 @@ import { CursorTrail } from "./components/ui/CursorTrail";
 import { DocsPageLoader } from "./components/docs-page-loader";
 
 // Lazy load pages for bundle splitting
-const ProjectsPage = React.lazy(() => import("./components/landing/ProjectsPage").then(module => ({ default: module.ProjectsPage })));
+
 const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
 const StyleGuideLayout = React.lazy(() => import("./pages/styleguide/Layout").then(module => ({ default: module.StyleGuideLayout })));
 import { Overview } from "./pages/styleguide/Overview";
@@ -43,9 +43,7 @@ const LandingPage = () => {
     navigate(`/project/${slug}`);
   };
 
-  const handleViewAllProjects = () => {
-    navigate('/projects');
-  };
+
 
   return (
     <>
@@ -58,7 +56,7 @@ const LandingPage = () => {
 
       <div id="projects">
         <Projects
-          onViewAll={handleViewAllProjects}
+
           onProjectClick={handleProjectClick}
         />
       </div>
@@ -111,7 +109,7 @@ export default function App() {
             <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
               <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
                 <Route path="/" element={<LandingPage />} />
-                <Route path="/projects" element={<ProjectsPage onBack={() => navigate(-1)} onProjectClick={(slug) => navigate(`/project/${slug}`)} />} />
+
                 <Route path="/project/:slug" element={<ProjectDetail />} />
 
                 {/* Design System Routes */}
