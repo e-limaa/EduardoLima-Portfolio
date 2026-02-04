@@ -26,7 +26,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
 
     useEffect(() => {
         if (shouldPlay && audioRef.current) {
-            audioRef.current.volume = 0.2; // Start at 20% volume
+            audioRef.current.volume = 0.1; // Start at 10% volume
             const playPromise = audioRef.current.play();
 
             if (playPromise !== undefined) {
