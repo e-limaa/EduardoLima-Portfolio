@@ -1,59 +1,52 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
-import { ArrowUpRight, Fingerprint, Cpu, Sparkles, Crown } from "lucide-react";
+import { ScanSearch, Workflow, Code2, Zap } from "lucide-react";
 import { SectionHeader } from "@antigravity/ds";
 
 const timelineData = [
   {
     id: 1,
-    year: "ORIGIN",
-    title: "Manual",
-    subtitle: "A precisão do Craft",
-    description: "Cresci em chão de fábrica. Onde milímetros importam. Essa obsessão por detalhes migrou do torno mecânico para o pixel perfeito.",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80",
-    icon: Fingerprint,
+    year: "Método de descoberta",
+    title: "Curiosidade Aplicada",
+    description: "Minha criatividade começa com perguntas. Entender o problema, explorar possibilidades e questionar soluções prontas faz parte do meu processo. Curiosidade, para mim, não é estética — é ferramenta para chegar em decisões mais conscientes.",
+    image: "/assets/images/curiosidade-aplicada.png",
+    icon: ScanSearch,
     color: "text-zinc-400",
     bgGradient: "from-zinc-500/20 to-transparent"
   },
   {
     id: 2,
-    year: "CODE",
-    title: "Lógica",
-    subtitle: "Design System & Code",
-    description: "Para desenhar o impossível, precisei aprender a construir. O código virou minha segunda caneta. Front-end não é barreira, é ferramenta.",
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
-    icon: Cpu,
+    year: "Estrutura antes da tela",
+    title: "Pensamento Sistêmico",
+    description: "Encaro produtos digitais como sistemas vivos. Cada decisão de interface impacta fluxos, regras de negócio, dados e evolução futura. Por isso, penso UX além das telas — como uma estrutura que precisa escalar, se manter e evoluir.",
+    image: "/assets/images/pensamento-sistemico.png",
+    icon: Workflow,
     color: "text-blue-500",
     bgGradient: "from-blue-500/20 to-transparent"
   },
   {
     id: 3,
-    year: "FUSION",
-    title: "AI + UX",
-    subtitle: "Inteligência Aumentada",
-    description: "Integro fluxos de IA generativa no processo criativo. O designer do futuro não desenha telas, ele orquestra sistemas inteligentes.",
-    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
-    icon: Sparkles,
+    year: "Design viável",
+    title: "Execução com Consciência Técnica",
+    description: "Entender limitações técnicas faz parte da criação. Conhecimento em frontend, lógica e automações me ajuda a projetar soluções viáveis, reduzir fricção com desenvolvimento e acelerar entregas sem perder qualidade.",
+    image: "/assets/images/execucao-tecnica.png",
+    icon: Code2,
     color: "text-zinc-300",
     bgGradient: "from-zinc-400/20 to-transparent"
   },
   {
     id: 4,
-    year: "LEAD",
-    title: "Visão",
-    subtitle: "Impacto & Liderança",
-    description: "Design sem negócio é arte. Meu foco hoje é liderar times que movem ponteiros de conversão, retenção e valor de mercado.",
-    image: "https://images.unsplash.com/photo-1535378437268-5f75d21683af?w=800&q=80",
-    icon: Crown,
+    year: "Aprendizado constante",
+    title: "Evolução Contínua",
+    description: "Meu processo está sempre em movimento. Exploro novas tecnologias, IA e ferramentas não por tendência, mas para ampliar autonomia e elevar o nível das entregas. Aprender rápido virou parte essencial do meu jeito de trabalhar.",
+    image: "/assets/images/evolucao-continua.png",
+    icon: Zap,
     color: "text-blue-400",
     bgGradient: "from-blue-400/20 to-transparent"
   }
 ];
 
 export const Storytelling = () => {
-  const [activeId, setActiveId] = useState<number>(1);
-
   return (
     <section className="relative py-12 md:py-24 bg-background overflow-hidden flex flex-col items-center justify-center transition-colors duration-300">
 
@@ -68,7 +61,7 @@ export const Storytelling = () => {
       </div>
 
       {/* Vertical Timeline Container */}
-      <div className="container mx-auto px-4 lg:px-12 relative z-10 max-w-5xl">
+      <div className="container mx-auto px-4 lg:px-12 relative z-10 max-w-7xl">
         {/* Central Vertical Line */}
         <div className="absolute left-8 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-300 dark:via-zinc-800 to-transparent transform -translate-x-1/2" />
 
@@ -78,51 +71,87 @@ export const Storytelling = () => {
           return (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7, delay: index * 0.2 }}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-20%" }}
               className={`relative flex flex-col lg:flex-row items-start lg:items-center gap-8 lg:gap-0 mb-12 md:mb-24 last:mb-0 group`}
             >
               {/* Desktop: Left Content (Even items) or Right Content (Odd items) */}
               {/* Mobile: Always content on right of line */}
 
-              {/* Left Side (Desktop) */}
-              <div className={`w-full lg:w-1/2 lg:pr-16 ${isEven ? 'lg:text-right' : 'lg:order-3 lg:pl-16 text-left'}`}>
-                <div className={`pl-16 lg:pl-0 ${isEven ? '' : 'lg:text-left'}`}>
+              {/* Left Side (Text Logic) */}
+              {/* 
+                  If Even: Text is on Left. Animate from Left (-x).
+                  If Odd: Text is on Right. Animate from Right (+x).
+              */}
+              <div className={`w-full lg:w-1/2 ${isEven ? 'lg:pr-20 lg:text-right' : 'lg:order-3 lg:pl-20 text-left'}`}>
+                <motion.div
+                  variants={{
+                    initial: { x: isEven ? -50 : 50, opacity: 0 },
+                    animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
+                  }}
+                  className={`pl-20 lg:pl-0 ${isEven ? '' : 'lg:text-left'}`}
+                >
                   <span className={`text-sm font-mono font-bold tracking-widest uppercase mb-2 block ${item.color}`}>
                     {item.year}
                   </span>
-                  <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+                  <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                     {item.title}
                   </h3>
-                  <h4 className="text-lg text-muted-foreground mb-4 font-light">
-                    {item.subtitle}
-                  </h4>
-                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base whitespace-pre-line">
                     {item.description}
                   </p>
-                </div>
+                </motion.div>
               </div>
 
               {/* Center Point */}
               <div className="absolute left-8 lg:left-1/2 transform -translate-x-1/2 flex items-center justify-center z-20">
-                <div className={`w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 bg-background flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_-5px_rgba(0,0,0,0.5)] dark:shadow-none ${item.color}`}>
-                  <div className={`absolute inset-0 bg-current opacity-10 rounded-full blur-lg group-hover:opacity-30 transition-opacity duration-500`} />
+                <motion.div
+                  variants={{
+                    initial: { scale: 0, opacity: 0 },
+                    animate: { scale: 1.1, opacity: 1, transition: { duration: 0.5, delay: 0.2 } }
+                  }}
+                  className={`w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 bg-background flex items-center justify-center shadow-[0_0_30px_-5px_rgba(0,0,0,0.5)] dark:shadow-none ${item.color}`}
+                >
+                  <motion.div
+                    variants={{
+                      initial: { opacity: 0 },
+                      animate: { opacity: 0.3, transition: { delay: 0.4, duration: 0.5 } }
+                    }}
+                    className={`absolute inset-0 bg-current rounded-full blur-lg`}
+                  />
                   <item.icon className="w-5 h-5" />
-                </div>
+                </motion.div>
               </div>
 
-              {/* Right Side (Desktop) - Visual/Image */}
-              <div className={`w-full lg:w-1/2 lg:pl-16 ${isEven ? 'lg:order-3 lg:pl-16' : 'lg:pr-16 lg:text-right'}`}>
-                <div className={`relative ml-16 lg:ml-0 rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 aspect-video md:aspect-[4/3] group-hover:border-blue-500/50 dark:group-hover:border-white/20 transition-colors duration-500 shadow-sm dark:shadow-none`}>
+              {/* Right Side (Image Logic) */}
+              {/* 
+                  If Even: Image is on Right. Animate from Right (+x).
+                  If Odd: Image is on Left. Animate from Left (-x).
+              */}
+              <div className={`w-full lg:w-1/2 ${isEven ? 'lg:order-3 lg:pl-20' : 'lg:pr-20 lg:text-right'}`}>
+                <motion.div
+                  variants={{
+                    initial: { x: isEven ? 50 : -50, opacity: 0, borderColor: "rgba(255,255,255,0.1)" },
+                    animate: { x: 0, opacity: 1, borderColor: "rgba(59, 130, 246, 0.5)", transition: { duration: 0.8, ease: "easeOut" } }
+                  }}
+                  className={`relative ml-20 lg:ml-0 rounded-2xl overflow-hidden border aspect-[3/2] transition-colors duration-500 shadow-sm dark:shadow-none bg-zinc-900/5`}
+                >
                   <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} opacity-20 mix-blend-soft-light z-10`} />
-                  <ImageWithFallback
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover opacity-80 dark:opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-100 dark:group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
-                  />
-                </div>
+                  <motion.div
+                    variants={{
+                      initial: { filter: "grayscale(100%)", opacity: 0.4, scale: 1 },
+                      animate: { filter: "grayscale(0%)", opacity: 1, scale: 1.05, transition: { duration: 0.8 } }
+                    }}
+                    className="w-full h-full"
+                  >
+                    <ImageWithFallback
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                </motion.div>
               </div>
 
             </motion.div>

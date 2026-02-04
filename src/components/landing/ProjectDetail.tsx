@@ -228,13 +228,7 @@ export const ProjectDetail = () => {
                             </div>
                         </section>
 
-                        {/* CTA Section - Moved from Sidebar */}
-                        <section className="pt-16 border-t border-zinc-200 dark:border-white/10 flex flex-col items-center text-center">
-                            <p className="text-muted-foreground mb-4">Interessado em construir algo similar?</p>
-                            <a href="#contact" className="inline-flex items-center gap-2 text-foreground font-bold hover:gap-3 transition-all text-xl">
-                                Iniciar um Projeto <ArrowRight className="w-5 h-5" />
-                            </a>
-                        </section>
+
 
                     </div>
                 </div >
