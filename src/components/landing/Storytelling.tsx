@@ -9,7 +9,7 @@ const timelineData = [
     year: "Método de descoberta",
     title: "Curiosidade Aplicada",
     description: "Minha criatividade começa com perguntas. Entender o problema, explorar possibilidades e questionar soluções prontas faz parte do meu processo. Curiosidade, para mim, não é estética — é ferramenta para chegar em decisões mais conscientes.",
-    image: "/assets/images/curiosidade-aplicada.png",
+    image: "/assets/images/curiosidade-aplicada.webp",
     icon: ScanSearch,
     color: "text-zinc-400",
     bgGradient: "from-zinc-500/20 to-transparent"
@@ -19,7 +19,7 @@ const timelineData = [
     year: "Estrutura antes da tela",
     title: "Pensamento Sistêmico",
     description: "Encaro produtos digitais como sistemas vivos. Cada decisão de interface impacta fluxos, regras de negócio, dados e evolução futura. Por isso, penso UX além das telas — como uma estrutura que precisa escalar, se manter e evoluir.",
-    image: "/assets/images/pensamento-sistemico.png",
+    image: "/assets/images/pensamento-sistemico.webp",
     icon: Workflow,
     color: "text-blue-500",
     bgGradient: "from-blue-500/20 to-transparent"
@@ -29,7 +29,7 @@ const timelineData = [
     year: "Design viável",
     title: "Execução com Consciência Técnica",
     description: "Entender limitações técnicas faz parte da criação. Conhecimento em frontend, lógica e automações me ajuda a projetar soluções viáveis, reduzir fricção com desenvolvimento e acelerar entregas sem perder qualidade.",
-    image: "/assets/images/execucao-tecnica.png",
+    image: "/assets/images/execucao-tecnica.webp",
     icon: Code2,
     color: "text-zinc-300",
     bgGradient: "from-zinc-400/20 to-transparent"
@@ -39,7 +39,7 @@ const timelineData = [
     year: "Aprendizado constante",
     title: "Evolução Contínua",
     description: "Meu processo está sempre em movimento. Exploro novas tecnologias, IA e ferramentas não por tendência, mas para ampliar autonomia e elevar o nível das entregas. Aprender rápido virou parte essencial do meu jeito de trabalhar.",
-    image: "/assets/images/evolucao-continua.png",
+    image: "/assets/images/evolucao-continua.webp",
     icon: Zap,
     color: "text-blue-400",
     bgGradient: "from-blue-400/20 to-transparent"
@@ -148,6 +148,10 @@ export const Storytelling = () => {
                     <ImageWithFallback
                       src={item.image}
                       alt={item.title}
+                      loading="lazy"
+                      decoding="async"
+                      width={800}
+                      height={533}
                       className="w-full h-full object-cover"
                     />
                   </motion.div>

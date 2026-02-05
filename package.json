@@ -64,6 +64,7 @@
     "@vitejs/plugin-react-swc": "^3.10.2",
     "remark-gfm": "^4.0.1",
     "shadcn": "^3.6.3",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.1.17",
     "vite": "6.3.5"
   },
