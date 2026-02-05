@@ -62,11 +62,14 @@ export const Hero = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="relative lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
           >
-            {/* Mobile Fallback Image (PNG) */}
+            {/* Mobile Fallback Image (WebP Optimized) */}
             <img
-              src="https://audio-assets.vercel.app/Edu-image.png"
+              src="/assets/images/Edu-image.webp"
               alt="Eduardo Lima"
-              className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] block md:hidden"
+              fetchPriority="high"
+              width={548}
+              height={981}
+              className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] block md:hidden"
             />
 
             {/* Desktop Video (WebM) */}

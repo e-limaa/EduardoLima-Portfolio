@@ -132,12 +132,12 @@ export const Storytelling = () => {
               <div className={`w-full lg:w-1/2 ${isEven ? 'lg:order-3 lg:pl-20' : 'lg:pr-20 lg:text-right'}`}>
                 <motion.div
                   variants={{
-                    initial: { x: isEven ? 50 : -50, opacity: 0, borderColor: "rgba(255,255,255,0.1)" },
-                    animate: { x: 0, opacity: 1, borderColor: "rgba(59, 130, 246, 0.5)", transition: { duration: 0.8, ease: "easeOut" } }
+                    initial: { x: isEven ? 50 : -50, opacity: 0 },
+                    animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
                   }}
-                  className={`relative ml-20 lg:ml-0 rounded-2xl overflow-hidden border aspect-[3/2] transition-colors duration-500 shadow-sm dark:shadow-none bg-zinc-900/5`}
+                  className={`relative ml-20 lg:ml-0 rounded-2xl overflow-hidden aspect-[3/2] transition-colors duration-500 shadow-sm dark:shadow-none bg-zinc-900/5`}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} opacity-20 mix-blend-soft-light z-10`} />
+
                   <motion.div
                     variants={{
                       initial: { filter: "grayscale(100%)", opacity: 0.4, scale: 1 },

@@ -4,7 +4,7 @@ import { Send } from "lucide-react";
 import { Button } from "@antigravity/ds";
 import { Input } from "@antigravity/ds";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import exampleImage from 'figma:asset/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png';
+
 
 // URL do Webhook do n8n - Substitua pela sua URL de produção
 const WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "YOUR_N8N_WEBHOOK_URL_HERE";
@@ -187,7 +187,7 @@ export const ChatWidget = () => {
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar className="h-10 w-10 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-              <AvatarImage src={exampleImage} />
+              <AvatarImage src="/assets/images/avatar-bot.webp" />
               <AvatarFallback>AI</AvatarFallback>
             </Avatar>
             <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white dark:border-black"></span>
