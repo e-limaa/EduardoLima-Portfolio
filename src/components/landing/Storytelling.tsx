@@ -61,7 +61,7 @@ export const Storytelling = () => {
       </div>
 
       {/* Vertical Timeline Container */}
-      <div className="container mx-auto px-4 lg:px-12 relative z-10 max-w-7xl">
+      <div className="container mx-auto px-4 lg:px-12 relative z-10">
         {/* Central Vertical Line */}
         <div className="absolute left-8 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-300 dark:via-zinc-800 to-transparent transform -translate-x-1/2" />
 
