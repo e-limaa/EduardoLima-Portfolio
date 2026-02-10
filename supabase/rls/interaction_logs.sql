@@ -41,11 +41,12 @@ security definer
 set search_path = public
 as $$
 begin
+  -- Never trust raw_user_meta_data for role assignment; users can control it.
   insert into public.profiles (id, email, role, is_admin)
   values (
     new.id,
     new.email,
-    coalesce(new.raw_user_meta_data ->> 'role', 'user'),
+    'user',
     false
   )
   on conflict (id) do update
@@ -92,11 +93,11 @@ begin
     return true;
   end if;
 
-  -- Optional fallback to JWT role claim
+  -- Optional fallback to app_metadata claim only.
+  -- Do not trust user_metadata.role for authorization decisions.
   claim_role := lower(
     coalesce(
       auth.jwt() -> 'app_metadata' ->> 'role',
-      auth.jwt() -> 'user_metadata' ->> 'role',
       ''
     )
   );

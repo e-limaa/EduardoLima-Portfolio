@@ -1,22 +1,10 @@
 import React from "react";
-import type { Session, User } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 import { Button, Input } from "@antigravity/ds";
 import { supabase } from "@/lib/supabase";
 
-const ADMIN_ROLES = new Set(["admin", "owner", "superadmin"]);
-
-const hasAdminRoleClaim = (user: User) => {
-  const appRole = typeof user.app_metadata?.role === "string" ? user.app_metadata.role : "";
-  const userRole = typeof user.user_metadata?.role === "string" ? user.user_metadata.role : "";
-  return ADMIN_ROLES.has(appRole.toLowerCase()) || ADMIN_ROLES.has(userRole.toLowerCase());
-};
-
-const resolveIsAdmin = async (user: User) => {
-  if (hasAdminRoleClaim(user)) {
-    return true;
-  }
-
-  // Fallback to DB-side function (works with/without profiles table).
+const resolveIsAdmin = async () => {
+  // Source of truth stays server-side (RLS function + profiles table).
   const { data, error } = await supabase.rpc("is_dashboard_admin");
   if (error) {
     return false;
@@ -126,7 +114,7 @@ export const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    const allowed = await resolveIsAdmin(nextSession.user);
+    const allowed = await resolveIsAdmin();
     setIsAdmin(allowed);
     setLoading(false);
   }, []);

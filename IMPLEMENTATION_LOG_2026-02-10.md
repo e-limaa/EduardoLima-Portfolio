@@ -116,6 +116,7 @@ Executar o plano priorizado de correções de segurança, hardening e melhorias 
 ### Servidor (Vercel Function e proxy local)
 - `N8N_WEBHOOK_URL`
 - `N8N_WEBHOOK_SECRET` (opcional, recomendado)
+- `CHAT_ALLOWED_ORIGINS` (opcional, allowlist de origem para `/api/chat`)
 
 Nota: o arquivo `.env` local não entra em commit (`.gitignore`).
 
@@ -147,3 +148,11 @@ Nota: o arquivo `.env` local não entra em commit (`.gitignore`).
 - Em ambiente local com Vite, `/api/chat` depende do proxy ativo.
 - Em produção, `/api/chat` depende das variáveis server-side na Vercel.
 
+## Hardening adicional aplicado após revisão final
+- Removida confiança em `user_metadata.role` na decisão de admin no frontend.
+- `is_dashboard_admin()` ajustada para fallback apenas em `app_metadata.role`.
+- Trigger de criação de perfil ajustado para sempre iniciar com `role = 'user'` (sem herdar `raw_user_meta_data.role`).
+- `/api/chat` recebeu proteção anti-abuso:
+  - validação de origem (`Origin`) com allowlist opcional (`CHAT_ALLOWED_ORIGINS`);
+  - validação de `Content-Type` e tamanho máximo de body;
+  - rate limit best-effort por IP (janela curta) com resposta `429`.

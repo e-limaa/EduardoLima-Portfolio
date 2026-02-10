@@ -20,6 +20,7 @@
 
   - `N8N_WEBHOOK_URL`
   - `N8N_WEBHOOK_SECRET` (optional but recommended)
+  - `CHAT_ALLOWED_ORIGINS` (optional, comma-separated allowlist for `/api/chat`; ex: `https://seu-dominio.com,https://preview.vercel.app`)
 
   Local chat with `npm run dev`:
 
@@ -30,9 +31,9 @@
 
   The dashboard route now depends on Supabase Auth and admin role checks.
 
-  - Claims supported: `app_metadata.role` / `user_metadata.role` as `admin|owner|superadmin`
+  - Claims supported: `app_metadata.role` as `admin|owner|superadmin`
   - Source of truth: `profiles` table (`role` + `is_admin`)
-  - Optional fallback: JWT role claim (`app_metadata.role` / `user_metadata.role`)
+  - Optional fallback: JWT role claim (`app_metadata.role`)
 
   Apply RLS script before production:
 
