@@ -16,13 +16,14 @@ import { AudioPlayer } from "./components/landing/AudioPlayer";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { CursorTrail } from "./components/ui/CursorTrail";
 import { DocsPageLoader } from "./components/docs-page-loader";
+import { RequireAdmin } from "./components/auth/RequireAdmin";
 
 // Lazy load pages for bundle splitting
 
 const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
 const StyleGuideLayout = React.lazy(() => import("./pages/styleguide/Layout").then(module => ({ default: module.StyleGuideLayout })));
+const Dashboard = React.lazy(() => import("./pages/Dashboard").then(module => ({ default: module.Dashboard })));
 import { Overview } from "./pages/styleguide/Overview";
-import { Dashboard } from "./pages/Dashboard";
 
 // Legacy Views (Being replaced)
 // import { SpacingView } from "./pages/styleguide/foundation/SpacingView";
@@ -84,7 +85,6 @@ const LandingPage = () => {
 export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   // Check if we are in the Design System or Dashboard to skip intros
   const isDesignSystem = location.pathname.startsWith('/design-system');
@@ -115,7 +115,14 @@ export default function App() {
 
 
                 <Route path="/project/:slug" element={<ProjectDetail />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <RequireAdmin>
+                      <Dashboard />
+                    </RequireAdmin>
+                  }
+                />
 
                 {/* Design System Routes */}
                 <Route path="/design-system" element={<StyleGuideLayout />}>

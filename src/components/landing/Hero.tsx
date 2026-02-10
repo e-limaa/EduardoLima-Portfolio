@@ -8,6 +8,7 @@ export const Hero = () => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+  const [videoFailed, setVideoFailed] = React.useState(false);
 
   const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -34,7 +35,7 @@ export const Hero = () => {
           style={{ y: y2 }}
           className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-zinc-600/10 rounded-full blur-[120px] mix-blend-screen"
         />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20"></div>
       </div>
 
       {/* Fixed Header (Eduardo Lima) */}
@@ -66,21 +67,31 @@ export const Hero = () => {
             <img
               src="/assets/images/Edu-image.webp"
               alt="Eduardo Lima"
-              fetchPriority="high"
               width={548}
               height={981}
               className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] block md:hidden"
             />
 
             {/* Desktop Video (WebM) */}
-            <video
-              src="https://audio-assets.vercel.app/Edu-video.webm"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
-            />
+            {!videoFailed ? (
+              <video
+                src="https://audio-assets.vercel.app/Edu-video.webm"
+                autoPlay
+                loop
+                muted
+                playsInline
+                onError={() => setVideoFailed(true)}
+                className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
+              />
+            ) : (
+              <img
+                src="/assets/images/Edu-image.webp"
+                alt="Eduardo Lima"
+                width={548}
+                height={981}
+                className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
+              />
+            )}
           </motion.div>
         </div>
 

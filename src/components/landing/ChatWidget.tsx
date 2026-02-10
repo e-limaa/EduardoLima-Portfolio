@@ -5,16 +5,14 @@ import { Button } from "@antigravity/ds";
 import { Input } from "@antigravity/ds";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-
-// URL do Webhook do n8n - Substitua pela sua URL de produção
-const WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "YOUR_N8N_WEBHOOK_URL_HERE";
-
 interface Message {
   id: string;
   text: string;
   sender: "user" | "bot";
   timestamp: Date;
 }
+
+const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{8,128}$/;
 
 export const ChatWidget = () => {
   // Inicializa mensagens carregando do localStorage ou usa o padrão
@@ -52,9 +50,17 @@ export const ChatWidget = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   // Inicializa Session ID do localStorage ou cria um novo
-  const [sessionId, setSessionId] = useState(() => {
-    return localStorage.getItem("chat_session_id") ||
-      Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  const [sessionId] = useState(() => {
+    const savedSession = localStorage.getItem("chat_session_id");
+    if (savedSession && SESSION_ID_PATTERN.test(savedSession)) {
+      return savedSession;
+    }
+
+    return (
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`
+    );
   });
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -96,23 +102,7 @@ export const ChatWidget = () => {
     setIsTyping(true);
 
     try {
-      // Verificar se a URL do webhook está configurada
-      if (WEBHOOK_URL === "YOUR_N8N_WEBHOOK_URL_HERE") {
-        // Simulação caso o webhook não esteja configurado
-        setTimeout(() => {
-          const botResponse: Message = {
-            id: (Date.now() + 1).toString(),
-            text: "O Chat está configurado para n8n, mas a URL do Webhook ainda não foi definida no código.",
-            sender: "bot",
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, botResponse]);
-          setIsTyping(false);
-        }, 1000);
-        return;
-      }
-
-      const response = await fetch(WEBHOOK_URL, {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,11 +114,15 @@ export const ChatWidget = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const errorPayload = await response.json().catch(() => null);
+        const errorMessage =
+          typeof errorPayload?.error === "string"
+            ? errorPayload.error
+            : "Não foi possível enviar a mensagem.";
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
-      console.log('n8n response:', data); // Debug para ver a estrutura retornada
 
       let botText = "Desculpe, não entendi a resposta do servidor.";
 
@@ -165,7 +159,9 @@ export const ChatWidget = () => {
       console.error("Error sending message:", error);
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente mais tarde.",
+        text: `Desculpe, ocorreu um erro ao processar sua mensagem: ${
+          error instanceof Error ? error.message : "falha desconhecida"
+        }`,
         sender: "bot",
         timestamp: new Date(),
       };

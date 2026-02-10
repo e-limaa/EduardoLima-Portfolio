@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
@@ -8,16 +8,36 @@ import remarkGfm from 'remark-gfm';
 
 const __dirname = path.resolve();
 
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+  const webhookUrl = env.N8N_WEBHOOK_URL?.trim();
+  const webhookSecret = env.N8N_WEBHOOK_SECRET?.trim();
 
-export default defineConfig({
-  plugins: [
-    { enforce: 'pre', ...mdx({ remarkPlugins: [remarkGfm], providerImportSource: "@mdx-js/react" }) },
-    react(),
-    tailwindcss()
-  ],
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-    alias: {
+  let chatProxyTarget: string | null = null;
+  let chatProxyPath: string | null = null;
+
+  if (webhookUrl) {
+    try {
+      const parsedWebhookUrl = new URL(webhookUrl);
+      chatProxyTarget = parsedWebhookUrl.origin;
+      chatProxyPath = `${parsedWebhookUrl.pathname}${parsedWebhookUrl.search}`;
+      console.info(`[vite] /api/chat proxy enabled -> ${chatProxyTarget}${chatProxyPath}`);
+    } catch {
+      console.warn("[vite] N8N_WEBHOOK_URL is invalid. Local /api/chat proxy disabled.");
+    }
+  } else {
+    console.warn("[vite] N8N_WEBHOOK_URL is missing. Local /api/chat proxy disabled.");
+  }
+
+  return {
+    plugins: [
+      { enforce: 'pre', ...mdx({ remarkPlugins: [remarkGfm], providerImportSource: "@mdx-js/react" }) },
+      react(),
+      tailwindcss()
+    ],
+    resolve: {
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+      alias: {
       'vaul@1.1.2': 'vaul',
       'sonner@2.0.3': 'sonner',
       'recharts@2.15.2': 'recharts',
@@ -27,11 +47,11 @@ export default defineConfig({
       'next-themes@0.4.6': 'next-themes',
       'lucide-react@0.487.0': 'lucide-react',
       'input-otp@1.4.2': 'input-otp',
-      'figma:asset/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png': path.resolve(__dirname, './src/assets/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png'),
-      'figma:asset/f8254b1f94d7f936b0be7dfd62c50373257cfd12.png': path.resolve(__dirname, './src/assets/f8254b1f94d7f936b0be7dfd62c50373257cfd12.png'),
-      'figma:asset/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.png': path.resolve(__dirname, './src/assets/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.png'),
-      'figma:asset/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.png': path.resolve(__dirname, './src/assets/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.png'),
-      'figma:asset/0fd29a5a04bdb70fda1a96b5dccc2cb95458d271.png': path.resolve(__dirname, './src/assets/0fd29a5a04bdb70fda1a96b5dccc2cb95458d271.png'),
+      'figma:asset/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png': path.resolve(__dirname, './src/assets/fe1addf78ff4776eb2ba01a20bd652eabe95c942.webp'),
+      'figma:asset/f8254b1f94d7f936b0be7dfd62c50373257cfd12.png': path.resolve(__dirname, './src/assets/f8254b1f94d7f936b0be7dfd62c50373257cfd12.webp'),
+      'figma:asset/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.png': path.resolve(__dirname, './src/assets/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.webp'),
+      'figma:asset/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.png': path.resolve(__dirname, './src/assets/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.webp'),
+      'figma:asset/0fd29a5a04bdb70fda1a96b5dccc2cb95458d271.png': path.resolve(__dirname, './src/assets/0fd29a5a04bdb70fda1a96b5dccc2cb95458d271.webp'),
       'embla-carousel-react@8.6.0': 'embla-carousel-react',
       'cmdk@1.1.1': 'cmdk',
       'class-variance-authority@0.7.1': 'class-variance-authority',
@@ -64,13 +84,45 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@design-system': path.resolve(__dirname, './packages/design-system'),
       '@antigravity/ds': path.resolve(__dirname, './packages/design-system/src/index.ts'),
+      },
     },
-  },
-  build: {
-    target: 'esnext',
-  },
-  server: {
-    port: 3000,
-    open: true,
-  },
+    build: {
+      target: 'esnext',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('recharts') || id.includes('d3-')) return 'vendor-charts';
+              if (id.includes('@sanity') || id.includes('@supabase') || id.includes('swr')) return 'vendor-data';
+              if (id.includes('motion') || id.includes('framer-motion')) return 'vendor-motion';
+              if (id.includes('react-router')) return 'vendor-router';
+              return 'vendor';
+            }
+            return undefined;
+          },
+        },
+      },
+    },
+    server: {
+      port: 3000,
+      open: true,
+      proxy: chatProxyTarget && chatProxyPath
+        ? {
+            "/api/chat": {
+              target: chatProxyTarget,
+              changeOrigin: true,
+              secure: false,
+              rewrite: () => chatProxyPath,
+              configure: (proxy) => {
+                proxy.on("proxyReq", (proxyReq) => {
+                  if (webhookSecret) {
+                    proxyReq.setHeader("x-webhook-secret", webhookSecret);
+                  }
+                });
+              },
+            },
+          }
+        : undefined,
+    },
+  };
 });

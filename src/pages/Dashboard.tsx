@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@antigravity/ds';
+import { Card, CardContent, CardHeader, CardTitle } from '@antigravity/ds';
 
 import { Input } from '@antigravity/ds';
 import { Button } from '@antigravity/ds';
@@ -33,99 +33,73 @@ export const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [passwordInput, setPasswordInput] = useState('');
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const isAuth = localStorage.getItem('dashboard_auth') === 'true';
-        if (isAuth) {
-            setIsAuthenticated(true);
-            fetchMessages();
+        fetchMessages();
 
-            // Realtime Subscription
-            const channel = supabase
-                .channel('interaction_logs_changes')
-                .on(
-                    'postgres_changes',
-                    {
-                        event: '*', // Listen to INSERT and UPDATE
-                        schema: 'public',
-                        table: 'interaction_logs'
-                    },
-                    (payload) => {
-                        console.log('Realtime update:', payload);
+        const channel = supabase
+            .channel('interaction_logs_changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'interaction_logs'
+                },
+                (payload) => {
+                    if (payload.eventType === 'INSERT') {
+                        const row = payload.new as InteractionLog;
+                        const sessionId = row.session_id || 'unknown';
+                        const timestamp = row.timestamp;
+                        const isRead = row.is_read;
+                        const newMessages: ChatMessage[] = [];
 
-                        if (payload.eventType === 'INSERT') {
-                            const row = payload.new as InteractionLog;
-                            const sessionId = row.session_id || 'unknown';
-                            const timestamp = row.timestamp;
-                            const isRead = row.is_read;
-                            const newMessages: ChatMessage[] = [];
-
-                            if (row.user_message) {
-                                newMessages.push({
-                                    id: `${row.id}-user`,
-                                    session_id: sessionId,
-                                    content: row.user_message,
-                                    role: 'user',
-                                    created_at: timestamp,
-                                    is_read: isRead
-                                });
-                            }
-                            if (row.ai_response) {
-                                newMessages.push({
-                                    id: `${row.id}-ai`,
-                                    session_id: sessionId,
-                                    content: row.ai_response,
-                                    role: 'assistant',
-                                    created_at: timestamp,
-                                    is_read: isRead
-                                });
-                            }
-
-                            setMessages(prev => [...prev, ...newMessages]);
-                        } else if (payload.eventType === 'UPDATE') {
-                            const newRow = payload.new as InteractionLog;
-                            // Mostly useful for syncing is_read status across devices
-                            setMessages(prev => prev.map(msg => {
-                                // Check if this message belongs to the updated row
-                                if (msg.id.startsWith(newRow.id)) {
-                                    return { ...msg, is_read: newRow.is_read };
-                                }
-                                return msg;
-                            }));
+                        if (row.user_message) {
+                            newMessages.push({
+                                id: `${row.id}-user`,
+                                session_id: sessionId,
+                                content: row.user_message,
+                                role: 'user',
+                                created_at: timestamp,
+                                is_read: isRead
+                            });
                         }
+                        if (row.ai_response) {
+                            newMessages.push({
+                                id: `${row.id}-ai`,
+                                session_id: sessionId,
+                                content: row.ai_response,
+                                role: 'assistant',
+                                created_at: timestamp,
+                                is_read: isRead
+                            });
+                        }
+
+                        setMessages(prev => [...prev, ...newMessages]);
+                    } else if (payload.eventType === 'UPDATE') {
+                        const newRow = payload.new as InteractionLog;
+                        setMessages(prev => prev.map(msg => {
+                            if (msg.id.startsWith(newRow.id)) {
+                                return { ...msg, is_read: newRow.is_read };
+                            }
+                            return msg;
+                        }));
                     }
-                )
-                .subscribe();
+                }
+            )
+            .subscribe();
 
-            return () => {
-                supabase.removeChannel(channel);
-            };
-        }
+        return () => {
+            void supabase.removeChannel(channel);
+        };
     }, []);
-
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-        const envPassword = import.meta.env.VITE_DASHBOARD_PASSWORD;
-        if (passwordInput === envPassword) {
-            setIsAuthenticated(true);
-            localStorage.setItem('dashboard_auth', 'true');
-            fetchMessages();
-        } else {
-            alert('Senha incorreta');
-        }
-    };
 
     const fetchMessages = async () => {
         setLoading(true);
         setError(null);
         try {
-            console.log("Attempting to fetch from table 'interaction_logs'...");
-
-            // Fetch raw rows
             const { data, error: sbError } = await supabase
                 .from('interaction_logs')
                 .select('*')
@@ -136,22 +110,13 @@ export const Dashboard = () => {
                 setError(sbError.message);
                 setMessages([]);
             } else {
-                console.log("Raw DB Data:", data);
-
-                if (data && data.length > 0 && !data[0].session_id) {
-                    console.warn("WARNING: 'session_id' column seems missing or empty in first row. Columns found:", Object.keys(data[0]));
-                }
-
-                // Transform DB rows (Turn-based) into UI Messages (List-based)
                 const transformedMessages: ChatMessage[] = [];
 
                 (data as InteractionLog[] || []).forEach((row) => {
-                    // User requested to use "session_id" as the grouping key
                     const sessionId = row.session_id || 'unknown';
                     const timestamp = row.timestamp;
-                    const isRead = row.is_read; // From DB
+                    const isRead = row.is_read;
 
-                    // Message 1: User
                     if (row.user_message) {
                         transformedMessages.push({
                             id: `${row.id}-user`,
@@ -163,7 +128,6 @@ export const Dashboard = () => {
                         });
                     }
 
-                    // Message 2: AI
                     if (row.ai_response) {
                         transformedMessages.push({
                             id: `${row.id}-ai`,
@@ -171,18 +135,16 @@ export const Dashboard = () => {
                             content: row.ai_response,
                             role: 'assistant',
                             created_at: timestamp,
-                            is_read: isRead // AI messages usually considered read or don't generate badge? Let's assume user checking dashboard sees them. 
-                            // Actually, if the user (admin) hasn't seen the interaction, both are unread.
-                            // Let's inherit row.is_read for simplicity.
+                            is_read: isRead
                         });
                     }
                 });
 
                 setMessages(transformedMessages);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Unexpected fetch error:", err);
-            setError(err.message || "Unknown error occurred");
+            setError(err instanceof Error ? err.message : "Unknown error occurred");
         } finally {
             setLoading(false);
         }
@@ -208,7 +170,12 @@ export const Dashboard = () => {
 
     const handleSessionClick = (sid: string) => {
         setSelectedSessionId(sid);
-        markSessionAsRead(sid);
+        void markSessionAsRead(sid);
+    };
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut();
+        setMessages([]);
     };
 
     // Group messages by session
@@ -262,33 +229,6 @@ export const Dashboard = () => {
         return Object.entries(counts).map(([name, value]) => ({ name, value })).slice(-7);
     }, [messages]);
 
-    if (!isAuthenticated) {
-        return (
-            <div className="min-h-screen bg-black text-foreground flex items-center justify-center p-4">
-                <div className="w-full max-w-md">
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader>
-                            <CardTitle>Acesso Restrito</CardTitle>
-                            <CardDescription>Digite a senha para acessar o dashboard.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <form onSubmit={handleLogin} className="flex flex-col gap-4">
-                                <Input
-                                    type="password"
-                                    placeholder="Senha"
-                                    value={passwordInput}
-                                    onChange={(e) => setPasswordInput(e.target.value)}
-                                    className="bg-zinc-950 border-zinc-800"
-                                />
-                                <Button type="submit" className="w-full">Entrar</Button>
-                            </form>
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className={`bg-black text-foreground p-4 md:p-8 flex flex-col ${selectedSessionId ? 'h-screen overflow-hidden' : 'min-h-screen lg:h-screen lg:overflow-hidden'}`}>
             <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col min-h-0">
@@ -306,11 +246,12 @@ export const Dashboard = () => {
                         </div>
 
                         <div className="flex gap-4 text-sm text-muted-foreground">
-                            <Button variant="outline" size="sm" onClick={() => {
-                                localStorage.removeItem('dashboard_auth');
-                                setIsAuthenticated(false);
-                                setMessages([]);
-                            }} className="border-red-900/30 text-red-500 hover:text-red-400 hover:bg-red-900/20">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => void handleSignOut()}
+                                className="border-red-900/30 text-red-500 hover:text-red-400 hover:bg-red-900/20"
+                            >
                                 Sair
                             </Button>
                             <div className="flex items-center gap-2">

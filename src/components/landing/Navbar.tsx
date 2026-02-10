@@ -38,6 +38,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
             onClick={() => handleNavigation(item.id)}
             whileHover={{ scale: 1.2, y: -5 }}
             whileTap={{ scale: 0.9 }}
+            aria-label={item.label}
             className="relative group p-1 sm:p-3 rounded-full hover:bg-white dark:hover:bg-white/10 transition-colors"
           >
             <item.icon className="w-5 h-5 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors" />
