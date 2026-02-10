@@ -119,8 +119,8 @@ module.exports = async function handler(req, res) {
     return sendJson(res, 429, { error: "Too many requests. Try again later." });
   }
 
-  const webhookUrl = process.env.N8N_WEBHOOK_URL;
-  const webhookSecret = process.env.N8N_WEBHOOK_SECRET;
+  const webhookUrl = process.env.N8N_WEBHOOK_URL || process.env.VITE_N8N_WEBHOOK_URL;
+  const webhookSecret = process.env.N8N_WEBHOOK_SECRET || process.env.VITE_N8N_WEBHOOK_SECRET;
 
   if (!webhookUrl) {
     return sendJson(res, 500, { error: "Chat endpoint is not configured." });
