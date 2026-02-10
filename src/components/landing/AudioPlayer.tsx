@@ -5,7 +5,7 @@ import { Play, Pause, SkipForward, Volume2, VolumeX, Music } from "lucide-react"
 const PLAYLIST = [
     {
         title: "Rollercoastin - Roddy Ricch (Instrumental)",
-        src: "https://audio-assets.vercel.app/Rollercoastin%20%20Roddy%20Ricch%20%20Instrumental%20%20Remake%20%20RX808%20-%20RX808%20(youtube)%20(2).mp3",
+        src: "https://audio-assets.vercel.app/Rollercoastin.mp3",
     },
     {
         title: "Awake - Tycho",
