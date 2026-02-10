@@ -160,7 +160,14 @@ module.exports = async function handler(req, res) {
     });
 
     if (!upstream.ok) {
-      return sendJson(res, 502, { error: "Upstream service unavailable." });
+      const upstreamBody = await upstream.text().catch(() => "");
+      console.error(
+        `[chat] upstream error: status=${upstream.status} body=${upstreamBody.slice(0, 500)}`
+      );
+      return sendJson(res, 502, {
+        error: "Upstream service unavailable.",
+        detail: `n8n responded with status ${upstream.status}`,
+      });
     }
 
     const upstreamContentType = upstream.headers.get("content-type") || "";
