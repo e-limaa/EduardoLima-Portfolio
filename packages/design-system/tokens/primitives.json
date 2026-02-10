@@ -108,6 +108,19 @@
             "medium": "500",
             "semibold": "600",
             "bold": "700"
+        },
+        "scale": {
+            "display-2xl": "4.5rem",
+            "display-xl": "3.75rem",
+            "display-lg": "3rem",
+            "heading-xl": "2.25rem",
+            "heading-lg": "1.875rem",
+            "heading-md": "1.5rem",
+            "heading-sm": "1.25rem",
+            "body-lg": "1.125rem",
+            "body-md": "1rem",
+            "body-sm": "0.875rem",
+            "caption": "0.75rem"
         }
     }
 }

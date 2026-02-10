@@ -95,9 +95,25 @@ let cssContent = `/**
 :root {
 `;
 
-// Add Primitives (optional, if we want them available globally as vars)
-// cssContent += `    /* Primitives */\n`;
-// cssContent += toCssVars(primitives, '    ');
+// Add Spacing Primitives
+if (primitives.spacing) {
+    cssContent += `\n    /* Spacing */\n`;
+    const flatSpacing = flattenObject(primitives.spacing);
+    for (const key in flatSpacing) {
+        const varName = '--spacing-' + key.replace(/\./g, '-');
+        cssContent += `    ${varName}: ${flatSpacing[key]};\n`;
+    }
+}
+
+// Add Typography Scale
+if (primitives.typography && primitives.typography.scale) {
+    cssContent += `\n    /* Typography Scale */\n`;
+    const flatScale = flattenObject(primitives.typography.scale);
+    for (const key in flatScale) {
+        const varName = '--text-' + key.replace(/\./g, '-');
+        cssContent += `    ${varName}: ${flatScale[key]};\n`;
+    }
+}
 
 // Add Semantic Light (default)
 const lightTokens = resolvedSemantic.light || {};

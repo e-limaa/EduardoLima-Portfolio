@@ -29,7 +29,15 @@ export const tokens = {
     "chart.2": "var(--chart-2)",
     "chart.3": "var(--chart-3)",
     "chart.4": "var(--chart-4)",
-    "chart.5": "var(--chart-5)"
+    "chart.5": "var(--chart-5)",
+    "sidebar.background": "var(--sidebar-background)",
+    "sidebar.foreground": "var(--sidebar-foreground)",
+    "sidebar.primary": "var(--sidebar-primary)",
+    "sidebar.primary-foreground": "var(--sidebar-primary-foreground)",
+    "sidebar.accent": "var(--sidebar-accent)",
+    "sidebar.accent-foreground": "var(--sidebar-accent-foreground)",
+    "sidebar.border": "var(--sidebar-border)",
+    "sidebar.ring": "var(--sidebar-ring)"
 } as const;
 
 export type TokenPath = keyof typeof tokens;
