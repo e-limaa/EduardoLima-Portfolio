@@ -57,11 +57,19 @@ export const NewsletterModal = () => {
             });
             setOpen(false);
             form.reset();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error subscribing:", error);
-            toast.error("Erro ao realizar inscrição", {
-                description: "Por favor, tente novamente mais tarde.",
-            });
+
+            // Check for unique constraint violation (Postgres error code 23505)
+            if (error?.code === '23505') {
+                toast.error("Você já está cadastrado", {
+                    description: "Este e-mail já faz parte da nossa lista.",
+                });
+            } else {
+                toast.error("Erro ao realizar inscrição", {
+                    description: "Por favor, tente novamente mais tarde.",
+                });
+            }
         } finally {
             setIsLoading(false);
         }
