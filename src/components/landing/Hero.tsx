@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ChatWidget } from "./ChatWidget";
+import { NewsletterModal } from "./NewsletterModal";
 import { TextReveal, InteractiveGrid, Badge } from "@antigravity/ds";
 import { ArrowRight } from "lucide-react";
 
@@ -146,7 +147,7 @@ export const Hero = () => {
               Ver Projetos
               <ArrowRight className="w-4 h-4" />
             </a>
-
+            <NewsletterModal />
           </motion.div>
         </div>
 

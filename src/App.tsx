@@ -17,6 +17,7 @@ import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { CursorTrail } from "./components/ui/CursorTrail";
 import { DocsPageLoader } from "./components/docs-page-loader";
 import { RequireAdmin } from "./components/auth/RequireAdmin";
+import { Toaster } from "@/components/ui/sonner";
 
 // Lazy load pages for bundle splitting
 
@@ -94,6 +95,7 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
       <LanguageProvider defaultLanguage="en" storageKey="portfolio-language">
+        <Toaster />
         {/* ALTERADO: Aplicação de classes de tema dinâmicas 
           - bg-background e text-foreground mapeiam para as variáveis CSS que mudam com o tema 
           - transition-colors permite a troca suave entre dark/light mode
