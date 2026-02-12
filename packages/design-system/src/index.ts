@@ -12,3 +12,5 @@ export * from "./components/section";
 export * from "./lib/utils";
 export * from "./lib/token";
 export * from "./tokens";
+export * from "./components/ui/dialog";
+export * from "./components/ui/form";
