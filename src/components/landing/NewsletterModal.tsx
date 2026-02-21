@@ -1,24 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Button, Input } from "@antigravity/ds";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import { Button, Input, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@antigravity/ds";
 import { supabase } from "@/lib/supabase";
 import { Loader2 } from "lucide-react";
 
