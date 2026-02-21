@@ -4,6 +4,7 @@ import { Send } from "lucide-react";
 import { Button } from "@antigravity/ds";
 import { Input } from "@antigravity/ds";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useLanguage } from "../language-provider";
 
 interface Message {
   id: string;
@@ -15,6 +16,8 @@ interface Message {
 const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{8,128}$/;
 
 export const ChatWidget = () => {
+  const { t } = useLanguage();
+
   // Inicializa mensagens carregando do localStorage ou usa o padrão
   const [messages, setMessages] = useState<Message[]>(() => {
     const savedMessages = localStorage.getItem("chat_messages");
@@ -33,13 +36,13 @@ export const ChatWidget = () => {
     return [
       {
         id: "1",
-        text: "Olá! Bem-vindo ao meu portfólio.",
+        text: t("chat.msg1"),
         sender: "bot",
         timestamp: new Date(),
       },
       {
         id: "2",
-        text: "Pergunte qualquer coisa sobre meu trabalho, processo criativo ou experiência.",
+        text: t("chat.msg2"),
         sender: "bot",
         timestamp: new Date(),
       },
@@ -159,9 +162,8 @@ export const ChatWidget = () => {
       console.error("Error sending message:", error);
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: `Desculpe, ocorreu um erro ao processar sua mensagem: ${
-          error instanceof Error ? error.message : "falha desconhecida"
-        }`,
+        text: `Desculpe, ocorreu um erro ao processar sua mensagem: ${error instanceof Error ? error.message : "falha desconhecida"
+          }`,
         sender: "bot",
         timestamp: new Date(),
       };
@@ -191,7 +193,7 @@ export const ChatWidget = () => {
           <div>
             <h3 className="font-medium text-foreground text-sm">Edu Lima</h3>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
-              AI Assistant
+              {t("chat.assistant")}
             </p>
           </div>
         </div>
@@ -267,7 +269,7 @@ export const ChatWidget = () => {
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Digite sua mensagem..."
+          placeholder={t("chat.placeholder")}
           className="bg-white dark:bg-black/20 border-zinc-200 dark:border-white/10 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-white/30 focus-visible:ring-blue-500/50 focus-visible:border-blue-500/50"
         />
         <Button

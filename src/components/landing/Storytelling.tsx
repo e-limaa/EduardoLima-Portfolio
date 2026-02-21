@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { ScanSearch, Workflow, Code2, Zap } from "lucide-react";
 import { SectionHeader } from "@antigravity/ds";
+import { useLanguage } from "../language-provider";
 
 const timelineData = [
   {
@@ -47,16 +48,18 @@ const timelineData = [
 ];
 
 export const Storytelling = () => {
+  const { t } = useLanguage();
+
   return (
     <section className="relative py-12 md:py-24 bg-background overflow-hidden flex flex-col items-center justify-center transition-colors duration-300">
 
       {/* Header Minimalista */}
       <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 mb-12 md:mb-24 relative z-10">
         <SectionHeader
-          title="DNA Criativo"
+          title={t("story.title")}
           index="03"
           label="TIMELINE"
-          description="Explore as fases que moldaram minha metodologia."
+          description={t("story.description")}
         />
       </div>
 
@@ -93,13 +96,13 @@ export const Storytelling = () => {
                   className={`pl-20 lg:pl-0 ${isEven ? '' : 'lg:text-left'}`}
                 >
                   <span className={`text-sm font-mono font-bold tracking-widest uppercase mb-2 block ${item.color}`}>
-                    {item.year}
+                    {t(`story.${item.id}.year`)}
                   </span>
                   <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                    {item.title}
+                    {t(`story.${item.id}.title`)}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed text-sm md:text-base whitespace-pre-line">
-                    {item.description}
+                    {t(`story.${item.id}.desc`)}
                   </p>
                 </motion.div>
               </div>

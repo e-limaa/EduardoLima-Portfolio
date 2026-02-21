@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { InteractiveGrid } from "@antigravity/ds";
+import { useLanguage } from "../language-provider";
 
 interface WelcomeScreenProps {
     onEnter: () => void;
@@ -10,7 +11,7 @@ interface WelcomeScreenProps {
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
     const [progress, setProgress] = useState(0);
     const [showButton, setShowButton] = useState(false);
-    const [isExiting, setIsExiting] = useState(false);
+    const { t } = useLanguage();
 
     useEffect(() => {
         // Lock body scroll
@@ -40,7 +41,6 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
     }, []);
 
     const handleEnter = () => {
-        setIsExiting(true);
         // Trigger the parent callback immediately, let AnimatePresence handle the visual exit
         onEnter();
     };
@@ -71,7 +71,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.8 }}
                 >
-                    Transformando complexidade em experiências simples e inteligentes.
+                    {t("welcome.subtitle")}
                 </motion.p>
 
                 <div className="h-12 w-full flex items-center justify-center relative">
@@ -101,7 +101,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="group flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300 text-sm font-medium text-zinc-200"
                             >
-                                Acessar portfólio
+                                {t("welcome.enter")}
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </motion.button>
                         )}
@@ -116,7 +116,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                 className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-20 px-4"
             >
                 <p className="text-[10px] md:text-xs text-zinc-600 font-mono">
-                    Experiência imersiva com áudio. Controle disponível no canto inferior.
+                    {t("welcome.audioHelp")}
                 </p>
             </motion.div>
         </motion.div>

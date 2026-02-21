@@ -2,22 +2,25 @@ import React from "react";
 import { motion } from "motion/react";
 import { Figma, Code, Database, Layers, Zap, PenTool } from "lucide-react";
 import { SectionHeader, Section, Card, CardContent, CardTitle, CardDescription } from "@antigravity/ds";
+import { useLanguage } from "../language-provider";
 
 const tools = [
-    { name: "Figma", icon: Figma, desc: "Prototipagem avançada e Design Systems" },
-    { name: "React / Next.js", icon: Code, desc: "Componentização e interfaces vivas" },
-    { name: "AI Integration", icon: Zap, desc: "Midjourney, ChatGPT, n8n" },
-    { name: "Design Systems", icon: Layers, desc: "Escalabilidade e consistência" },
-    { name: "Automation", icon: Database, desc: "Workflows inteligentes" },
-    { name: "Adobe Suite", icon: PenTool, desc: "Visual robusto e edição" },
+    { name: "Figma", icon: Figma, translationKey: "stack.tool.figma" },
+    { name: "React / Next.js", icon: Code, translationKey: "stack.tool.react" },
+    { name: "AI Integration", icon: Zap, translationKey: "stack.tool.ai" },
+    { name: "Design Systems", icon: Layers, translationKey: "stack.tool.ds" },
+    { name: "Automation", icon: Database, translationKey: "stack.tool.automation" },
+    { name: "Adobe Suite", icon: PenTool, translationKey: "stack.tool.adobe" },
 ];
 
 export const Stack = () => {
+    const { t } = useLanguage();
+
     return (
         <Section className="py-16 md:py-32">
             <SectionHeader
-                title="Arsenal Tecnológico"
-                description="Ferramentas são meios. O diferencial está em como elas são usadas para resolver problemas reais."
+                title={t("stack.title")}
+                description={t("stack.description")}
                 index="04"
                 label="STACK"
             />
@@ -45,7 +48,7 @@ export const Stack = () => {
                                 </motion.div>
                                 <CardTitle className="text-heading-sm font-bold text-foreground mb-3">{tool.name}</CardTitle>
                                 <CardDescription className="text-body-sm text-muted-foreground leading-relaxed group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
-                                    {tool.desc}
+                                    {t(tool.translationKey)}
                                 </CardDescription>
                             </CardContent>
                         </Card>

@@ -1,9 +1,12 @@
 import { motion } from "motion/react";
 import { Linkedin, Mail } from "lucide-react";
-import { TextReveal, InteractiveGrid, Button } from "@antigravity/ds";
+import { InteractiveGrid, Button, SectionHeader } from "@antigravity/ds";
 import { ContactFormModal } from "./ContactFormModal";
+import { useLanguage } from "../language-provider";
 
 export const CTA = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="relative pt-16 pb-12 md:pt-32 bg-zinc-50 dark:bg-black overflow-hidden border-t border-zinc-200 dark:border-white/10 transition-colors duration-300">
       {/* Background Elements */}
@@ -16,30 +19,21 @@ export const CTA = () => {
         <div className="flex flex-col items-center text-center mb-12 md:mb-24">
           {/* Status removed */}
 
-          <TextReveal className="flex justify-center flex-wrap gap-x-4">
-            <h2 className="text-display-lg md:text-display-2xl font-bold text-zinc-900 dark:text-white tracking-tighter mb-2">
-              Vamos criar algo que gere impacto real?
-            </h2>
-          </TextReveal>
-
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 1 }}
-            className="text-heading-sm md:text-heading-md text-zinc-600 dark:text-zinc-500 max-w-2xl mx-auto mt-8 mb-12 font-light leading-relaxed"
-          >
-            Estou disponível para novos projetos e colaborações.
-            Entre em contato e vamos discutir como posso ajudar a elevar seu produto.
-          </motion.p>
+          <div className="max-w-3xl mx-auto text-center relative z-10 w-full">
+            <SectionHeader
+              title={t("cta.title")}
+              description={t("cta.description")}
+              index="05"
+              label="CONTACT"
+            />
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-4"
+            className="flex flex-wrap justify-center gap-4 mt-12"
           >
             <ContactFormModal>
               <Button
@@ -47,7 +41,7 @@ export const CTA = () => {
                 className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 hover:scale-105 duration-300 rounded-full px-8 h-14 text-base font-bold shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
               >
                 <Mail className="mr-2 h-4 w-4" />
-                Fale Comigo
+                {t("cta.button.email")}
               </Button>
             </ContactFormModal>
 
@@ -68,7 +62,7 @@ export const CTA = () => {
               onClick={() => window.open("https://linkedin.com", "_blank", "noopener,noreferrer")}
             >
               <Linkedin className="mr-2 h-4 w-4" />
-              LinkedIn
+              {t("cta.button.linkedin")}
             </Button>
           </motion.div>
         </div>

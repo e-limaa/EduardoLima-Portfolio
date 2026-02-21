@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button, Input, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@antigravity/ds";
 import { supabase } from "@/lib/supabase";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "../language-provider";
 
 interface NewsletterFormValues {
     name: string;
@@ -13,6 +14,7 @@ interface NewsletterFormValues {
 export const NewsletterModal = () => {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
+    const { t } = useLanguage();
 
     const form = useForm<NewsletterFormValues>({
         defaultValues: {
@@ -35,8 +37,8 @@ export const NewsletterModal = () => {
 
             if (error) throw error;
 
-            toast.success("Inscrição realizada com sucesso!", {
-                description: "Fique de olho no seu e-mail para novidades.",
+            toast.success(t("newsletter.toast.success.title"), {
+                description: t("newsletter.toast.success.desc"),
             });
             setOpen(false);
             form.reset();
@@ -45,12 +47,12 @@ export const NewsletterModal = () => {
 
             // Check for unique constraint violation (Postgres error code 23505)
             if (error?.code === '23505') {
-                toast.error("Você já está cadastrado", {
-                    description: "Este e-mail já faz parte da nossa lista.",
+                toast.error(t("newsletter.toast.error.duplicateTitle"), {
+                    description: t("newsletter.toast.error.duplicateDesc"),
                 });
             } else {
-                toast.error("Erro ao realizar inscrição", {
-                    description: "Por favor, tente novamente mais tarde.",
+                toast.error(t("newsletter.toast.error.generalTitle"), {
+                    description: t("newsletter.toast.error.generalDesc"),
                 });
             }
         } finally {
@@ -62,14 +64,14 @@ export const NewsletterModal = () => {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="secondary" className="rounded-full px-6 py-2 h-auto text-base font-medium transition-all">
-                    Newsletter IA
+                    {t("newsletter.trigger")}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Entre na minha Newsletter</DialogTitle>
+                    <DialogTitle>{t("newsletter.title")}</DialogTitle>
                     <DialogDescription>
-                        Receba notícias e insights exclusivos sobre o universo de Inteligência Artificial e tecnologia diretamente no seu e-mail.
+                        {t("newsletter.desc")}
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -77,12 +79,12 @@ export const NewsletterModal = () => {
                         <FormField
                             control={form.control}
                             name="name"
-                            rules={{ required: "Nome é obrigatório" }}
+                            rules={{ required: t("newsletter.form.nameRequired") }}
                             render={({ field }: { field: any }) => (
                                 <FormItem>
-                                    <FormLabel>Nome</FormLabel>
+                                    <FormLabel>{t("newsletter.form.name")}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Seu nome" {...field} />
+                                        <Input placeholder={t("newsletter.form.namePlaceholder")} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -92,19 +94,19 @@ export const NewsletterModal = () => {
                             control={form.control}
                             name="email"
                             rules={{
-                                required: "E-mail é obrigatório",
+                                required: t("newsletter.form.emailRequired"),
                                 pattern: {
                                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                    message: "E-mail inválido",
+                                    message: t("newsletter.form.emailInvalid"),
                                 },
                             }}
                             render={({ field }: { field: any }) => (
                                 <FormItem>
-                                    <FormLabel>E-mail</FormLabel>
+                                    <FormLabel>{t("newsletter.form.email")}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="email"
-                                            placeholder="seu@email.com"
+                                            placeholder={t("newsletter.form.emailPlaceholder")}
                                             {...field}
                                         />
                                     </FormControl>
@@ -115,7 +117,7 @@ export const NewsletterModal = () => {
                         <DialogFooter className="pt-4">
                             <Button type="submit" disabled={isLoading} className="w-full">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Inscrever-se
+                                {t("newsletter.form.submit")}
                             </Button>
                         </DialogFooter>
                     </form>

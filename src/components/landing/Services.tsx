@@ -1,63 +1,76 @@
-
-import { PenTool, Layout, Smartphone, Box } from "lucide-react";
+import { Layout, Component, Search, Code2 } from "lucide-react";
 import { SectionHeader, Section } from "@antigravity/ds";
-import services3dImage from "figma:asset/8926732e6d84f8a31a4ab7a603fb7f29d74326b8.png";
-import designSystem3dImage from "figma:asset/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.png";
-import mobileExp3dImage from "figma:asset/0fd29a5a04bdb70fda1a96b5dccc2cb95458d271.png";
-import visualStrategy3dImage from "figma:asset/f8254b1f94d7f936b0be7dfd62c50373257cfd12.png";
+import { motion } from "framer-motion"; // Assuming motion/react is framer-motion
+import { useLanguage } from "../language-provider";
+// Removed 3D image imports as they are no longer used in the new structure
 
 const services = [
   {
+    titleKey: "services.design.title",
+    descriptionKey: "services.design.desc",
     icon: Layout,
-    title: "Product Design",
-    desc: "Da ideação ao MVP. Transformo requisitos complexos em interfaces intuitivas focadas em conversão e retenção."
+    color: "text-blue-500",
+    delay: 0.1,
   },
   {
-    icon: Box,
-    title: "Design Systems",
-    desc: "Criação de bibliotecas de componentes escaláveis, tokens e documentação para garantir consistência visual e velocidade de dev."
+    titleKey: "services.system.title",
+    descriptionKey: "services.system.desc",
+    icon: Component,
+    color: "text-indigo-500",
+    delay: 0.2,
   },
   {
-    icon: Smartphone,
-    title: "Mobile Experience",
-    desc: "Interfaces nativas (iOS/Android) desenhadas pensando nas diretrizes de cada plataforma e na ergonomia do toque."
+    titleKey: "services.consulting.title",
+    descriptionKey: "services.consulting.desc",
+    icon: Search,
+    color: "text-violet-500",
+    delay: 0.3,
   },
   {
-    icon: PenTool,
-    title: "Visual Strategy",
-    desc: "Direção de arte e identidade visual digital que posiciona sua marca como líder de mercado através de estética premium."
-  }
+    titleKey: "services.dev.title",
+    descriptionKey: "services.dev.desc",
+    icon: Code2,
+    color: "text-fuchsia-500",
+    delay: 0.4,
+  },
 ];
 
 export const Services = () => {
+  const { t } = useLanguage();
+
   return (
     <Section id="services" className="py-16 md:py-32">
       <SectionHeader
-        title="Expertise"
-        description="Criação de experiências digitais orientadas a métricas, usabilidade e objetivos de negócio."
+        title={t("services.title")}
+        description={t("services.description")}
         index="02"
         label="SERVICES"
+        align="left"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-200 dark:bg-white/5 border border-zinc-200 dark:border-white/10 overflow-hidden rounded-3xl backdrop-blur-sm shadow-sm dark:shadow-none">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        className="mt-8 md:mt-12 hidden md:block" // Escondido no mobile, mostrado a partir do md
+      >
+        <a
+          href="#contact"
+          className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors group"
+        >
+          {t("services.cta")}
+          <span className="group-hover:translate-x-1 transition-transform">→</span>
+        </a>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-200 dark:bg-white/5 border border-zinc-200 dark:border-white/10 overflow-hidden rounded-3xl backdrop-blur-sm shadow-sm dark:shadow-none mt-12">
         {services.map((service, index) => (
           <div key={index} className="bg-background dark:bg-black/40 p-12 group hover:bg-zinc-50 dark:hover:bg-zinc-900/60 transition-colors duration-500 relative overflow-hidden">
-            <div className="absolute top-6 right-6 w-32 h-32 opacity-50 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-6">
-              <img
-                src={[
-                  services3dImage,
-                  designSystem3dImage,
-                  mobileExp3dImage,
-                  visualStrategy3dImage
-                ][index]}
-                alt=""
-                className="w-full h-full object-contain"
-              />
-            </div>
+            {/* Removed 3D image rendering */}
 
-            <service.icon className="w-8 h-8 text-muted-foreground group-hover:text-blue-500 transition-colors duration-500 mb-6 relative z-10" />
-            <h3 className="text-heading-md font-bold text-foreground mb-4 relative z-10">{service.title}</h3>
-            <p className="text-body-md text-muted-foreground leading-relaxed relative z-10">{service.desc}</p>
+            <service.icon className={`w-8 h-8 text-muted-foreground group-hover:${service.color} transition-colors duration-500 mb-6 relative z-10`} />
+            <h3 className="text-heading-md font-bold text-foreground mb-4 relative z-10">{t(service.titleKey)}</h3>
+            <p className="text-body-md text-muted-foreground leading-relaxed relative z-10">{t(service.descriptionKey)}</p>
           </div>
         ))}
       </div>

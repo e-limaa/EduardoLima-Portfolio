@@ -1,15 +1,18 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { ChatWidget } from "./ChatWidget";
-import { NewsletterModal } from "./NewsletterModal";
 import { TextReveal, InteractiveGrid, Badge } from "@antigravity/ds";
 import { ArrowRight } from "lucide-react";
+import { ChatWidget } from "./ChatWidget";
+import { NewsletterModal } from "./NewsletterModal";
+import { useLanguage } from "../language-provider";
 
 export const Hero = () => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const [videoFailed, setVideoFailed] = React.useState(false);
+
+  const { t } = useLanguage();
 
   const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -107,20 +110,20 @@ export const Hero = () => {
           >
             <div className="flex justify-center lg:justify-start">
               <Badge variant="secondary" className="mb-4 text-body-sm font-medium px-4 py-1">
-                Senior UI/UX
+                {t("hero.badge")}
               </Badge>
             </div>
           </motion.div>
 
           <div className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto">
             <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">Curiosidade.</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">{t("hero.word1")}</span>
             </TextReveal>
             <TextReveal delay={0.2} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-700 via-zinc-500 to-zinc-300 dark:from-zinc-200 dark:via-zinc-400 dark:to-zinc-600 leading-[1.0] md:leading-[1.15]">Design.</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-700 via-zinc-500 to-zinc-300 dark:from-zinc-200 dark:via-zinc-400 dark:to-zinc-600 leading-[1.0] md:leading-[1.15]">{t("hero.word2")}</span>
             </TextReveal>
             <TextReveal delay={0.3} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 leading-[1.0] md:leading-[1.15]">Impacto.</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 leading-[1.0] md:leading-[1.15]">{t("hero.word3")}</span>
             </TextReveal>
           </div>
 
@@ -130,7 +133,7 @@ export const Hero = () => {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="text-body-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
           >
-            Projeto experiências digitais unindo design, tecnologia e IA para resolver problemas reais e gerar impacto mensurável.
+            {t("hero.description")}
           </motion.p>
 
           <motion.div
@@ -144,7 +147,7 @@ export const Hero = () => {
               onClick={handleScrollToProjects}
               className="flex items-center gap-2 px-6 py-2 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
             >
-              Ver Projetos
+              {t("hero.cta")}
               <ArrowRight className="w-4 h-4" />
             </a>
             <NewsletterModal />

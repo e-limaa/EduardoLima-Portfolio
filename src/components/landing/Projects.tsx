@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SectionHeader, Section, ProjectCard } from "@antigravity/ds";
 import { getImageUrl, useProjects } from "../../lib/project-service";
+import { useLanguage } from "../language-provider";
 
 export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => void }) => {
     const { projects, isLoading: loading } = useProjects();
     const [activeTab, setActiveTab] = useState<'ui' | 'study'>('ui');
+    const { t } = useLanguage();
 
     // Filter projects based on the active tab
     const filteredProjects = projects.filter(project => {
@@ -26,8 +28,8 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
 
             <div className="mb-10 md:mb-16">
                 <SectionHeader
-                    title={activeTab === 'study' ? "Pesquisas UX" : "UI Design"}
-                    description="Uma seleção de trabalhos que definem minha abordagem."
+                    title={activeTab === 'study' ? t("projects.tab.ux") : t("projects.tab.ui")}
+                    description={t("projects.description")}
                     index="01"
                     label="PROJECTS"
                 >
@@ -40,7 +42,7 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
                                 : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'
                                 }`}
                         >
-                            Pesquisas UX
+                            {t("projects.tab.ux")}
                         </button>
                         <button
                             onClick={() => setActiveTab('ui')}
@@ -49,14 +51,14 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
                                 : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'
                                 }`}
                         >
-                            UI Design
+                            {t("projects.tab.ui")}
                         </button>
                     </div>
                 </SectionHeader>
 
                 {/* Grid Container */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12 md:mt-16 no-cursor-trail">
-                    {featuredProjects.map((project, index) => (
+                    {featuredProjects.map((project) => (
                         <ProjectCard
                             key={project._id}
                             title={project.title}
@@ -69,7 +71,7 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
                     ))}
                     {featuredProjects.length === 0 && (
                         <div className="col-span-1 md:col-span-3 text-center py-12 text-muted-foreground bg-zinc-50 dark:bg-white/5 rounded-2xl border border-zinc-200 dark:border-white/10">
-                            Nenhum projeto encontrado nesta categoria no momento.
+                            {t("projects.empty")}
                         </div>
                     )}
                 </div>

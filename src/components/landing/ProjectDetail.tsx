@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, ArrowRight, Layers, Calendar, User, Building2 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -6,11 +6,12 @@ import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { TextReveal } from "@antigravity/ds";
 
 import { getImageUrl, useProjectBySlug, useAdjacentProjects } from "../../lib/project-service";
-import { Project } from "../../lib/sanity-types";
+import { useLanguage } from "../language-provider";
 
 export const ProjectDetail = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
+    const { t } = useLanguage();
 
     const { project, isLoading: projectLoading } = useProjectBySlug(slug);
     const { navigation } = useAdjacentProjects(project?._id);
@@ -55,7 +56,7 @@ export const ProjectDetail = () => {
                     className="group flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors bg-background/50 backdrop-blur-md px-4 py-2 rounded-full border border-zinc-200 dark:border-white/10"
                 >
                     <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                    <span className="text-sm font-mono uppercase tracking-wider">Voltar</span>
+                    <span className="text-sm font-mono uppercase tracking-wider">{t("project.back")}</span>
                 </button>
 
                 <div className="flex gap-2">
@@ -112,21 +113,21 @@ export const ProjectDetail = () => {
                             className="flex flex-wrap items-center w-full gap-8 md:gap-16 mt-8 border-t border-zinc-200 dark:border-white/10 pt-8 text-sm md:text-base"
                         >
                             <div className="flex flex-col gap-2">
-                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">Cliente</span>
+                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">{t("project.client")}</span>
                                 <div className="flex items-center gap-2 text-foreground">
                                     <Building2 className="w-4 h-4 text-muted-foreground" />
                                     {project.client}
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">Função</span>
+                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">{t("project.role")}</span>
                                 <div className="flex items-center gap-2 text-foreground">
                                     <User className="w-4 h-4 text-muted-foreground" />
                                     {project.role}
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">Tecnologias</span>
+                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">{t("project.tech")}</span>
                                 <div className="flex flex-wrap gap-2 text-foreground">
                                     <Layers className="w-4 h-4 text-muted-foreground mt-1" />
                                     <div className="flex flex-wrap gap-2">
@@ -141,7 +142,7 @@ export const ProjectDetail = () => {
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">Ano</span>
+                                <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">{t("project.year")}</span>
                                 <div className="flex items-center gap-2 text-foreground">
                                     <Calendar className="w-4 h-4 text-muted-foreground" />
                                     {project.year}
@@ -149,7 +150,7 @@ export const ProjectDetail = () => {
                             </div>
 
                             <div className={`flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r ${project.color} shadow-lg ml-auto`}>
-                                <span className="font-sans text-white/90 text-sm font-medium">{project.metricLabel || "Métrica Chave"}</span>
+                                <span className="font-sans text-white/90 text-sm font-medium">{project.metricLabel || t("project.keyMetric")}</span>
                                 <div className="w-px h-3 bg-white/40" />
                                 <div className="font-sans text-white font-bold text-sm leading-none">
                                     {project.metric}
@@ -167,7 +168,7 @@ export const ProjectDetail = () => {
 
                         {/* Overview */}
                         <section>
-                            <h3 className="text-heading-md font-bold text-foreground mb-6">Visão Geral</h3>
+                            <h3 className="text-heading-md font-bold text-foreground mb-6">{t("project.overview")}</h3>
                             <div className="text-heading-sm text-muted-foreground font-light leading-relaxed">
                                 {/* Aqui entraria o componente <PortableText value={project.description} /> se viesse do Sanity */}
                                 {project.description}
@@ -176,7 +177,7 @@ export const ProjectDetail = () => {
 
                         {/* Challenge */}
                         <section className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg">
-                            <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">O Desafio</h3>
+                            <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">{t("project.challenge")}</h3>
                             <div className="text-muted-foreground leading-relaxed">
                                 {project.challenge}
                             </div>
@@ -196,7 +197,7 @@ export const ProjectDetail = () => {
                                                 viewport={{ once: true }}
                                                 className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg my-8"
                                             >
-                                                <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">A Solução</h3>
+                                                <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">{t("project.solution")}</h3>
                                                 <div className="text-muted-foreground leading-relaxed">
                                                     {item.text}
                                                 </div>
@@ -242,9 +243,9 @@ export const ProjectDetail = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 dark:via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
 
                 <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 text-center">
-                    <span className="text-muted-foreground uppercase tracking-widest font-mono text-sm mb-4 block">Próximo Projeto</span>
+                    <span className="text-muted-foreground uppercase tracking-widest font-mono text-sm mb-4 block">{t("project.next")}</span>
                     <h2 className="text-heading-xl md:text-display-xl font-bold text-foreground group-hover:scale-105 transition-transform duration-500">
-                        Ver Próximo
+                        {t("project.viewNext")}
                     </h2>
                     <div className="mt-6 flex justify-center">
                         <div className="w-16 h-16 rounded-full border border-zinc-200 dark:border-white/20 flex items-center justify-center group-hover:bg-foreground group-hover:text-background transition-colors text-foreground">
