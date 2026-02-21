@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, onProjectClick?: (id: string) => void }) => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState<'ui' | 'study'>('ui');
 
     useEffect(() => {
         const loadProjects = async () => {
@@ -22,6 +23,14 @@ export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, o
         };
         loadProjects();
     }, []);
+
+    // Filter projects based on the active tab
+    const filteredProjects = projects.filter(project => {
+        const cat = project.category?.toLowerCase() || '';
+        const isStudy = cat.includes('pesquisa') || cat.includes('estudo') || cat.includes('ux');
+        if (activeTab === 'study') return isStudy;
+        return !isStudy; // "UI" tab shows everything else
+    });
 
     if (loading) {
         return (
@@ -48,20 +57,41 @@ export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, o
                             </p>
                         </div>
 
-                        <div className="flex flex-col items-end gap-4 relative z-10">
+                        <div className="flex flex-col md:flex-row items-end md:items-center gap-4 relative z-10">
+                            {/* Tabs Container in Header */}
+                            <div className="inline-flex items-center p-1 bg-zinc-100 dark:bg-zinc-800/50 rounded-full border border-zinc-200 dark:border-white/5 no-cursor-trail">
+                                <button
+                                    onClick={() => setActiveTab('ui')}
+                                    className={`px-4 py-1.5 md:px-5 md:py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === 'ui'
+                                        ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm border border-black/5 dark:border-white/5'
+                                        : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'
+                                        }`}
+                                >
+                                    Projetos UI
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('study')}
+                                    className={`px-4 py-1.5 md:px-5 md:py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === 'study'
+                                        ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm border border-black/5 dark:border-white/5'
+                                        : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'
+                                        }`}
+                                >
+                                    Pesquisas UX
+                                </button>
+                            </div>
+
                             <Link to="/">
                                 <Button variant="outline" className="rounded-full">
                                     <ArrowLeft className="mr-2 h-4 w-4" />
                                     Voltar
                                 </Button>
                             </Link>
-                            <span className="text-muted-foreground font-mono text-sm hidden md:block mt-2">ARCHIVE</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {projects.map((project, index) => (
+                    {filteredProjects.map((project, index) => (
                         <ProjectCard
                             key={project._id}
                             title={project.title}
@@ -72,6 +102,11 @@ export const ProjectsPage = ({ onBack, onProjectClick }: { onBack: () => void, o
                             onClick={() => onProjectClick && onProjectClick(project.slug.current)}
                         />
                     ))}
+                    {filteredProjects.length === 0 && (
+                        <div className="col-span-1 lg:col-span-2 text-center py-12 text-muted-foreground bg-zinc-50 dark:bg-white/5 rounded-2xl border border-zinc-200 dark:border-white/10">
+                            Nenhum projeto encontrado nesta categoria no momento.
+                        </div>
+                    )}
                 </div>
             </div>
         </Section>

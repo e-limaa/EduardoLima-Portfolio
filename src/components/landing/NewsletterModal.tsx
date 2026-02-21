@@ -78,7 +78,7 @@ export const NewsletterModal = () => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="rounded-full px-6 py-2 h-auto text-base font-medium border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all">
+                <Button variant="secondary" className="rounded-full px-6 py-2 h-auto text-base font-medium transition-all">
                     Newsletter IA
                 </Button>
             </DialogTrigger>

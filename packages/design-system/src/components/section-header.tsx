@@ -9,6 +9,7 @@ export interface SectionHeaderProps {
     label?: string;
     className?: string;
     align?: "left" | "center";
+    children?: React.ReactNode;
 }
 
 export const SectionHeader = ({
@@ -17,7 +18,8 @@ export const SectionHeader = ({
     index,
     label,
     className,
-    align = "left"
+    align = "left",
+    children
 }: SectionHeaderProps) => {
     return (
         <div className={cn(
@@ -38,13 +40,16 @@ export const SectionHeader = ({
                 )}
             </div>
 
-            {(index || label) && (
-                <div className="text-right hidden md:block shrink-0">
-                    <span className="text-muted-foreground font-mono text-sm uppercase">
-                        {index && `${index} — `}{label}
-                    </span>
-                </div>
-            )}
+            <div className="flex items-center gap-4 shrink-0">
+                {children}
+                {(index || label) && !children && (
+                    <div className="text-right hidden md:block">
+                        <span className="text-muted-foreground font-mono text-sm uppercase">
+                            {index && `${index} — `}{label}
+                        </span>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
