@@ -47,7 +47,7 @@ export const ProjectCard = ({
     return (
         <motion.div
             className={cn(
-                "relative group w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden bg-black dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 cursor-none",
+                "relative group w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-black dark:bg-zinc-900 cursor-none",
                 className
             )}
             whileHover={{ y: -10 }}

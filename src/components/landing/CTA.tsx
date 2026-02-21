@@ -11,7 +11,7 @@ export const CTA = () => {
       <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20 pointer-events-none"></div>
       <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-blue-500/5 dark:bg-blue-900/10 blur-[120px] pointer-events-none"></div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 relative z-10">
 
         <div className="flex flex-col items-center text-center mb-12 md:mb-24">
           {/* Status removed */}

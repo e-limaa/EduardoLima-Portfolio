@@ -31,7 +31,7 @@ export const Testimonials = () => {
       {/* Background blob */}
       <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen animate-pulse"></div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 relative z-10">
         <div className="mb-20 border-b border-white/10 pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
           <div>
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-2">O que dizem</h2>

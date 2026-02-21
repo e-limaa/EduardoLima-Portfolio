@@ -46,14 +46,14 @@ export const Hero = () => {
         transition={{ duration: 0.8 }}
         className="fixed top-6 left-0 right-0 z-50 pointer-events-none"
       >
-        <div className="container mx-auto px-4 lg:px-12 text-center lg:text-left">
+        <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 text-center lg:text-left">
           <span className="text-heading-sm font-semibold text-foreground tracking-tight pointer-events-auto inline-block">
             Eduardo Lima<span className="text-blue-600 dark:text-blue-500">.</span>
           </span>
         </div>
       </motion.div>
 
-      <div className="container mx-auto px-4 lg:px-12 z-10 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 items-center relative">
+      <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 z-10 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 items-center relative">
 
         {/* Video/Avatar Column */}
         {/* Order: Mobile 1, Desktop 2 (Center) */}

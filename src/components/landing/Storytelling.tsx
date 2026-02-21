@@ -51,7 +51,7 @@ export const Storytelling = () => {
     <section className="relative py-12 md:py-24 bg-background overflow-hidden flex flex-col items-center justify-center transition-colors duration-300">
 
       {/* Header Minimalista */}
-      <div className="container mx-auto px-4 lg:px-12 mb-12 md:mb-24 relative z-10">
+      <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 mb-12 md:mb-24 relative z-10">
         <SectionHeader
           title="DNA Criativo"
           index="03"
@@ -61,7 +61,7 @@ export const Storytelling = () => {
       </div>
 
       {/* Vertical Timeline Container */}
-      <div className="container mx-auto px-4 lg:px-12 relative z-10">
+      <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 relative z-10">
         {/* Central Vertical Line */}
         <div className="absolute left-8 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-300 dark:via-zinc-800 to-transparent transform -translate-x-1/2" />
 

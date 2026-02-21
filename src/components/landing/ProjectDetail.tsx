@@ -88,7 +88,7 @@ export const ProjectDetail = () => {
                 </div>
 
                 <div className="absolute bottom-0 left-0 w-full z-10">
-                    <div className="container mx-auto px-4 lg:px-12 pb-6 md:pb-20">
+                    <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 pb-6 md:pb-20">
                         <motion.div
                             initial={{ y: 30, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -160,7 +160,7 @@ export const ProjectDetail = () => {
                 </div>
             </header>
 
-            <main className="container mx-auto px-4 lg:px-12 py-20">
+            <main className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 py-20">
                 <div className="flex flex-col gap-16">
                     {/* Main Content */}
                     <div className="flex flex-col gap-16">
@@ -241,7 +241,7 @@ export const ProjectDetail = () => {
             >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 dark:via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
 
-                <div className="container mx-auto px-4 lg:px-12 text-center">
+                <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 text-center">
                     <span className="text-muted-foreground uppercase tracking-widest font-mono text-sm mb-4 block">Próximo Projeto</span>
                     <h2 className="text-heading-xl md:text-display-xl font-bold text-foreground group-hover:scale-105 transition-transform duration-500">
                         Ver Próximo

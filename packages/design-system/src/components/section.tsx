@@ -33,7 +33,7 @@ export const Section = ({
             )}
 
             {container ? (
-                <div className="container mx-auto px-4 lg:px-12 relative z-10">
+                <div className="w-full px-4 md:px-8 xl:px-12 relative z-10 max-w-[2000px] mx-auto">
                     {children}
                 </div>
             ) : children}

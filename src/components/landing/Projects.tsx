@@ -26,22 +26,13 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
 
             <div className="mb-10 md:mb-16">
                 <SectionHeader
-                    title="Projetos"
+                    title={activeTab === 'study' ? "Pesquisas UX" : "UI Design"}
                     description="Uma seleção de trabalhos que definem minha abordagem."
                     index="01"
                     label="PROJECTS"
                 >
                     {/* Tabs Container in Header */}
                     <div className="inline-flex items-center p-1 bg-zinc-100 dark:bg-zinc-800/50 rounded-full border border-zinc-200 dark:border-white/5 no-cursor-trail">
-                        <button
-                            onClick={() => setActiveTab('ui')}
-                            className={`px-4 py-1.5 md:px-5 md:py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === 'ui'
-                                ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm border border-black/5 dark:border-white/5'
-                                : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'
-                                }`}
-                        >
-                            Projetos UI
-                        </button>
                         <button
                             onClick={() => setActiveTab('study')}
                             className={`px-4 py-1.5 md:px-5 md:py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === 'study'
@@ -51,11 +42,20 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
                         >
                             Pesquisas UX
                         </button>
+                        <button
+                            onClick={() => setActiveTab('ui')}
+                            className={`px-4 py-1.5 md:px-5 md:py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === 'ui'
+                                ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm border border-black/5 dark:border-white/5'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'
+                                }`}
+                        >
+                            UI Design
+                        </button>
                     </div>
                 </SectionHeader>
 
                 {/* Grid Container */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 md:mt-16 no-cursor-trail">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12 md:mt-16 no-cursor-trail">
                     {featuredProjects.map((project, index) => (
                         <ProjectCard
                             key={project._id}
