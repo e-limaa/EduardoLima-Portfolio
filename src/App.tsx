@@ -24,6 +24,7 @@ import { Toaster } from "@/components/ui/sonner";
 const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
 const StyleGuideLayout = React.lazy(() => import("./pages/styleguide/Layout").then(module => ({ default: module.StyleGuideLayout })));
 const Dashboard = React.lazy(() => import("./pages/Dashboard").then(module => ({ default: module.Dashboard })));
+const Newsletter = React.lazy(() => import("./pages/Newsletter").then(module => ({ default: module.Newsletter })));
 import { Overview } from "./pages/styleguide/Overview";
 
 // Legacy Views (Being replaced)
@@ -114,7 +115,7 @@ export default function App() {
             <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
               <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
                 <Route path="/" element={<LandingPage />} />
-
+                <Route path="/newsletter" element={<Newsletter />} />
 
                 <Route path="/project/:slug" element={<ProjectDetail />} />
                 <Route

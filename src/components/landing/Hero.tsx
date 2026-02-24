@@ -2,8 +2,8 @@ import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { TextReveal, InteractiveGrid, Badge } from "@antigravity/ds";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { ChatWidget } from "./ChatWidget";
-import { NewsletterModal } from "./NewsletterModal";
 import { useLanguage } from "../language-provider";
 
 export const Hero = () => {
@@ -150,7 +150,11 @@ export const Hero = () => {
               {t("hero.cta")}
               <ArrowRight className="w-4 h-4" />
             </a>
-            <NewsletterModal />
+            <Link to="/newsletter">
+              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-full px-6 py-2 h-auto text-base font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 cursor-pointer">
+                {t("newsletter.trigger")}
+              </button>
+            </Link>
           </motion.div>
         </div>
 
