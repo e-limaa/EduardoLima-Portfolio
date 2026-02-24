@@ -239,7 +239,7 @@ export const Newsletter = () => {
 
                     {/* Right Side: Mock Phone / News Layout */}
                     <div className="w-full lg:absolute lg:w-[996px] lg:left-[calc(50%+306.5px)] lg:-translate-x-1/2 lg:-top-10 hidden md:flex items-center justify-center z-0 pointer-events-none mt-12 lg:mt-0 order-1 lg:order-2">
-                        <img src="/assets/images/frame-email.png" alt="Newsletter Preview" className="w-full h-auto object-contain" />
+                        <img src="/assets/images/frame-email.webp" alt="Newsletter Preview" loading="lazy" className="w-full h-auto object-contain" />
                     </div>
                 </div>
 
