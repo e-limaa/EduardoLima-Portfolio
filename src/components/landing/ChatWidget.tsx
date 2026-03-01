@@ -183,15 +183,15 @@ export const ChatWidget = () => {
       {/* Header */}
       <div className="p-4 border-b border-zinc-200 dark:border-white/5 flex items-center justify-between bg-zinc-50/50 dark:bg-white/5">
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <Avatar className="h-10 w-10 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-              <AvatarImage src="/assets/images/avatar-bot.webp" />
-              <AvatarFallback>AI</AvatarFallback>
-            </Avatar>
-            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white dark:border-black"></span>
-          </div>
+          <Avatar className="h-10 w-10 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+            <AvatarImage src="/assets/images/avatar-bot.webp" />
+            <AvatarFallback>AI</AvatarFallback>
+          </Avatar>
           <div>
-            <h3 className="font-medium text-foreground text-sm">Edu Lima</h3>
+            <h3 className="font-medium text-foreground text-sm flex items-center gap-2">
+              Edu Lima
+              <span className="h-2.5 w-2.5 rounded-full bg-green-500 border border-white dark:border-black" />
+            </h3>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               {t("chat.assistant")}
             </p>

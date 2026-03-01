@@ -106,6 +106,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Projects
         "projects.title": "Projects",
+        "projects.label": "Projects",
         "projects.description": "A selection of work that defines my approach.",
         "projects.tab.ux": "UX Research",
         "projects.tab.ui": "UI Design",
@@ -113,6 +114,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Services
         "services.title": "Services",
+        "services.label": "Services",
         "services.description": "How I can help your team or product grow.",
         "services.cta": "Let's talk",
         "services.design.title": "Product Design",
@@ -126,6 +128,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Storytelling
         "story.title": "Creative DNA",
+        "story.label": "Timeline",
         "story.description": "Explore the phases that shaped my methodology.",
         "story.1.year": "Discovery Method",
         "story.1.title": "Applied Curiosity",
@@ -142,6 +145,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Stack
         "stack.title": "Tech Stack",
+        "stack.label": "Stack",
         "stack.description": "Tools and technologies I use to bring ideas to life.",
         "stack.tool.figma": "Advanced prototyping and Design Systems",
         "stack.tool.react": "Componentization and living interfaces",
@@ -152,6 +156,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: CTA
         "cta.title": "Let's talk?",
+        "cta.label": "Contact",
         "cta.description": "Always open to new projects, collaborations, or a good chat about design and technology.",
         "cta.button.email": "Get in touch",
         "cta.button.linkedin": "Connect on LinkedIn",
@@ -307,6 +312,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Projects
         "projects.title": "Projetos",
+        "projects.label": "Projetos",
         "projects.description": "Uma seleção de trabalhos que definem minha abordagem.",
         "projects.tab.ux": "Pesquisas UX",
         "projects.tab.ui": "UI Design",
@@ -314,6 +320,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Services
         "services.title": "Serviços",
+        "services.label": "Serviços",
         "services.description": "Como posso ajudar seu time ou produto a evoluir.",
         "services.cta": "Vamos conversar",
         "services.design.title": "Product Design",
@@ -327,6 +334,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Storytelling
         "story.title": "DNA Criativo",
+        "story.label": "Linha do Tempo",
         "story.description": "Explore as fases que moldaram minha metodologia.",
         "story.1.year": "Método de descoberta",
         "story.1.title": "Curiosidade Aplicada",
@@ -343,6 +351,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: Stack
         "stack.title": "Tech Stack",
+        "stack.label": "Stack",
         "stack.description": "Ferramentas e tecnologias que utilizo para dar vida às ideias.",
         "stack.tool.figma": "Prototipagem avançada e Design Systems",
         "stack.tool.react": "Componentização e interfaces vivas",
@@ -353,6 +362,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Landing Page: CTA
         "cta.title": "Vamos conversar?",
+        "cta.label": "Contato",
         "cta.description": "Sempre aberto a novos projetos, colaborações ou um bom papo sobre design e tecnologia.",
         "cta.button.email": "Entrar em contato",
         "cta.button.linkedin": "Conectar no LinkedIn",

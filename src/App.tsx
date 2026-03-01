@@ -52,41 +52,26 @@ const LandingPage = () => {
   return (
     <>
       <Navbar onNavigate={handleNavigate} />
-      <div id="hero">
-        <Hero />
-      </div>
+      <Hero />
 
       <BrandMarquee />
 
-      <div id="projects">
-        <Projects
+      <Projects onProjectClick={handleProjectClick} />
 
-          onProjectClick={handleProjectClick}
-        />
-      </div>
+      <Services />
 
-      <div id="services">
-        <Services />
-      </div>
+      <Storytelling />
 
-      <div id="story">
-        <Storytelling />
-      </div>
+      <Stack />
 
-      <div id="stack">
-        <Stack />
-      </div>
-
-      <div id="contact">
-        <CTA />
-      </div>
+      <CTA />
     </>
   );
 };
 
 export default function App() {
-  const [hasEntered, setHasEntered] = useState(false);
   const location = useLocation();
+  const [hasEntered, setHasEntered] = useState(() => location.hash.includes("figmacapture="));
 
   // Check if we are in the Design System or Dashboard to skip intros
   const isDesignSystem = location.pathname.startsWith('/design-system');
@@ -111,7 +96,7 @@ export default function App() {
 
           {!shouldSkipIntro && <AudioPlayer shouldPlay={hasEntered} />}
 
-          <main className="relative z-10" key={hasEntered ? "entered" : "loading"}>
+          <main className="z-10" key={hasEntered ? "entered" : "loading"}>
             <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
               <Routes location={location} key={location.pathname.startsWith('/design-system') ? 'ds' : location.pathname}>
                 <Route path="/" element={<LandingPage />} />

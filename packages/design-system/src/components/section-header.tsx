@@ -1,5 +1,4 @@
 
-import { TextReveal } from "./text-reveal";
 import { cn } from "../lib/utils";
 
 export interface SectionHeaderProps {
@@ -7,6 +6,7 @@ export interface SectionHeaderProps {
     description?: string;
     index?: string;
     label?: string;
+    headingId?: string;
     className?: string;
     align?: "left" | "center";
     children?: React.ReactNode;
@@ -17,28 +17,27 @@ export const SectionHeader = ({
     description,
     index,
     label,
+    headingId,
     className,
     align = "left",
     children
 }: SectionHeaderProps) => {
     return (
-        <div className={cn(
+        <header className={cn(
             "mb-10 md:mb-20 border-b border-zinc-200 dark:border-white/10 pb-10 flex flex-col md:flex-row justify-between items-end gap-6",
             align === "center" && "text-center md:text-left",
             className
         )}>
-            <div>
-                <TextReveal>
-                    <h2 className="text-heading-lg font-semibold text-foreground mb-2">
-                        {title}
-                    </h2>
-                </TextReveal>
+            <hgroup>
+                <h2 id={headingId} className="text-heading-lg font-semibold text-foreground mb-2">
+                    {title}
+                </h2>
                 {description && (
                     <p className="text-muted-foreground text-lg w-full mt-4 max-w-4xl">
                         {description}
                     </p>
                 )}
-            </div>
+            </hgroup>
 
             <div className="flex items-center gap-4 shrink-0">
                 {children}
@@ -50,6 +49,6 @@ export const SectionHeader = ({
                     </div>
                 )}
             </div>
-        </div>
+        </header>
     );
 };

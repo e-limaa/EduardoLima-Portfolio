@@ -21,26 +21,34 @@ const brands = [
 ];
 
 export const BrandMarquee = () => {
+  const repeatedBrands = [...brands, ...brands, ...brands, ...brands];
+
   return (
-    <div className="w-full py-10 bg-white dark:bg-black border-y border-zinc-200 dark:border-white/5 overflow-hidden relative z-20 transition-colors duration-300">
+    <section aria-label="Brands and clients" className="w-full py-10 bg-white dark:bg-black border-y border-zinc-200 dark:border-white/5 overflow-hidden relative z-20 transition-colors duration-300">
       <div className="flex">
-        <motion.div
+        <motion.ul
           initial={{ x: 0 }}
           animate={{ x: "-50%" }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="flex gap-16 whitespace-nowrap pr-16 items-center"
+          className="list-none m-0 p-0 flex gap-16 whitespace-nowrap pr-16 items-center"
         >
-          {[...brands, ...brands, ...brands, ...brands].map((brand, i) => (
-            <div key={i} className="flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity cursor-default grayscale hover:grayscale-0">
+          {repeatedBrands.map((brand, i) => {
+            const isDuplicate = i >= brands.length;
+            return (
+            <li
+              key={`${brand.name}-${i}`}
+              aria-hidden={isDuplicate}
+              className="flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity cursor-default grayscale hover:grayscale-0"
+            >
               <img
                 src={brand.logo}
-                alt={brand.name}
+                alt={isDuplicate ? "" : brand.name}
                 className="h-10 md:h-14 w-auto object-contain max-w-[150px]"
               />
-            </div>
-          ))}
-        </motion.div>
+            </li>
+          )})}
+        </motion.ul>
       </div>
-    </div>
+    </section>
   );
 };

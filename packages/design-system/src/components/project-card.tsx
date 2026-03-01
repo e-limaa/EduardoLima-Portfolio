@@ -29,7 +29,7 @@ export const ProjectCard = ({
     const [isHovered, setIsHovered] = useState(false);
     const [imgSrc, setImgSrc] = useState(image);
 
-    function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -45,7 +45,7 @@ export const ProjectCard = ({
     }
 
     return (
-        <motion.div
+        <motion.article
             className={cn(
                 "relative group w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-black dark:bg-zinc-900 cursor-none",
                 className
@@ -54,6 +54,16 @@ export const ProjectCard = ({
             transition={{ duration: 0.5, ease: "circOut" }}
             onMouseMove={handleMouseMove}
             onClick={onClick}
+            role={onClick ? "button" : undefined}
+            tabIndex={onClick ? 0 : undefined}
+            aria-label={onClick ? `Open project ${title}` : undefined}
+            onKeyDown={(e) => {
+                if (!onClick) return;
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onClick();
+                }
+            }}
             onMouseEnter={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 mouseX.set(e.clientX - rect.left);
@@ -131,6 +141,6 @@ export const ProjectCard = ({
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </motion.article>
     );
 };

@@ -24,12 +24,14 @@ export const Hero = () => {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pt-0 md:pb-0 perspective-[1000px]"
+      id="hero"
+      className="relative isolate min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pt-0 md:pb-0 perspective-[1000px]"
     >
-      {/* Interactive Background Grid */}
-      <InteractiveGrid />
+      <InteractiveGrid
+        variant="subtle"
+        className="-z-10 opacity-80"
+      />
 
-      {/* Background Elements */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <motion.div
           style={{ y: y1 }}
@@ -42,7 +44,6 @@ export const Hero = () => {
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20"></div>
       </div>
 
-      {/* Fixed Header (Eduardo Lima) */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -57,17 +58,13 @@ export const Hero = () => {
       </motion.div>
 
       <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 z-10 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 items-center relative">
-
-        {/* Video/Avatar Column */}
-        {/* Order: Mobile 1, Desktop 2 (Center) */}
         <div className="col-span-1 lg:col-span-3 relative h-[400px] lg:h-[600px] flex items-end justify-center z-10 order-1 lg:order-2 pointer-events-none mt-4 lg:mt-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
+            className="relative z-40 isolate lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
           >
-            {/* Mobile Fallback Image (WebP Optimized) */}
             <img
               src="/assets/images/Edu-image.webp"
               alt="Eduardo Lima"
@@ -76,7 +73,6 @@ export const Hero = () => {
               className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] block md:hidden"
             />
 
-            {/* Desktop Video (WebM) */}
             {!videoFailed ? (
               <video
                 src="https://audio-assets.vercel.app/Edu-video.webm"
@@ -85,7 +81,7 @@ export const Hero = () => {
                 muted
                 playsInline
                 onError={() => setVideoFailed(true)}
-                className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
+                className="relative z-40 w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
               />
             ) : (
               <img
@@ -93,14 +89,12 @@ export const Hero = () => {
                 alt="Eduardo Lima"
                 width={548}
                 height={981}
-                className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
+                className="relative z-40 w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
               />
             )}
           </motion.div>
         </div>
 
-        {/* Text Content Column */}
-        {/* Order: Mobile 2, Desktop 1 (Left) */}
         <div className="col-span-1 lg:col-span-5 flex flex-col gap-6 text-center lg:text-left pointer-events-none z-20 order-2 lg:order-1 -mt-20 lg:mt-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -108,14 +102,17 @@ export const Hero = () => {
             transition={{ delay: 0.1, duration: 0.8 }}
             className="flex justify-center lg:justify-start"
           >
-            <div className="flex justify-center lg:justify-start">
-              <Badge variant="secondary" className="mb-4 text-body-sm font-medium px-4 py-1">
-                {t("hero.badge")}
-              </Badge>
-            </div>
+            <Badge variant="secondary" className="mb-4 text-body-sm font-medium px-4 py-1">
+              {t("hero.badge")}
+            </Badge>
           </motion.div>
 
-          <div className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto"
+          >
             <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2" priority>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">{t("hero.word1")}</span>
             </TextReveal>
@@ -125,7 +122,7 @@ export const Hero = () => {
             <TextReveal delay={0.3} className="-mb-3 md:-mb-6 pb-2" priority>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 leading-[1.0] md:leading-[1.15]">{t("hero.word3")}</span>
             </TextReveal>
-          </div>
+          </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -150,18 +147,16 @@ export const Hero = () => {
               {t("hero.cta")}
               <ArrowRight className="w-4 h-4" />
             </a>
-            <Link to="/newsletter">
-              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-full px-6 py-2 h-auto text-base font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 cursor-pointer">
-                {t("newsletter.trigger")}
-              </button>
+            <Link
+              to="/newsletter"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-full px-6 py-2 h-auto text-base font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 cursor-pointer"
+            >
+              {t("newsletter.trigger")}
             </Link>
           </motion.div>
         </div>
 
-        {/* Chat Widget Column */}
-        {/* Order: Mobile 3, Desktop 3 (Right) */}
         <div className="col-span-1 lg:col-span-4 relative flex items-center justify-center lg:justify-end h-full pointer-events-auto min-h-[400px] order-3 lg:order-3">
-          {/* Floating Chat UI */}
           <motion.div
             className="relative z-20 w-full max-w-md"
             initial={{ opacity: 0, x: 50 }}
@@ -173,7 +168,6 @@ export const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, 10, 0] }}
@@ -183,7 +177,6 @@ export const Hero = () => {
         <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Scroll</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-500 to-transparent"></div>
       </motion.div>
-
     </section>
   );
 };
