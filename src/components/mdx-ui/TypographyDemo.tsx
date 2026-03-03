@@ -33,7 +33,7 @@ export const TypographyDemo = () => {
                     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
                         <div className="md:w-1/4 space-y-1">
                             <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Display 2XL</p>
-                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-display-2xl (72px)</p>
+                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-display-2xl (SM: 48px / MD: 72px)</p>
                         </div>
                         <div className="md:w-3/4">
                             <div className="text-display-2xl font-bold">
@@ -44,7 +44,7 @@ export const TypographyDemo = () => {
                     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
                         <div className="md:w-1/4 space-y-1">
                             <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Display XL</p>
-                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-display-xl (60px)</p>
+                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-display-xl (SM: 36px / MD: 60px)</p>
                         </div>
                         <div className="md:w-3/4">
                             <div className="text-display-xl font-bold">
@@ -55,7 +55,7 @@ export const TypographyDemo = () => {
                     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
                         <div className="md:w-1/4 space-y-1">
                             <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Display LG</p>
-                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-display-lg (48px)</p>
+                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-display-lg (SM: 30px / MD: 48px)</p>
                         </div>
                         <div className="md:w-3/4">
                             <div className="text-display-lg font-bold">
@@ -74,7 +74,7 @@ export const TypographyDemo = () => {
                     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
                         <div className="md:w-1/4 space-y-1">
                             <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H1 (Heading XL)</p>
-                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-heading-xl (36px)</p>
+                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-heading-xl (SM: 24px / MD: 36px)</p>
                         </div>
                         <div className="md:w-3/4">
                             <h1 className="text-heading-xl font-bold m-0 p-0 border-0">Heading XL</h1>
@@ -84,7 +84,7 @@ export const TypographyDemo = () => {
                     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
                         <div className="md:w-1/4 space-y-1">
                             <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H2 (Heading LG)</p>
-                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-heading-lg (30px)</p>
+                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-heading-lg (SM: 20px / MD: 30px)</p>
                         </div>
                         <div className="md:w-3/4">
                             <h2 className="text-heading-lg font-semibold m-0 p-0 border-0">Heading LG</h2>
@@ -94,7 +94,7 @@ export const TypographyDemo = () => {
                     <div className="flex flex-col md:flex-row md:items-baseline gap-4 py-8 border-b border-border">
                         <div className="md:w-1/4 space-y-1">
                             <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">H3 (Heading MD)</p>
-                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-heading-md (24px)</p>
+                            <p className="font-mono text-[10px] text-muted-foreground opacity-70">.text-heading-md (SM: 18px / MD: 24px)</p>
                         </div>
                         <div className="md:w-3/4">
                             <h3 className="text-heading-md font-semibold m-0 p-0">Heading MD</h3>

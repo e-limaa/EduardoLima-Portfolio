@@ -62,6 +62,18 @@
     --sidebar-ring: var(--sidebar-ring);
 }
 
+/* Responsive Fluid Typography for Mobile (SM) */
+@media (max-width: 767px) {
+    :root {
+        --text-display-2xl: 3rem; /* 48px - Was 72px */
+        --text-display-xl: 2.25rem; /* 36px - Was 60px */
+        --text-display-lg: 1.875rem; /* 30px - Was 48px */
+        --text-heading-xl: 1.5rem; /* 24px - Was 36px */
+        --text-heading-lg: 1.25rem; /* 20px - Was 30px */
+        --text-heading-md: 1.125rem; /* 18px - Was 24px */
+    }
+}
+
 .dark {
     /*
      * Legacy Mappings - Dark Mode

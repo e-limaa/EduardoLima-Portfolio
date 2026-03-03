@@ -78,12 +78,12 @@ export const Newsletter = () => {
             <div className="max-w-[1600px] mx-auto px-6 md:px-12 relative z-10 w-full flex flex-col min-h-screen">
 
                 {/* Header */}
-                <header className="py-8 flex items-center justify-between w-full shrink-0">
-                    <Link to="/" className="flex items-center text-xl font-bold tracking-tight hover:opacity-80 transition-opacity cursor-pointer">
+                <header className="py-8 flex text-center sm:text-left flex-row items-center justify-between w-full shrink-0">
+                    <Link to="/" className="flex items-center text-lg md:text-xl font-bold tracking-tight hover:opacity-80 transition-opacity cursor-pointer">
                         <span className="text-zinc-100">Eduardo Lima</span>
                         <span className="text-blue-500 ml-1">.</span>
                     </Link>
-                    <div className="flex items-center text-xl font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
+                    <div className="flex items-center text-lg md:text-xl font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">Newsletter AI</span>
                         <span className="text-zinc-100 ml-1">.</span>
                     </div>
@@ -92,12 +92,17 @@ export const Newsletter = () => {
                 {/* Main Content Layout */}
                 <div className="flex flex-col lg:flex-row flex-1 py-12 lg:pt-20 items-start relative w-full">
 
+                    {/* Mobile Image (Visible only on small screens) */}
+                    <div className="w-[calc(100%+48px)] -mx-6 flex md:hidden items-center justify-center z-0 pointer-events-none order-1 -mt-[72px] relative">
+                        <img src="/assets/images/mobile-email.webp" alt="Newsletter Preview Mobile" loading="lazy" className="w-full h-auto object-cover rounded-none mask-image-b" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' }} />
+                    </div>
+
                     {/* Left Side: Copy & Form */}
-                    <div className="w-full lg:max-w-[434px] flex flex-col gap-12 lg:gap-14 mx-auto lg:mx-0 z-10 order-2 lg:order-1 pt-4">
+                    <div className="w-full lg:max-w-[434px] flex flex-col gap-12 lg:gap-14 mx-auto lg:mx-0 z-10 relative order-2 lg:order-1 -mt-32 lg:mt-0 pt-4">
 
                         {/* Header / Value Proposition */}
                         <div className="flex flex-col gap-4">
-                            <h1 className="text-[40px] md:text-[48px] font-bold tracking-[-0.71px] text-white leading-[1.1] md:leading-none items-center">
+                            <h1 className="text-3xl md:text-[48px] font-bold tracking-[-0.71px] text-white leading-[1.1] md:leading-none items-center">
                                 Fique à frente da revolução da IA.
                             </h1>
                             <p className="text-[#a1a1aa] text-[16px] leading-[1.4] mt-2">
@@ -107,7 +112,7 @@ export const Newsletter = () => {
 
                         {/* Interactive Form */}
                         <div className="flex flex-col gap-6">
-                            <h2 className="text-[18px] font-bold text-white leading-[1.4]">
+                            <h2 className="text-base md:text-[18px] font-bold text-white leading-[1.4]">
                                 Automação com critério. Informação sem ruído.
                             </h2>
 
@@ -162,7 +167,7 @@ export const Newsletter = () => {
 
                         {/* Como funciona */}
                         <div className="flex flex-col gap-6">
-                            <h3 className="text-[32px] font-bold tracking-[-0.71px] text-white">Como funciona?</h3>
+                            <h3 className="text-2xl md:text-[32px] font-bold tracking-[-0.71px] text-white">Como funciona?</h3>
                             <p className="text-[#a1a1aa] text-[16px]">A newsletter é alimentada por uma automação criada por mim utilizando n8n.</p>
 
                             <div className="flex flex-col gap-4">
@@ -192,7 +197,7 @@ export const Newsletter = () => {
                             </div>
 
                             <div className="flex flex-col gap-4 mt-4">
-                                <p className="bg-clip-text text-[transparent] bg-gradient-to-r from-blue-400 to-blue-600 font-bold text-[20px] tracking-tight">Resultado:</p>
+                                <p className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600 font-bold text-lg md:text-[20px] tracking-tight">Resultado:</p>
                                 <p className="text-[#a1a1aa] text-[16px]">Você recebe informação relevante, com consistência e sem depender de redes sociais ou algoritmo.</p>
                             </div>
                         </div>
@@ -202,7 +207,7 @@ export const Newsletter = () => {
 
                         {/* Por que isso é diferente? */}
                         <div className="flex flex-col gap-6 pb-20">
-                            <h3 className="text-[32px] font-bold tracking-[-0.71px] text-white">
+                            <h3 className="text-2xl md:text-[32px] font-bold tracking-[-0.71px] text-white">
                                 Por que isso é diferente?
                             </h3>
                             <p className="text-[#a1a1aa] text-[16px]">A maioria dos conteúdos sobre IA vive de hype.</p>
