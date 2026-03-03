@@ -149,6 +149,7 @@ export const Hero = () => {
             </a>
             <Link
               to="/newsletter"
+              state={{ fromInternal: true }}
               className="inline-flex items-center justify-center whitespace-nowrap rounded-full px-6 py-2 h-auto text-base font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 cursor-pointer"
             >
               {t("newsletter.trigger")}

@@ -3,12 +3,14 @@ import { Button } from "@antigravity/ds";
 import { Input } from "@antigravity/ds";
 import { ArrowRight, Github, Instagram, Twitter } from "lucide-react";
 import { Navbar } from "../components/landing/Navbar";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { toast } from "sonner";
 
 export const Newsletter = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const isInternal = location.state?.fromInternal;
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -53,21 +55,23 @@ export const Newsletter = () => {
 
     return (
         <div className="min-h-screen w-full bg-[#030303] text-zinc-300 font-sans relative overflow-x-hidden selection:bg-blue-500/30">
-            <Navbar onNavigate={(id) => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
-                } else {
-                    // Navigate to home and then scroll
-                    navigate("/", { replace: false });
-                    setTimeout(() => {
-                        const targetElement = document.getElementById(id);
-                        if (targetElement) {
-                            targetElement.scrollIntoView({ behavior: "smooth" });
-                        }
-                    }, 100);
-                }
-            }} />
+            {isInternal && (
+                <Navbar onNavigate={(id) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.scrollIntoView({ behavior: "smooth" });
+                    } else {
+                        // Navigate to home and then scroll
+                        navigate("/", { replace: false });
+                        setTimeout(() => {
+                            const targetElement = document.getElementById(id);
+                            if (targetElement) {
+                                targetElement.scrollIntoView({ behavior: "smooth" });
+                            }
+                        }, 100);
+                    }
+                }} />
+            )}
 
             {/* Background Gradients */}
             <div className="absolute top-0 left-0 w-full h-[900px] pointer-events-none z-0">
@@ -79,10 +83,17 @@ export const Newsletter = () => {
 
                 {/* Header */}
                 <header className="py-8 flex text-center sm:text-left flex-row items-center justify-between w-full shrink-0">
-                    <Link to="/" className="flex items-center text-lg md:text-xl font-bold tracking-tight hover:opacity-80 transition-opacity cursor-pointer">
-                        <span className="text-zinc-100">Eduardo Lima</span>
-                        <span className="text-blue-500 ml-1">.</span>
-                    </Link>
+                    {isInternal ? (
+                        <Link to="/" className="flex items-center text-lg md:text-xl font-bold tracking-tight hover:opacity-80 transition-opacity cursor-pointer">
+                            <span className="text-zinc-100">Eduardo Lima</span>
+                            <span className="text-blue-500 ml-1">.</span>
+                        </Link>
+                    ) : (
+                        <div className="flex items-center text-lg md:text-xl font-bold tracking-tight">
+                            <span className="text-zinc-100">Eduardo Lima</span>
+                            <span className="text-blue-500 ml-1">.</span>
+                        </div>
+                    )}
                     <div className="flex items-center text-lg md:text-xl font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">Newsletter AI</span>
                         <span className="text-zinc-100 ml-1">.</span>
