@@ -12,6 +12,7 @@
     "tokens"
   ],
   "scripts": {
+    "prepare": "npm run build",
     "build": "node ./scripts/build-tokens.js",
     "test:a11y": "node ./scripts/check-contrast.js"
   },

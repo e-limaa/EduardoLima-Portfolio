@@ -28,6 +28,8 @@ export default defineConfig(({ mode }) => {
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
       alias: {
+        "@limia/design-system/styles.css": path.resolve(rootDir, "../../packages/limia-design-system/styles/globals.css"),
+        "@limia/tokens/css": path.resolve(rootDir, "../../packages/limia-tokens/dist/tokens.css"),
         "figma:asset/fe1addf78ff4776eb2ba01a20bd652eabe95c942.png": path.resolve(rootDir, "./src/assets/fe1addf78ff4776eb2ba01a20bd652eabe95c942.webp"),
         "figma:asset/f8254b1f94d7f936b0be7dfd62c50373257cfd12.png": path.resolve(rootDir, "./src/assets/f8254b1f94d7f936b0be7dfd62c50373257cfd12.webp"),
         "figma:asset/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.png": path.resolve(rootDir, "./src/assets/ae81cf578fc1b70d1cd9b353a408f5971601e9a0.webp"),
