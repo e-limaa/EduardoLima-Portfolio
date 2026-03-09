@@ -1,0 +1,8 @@
+interface:
+  display_name: "Limia Design System"
+  short_description: "Maintain the @limia/design-system stack"
+  default_prompt: "Use $build-design-system to work on the @limia/design-system package, token pipeline, MDX docs, and governance flows in this repository."
+
+policy:
+  allow_implicit_invocation: true
+

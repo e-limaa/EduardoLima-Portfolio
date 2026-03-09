@@ -4,7 +4,7 @@ const { promisify } = require('util');
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
 
-const DOCS_ROOT = path.resolve(__dirname, '../src/app/docs');
+const DOCS_ROOT = path.resolve(__dirname, "../apps/design-system-docs/src/docs/content");
 
 // Configuration
 const SOURCE_EXT = '.mdx';
@@ -69,3 +69,4 @@ async function checkParity() {
 }
 
 checkParity();
+

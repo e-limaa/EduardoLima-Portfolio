@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Read the source tokens
-const sourcePath = path.join(__dirname, '../limex-tokens.json');
+const sourcePath = path.join(__dirname, '../limia-tokens.json');
 const rawData = fs.readFileSync(sourcePath, 'utf8');
 const tokens = JSON.parse(rawData);
 
@@ -206,8 +206,9 @@ Object.entries(tokens).forEach(([key, value]) => {
 });
 
 // Write files
-fs.writeFileSync(path.join(__dirname, '../limex-primitives.json'), JSON.stringify(primitives, null, 2));
-fs.writeFileSync(path.join(__dirname, '../limex-light.json'), JSON.stringify(light, null, 2));
-fs.writeFileSync(path.join(__dirname, '../limex-dark.json'), JSON.stringify(dark, null, 2));
+fs.writeFileSync(path.join(__dirname, '../limia-primitives.json'), JSON.stringify(primitives, null, 2));
+fs.writeFileSync(path.join(__dirname, '../limia-light.json'), JSON.stringify(light, null, 2));
+fs.writeFileSync(path.join(__dirname, '../limia-dark.json'), JSON.stringify(dark, null, 2));
 
 console.log('Successfully generated Figma token files.');
+

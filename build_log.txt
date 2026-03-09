@@ -1,13 +1,13 @@
 
 > landing-page-portfolio@0.1.0 build
-> npm run build:tokens --prefix packages/design-system && vite build
+> npm run build:tokens --prefix packages/limia-design-system && vite build
 
 
-> @antigravity/ds@0.1.0 build:tokens
+> @limia/design-system@0.1.0 build:tokens
 > node scripts/build-tokens.js
 
-✅ Tokens built successfully to /Users/ejorge/Desktop/EduardoLima-Portfolio/packages/design-system/styles/tokens.css
-✅ TypeScript tokens built successfully to /Users/ejorge/Desktop/EduardoLima-Portfolio/packages/design-system/src/tokens/index.ts
+✅ Tokens built successfully to /Users/ejorge/Desktop/EduardoLima-Portfolio/packages/limia-design-system/styles/tokens.css
+✅ TypeScript tokens built successfully to /Users/ejorge/Desktop/EduardoLima-Portfolio/packages/limia-design-system/src/tokens/index.ts
 vite v6.3.5 building for production...
 transforming...
 
@@ -15,10 +15,10 @@ transforming...
 ✓ 2453 modules transformed.
 ✗ Build failed in 7.65s
 error during build:
-src/app/docs/components/badge.pt-br.mdx (1:9): "Badge" is not exported by "packages/design-system/src/index.ts", imported by "src/app/docs/components/badge.pt-br.mdx".
+src/app/docs/components/badge.pt-br.mdx (1:9): "Badge" is not exported by "packages/limia-design-system/src/index.ts", imported by "src/app/docs/components/badge.pt-br.mdx".
 file: /Users/ejorge/Desktop/EduardoLima-Portfolio/src/app/docs/components/badge.pt-br.mdx:1:9
 
-1: import { Badge } from "@antigravity/ds";
+1: import { Badge } from "@limia/design-system";
             ^
 2: 
 3: <DocsPageHeader
@@ -33,3 +33,4 @@ file: /Users/ejorge/Desktop/EduardoLima-Portfolio/src/app/docs/components/badge.
     at Identifier.bind (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:5423:40)
     at CallExpression.bind (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:2809:28)
     at CallExpression.bind (file:///Users/ejorge/Desktop/EduardoLima-Portfolio/node_modules/rollup/dist/es/shared/node-entry.js:12123:15)
+

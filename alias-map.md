@@ -7,9 +7,9 @@ Para cada variável semântica, clique nela no Figma → troque o valor para **"
 
 ## Como importar
 
-1. Importe `limex-figma-primitives.json` → cria collection **Primitives**
-2. Importe `limex-figma-semantic-light.json` → cria collection **Semantic** (modo Light)
-3. Importe `limex-figma-semantic-dark.json` → **na mesma collection Semantic** → cria modo **Dark** como coluna
+1. Importe `limia-figma-primitives.json` → cria collection **Primitives**
+2. Importe `limia-figma-semantic-light.json` → cria collection **Semantic** (modo Light)
+3. Importe `limia-figma-semantic-dark.json` → **na mesma collection Semantic** → cria modo **Dark** como coluna
 
 ## Background
 
@@ -74,4 +74,5 @@ Para cada variável semântica, clique nela no Figma → troque o valor para **"
 | `sidebar/accent-foreground` | `color/zinc/900` | `color/zinc/50` |
 | `sidebar/border` | `color/zinc/200` | `color/zinc/800` |
 | `sidebar/ring` | `color/zinc/700` | `color/zinc/300` |
+
 

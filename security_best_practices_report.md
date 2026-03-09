@@ -89,7 +89,7 @@ No high/critical vulnerabilities remain in root runtime or root dev graph after 
 - Result: `0 high`, `0 critical`, `1 moderate` (`lodash` via transitive dependency)
 - Runtime risk target (high/critical) met.
 
-### Design system (`packages/design-system`, `npm audit --omit=dev --json`)
+### Design system (`packages/limia-design-system`, `npm audit --omit=dev --json`)
 - Result: `0` vulnerabilities.
 
 ### Studio (`studio`, `npm audit --omit=dev --json`)
@@ -108,3 +108,4 @@ No high/critical vulnerabilities remain in root runtime or root dev graph after 
    - `N8N_WEBHOOK_URL`
    - `N8N_WEBHOOK_SECRET`
 3. Confirm admin role source in production (`profiles` table and/or JWT metadata).
+

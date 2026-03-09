@@ -1,0 +1,59 @@
+import React from "react";
+import { motion } from "motion/react";
+import { Figma, Code, Database, Layers, Zap, PenTool } from "lucide-react";
+import { SectionHeader, Section, Card, CardContent, CardTitle, CardDescription } from "@limia/design-system";
+import { useLanguage } from "../language-provider";
+
+const tools = [
+    { name: "Figma", icon: Figma, translationKey: "stack.tool.figma" },
+    { name: "React / Next.js", icon: Code, translationKey: "stack.tool.react" },
+    { name: "AI Integration", icon: Zap, translationKey: "stack.tool.ai" },
+    { name: "Design Systems", icon: Layers, translationKey: "stack.tool.ds" },
+    { name: "Automation", icon: Database, translationKey: "stack.tool.automation" },
+    { name: "Adobe Suite", icon: PenTool, translationKey: "stack.tool.adobe" },
+];
+
+export const Stack = () => {
+    const { t } = useLanguage();
+
+    return (
+        <Section id="stack" className="py-16 md:py-32">
+            <SectionHeader
+                title={t("stack.title")}
+                description={t("stack.description")}
+                index="04"
+                label={t("stack.label")}
+            />
+
+            <ul className="list-none m-0 p-0 grid grid-cols-2 md:grid-cols-3 gap-6">
+                {tools.map((tool, index) => (
+                    <motion.li
+                        key={tool.name}
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        whileHover={{ y: -10, scale: 1.02 }}
+                        className="group"
+                    >
+                        <Card className="h-full bg-white dark:bg-white/5 border-zinc-200 dark:border-white/5 backdrop-blur-sm hover:border-blue-500/30 transition-colors duration-500 relative overflow-hidden shadow-sm dark:shadow-none">
+                            <CardContent className="p-8 flex flex-col items-start h-full bg-gradient-to-b from-zinc-100/70 to-transparent dark:from-white/5 dark:to-transparent group-hover:from-zinc-100 dark:group-hover:from-white/10 transition-colors duration-500">
+                                <motion.div
+                                    animate={{ y: [0, -5, 0] }}
+                                    transition={{ duration: 3 + (index % 3) * 0.4, repeat: Infinity, ease: "easeInOut" }}
+                                    className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-black/40 flex items-center justify-center mb-6 text-muted-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500"
+                                >
+                                    <tool.icon className="w-8 h-8" />
+                                </motion.div>
+                                <CardTitle className="text-heading-sm font-bold text-foreground mb-3">{tool.name}</CardTitle>
+                                <CardDescription className="text-body-sm text-muted-foreground leading-relaxed group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                                    {t(tool.translationKey)}
+                                </CardDescription>
+                            </CardContent>
+                        </Card>
+                    </motion.li>
+                ))}
+            </ul>
+        </Section>
+    );
+};
+

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // ── Read source tokens ──────────────────────────────────────────────
-const sourcePath = path.join(__dirname, '../limex-tokens.json');
+const sourcePath = path.join(__dirname, '../limia-tokens.json');
 const tokens = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
 
 // ── Helpers ─────────────────────────────────────────────────────────
@@ -264,17 +264,17 @@ const darkOutput = {
 };
 
 fs.writeFileSync(
-    path.join(outDir, 'limex-figma-primitives.json'),
+    path.join(outDir, 'limia-figma-primitives.json'),
     JSON.stringify(primitivesOutput, null, 2)
 );
 
 fs.writeFileSync(
-    path.join(outDir, 'limex-figma-semantic-light.json'),
+    path.join(outDir, 'limia-figma-semantic-light.json'),
     JSON.stringify(lightOutput, null, 2)
 );
 
 fs.writeFileSync(
-    path.join(outDir, 'limex-figma-semantic-dark.json'),
+    path.join(outDir, 'limia-figma-semantic-dark.json'),
     JSON.stringify(darkOutput, null, 2)
 );
 
@@ -284,9 +284,9 @@ md += `Após importar os JSONs no Figma, use esta tabela para criar os aliases m
 md += `Para cada variável semântica, clique nela no Figma → troque o valor para **"Alias"** → selecione o primitivo indicado.\n\n`;
 md += `> **Dica**: No Figma, a descrição de cada variável semântica já contém o alias (ex: \`Alias → color/zinc/100\`).\n\n`;
 md += `## Como importar\n\n`;
-md += `1. Importe \`limex-figma-primitives.json\` → cria collection **Primitives**\n`;
-md += `2. Importe \`limex-figma-semantic-light.json\` → cria collection **Semantic** (modo Light)\n`;
-md += `3. Importe \`limex-figma-semantic-dark.json\` → **na mesma collection Semantic** → cria modo **Dark** como coluna\n\n`;
+md += `1. Importe \`limia-figma-primitives.json\` → cria collection **Primitives**\n`;
+md += `2. Importe \`limia-figma-semantic-light.json\` → cria collection **Semantic** (modo Light)\n`;
+md += `3. Importe \`limia-figma-semantic-dark.json\` → **na mesma collection Semantic** → cria modo **Dark** como coluna\n\n`;
 
 // Group by category
 const categories = {};
@@ -309,16 +309,17 @@ Object.entries(categories).forEach(([cat, mappings]) => {
 fs.writeFileSync(path.join(outDir, 'alias-map.md'), md);
 
 // Clean up old single semantic file
-const oldFile = path.join(outDir, 'limex-figma-semantic.json');
+const oldFile = path.join(outDir, 'limia-figma-semantic.json');
 if (fs.existsSync(oldFile)) fs.unlinkSync(oldFile);
 
 console.log('✅ Arquivos gerados com sucesso:');
-console.log('   → limex-figma-primitives.json      (collection: Primitives)');
-console.log('   → limex-figma-semantic-light.json   (collection: Semantic, modo: Light)');
-console.log('   → limex-figma-semantic-dark.json    (collection: Semantic, modo: Dark)');
+console.log('   → limia-figma-primitives.json      (collection: Primitives)');
+console.log('   → limia-figma-semantic-light.json   (collection: Semantic, modo: Light)');
+console.log('   → limia-figma-semantic-dark.json    (collection: Semantic, modo: Dark)');
 console.log('   → alias-map.md                      (guia de referência para aliases)');
 console.log('');
 console.log('📋 Para importar no Figma:');
 console.log('   1. Importe primitives → cria collection Primitives');
 console.log('   2. Importe semantic-light → cria collection Semantic (modo Light)');
 console.log('   3. Importe semantic-dark na MESMA collection Semantic → cria modo Dark');
+

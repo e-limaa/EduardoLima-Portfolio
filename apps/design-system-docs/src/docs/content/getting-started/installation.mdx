@@ -1,0 +1,104 @@
+import { Button } from '@limia/design-system';
+
+<DocsPageHeader 
+  title="Installation" 
+  description="How to install, configure, and integrate the Limia Design System into your project." 
+  status="stable" 
+/>
+
+The Limia Design System is a managed dependency that provides a unified language for our portfolio products.
+
+## Requirements
+
+- **Node**: >= 18.0.0
+- **React**: >= 18.0.0
+- **Tailwind CSS**: >= 3.0.0
+
+## Installation
+
+Install the package alongside its peer dependencies:
+
+```bash
+npm install @limia/design-system class-variance-authority clsx tailwind-merge @radix-ui/react-slot
+```
+
+---
+
+## Setup
+
+### 1. Import Global Styles
+
+In your root layout or entry file (e.g., `main.tsx`, `app/layout.tsx`):
+
+```tsx
+import "@limia/design-system/styles.css";
+import "@limia/tokens/css";
+```
+
+### 2. Configure Tailwind
+
+Update `tailwind.config.js` to inherit the system's design tokens.
+
+```js
+// tailwind.config.js
+import { limiaPreset } from "@limia/design-system/tailwind";
+
+export default {
+  content: [
+    "./src/**/*.{ts,tsx}",
+    "./node_modules/@limia/design-system/dist/**/*.{js,mjs}"
+  ],
+  presets: [limiaPreset],
+  darkMode: ["class"],
+  // ... other config
+};
+```
+
+---
+
+## First Working Example
+
+Once installed, you can use components immediately.
+
+<ComponentPreview>
+  <div className="flex gap-4 items-center justify-center p-8">
+    <Button variant="default">Hello World</Button>
+    <Button variant="secondary">Secondary Action</Button>
+  </div>
+</ComponentPreview>
+
+```tsx
+import { Button } from "@limia/design-system";
+
+export default function App() {
+  return (
+    <div className="flex gap-4">
+      <Button variant="default">Hello World</Button>
+      <Button variant="secondary">Secondary Action</Button>
+    </div>
+  );
+}
+```
+
+---
+
+## Common Mistakes
+
+<DoDontContainer>
+  <DoDont type="do" title="Use System Components">
+     Always import primitives like `Button` or `Input` directly from `@limia/design-system`. This ensures you get the latest accessibility fixes and design updates.
+  </DoDont>
+  <DoDont type="dont" title="Create Local Wrappers">
+    Do not wrap DS components in local "convenience" wrappers (e.g., `MyButton`). This breaks the update path and doubles the maintenance burden.
+  </DoDont>
+</DoDontContainer>
+
+<DoDontContainer>
+  <DoDont type="do" title="Use Token Classes">
+     Use standardized sizing tokens like `w-9`, `h-9` or `p-4`.
+  </DoDont>
+  <DoDont type="dont" title="Use Arbitrary Values">
+    Avoid magic numbers like `w-[37px]`. If a token doesn't exist, question if the design deviation is necessary.
+  </DoDont>
+</DoDontContainer>
+

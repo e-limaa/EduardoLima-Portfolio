@@ -1,0 +1,25 @@
+{
+  "name": "@limia/tokens",
+  "version": "0.1.0",
+  "description": "Limia design tokens.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "tokens"
+  ],
+  "scripts": {
+    "build": "node ./scripts/build-tokens.js",
+    "test:a11y": "node ./scripts/check-contrast.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./css": "./dist/tokens.css"
+  }
+}
