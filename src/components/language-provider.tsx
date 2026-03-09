@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
-
-type Language = "en" | "pt-br"
+import { DEFAULT_LANGUAGE, type AppLanguage } from "../lib/i18n"
+type Language = AppLanguage
 
 type LanguageProviderProps = {
     children: React.ReactNode
@@ -111,6 +111,12 @@ const translations: Record<Language, Record<string, string>> = {
         "projects.tab.ux": "UX Research",
         "projects.tab.ui": "UI Design",
         "projects.empty": "No projects found in this category at the moment.",
+        "projects.loading": "Loading projects...",
+        "projects.archive.title": "All Projects",
+        "projects.archive.description": "Complete archive of case studies and experiments.",
+        "projects.archive.tab.ui": "UI Projects",
+        "projects.archive.tab.ux": "UX Research",
+        "projects.archive.back": "Back",
 
         // Landing Page: Services
         "services.title": "Services",
@@ -317,6 +323,12 @@ const translations: Record<Language, Record<string, string>> = {
         "projects.tab.ux": "Pesquisas UX",
         "projects.tab.ui": "UI Design",
         "projects.empty": "Nenhum projeto encontrado nesta categoria no momento.",
+        "projects.loading": "Carregando projetos...",
+        "projects.archive.title": "Todos os Projetos",
+        "projects.archive.description": "Arquivo completo de cases e experimentos.",
+        "projects.archive.tab.ui": "Projetos UI",
+        "projects.archive.tab.ux": "Pesquisas UX",
+        "projects.archive.back": "Voltar",
 
         // Landing Page: Services
         "services.title": "Serviços",
@@ -439,7 +451,7 @@ const LanguageProviderContext = createContext<LanguageProviderState>(initialStat
 
 export function LanguageProvider({
     children,
-    defaultLanguage = "en",
+    defaultLanguage = DEFAULT_LANGUAGE,
     storageKey = "portfolio-language",
     ...props
 }: LanguageProviderProps) {
@@ -477,3 +489,5 @@ export const useLanguage = () => {
 
     return context
 }
+
+

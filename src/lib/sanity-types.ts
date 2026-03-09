@@ -1,35 +1,36 @@
-
 export interface SanityImage {
   asset: {
-    _ref: string;
-    _type: "reference";
-  };
-  alt?: string;
+    _ref: string
+    _type: 'reference'
+  }
+  alt?: string
 }
 
 export interface SolutionBlock {
-  _type: 'solution';
-  text: string;
+  _type: 'solution'
+  text: string
 }
 
+export type ProjectCategoryKind = 'ui' | 'study'
+
 export interface Project {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  category: string;
-  role: string;
-  year: string;
-  client: string;
-  description: string; // No futuro pode ser PortableTextBlock[]
-  challenge: string;
-  solution: string;
-  // Permitir string (URL direta atual) ou objeto SanityImage
-  mainImage: string | SanityImage;
-  thumbnail?: string | SanityImage;
-  gallery: Array<string | SanityImage | SolutionBlock>;
-  metricLabel?: string;
-  metric: string;
-  color: string;
-  stack: string[];
-  order?: number;
+  _id: string
+  title: string
+  slug: { current: string }
+  category: string
+  categoryKind?: ProjectCategoryKind | string
+  role: string
+  year: string
+  client: string
+  description: string
+  challenge: string
+  solution: string
+  mainImage: string | SanityImage
+  thumbnail?: string | SanityImage
+  gallery: Array<string | SanityImage | SolutionBlock>
+  metricLabel?: string
+  metric: string
+  color: string
+  stack: string[]
+  order?: number
 }
