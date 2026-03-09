@@ -9,6 +9,7 @@
   "types": "./dist/src/index.d.ts",
   "files": [
     "dist",
+    "styles",
     "README.md",
     "COMPONENT_STATUS.md",
     "CONTRIBUTING.md"
@@ -45,7 +46,7 @@
       "types": "./dist/tailwind/preset.d.ts",
       "default": "./dist/tailwind/preset.js"
     },
-    "./styles.css": "./dist/styles.css",
-    "./styles/globals.css": "./dist/styles.css"
+    "./styles.css": "./styles/globals.css",
+    "./styles/globals.css": "./styles/globals.css"
   }
 }

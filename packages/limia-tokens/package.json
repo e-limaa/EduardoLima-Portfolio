@@ -9,6 +9,7 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
+    "styles",
     "tokens"
   ],
   "scripts": {
@@ -21,6 +22,6 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./css": "./dist/tokens.css"
+    "./css": "./styles/tokens.css"
   }
 }

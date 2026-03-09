@@ -10,7 +10,9 @@ const require = createRequire(import.meta.url);
 const PACKAGE_ROOT = path.join(__dirname, "..");
 const TOKENS_DIR = path.join(PACKAGE_ROOT, "tokens");
 const OUTPUT_DIR = path.join(PACKAGE_ROOT, "dist");
+const STYLES_DIR = path.join(PACKAGE_ROOT, "styles");
 const OUTPUT_FILE = path.join(OUTPUT_DIR, "tokens.css");
+const STYLES_OUTPUT_FILE = path.join(STYLES_DIR, "tokens.css");
 
 // Load JSONs
 const primitives = require(path.join(TOKENS_DIR, "primitives.json"));
@@ -138,8 +140,12 @@ if (resolvedSemantic.dark) {
 if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
+if (!fs.existsSync(STYLES_DIR)) {
+    fs.mkdirSync(STYLES_DIR, { recursive: true });
+}
 
 fs.writeFileSync(OUTPUT_FILE, cssContent);
+fs.writeFileSync(STYLES_OUTPUT_FILE, cssContent);
 const semanticLight = resolvedSemantic.light || {};
 const flattenedSemantic = flattenObject(semanticLight);
 const tsTokenMap = {};
