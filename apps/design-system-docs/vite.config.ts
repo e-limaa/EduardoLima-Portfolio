@@ -18,8 +18,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      "@limia/design-system": path.resolve(rootDir, "../../packages/limia-design-system/src/index.ts"),
+      "@limia/tokens": path.resolve(rootDir, "../../packages/limia-tokens/src/index.ts"),
       "@limia/design-system/styles.css": path.resolve(rootDir, "../../packages/limia-design-system/styles/globals.css"),
-      "@limia/tokens/css": path.resolve(rootDir, "../../packages/limia-tokens/dist/tokens.css"),
+      "@limia/tokens/css": path.resolve(rootDir, "../../packages/limia-tokens/styles/tokens.css"),
       "@": path.resolve(rootDir, "./src"),
     },
   },

@@ -10,6 +10,11 @@
     "moduleResolution": "Node",
     "noEmit": false,
     "outDir": "./dist",
+    "paths": {
+      "@limia/tokens": [
+        "../limia-tokens/dist/index.d.ts"
+      ]
+    },
     "rootDir": "."
   },
   "include": [

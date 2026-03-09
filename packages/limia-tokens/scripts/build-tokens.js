@@ -11,6 +11,7 @@ const PACKAGE_ROOT = path.join(__dirname, "..");
 const TOKENS_DIR = path.join(PACKAGE_ROOT, "tokens");
 const OUTPUT_DIR = path.join(PACKAGE_ROOT, "dist");
 const STYLES_DIR = path.join(PACKAGE_ROOT, "styles");
+const SOURCE_DIR = path.join(PACKAGE_ROOT, "src");
 const OUTPUT_FILE = path.join(OUTPUT_DIR, "tokens.css");
 const STYLES_OUTPUT_FILE = path.join(STYLES_DIR, "tokens.css");
 
@@ -143,6 +144,9 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 if (!fs.existsSync(STYLES_DIR)) {
     fs.mkdirSync(STYLES_DIR, { recursive: true });
 }
+if (!fs.existsSync(SOURCE_DIR)) {
+    fs.mkdirSync(SOURCE_DIR, { recursive: true });
+}
 
 fs.writeFileSync(OUTPUT_FILE, cssContent);
 fs.writeFileSync(STYLES_OUTPUT_FILE, cssContent);
@@ -160,6 +164,7 @@ console.log(`✅ Tokens built successfully to ${OUTPUT_FILE}`);
 
 const JS_OUTPUT_FILE = path.join(OUTPUT_DIR, 'index.js');
 const DTS_OUTPUT_FILE = path.join(OUTPUT_DIR, 'index.d.ts');
+const SOURCE_OUTPUT_FILE = path.join(SOURCE_DIR, 'index.ts');
 
 const jsContent = `/**
  * THIS FILE IS AUTO-GENERATED. DO NOT EDIT MANUALLY.
@@ -183,7 +188,18 @@ ${Object.keys(tsTokenMap)
 export type TokenPath = keyof typeof tokens;
 export type ColorTokenPath = Extract<TokenPath, \`\${'background' | 'text' | 'border' | 'action' | 'chart' | 'sidebar'}\${string}\`>;
 `;
+const sourceContent = `/**
+ * THIS FILE IS AUTO-GENERATED. DO NOT EDIT MANUALLY.
+ * Source: packages/limia-tokens/tokens/semantic.json
+ */
+
+export const tokens = ${JSON.stringify(tsTokenMap, null, 2)} as const;
+
+export type TokenPath = keyof typeof tokens;
+export type ColorTokenPath = Extract<TokenPath, \`\${'background' | 'text' | 'border' | 'action' | 'chart' | 'sidebar'}\${string}\`>;
+`;
 
 fs.writeFileSync(JS_OUTPUT_FILE, jsContent);
 fs.writeFileSync(DTS_OUTPUT_FILE, dtsContent);
+fs.writeFileSync(SOURCE_OUTPUT_FILE, sourceContent);
 console.log(`✅ Token modules built successfully to ${OUTPUT_DIR}`);
