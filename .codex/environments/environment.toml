@@ -14,3 +14,8 @@ command = "npm run dev"
 name = "Play-LimiaDocs"
 icon = "tool"
 command = "npm run dev:docs"
+
+[[actions]]
+name = "Play-portfolio"
+icon = "run"
+command = "npm run dev:portfolio"
