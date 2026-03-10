@@ -278,6 +278,12 @@
 
 @layer utilities {
 
+    .bg-surface-glass {
+        background-color: color-mix(in oklab, var(--background-layer-1) 80%, transparent);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+    }
+
     /* Typography Utilities */
     .text-display-2xl {
         font-size: var(--text-display-2xl);

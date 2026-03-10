@@ -78,7 +78,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
       >
         <nav
           aria-label={language === "pt-br" ? "Navegação de seções" : "Section navigation"}
-          className="rounded-[2rem] border border-border/70 bg-background/85 px-1 py-1 shadow-lg shadow-black/10 backdrop-blur-xl sm:rounded-full sm:px-2 sm:py-2"
+          className="bg-surface-glass rounded-[2rem] border border-border/70 px-1 py-1 shadow-lg shadow-black/10 sm:rounded-full sm:px-2 sm:py-2"
         >
           <ul
             ref={scrollRef}
