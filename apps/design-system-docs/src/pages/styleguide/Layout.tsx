@@ -1,5 +1,5 @@
 import React from "react";
-import { Moon, Sun, Menu } from "lucide-react";
+import { Moon, Sun, Menu, LayoutGrid } from "lucide-react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Button, cn } from "@limia/design-system";
@@ -53,6 +53,29 @@ export function StyleGuideLayout() {
           </div>
 
           <nav className="flex-1 space-y-8 overflow-y-auto p-4">
+            <div>
+              <h4 className="mb-2 px-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t("docs.nav.overview-group")}
+              </h4>
+              <div className="space-y-1">
+                <NavLink
+                  to="/design-system"
+                  end
+                  className={({ isActive }) =>
+                    cn(
+                      "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    )
+                  }
+                >
+                  <LayoutGrid size={16} />
+                  <span>{t("docs.nav.overview")}</span>
+                </NavLink>
+              </div>
+            </div>
+
             {["Getting Started", "Foundations", "Components", "Patterns", "Governance"].map((sectionTitle) => {
               const items = docsRegistry.filter((doc) => doc.section === sectionTitle);
               if (items.length === 0) return null;
