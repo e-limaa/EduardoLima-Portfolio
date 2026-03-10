@@ -26,20 +26,20 @@ const TextSwitch = React.forwardRef<
       {...props}
     >
       <span className="pointer-events-none relative z-10 flex size-7.5 shrink-0 items-center justify-center font-mono text-[0.625rem] font-bold uppercase tracking-[0.12em]">
-        <span className={cn(checked ? "text-muted-foreground group-hover:text-foreground" : "text-primary-foreground")}>
+        <span className={cn(checked ? "text-muted-foreground group-hover:text-foreground" : "text-foreground")}>
           {uncheckedLabel}
         </span>
       </span>
 
       <span className="pointer-events-none relative z-10 flex size-7.5 shrink-0 items-center justify-center font-mono text-[0.625rem] font-bold uppercase tracking-[0.12em]">
-        <span className={cn(checked ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground")}>
+        <span className={cn(checked ? "text-foreground" : "text-muted-foreground group-hover:text-foreground")}>
           {checkedLabel}
         </span>
       </span>
 
       <SwitchPrimitive.Thumb
         data-slot="text-switch-thumb"
-        className="pointer-events-none absolute left-1 top-1 z-0 flex size-7.5 items-center justify-center rounded-full border border-border/80 bg-background ring-1 ring-border/40 transition-transform duration-200 data-[state=checked]:translate-x-8 data-[state=unchecked]:translate-x-0"
+        className="pointer-events-none absolute left-1 top-1 z-0 flex size-7.5 items-center justify-center rounded-full border border-border-strong bg-layer-1 ring-1 ring-border/50 transition-transform duration-200 data-[state=checked]:translate-x-8 data-[state=unchecked]:translate-x-0"
       />
     </SwitchPrimitive.Root>
   );
