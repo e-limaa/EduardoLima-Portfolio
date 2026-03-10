@@ -179,18 +179,18 @@ export const ChatWidget = () => {
       className="flex h-[480px] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl backdrop-blur-xl md:h-[580px]"
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border bg-muted/30 p-4">
+      <div className="flex items-center justify-between border-b border-border bg-layer-2 p-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10 border border-primary/30 shadow-sm">
             <AvatarImage src="/assets/images/avatar-bot.webp" />
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
           <div>
-            <h3 className="font-medium text-foreground text-sm flex items-center gap-2">
+            <h3 className="font-medium text-foreground text-sm">
               Edu Lima
-              <span className="h-2.5 w-2.5 rounded-full border border-background bg-primary" />
             </h3>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <span className="h-2.5 w-2.5 rounded-full border border-success-subtle bg-success" />
               {t("chat.assistant")}
             </p>
           </div>
@@ -213,7 +213,7 @@ export const ChatWidget = () => {
             <div
               className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.sender === "user"
                 ? "bg-primary text-primary-foreground rounded-br-none"
-                : "border border-border bg-card/80 text-foreground rounded-bl-none"
+                : "border border-border bg-layer-2 text-foreground rounded-bl-none"
                 }`}
             >
               {msg.text.split('\n').map((line, i) => {
@@ -263,7 +263,7 @@ export const ChatWidget = () => {
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSendMessage} className="flex gap-2 border-t border-border bg-muted/30 p-3">
+      <form onSubmit={handleSendMessage} className="flex gap-2 border-t border-border bg-layer-1 p-3">
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}

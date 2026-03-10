@@ -41,6 +41,10 @@ export const Hero = () => {
           style={{ y: y2 }}
           className="absolute bottom-0 right-1/4 h-[500px] w-[500px] rounded-full bg-muted/80 blur-[120px] mix-blend-screen"
         />
+        <motion.div
+          style={{ y: y2 }}
+          className="absolute right-[8%] top-[8%] h-[360px] w-[360px] rounded-full bg-primary/12 blur-[140px] mix-blend-screen"
+        />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20"></div>
       </div>
 

@@ -9,6 +9,8 @@ export * from "./components/section-header";
 export * from "./components/interactive-grid";
 export * from "./components/project-card";
 export * from "./components/section";
+export * from "./components/theme-switch";
+export * from "./components/text-switch";
 export * from "./lib/utils";
 export * from "./lib/token";
 export * from "./components/ui/dialog";

@@ -85,7 +85,6 @@ export const Storytelling = () => {
       id="story"
       aria-labelledby={sectionTitleId}
       className="py-12 md:py-24"
-      grid={false}
       noise={false}
     >
       <SectionHeader

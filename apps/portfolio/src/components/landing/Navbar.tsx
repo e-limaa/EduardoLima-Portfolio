@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { Home, User, Briefcase, Layers, Mail, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { cn } from "@limia/design-system";
+import { TextSwitch } from "@limia/design-system";
 import { ModeToggle } from "../mode-toggle";
 import { useLanguage } from "../language-provider";
 
@@ -105,38 +105,14 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
             <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
 
             <li className="flex-shrink-0">
-              <div
-                role="group"
+              <TextSwitch
+                checked={language === "pt-br"}
+                onCheckedChange={(checked) => setLanguage(checked ? "pt-br" : "en")}
+                uncheckedLabel="EN"
+                checkedLabel="PT"
                 aria-label={language === "pt-br" ? "Selecionar idioma" : "Select language"}
-                className="flex items-center gap-1 rounded-lg border border-border/70 bg-card/80 p-1"
-              >
-                <button
-                  type="button"
-                  onClick={() => setLanguage("en")}
-                  className={cn(
-                    "rounded-md px-2 py-0.5 font-mono text-xs font-bold uppercase transition-all",
-                    language === "en"
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                  )}
-                  title="English"
-                >
-                  EN
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage("pt-br")}
-                  className={cn(
-                    "rounded-md px-2 py-0.5 font-mono text-xs font-bold uppercase transition-all",
-                    language === "pt-br"
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                  )}
-                  title="Português"
-                >
-                  PT
-                </button>
-              </div>
+                title={language === "pt-br" ? "Selecionar idioma" : "Select language"}
+              />
             </li>
 
             <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />

@@ -22,6 +22,8 @@
 | **Skeleton** | 🧪 Beta | 0.9 | Loading placeholder using accent surfaces. |
 | **Toast / Toaster** | 🧪 Beta | 0.9 | Public feedback API for app-wide notifications. |
 | **Switch** | 🧪 Beta | 0.9 | Immediate binary control verified against semantic state tokens. |
+| **Theme Switch** | 🧪 Beta | 0.9 | Dark/light mode switch built on the Switch primitive with semantic surface styling. |
+| **Text Switch** | 🧪 Beta | 0.9 | Binary text switch for short labels such as locale or compact mode controls. |
 | **Table** | 🧪 Beta | 0.9 | Data presentation primitive with muted structural emphasis. |
 | **Tabs** | 🧪 Beta | 0.9 | Segmented content navigation with surface-aware active states. |
 | **Toggle** | 🧪 Beta | 0.9 | Pressed-state control for formatting and mode selection. |

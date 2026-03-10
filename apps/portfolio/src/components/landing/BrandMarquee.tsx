@@ -24,7 +24,7 @@ export const BrandMarquee = () => {
   const repeatedBrands = [...brands, ...brands, ...brands, ...brands];
 
   return (
-    <section aria-label="Brands and clients" className="relative z-20 w-full overflow-hidden border-y border-border bg-background py-10 transition-colors duration-300">
+    <section aria-label="Brands and clients" className="relative z-20 w-full overflow-hidden border-y border-border-subtle bg-background py-10 transition-colors duration-300">
       <div className="flex">
         <motion.ul
           initial={{ x: 0 }}
