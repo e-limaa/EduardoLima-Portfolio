@@ -1,0 +1,119 @@
+import { ThemeSwitch, TextSwitch } from '@limia/design-system';
+
+<ComponentPlayground
+  controls={[
+    { name: 'variant', type: 'select', options: ['theme', 'text'], defaultValue: 'theme' },
+    { name: 'checked', type: 'boolean', defaultValue: false },
+    { name: 'uncheckedLabel', type: 'text', defaultValue: 'EN' },
+    { name: 'checkedLabel', type: 'text', defaultValue: 'PT' }
+  ]}
+  codeTemplate={(props) => props.variant === 'theme' ? `
+import { ThemeSwitch } from "@limia/design-system";
+
+export default function Example() {
+  return (
+    <ThemeSwitch
+      checked={${props.checked}}
+      aria-label="${props.checked ? 'Switch to light theme' : 'Switch to dark theme'}"
+    />
+  );
+}
+  ` : `
+import { TextSwitch } from "@limia/design-system";
+
+export default function Example() {
+  return (
+    <TextSwitch
+      checked={${props.checked}}
+      uncheckedLabel="${props.uncheckedLabel}"
+      checkedLabel="${props.checkedLabel}"
+      aria-label="Select language"
+    />
+  );
+}
+  `}
+>
+  {(props, { setValue }) => props.variant === 'theme' ? (
+    <ThemeSwitch
+      checked={props.checked}
+      onCheckedChange={(checked) => setValue('checked', checked)}
+      aria-label={props.checked ? 'Switch to light theme' : 'Switch to dark theme'}
+    />
+  ) : (
+    <TextSwitch
+      checked={props.checked}
+      onCheckedChange={(checked) => setValue('checked', checked)}
+      uncheckedLabel={props.uncheckedLabel}
+      checkedLabel={props.checkedLabel}
+      aria-label="Select language"
+    />
+  )}
+</ComponentPlayground>
+
+## Overview
+
+Mode Switch groups the styled binary switches built on top of the base `Switch` primitive. Use it when the control itself needs to communicate the current mode directly, either with icons or compact text labels.
+
+## Usage
+
+Use `ThemeSwitch` for theme mode toggles such as light and dark. Use `TextSwitch` for short binary labels such as locale or compact mode, where both options need to stay visible inside the control.
+
+<ComponentPreview>
+  <div className="flex flex-wrap items-center gap-4">
+    <ThemeSwitch checked aria-label="Switch to light theme" />
+    <ThemeSwitch checked={false} aria-label="Switch to dark theme" />
+    <TextSwitch checked={false} uncheckedLabel="EN" checkedLabel="PT" aria-label="Select language" />
+    <TextSwitch checked uncheckedLabel="EN" checkedLabel="PT" aria-label="Selecionar idioma" />
+  </div>
+</ComponentPreview>
+
+<DoDontContainer>
+  <DoDont type="do" title="Keep both states explicit">
+    Use labels or icons that make the two states obvious without extra explanation.
+  </DoDont>
+  <DoDont type="dont" title="Replace longer segmented controls">
+    Do not use these variants for three or more options or when labels need helper text.
+  </DoDont>
+</DoDontContainer>
+
+## Style
+
+These variants keep the same geometry as the binary switch pattern: a neutral track, one moving thumb and two symmetric slots. `ThemeSwitch` uses the primary surface to reinforce light versus dark intent, while `TextSwitch` keeps the selected thumb more neutral so it does not compete with surrounding navigation.
+
+<Callout type="info" title="Use short labels only">
+  `TextSwitch` works best with two- or three-character labels such as `EN/PT`, `ON/OFF` or `A/B`. Longer text will break the visual rhythm and should move to tabs or segmented controls instead.
+</Callout>
+
+## Code
+
+Use the styled variants directly from `@limia/design-system` when the base switch is not expressive enough on its own.
+
+```tsx
+import { ThemeSwitch, TextSwitch } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <div className="flex items-center gap-4">
+      <ThemeSwitch
+        checked={theme === "dark"}
+        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+        aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+      />
+
+      <TextSwitch
+        checked={language === "pt-br"}
+        onCheckedChange={(checked) => setLanguage(checked ? "pt-br" : "en")}
+        uncheckedLabel="EN"
+        checkedLabel="PT"
+        aria-label="Select language"
+      />
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+- Provide an `aria-label` that describes the action or current meaning of the switch.
+- Keep text labels short and unambiguous so each side remains legible inside the control.
+- Use these variants only for immediate mode changes, not for submitted form choices.

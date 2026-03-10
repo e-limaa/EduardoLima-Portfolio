@@ -13,7 +13,7 @@ interface Control {
 }
 
 interface ComponentPlaygroundProps {
-  children: (props: any) => React.ReactNode;
+  children: (props: any, helpers: { setValue: (name: string, value: any) => void }) => React.ReactNode;
   controls: Control[];
   codeTemplate: (props: any) => string;
 }
@@ -49,7 +49,7 @@ export const ComponentPlayground = ({
       <div className="flex border-b bg-muted/30">
         <div className="flex min-h-[200px] flex-1 items-center justify-center bg-[url('/grid-pattern.svg')] p-4">
           <div className="scale-100 transition-all duration-200">
-            {children(values)}
+            {children(values, { setValue: handleChange })}
           </div>
         </div>
 

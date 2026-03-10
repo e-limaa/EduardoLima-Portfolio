@@ -615,6 +615,26 @@ export const docsRegistry: DocPage[] = [
     ),
   }),
   defineDoc({
+    title: "docs.mode-switch.title",
+    href: "/design-system/components/mode-switch",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.mode-switch.description",
+    resources: componentResources(
+      "ThemeSwitch, TextSwitch",
+      "packages/limia-design-system/src/components/theme-switch.tsx, packages/limia-design-system/src/components/text-switch.tsx",
+    ),
+    related: [
+      "/design-system/components/switch",
+      "/design-system/components/toggle",
+    ],
+    component: React.lazy(() => import("./content/components/mode-switch.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/mode-switch.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
     title: "docs.table.title",
     href: "/design-system/components/table",
     section: "Components",
