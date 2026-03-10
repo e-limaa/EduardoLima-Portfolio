@@ -1,20 +1,32 @@
 import { Toggle } from '@limia/design-system';
-import { Bold } from 'lucide-react';
-
-<DocsPageHeader
-  title="Toggle"
-  description="Toggle represents a pressed on or off state for a single control."
-  status="beta"
-/>
 
 <ComponentPreview>
-  <Toggle aria-label="Toggle bold">
-    <Bold />
-  </Toggle>
+  <div className="flex gap-3">
+    <Toggle aria-label="Toggle bold">Bold</Toggle>
+    <Toggle aria-label="Toggle italic">Italic</Toggle>
+  </div>
 </ComponentPreview>
+
+## Overview
+
+Toggle represents a pressable on or off state for a single control.
 
 ## Usage
 
-- Use toggle when the control itself owns the state.
-- Prefer checkbox or switch for form settings and preference rows.
-- Always provide an accessible label for icon-only toggles.
+Use toggle when the pressed state itself is the main interaction, such as formatting, view mode or filter chips. Prefer button when the control triggers an action rather than maintaining state.
+
+## Style
+
+Keep the content short and recognizable. Toggles work best with short labels or familiar icons, especially when several controls appear together.
+
+## Code
+
+```tsx
+import { Toggle } from "@limia/design-system";
+```
+
+## Accessibility
+
+- Provide `aria-label` for icon-only toggles.
+- Ensure the pressed state remains visible beyond color alone.
+- Do not use toggle for destructive or ambiguous actions.

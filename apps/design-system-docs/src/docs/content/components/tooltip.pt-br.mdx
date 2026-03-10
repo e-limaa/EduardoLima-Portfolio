@@ -1,26 +1,49 @@
-import { Button, Tooltip, TooltipContent, TooltipTrigger } from '@limia/design-system';
-
-<DocsPageHeader
-  title="Tooltip"
-  description="Tooltip oferece orientacao contextual curta para controles que se beneficiam de mais clareza em hover ou foco."
-  status="beta"
-/>
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@limia/design-system';
 
 <ComponentPreview>
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <Button variant="outline" size="icon" aria-label="Detalhes do projeto">
-        ?
-      </Button>
-    </TooltipTrigger>
-    <TooltipContent sideOffset={8}>
-      Tooltip complementa o controle. Ele nao deve carregar informacao critica.
-    </TooltipContent>
-  </Tooltip>
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant="outline">Hover ou foco</Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Guidance curto e suplementar.</p>
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
 </ComponentPreview>
+
+## Visão geral
+
+Tooltip fornece orientação contextual curta em hover ou foco.
 
 ## Uso
 
-- Use tooltip para orientacoes curtas e nao essenciais.
-- Mantenha o conteudo em uma frase curta sempre que possivel.
-- Prefira texto visivel quando a instrucao precisar ser lida antes da acao.
+Use tooltip para hints de apoio concisos, como esclarecimento de ícones ou labels compactos. Não use para instruções obrigatórias, explicações complexas ou feedback crítico de status.
+
+## Estilo
+
+Mantenha o texto do tooltip em uma frase curta. Se o conteúdo exigir formatação, decisões ou tempo maior de leitura, use popover ou outro pattern mais rico.
+
+## Código
+
+```tsx
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- O conteúdo do tooltip também precisa aparecer em foco, não apenas em hover.
+- Não coloque informação essencial apenas dentro do tooltip.
+- Os triggers devem continuar fazendo sentido sem o tooltip.

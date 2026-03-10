@@ -1,62 +1,39 @@
-<DocsPageHeader
-  title="Contributing"
-  description="How to propose, build, and ship changes to the Design System."
-  status="stable"
-/>
+## Overview
 
-The Design System is a living product that evolves with the needs of the team. We welcome contributions from everyone, whether it's fixing a bug or proposing a new component.
+Contributing defines how changes enter Limia without turning the design system into a dumping ground for app-specific needs. The process exists to protect API quality, token discipline and documentation parity.
 
-## Contribution Workflow
+## Policy
 
-<div className="relative border-l-2 border-border ml-4 space-y-12 my-12">
-    <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">1. Proposal</h3>
-        <p className="text-muted-foreground text-sm">
-            Before writing code, open an issue or start a discussion. Explain the problem you are solving.
-            If it's a new component, check if an existing one can be extended.
-        </p>
-    </div>
+Every contribution should start from a clear problem statement, not from an implementation idea alone. Before adding or changing a component, verify whether the need is:
 
-    <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">2. Design & Spec</h3>
-        <p className="text-muted-foreground text-sm">
-            Define the API props, variations, and states. Consider accessibility and responsiveness from the start.
-            Draft a quick spec or share a Figma link.
-        </p>
-    </div>
+- a reusable package primitive
+- a product-specific composition
+- a documentation-only pattern
+- a token or governance issue instead of a component gap
 
-    <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">3. Implementation</h3>
-        <p className="text-muted-foreground text-sm">
-            Build the component in the `packages/limia-design-system` directory.
-            Ensure it follows our `Do / Don't` guidelines regarding token usage.
-        </p>
-    </div>
+<Callout type="info" title="Source of truth first">
+  Changes must land in the package or token source of truth. App-local copies and one-off overrides are not acceptable substitutes for public API work.
+</Callout>
 
-     <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">4. Documentation</h3>
-        <p className="text-muted-foreground text-sm">
-            Create an MDX page in `apps/design-system-docs`. Include interactive examples and accessibility notes.
-        </p>
-    </div>
-</div>
+## Workflow
 
-## Code Standards
-
-- **Typescript**: All components must be strictly typed. Avoid `any`.
-- **Tailwind**: Use our design tokens. Do not use arbitrary values e.g., `w-[350px]`.
-- **Exports**: Export your component from `index.ts` to make it available to consumers.
+1. Frame the problem and confirm that the design system is the right layer to solve it.
+2. Define the API, states, semantics and lifecycle target before coding.
+3. Implement in `packages/limia-design-system` or `packages/limia-tokens`, not only in consumers.
+4. Document the change in English and Portuguese and update lifecycle metadata when relevant.
+5. Validate build, parity and adoption before considering the change ready.
 
 <DoDontContainer>
-  <DoDont type="do" title="Small API Surface">
-    Keep prop counts low. Use `slots` or `asChild` composition pattern (coming soon) instead of boolean props for everything.
+  <DoDont type="do" title="Keep the API small">
+    Prefer composition, slots and semantic variants over adding many props for one screen.
   </DoDont>
-  <DoDont type="dont" title="Business Logic">
-    Never include business logic (e.g., fetching data, specific analytics) inside the Design System. Components should be dumb and presentational.
+  <DoDont type="dont" title="Ship product logic in the package">
+    Data fetching, analytics, routing rules and app-specific copy should stay outside the design system package.
   </DoDont>
 </DoDontContainer>
 
+## References
+
+- `packages/limia-design-system/CONTRIBUTING.md`
+- `packages/limia-design-system/COMPONENT_STATUS.md`
+- `apps/design-system-docs/src/docs/registry.ts`

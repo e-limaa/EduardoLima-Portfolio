@@ -1,11 +1,15 @@
 import { cn } from "@limia/design-system";
-import type { DocStatus } from "../types";
-import { DocStatusBadge } from "./DocStatusBadge";
+import { useCurrentDoc } from "../context";
+import type { DocA11yStatus, DocKind, DocResources, DocStatus } from "../types";
+import { DocsPageHero } from "./DocsPageHero";
 
 interface DocsPageHeaderProps {
   title: string;
   description?: string;
   status?: DocStatus;
+  kind?: DocKind;
+  resources?: DocResources;
+  a11yStatus?: DocA11yStatus;
   className?: string;
 }
 
@@ -13,21 +17,24 @@ export function DocsPageHeader({
   title,
   description,
   status = "stable",
+  kind = "component",
+  resources,
+  a11yStatus,
   className,
 }: DocsPageHeaderProps) {
+  const doc = useCurrentDoc();
+
+  if (doc) return null;
+
   return (
-    <div className={cn("mb-8 space-y-4 border-b border-border pb-8", className)}>
-      <div className="flex items-center gap-3">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          {title}
-        </h1>
-        {status && <DocStatusBadge status={status} />}
-      </div>
-      {description && (
-        <p className="max-w-3xl text-xl leading-relaxed text-muted-foreground">
-          {description}
-        </p>
-      )}
-    </div>
+    <DocsPageHero
+      title={title}
+      description={description}
+      status={status}
+      kind={kind}
+      resources={resources}
+      a11yStatus={a11yStatus}
+      className={cn("mb-8", className)}
+    />
   );
 }

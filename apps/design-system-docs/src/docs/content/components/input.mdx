@@ -1,9 +1,9 @@
 import { Input, Button } from '@limia/design-system';
 import { Label } from '@limia/design-system';
 
-# Input
+## Overview
 
-Inputs allow users to enter text into a UI. They typically appear in forms and dialogs.
+Inputs allow users to enter short text in forms, filters and dialogs. Use them for data entry that benefits from a visible cursor, keyboard editing and direct validation.
 
 ## Usage
 
@@ -15,7 +15,7 @@ Inputs allow users to enter text into a UI. They typically appear in forms and d
 - For multiple lines of text (use **Textarea**).
 - For strict preset options (use **Select** or **Radio**).
 
-## Examples
+## Style
 
 ### Default
 Basic text input with a placeholder.
@@ -52,7 +52,7 @@ Prevents user interaction, typically during loading or permission states.
   <Input disabled type="email" placeholder="Email" className="max-w-sm" />
 </ComponentPreview>
 
-## States
+## Code
 
 ### Error State
 Currently, error states are handled by adding `aria-invalid` or specific classes.

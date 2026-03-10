@@ -1,24 +1,38 @@
-
-# Typography
-
-Typography gives a voice to the UI. We use **Inter** as our primary font family to ensure readability, neutrality, and clean aesthetics across all devices.
-
-## Type Scale
-
-Our scale has been expanded to offer greater visual flexibility, divided into Display, Headings, and Body.
-
 import { TypographyDemo } from '../../ui/TypographyDemo';
+
+## Overview
+
+Typography gives the interface hierarchy, pace and reading comfort. Limia uses a single sans-serif system family and a tokenized scale so teams can create contrast without inventing local text systems.
+
+## Principles
+
+Typography should communicate structure before decoration. Display styles establish entry points, heading styles organize sections and body styles optimize readability in dense product contexts.
+
+<Callout type="info" title="One family, multiple roles">
+  Keep hierarchy in size, weight and spacing. Do not introduce extra font families to solve emphasis problems that the scale already covers.
+</Callout>
+
+## Tokens
 
 <TypographyDemo language="en" />
 
-## Usage Guidelines
+## Implementation
+
+Use the documented typography utilities and semantic roles instead of custom font imports or arbitrary sizes.
 
 <DoDontContainer>
-  <DoDont type="do" title="Establish Hierarchy">
-     Use `H1`, `H2`, `H3` clearly to outline the page structure for screen readers.
+  <DoDont type="do" title="Build hierarchy intentionally">
+    Use display styles for hero moments, headings for structure and body styles for sustained reading.
   </DoDont>
-  <DoDont type="dont" title="Mix Fonts manually">
-    Avoid importing custom fonts. Stick to the system font stack provided by `Inter`.
+  <DoDont type="dont" title="Mix scales ad hoc">
+    Avoid creating one-off font sizes or bringing extra weights just to fix a single screen.
   </DoDont>
 </DoDontContainer>
 
+## Accessibility
+
+Readable typography depends on size, contrast, line height and predictable hierarchy. Headings should reflect document structure, not only appearance.
+
+<Callout type="warning" title="Structure matters">
+  Do not choose a heading level only because it looks right. Keep semantic heading order and adjust visual style with the documented token scale.
+</Callout>

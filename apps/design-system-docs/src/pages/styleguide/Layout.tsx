@@ -28,7 +28,7 @@ export function StyleGuideLayout() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
           />
         )}
       </AnimatePresence>
@@ -134,7 +134,7 @@ export function StyleGuideLayout() {
           </Button>
         </header>
 
-        <main className="mx-auto flex-1 w-full max-w-5xl overflow-y-auto p-6 lg:p-12">
+        <main className="flex-1 w-full overflow-y-auto p-6 lg:p-12">
           <DocsMDXProvider>
             <Outlet />
           </DocsMDXProvider>

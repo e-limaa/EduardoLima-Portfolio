@@ -1,16 +1,26 @@
-<DocsPageHeader
-  title="Raio (Radius)"
-  description="Tokens de raio de borda suavizam os cantos dos elementos da interface. Nosso sistema usa um raio base inteligente que escala automaticamente entre os componentes."
-  status="stable"
-/>
+export const RadiusCard = ({ token, value, exampleClass }) => (
+  <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6">
+    <div className="flex items-center justify-between">
+      <code className="rounded bg-primary/10 px-2 py-1 text-sm font-semibold text-primary">{token}</code>
+      <span className="font-mono text-xs text-muted-foreground">{value}</span>
+    </div>
+    <div className="flex h-32 items-center justify-center rounded-lg border border-dashed border-border bg-muted/50 p-8">
+      <div className={`flex h-16 w-16 items-center justify-center bg-primary shadow-sm ${exampleClass}`} />
+    </div>
+  </div>
+);
 
-<Callout type="info" title="Raio Adaptativo">
-  Nosso sistema de raio é construído sobre variáveis. Alterar `--radius` em `globals.css` atualiza todo o sistema (botões, inputs, cartões) instantaneamente.
-</Callout>
+## Visão geral
+
+Radius suaviza o sistema e ajuda a diferenciar papéis de componente. Tokens compartilhados fazem superfícies aninhadas parecerem relacionadas, e não acidentais.
+
+## Princípios
+
+Controles menores devem usar raios mais contidos do que as superfícies que os contêm. Radius faz parte da hierarquia do componente, não é uma escolha decorativa isolada.
 
 ## Tokens
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+<div className="my-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
   <RadiusCard token="rounded-sm" value="~6px" exampleClass="rounded-sm" />
   <RadiusCard token="rounded-md" value="~8px" exampleClass="rounded-md" />
   <RadiusCard token="rounded-lg" value="10px (Base)" exampleClass="rounded-lg ring-2 ring-primary" />
@@ -19,29 +29,19 @@
   <RadiusCard token="rounded-full" value="9999px" exampleClass="rounded-full" />
 </div>
 
-export const RadiusCard = ({ token, value, exampleClass }) => (
-  <div className="flex flex-col gap-4 p-6 border border-border rounded-xl bg-card">
-    <div className="flex items-center justify-between">
-      <code className="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded">{token}</code>
-      <span className="text-xs text-muted-foreground font-mono">{value}</span>
-    </div>
-    <div className="flex items-center justify-center p-8 bg-muted/50 rounded-lg border border-dashed border-border h-32">
-      <div className={`w-16 h-16 bg-primary shadow-sm flex items-center justify-center ${exampleClass}`}>
-      </div>
-    </div>
-  </div>
-);
+## Implementação
 
-## Diretrizes de Uso
-
-`rounded-md` é tipicamente usado para pequenos elementos interativos como Botões e Inputs dentro de cartões.
-`rounded-lg` ou `rounded-xl` é usado para containers como Cartões, Diálogos e Popovers.
+O sistema se ancora em `--radius` e depois mapeia isso para utilities de radius compatíveis com Tailwind. Assim, buttons, inputs, cards e overlays permanecem coerentes quando o valor-base muda.
 
 <DoDontContainer>
-  <DoDont type="do" title="Aninhar Raios Corretamente">
-    Elementos internos devem geralmente ter menos raio que seus containers para parecerem visualmente concêntricos.
+  <DoDont type="do" title="Aninhe raios com intenção">
+    Mantenha elementos internos ligeiramente mais contidos do que a superfície-pai para que a composição pareça concêntrica.
   </DoDont>
-  <DoDont type="dont" title="Misturar Formas">
-    Evite misturar botões totalmente arredondados (pílula) com inputs retangulares no mesmo grupo.
+  <DoDont type="dont" title="Misture formas sem relação">
+    Evite combinar botões pill, containers retos e inputs muito arredondados no mesmo grupo sem uma razão documentada.
   </DoDont>
 </DoDontContainer>
+
+## Acessibilidade
+
+Radius é majoritariamente visual, mas consistência de forma melhora reconhecimento e reduz ambiguidade entre campos, pills e agrupamentos densos de superfície.

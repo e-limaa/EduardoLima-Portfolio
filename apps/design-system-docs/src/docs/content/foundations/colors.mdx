@@ -1,56 +1,93 @@
 import { ColorPalette } from '../components/ColorPalette';
 
-<DocsPageHeader
-  title="Colors"
-  description="Color distinguishes our brand and helps users establish a visual hierarchy. Our color system is designed to be accessible, consistent, and intent-based."
-  status="stable"
-/>
+## Overview
 
-<Callout type="info" title="Intent-based system">
-  We define colors by **intent** (e.g., `background`, `action`, `critical`) rather than by hue (e.g., `blue`, `red`). This ensures that colors adapt correctly to different themes (Light/Dark) without code changes.
-</Callout>
+Color in Limia is semantic, layered and theme-aware. The system separates primitive scales from semantic roles so product code can express intent like `primary`, `layer-2` or `success` without coupling behavior to a specific hue.
 
-## Color Roles
+## Principles
 
-We assign specific roles to colors to communicate meaning. Using the correct role ensures consistency across the platform.
-
-### Primary & Action
-Used for the most important actions on a page. These colors should draw the user's focus.
-
-<TokenTable tokens={[
-  { name: 'primary', value: 'hsl(var(--primary))', usage: 'High-emphasis backgrounds, buttons, and icons' },
-  { name: 'primary-foreground', value: 'hsl(var(--primary-foreground))', usage: 'Text on top of primary backgrounds' }
-]} />
-
-### Backgrounds & Surfaces
-The canvas upon which content is placed.
-
-<TokenTable tokens={[
-  { name: 'background', value: 'hsl(var(--background))', usage: 'Page background' },
-  { name: 'card', value: 'hsl(var(--card))', usage: 'Component background (Cards, Popovers, Modals)' }
-]} />
-
-## Usage Guidelines
-
-### Accessibility
-
-We guarantee WCAG AA contrast ratios for all standard text pairs.
-
-<Callout type="warning" title="Contrast Check">
-  Never rely solely on color to convey meaning. Always use text labels or icons alongside status colors to support colorblind users.
-</Callout>
-
-### Do's and Don'ts
+Limia follows the same core direction used by mature systems like Carbon: color is documented by role, theme and layer before it is documented by palette. That makes it easier to scale the system across surfaces without local forks.
 
 <DoDontContainer>
-  <DoDont type="do" title="Use Semantic Names">
-    Use `bg-destructive` for error states or dangerous actions. This automatically handles red scaling and dark mode.
+  <DoDont type="do" title="Start from semantic roles">
+    Prefer `bg-primary`, `bg-layer-2`, `text-muted-foreground`, `bg-success-subtle` and `border-warning-border` before reaching for a primitive scale.
   </DoDont>
-  <DoDont type="dont" title="Hardcode Hex Values">
-    Avoid using arbitrary hex values like `#ff0000`. These break theming and require manual maintenance.
+  <DoDont type="dont" title="Treat the palette as the API">
+    Primitive scales are source material for the system. They should not become the default authoring model in apps or shared components.
   </DoDont>
 </DoDontContainer>
 
-## Palette Reference
+<Callout type="info" title="Themes and layers">
+  Light and dark are not just inversions. Layers define how surfaces stack inside each theme so cards, popovers and embedded regions keep a clear depth model.
+</Callout>
 
-<ColorPalette />
+## Tokens
+
+### Theme and layer roles
+
+<TokenTable tokens={[
+  { name: 'background.default', value: 'var(--background-default)', usage: 'Primary page canvas inside the active theme.' },
+  { name: 'background.layer-1', value: 'var(--background-layer-1)', usage: 'Base elevated surface within the current theme.' },
+  { name: 'background.layer-2', value: 'var(--background-layer-2)', usage: 'Secondary layer for nested surfaces and grouped regions.' },
+  { name: 'background.layer-3', value: 'var(--background-layer-3)', usage: 'Higher-emphasis nested layer used when depth must stay readable.' },
+  { name: 'background.inverse', value: 'var(--background-inverse)', usage: 'Inverse surface for strong contrast moments such as dark badges or hero chips.' },
+  { name: 'text.primary', value: 'var(--text-primary)', usage: 'Default readable text on page and surface backgrounds.' },
+  { name: 'text.on-color', value: 'var(--text-on-color)', usage: 'Readable text and icons over saturated action or support backgrounds.' },
+  { name: 'border.subtle', value: 'var(--border-subtle)', usage: 'Low-contrast separation between close layers.' },
+  { name: 'border.strong', value: 'var(--border-strong)', usage: 'Higher-emphasis separation for dense layouts or data regions.' }
+]} />
+
+### Action and support roles
+
+<TokenTable tokens={[
+  { name: 'action.primary.background', value: 'var(--action-primary-background)', usage: 'High-emphasis actions, active states and branded highlights.' },
+  { name: 'action.primary.active', value: 'var(--action-primary-active)', usage: 'Pressed state for primary interactive surfaces.' },
+  { name: 'support.info.background', value: 'var(--support-info-background)', usage: 'Informational banners, badges and status moments.' },
+  { name: 'support.success.background', value: 'var(--support-success-background)', usage: 'Positive confirmation and completed states.' },
+  { name: 'support.warning.background', value: 'var(--support-warning-background)', usage: 'Cautionary states that need attention without destructive tone.' },
+  { name: 'support.danger.background', value: 'var(--support-danger-background)', usage: 'Critical inline feedback and high-risk messaging.' },
+  { name: 'support.info.subtle', value: 'var(--support-info-subtle)', usage: 'Low-emphasis contextual messaging background.' },
+  { name: 'support.success.subtle', value: 'var(--support-success-subtle)', usage: 'Subtle positive surfaces for inline confirmation blocks.' },
+  { name: 'support.warning.subtle', value: 'var(--support-warning-subtle)', usage: 'Subtle caution surfaces that should not overpower the layout.' },
+  { name: 'support.danger.subtle', value: 'var(--support-danger-subtle)', usage: 'Subtle error surfaces for inline validation or non-blocking risk.' }
+]} />
+
+## Implementation
+
+Use semantic classes in components and layouts, and reserve inline token consumption for cases where utility classes are insufficient. Primitive scales should stay mostly inside token definition work, data visualization and carefully reviewed brand moments.
+
+<DoDontContainer>
+  <DoDont type="do" title="Build with roles and layers">
+    Use `bg-layer-1`, `bg-layer-2` and `border-subtle` to create depth. Use `bg-success-subtle` or `bg-warning-subtle` for support messaging that should remain contextual instead of dominant.
+  </DoDont>
+  <DoDont type="dont" title="Hardcode local palettes">
+    Avoid arbitrary hex, one-off HSL values and app-level color forks in shared surfaces. They break theme parity and make lifecycle governance harder.
+  </DoDont>
+</DoDontContainer>
+
+```tsx
+import { Badge, Card } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <Card className="border-border-subtle bg-layer-1">
+      <div className="space-y-3 rounded-lg border border-success-border bg-success-subtle p-4 text-success-subtle-foreground">
+        <Badge className="bg-success text-success-foreground">Healthy</Badge>
+        <p className="text-sm">
+          Semantic support colors preserve meaning across light and dark themes.
+        </p>
+      </div>
+    </Card>
+  );
+}
+```
+
+<ColorPalette locale="en" />
+
+## Accessibility
+
+Color should support meaning, never carry it alone. Pair support colors with text, iconography or structure, and treat contrast as a release gate for all themes and states, not only the default action palette.
+
+<Callout type="warning" title="Contrast and redundancy">
+  Never rely on color alone to communicate success, warning, error or selection. Pair it with copy, iconography, placement or another explicit state cue so low-vision and colorblind users receive the same signal.
+</Callout>

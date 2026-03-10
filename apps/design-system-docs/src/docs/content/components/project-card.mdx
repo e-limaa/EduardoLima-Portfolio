@@ -1,51 +1,82 @@
 import { ProjectCardDefaultDemo, ProjectCardGridDemo } from "../examples/project-card-demo";
 
-<DocsPageHeader
-  title="Project Card"
-  description="A highly interactive card component with mouse-tracking spotlight, image parallax, and data visualization. Used for showcasing work items."
-  status="stable"
-/>
-
-## Usage
-
-```tsx
-import { ProjectCard } from "@limia/design-system";
-
-<ProjectCard
-  title="Project Name"
-  category="Design System"
-  image="/path/to/image.jpg"
-  metric="2024"
-  color="from-blue-500 to-cyan-500"
-  onClick={() => console.log("Clicked")}
-/>
-```
-
-## Examples
-
-### Default
-
 <ComponentPreview>
   <ProjectCardDefaultDemo />
 </ComponentPreview>
 
-### Grid Layout
+## Overview
 
-The card is designed to work perfectly within a CSS grid.
+Project Card is a high-impact content card for portfolio and case-study surfaces. It combines image-led storytelling, motion, keyboard support and a branded category accent in a single reusable pattern.
+
+## Usage
+
+Use Project Card when the card itself is the entry point to a richer story, such as a case study, featured project or work archive. Prefer simpler cards when motion, full-bleed imagery or hover-driven feedback would add visual noise instead of clarity.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use it for navigable highlights">
+    Make the whole card actionable when it opens a project detail, external case study or filtered collection.
+  </DoDont>
+  <DoDont type="dont" title="Force it into dense data views">
+    Avoid Project Card inside compact admin lists or dashboards where a quieter card or table row communicates faster.
+  </DoDont>
+</DoDontContainer>
+
+## Style
+
+The component works best with strong imagery, short categories and one supporting metric. Keep the gradient accent tied to the project identity, but do not overload the card with multiple badges or extra metadata blocks.
 
 <ComponentPreview>
   <ProjectCardGridDemo />
 </ComponentPreview>
 
-## Props
+<Callout type="info" title="Image quality">
+  Use high-contrast images with a clear focal point. The component adds its own dark overlay, so avoid images that are already too dim or heavily filtered.
+</Callout>
 
-<TokenTable tokens={[
-  { name: 'title', value: 'string', usage: 'The name of the project' },
-  { name: 'category', value: 'string', usage: 'The project category (displayed with gradient)' },
-  { name: 'image', value: 'string', usage: 'URL for the background image' },
-  { name: 'metric', value: 'string (optional)', usage: 'Secondary data point (year, statistic)' },
-  { name: 'color', value: 'string', usage: 'Tailwind gradient classes (e.g., from-x to-y)' },
-  { name: 'onClick', value: 'function', usage: 'Click handler' },
-  { name: 'className', value: 'string', usage: 'Additional classes for container' }
-]} />
+## Code
 
+`ProjectCard` is exported from `@limia/design-system`. The `color` prop currently expects gradient utility classes and should stay constrained to curated brand combinations.
+
+```tsx
+import { ProjectCard } from "@limia/design-system";
+
+export function WorkShowcase() {
+  return (
+    <ProjectCard
+      title="Neo Bank App"
+      category="Fintech"
+      image="https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop"
+      metric="2024"
+      color="from-violet-500 to-purple-500"
+      onClick={() => console.log("Open project")}
+    />
+  );
+}
+```
+
+<TokenTable
+  tokens={[
+    { name: "title", value: "string", usage: "Primary project title shown in the content block." },
+    { name: "category", value: "string", usage: "Short label rendered with the gradient accent." },
+    { name: "image", value: "string", usage: "Background image URL used in the immersive surface." },
+    { name: "metric", value: "string | undefined", usage: "Optional supporting value such as year, version or KPI." },
+    { name: "color", value: "string", usage: "Curated gradient utility classes for the category accent." },
+    { name: "onClick", value: "() => void", usage: "Optional interaction handler. Enables button semantics and keyboard activation." },
+    { name: "className", value: "string", usage: "Additional classes for layout-specific sizing or placement." },
+  ]}
+/>
+
+## Accessibility
+
+- When `onClick` is provided, the card exposes keyboard activation on `Enter` and `Space`.
+- Keep `title` descriptive because it contributes to the accessible name when the card is interactive.
+- Do not hide critical information behind hover only. Category, title and supporting metric should remain visible at rest.
+
+<DoDontContainer>
+  <DoDont type="do" title="Preserve clear text contrast">
+    Check titles and metrics against the selected image so the overlay keeps text readable in both themes.
+  </DoDont>
+  <DoDont type="dont" title="Rely on cursor effects alone">
+    The spotlight cursor is decorative. It should never be the only signal that the card is clickable.
+  </DoDont>
+</DoDontContainer>

@@ -1,46 +1,63 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Table"
-  description="Table apresenta dados estruturados com alta capacidade de comparacao entre linhas e colunas."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
   <Table>
-    <TableCaption>Checkpoints de entrega do projeto</TableCaption>
     <TableHeader>
       <TableRow>
-        <TableHead>Etapa</TableHead>
-        <TableHead>Responsavel</TableHead>
+        <TableHead>Projeto</TableHead>
         <TableHead>Status</TableHead>
+        <TableHead className="text-right">Receita</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       <TableRow>
-        <TableCell>Discovery</TableCell>
-        <TableCell>Eduardo</TableCell>
-        <TableCell>Concluido</TableCell>
+        <TableCell>Limia</TableCell>
+        <TableCell>Active</TableCell>
+        <TableCell className="text-right">$12,400</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell>Prototipo</TableCell>
-        <TableCell>Limia</TableCell>
-        <TableCell>Em andamento</TableCell>
+        <TableCell>Portfolio</TableCell>
+        <TableCell>Beta</TableCell>
+        <TableCell className="text-right">$4,100</TableCell>
       </TableRow>
     </TableBody>
   </Table>
 </ComponentPreview>
 
+## Visão geral
+
+Table exibe dados estruturados em linhas e colunas com hierarquia clara.
+
 ## Uso
 
-- Use tables para dados estruturados e comparaveis.
-- Prefira cards ou listas em datasets pequenos quando o escaneamento importar mais do que a comparacao.
-- Mantenha cabecalhos explicitos e evite comprimir colunas demais em layouts estreitos.
+Use table quando a pessoa precisar escanear, comparar ou inspecionar conjuntos estruturados de dados. Evite em telas pequenas quando card ou lista comunicarem a mesma informação com mais clareza.
+
+## Estilo
+
+Mantenha labels de coluna curtos, alinhe valores de modo consistente e evite sobrecarregar as linhas com ações sem relação. Tabelas funcionam melhor quando a hierarquia fica clara antes da interação.
+
+## Código
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- Use células de cabeçalho para contexto de coluna e linha quando apropriado.
+- Não dependa apenas de alinhamento ou cor para comunicar significado.
+- Forneça alternativas responsivas quando tabelas densas quebrarem no mobile.

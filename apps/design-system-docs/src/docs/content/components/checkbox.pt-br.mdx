@@ -1,30 +1,35 @@
 import { Checkbox, Label } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Checkbox"
-  description="Checkbox permite selecionar uma ou mais opcoes independentes sem forcar uma escolha unica."
-  status="beta"
-/>
-
-<ComponentPreview className="block space-y-4">
+<ComponentPreview>
   <div className="flex items-start gap-3">
-    <Checkbox id="terms" defaultChecked />
-    <div className="grid gap-1.5">
-      <Label htmlFor="terms">Aceitar termos e politica de privacidade</Label>
-      <p className="text-sm text-muted-foreground">
-        Sempre combine o controle com um rotulo persistente e texto de apoio quando necessario.
-      </p>
+    <Checkbox id="terms" />
+    <div className="space-y-1">
+      <Label htmlFor="terms">Aceitar termos e atualizações</Label>
+      <p className="text-sm text-muted-foreground">Use para opções independentes que podem ser combinadas.</p>
     </div>
   </div>
 </ComponentPreview>
 
+## Visão geral
+
+Checkbox permite selecionar uma ou mais opções independentes.
+
 ## Uso
 
-- Use checkbox para selecoes independentes.
-- Use radio group ou select quando o usuario precisar escolher apenas uma opcao.
-- Mantenha labels explicitas o suficiente para funcionarem sem contexto extra.
+Use checkbox quando as opções forem independentes e puderem ser combinadas. Prefira radio group quando a pessoa precisar escolher exatamente uma opção em um conjunto visível.
+
+## Estilo
+
+Mantenha os labels próximos do controle e use helper text apenas quando a escolha exigir contexto extra. Evite transformar o label em um bloco longo e denso de texto.
+
+## Código
+
+```tsx
+import { Checkbox, Label } from "@limia/design-system";
+```
 
 ## Acessibilidade
 
-- Sempre associe o controle a um rotulo visivel.
-- Aumente a area de clique agrupando checkbox e texto na mesma linha.
+- Associe cada checkbox a um label visível.
+- Agrupe checkboxes relacionados com heading claro ou fieldset.
+- Não esconda a consequência do estado marcado em um texto distante.

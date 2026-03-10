@@ -1,56 +1,30 @@
-<DocsPageHeader
-  title="Localização"
-  description="Regras de governança para internacionalização, fluxos de tradução e paridade estrutural."
-  status="stable"
-/>
+## Visão geral
 
-## Visão Geral
+Localization mantém a documentação do Limia utilizável em inglês e português sem criar dois sistemas divergentes. O objetivo é paridade estrutural, e não tradução solta.
 
-Suportamos **Inglês (en)** e **Português (pt-br)**.
-O Inglês é a **Fonte da Verdade**. Toda documentação deve ser escrita primeiro em Inglês.
+## Política
 
-## Regras de Governança
+O inglês continua sendo a fonte de verdade da documentação, e o português deve preservar o mesmo escopo, conjunto de capítulos e exemplos.
 
-<DoDontContainer>
-  <DoDont type="do" title="Manter Paridade 1:1">
-    Cada página em Inglês DEVE ter um arquivo correspondente `.pt-br.mdx`. A estrutura (cabeçalhos, exemplos) deve ser idêntica.
-  </DoDont>
-  <DoDont type="dont" title="Conteúdo Divergente">
-    Não adicione exemplos ou seções na versão em Português que não existam na versão em Inglês.
-  </DoDont>
-</DoDontContainer>
+- traduza títulos, descrições, texto editorial e rótulos de exemplos
+- mantenha nomes de componentes, props, sintaxe de código e caminhos de arquivo inalterados
+- nunca adicione seções ou exemplos em um idioma que não existam no outro
 
-## Padrões de Tradução
+<Callout type="info" title="Paridade é regra de release">
+  Localização faz parte da qualidade da documentação. Arquivos ausentes ou estruturalmente diferentes devem ser tratados como defeito real de docs, não como limpeza opcional.
+</Callout>
 
-### O que Traduzir
-- Título e Descrição da página.
-- Todo o texto do corpo (parágrafos, listas).
-- Diretrizes de Uso.
-- Rótulos de exemplos (ex: "Create Project" -> "Criar Projeto").
-- Títulos e descrições de `DoDont`.
+## Fluxo
 
-### O que NÃO Traduzir
-- **Nomes de Componentes**: `ProjectCard` permanece `ProjectCard`.
-- **Nomes de Props**: `variant="default"` permanece `variant="default"`.
-- **Blocos de Código**: Imports e exemplos de código devem permanecer em Inglês/Sintaxe Técnica.
-- **Caminhos de Arquivo**: `/src/components/...`
+1. Escreva ou atualize primeiro a página em inglês.
+2. Replique a estrutura exata de capítulos no arquivo em português.
+3. Traduza o conteúdo editorial preservando código, imports e nomes de API.
+4. Rode os checks do workspace para capturar pares ausentes ou desvio estrutural.
 
-## Política de Fallback
+Quando uma tradução estiver temporariamente bloqueada, use o fallback apenas como exceção curta e documente claramente a lacuna.
 
-Se uma tradução causar um erro crítico de build ou estiver incompleta:
-1.  O arquivo `.pt-br.mdx` pode importar o componente em Inglês como um fallback temporário.
-2.  Essa exceção deve ser documentada.
-3.  Os usuários verão conteúdo em Inglês, mas permanecerão no contexto/URL em Português.
+## Referências
 
-## Integridade Estrutural
-
-Forçamos a paridade estrutural via verificações automatizadas. O build falhará se:
-- Um arquivo em Inglês existir sem um arquivo correspondente em Português.
-- `registry.ts` apontar para um arquivo inexistente.
-
-## Estratégia de Roteamento
-
-Atualmente, usamos uma estratégia de roteamento **Baseada em Estado** via `LanguageProvider`.
-- **Prós**: Troca instantânea sem recarregamento; mantém posição de scroll; estrutura de URL mais simples.
-- **Contras**: Links diretos para um idioma específico exigem lógica adicional (atualmente padroniza pela preferência do usuário/browser).
-- **Recomendação**: Manter roteamento por estado para este SPA. Melhorias futuras podem adicionar um parâmetro de query `?lang=pt-br` para compartilhamento, em vez de prefixos de caminho completos.
+- `apps/design-system-docs/src/lib/i18n.ts`
+- `apps/design-system-docs/src/docs/registry.ts`
+- `npm run check`

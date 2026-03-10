@@ -1,65 +1,102 @@
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-    Button,
-    Input
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
 } from "@limia/design-system";
-import { Label } from '@limia/design-system';
-
-<DocsPageHeader
-  title="Card"
-  description="Cards contêm conteúdo e ações sobre um único assunto. São containers flexíveis que agrupam informações relacionadas."
-  status="stable"
-/>
-
-## Anatomia
-
-Cards são compostos de slots primitivos que você pode compor:
-- `CardHeader`: Container de título e descrição.
-- `CardContent`: O corpo principal.
-- `CardFooter`: Área de ações.
-
-## Exemplos
-
-### Card Simples
-Um layout padrão para fluxos de criação ou resumos.
 
 <ComponentPreview>
-  <Card className="w-[350px]">
+  <Card className="mx-auto w-full max-w-sm">
     <CardHeader>
       <CardTitle>Criar projeto</CardTitle>
-      <CardDescription>Faça deploy do seu novo projeto em um clique.</CardDescription>
+      <CardDescription>Faça deploy de um novo projeto com os padrões do Limia já configurados.</CardDescription>
     </CardHeader>
     <CardContent>
       <form>
-        <div className="grid w-full items-center gap-4">
-          <div className="flex flex-col space-y-1.5">
+        <div className="grid gap-4">
+          <div className="space-y-1.5">
             <Label htmlFor="name">Nome</Label>
-            <Input id="name" placeholder="Nome do seu projeto" />
+            <Input id="name" placeholder="Nome do projeto" />
           </div>
         </div>
       </form>
     </CardContent>
     <CardFooter className="flex justify-between">
       <Button variant="outline">Cancelar</Button>
-      <Button variant="default">Deploy</Button>
+      <Button>Deploy</Button>
     </CardFooter>
   </Card>
 </ComponentPreview>
 
-## Diretrizes de Uso
+## Visão geral
+
+Cards agrupam conteúdo, controles e feedback em uma única superfície. Eles são úteis quando o usuário precisa escanear ou agir sobre uma entidade por vez sem perder o contexto da página.
+
+## Uso
+
+Monte cards a partir dos slots públicos, em vez de criar wrappers ad hoc: `CardHeader`, `CardTitle`, `CardDescription`, `CardContent` e `CardFooter`. Nem todo card precisa de todos os slots, mas a estrutura deve continuar previsível quando houver ações.
 
 <DoDontContainer>
-  <DoDont type="do" title="Agrupar conteúdo relacionado">
-    Use cards para separar entidades distintas (ex: um Projeto, um Usuário, um Método de Pagamento).
+  <DoDont type="do" title="Agrupe um assunto por card">
+    Mantenha cada card focado em um objeto, tarefa ou resumo para que a leitura continue rápida.
   </DoDont>
-  <DoDont type="dont" title="Sobrecarregar com ações">
-    Mantenha o rodapé simples. Se um card tem muitas ações, considere uma página dedicada.
+  <DoDont type="dont" title="Empilhar responsabilidades demais">
+    Se um card começar a se comportar como uma página inteira com várias seções, tabs e muitas ações, quebre isso em uma tela ou layout dedicado.
   </DoDont>
 </DoDontContainer>
 
+## Estilo
 
+Cards são superfícies estruturais discretas. Use espaçamento, hierarquia e ordem dos slots para criar ritmo antes de adicionar decoração mais forte. As ações do footer devem parecer subordinadas ao conteúdo do card, não competir com a ação principal da página.
+
+<Callout type="info" title="Hierarquia de superfícies">
+  Em páginas densas, prefira um estilo dominante de card e varie o conteúdo interno. Muitos tratamentos visuais diferentes transformam o layout em um mosaico inconsistente.
+</Callout>
+
+## Código
+
+```tsx
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@limia/design-system";
+
+export function AccountCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Billing</CardTitle>
+        <CardDescription>Review invoices and payment status.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground">
+          Your next invoice will be generated on April 1.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+## Acessibilidade
+
+- Cards são containers, não landmarks por padrão. Só adicione semântica extra quando a estrutura realmente exigir.
+- Mantenha headings significativos para que usuários de leitor de tela entendam cada card ao navegar pela hierarquia.
+- Se o card inteiro se tornar clicável, forneça foco visível claro e um nome acessível explícito.
+
+<DoDontContainer>
+  <DoDont type="do" title="Preserve estrutura legível">
+    Use a ordem dos slots para manter heading primeiro, corpo depois e ações por último sempre que possível.
+  </DoDont>
+  <DoDont type="dont" title="Esconder ações sem contexto">
+    Evite ações de footer só com ícone a menos que o significado seja óbvio e esteja rotulado para tecnologia assistiva.
+  </DoDont>
+</DoDontContainer>

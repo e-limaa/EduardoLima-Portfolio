@@ -1,3 +1,19 @@
-# Components Overview
+## Overview
 
-Coming soon.
+The Components collection documents the public UI building blocks of Limia, from low-level inputs and feedback primitives to higher-level editorial compositions such as Section and Project Card.
+
+## Usage
+
+Start with the simplest primitive that solves the problem, then compose upward only when the pattern repeats across the product. Components in this collection are expected to work with Limia tokens, documented lifecycle states and English/Portuguese parity.
+
+## Style
+
+Limia components should inherit their character from semantic tokens, spacing rhythm and typography hierarchy instead of one-off hardcoded values. The docs use the same rule: each component page explains emphasis, density and visual behavior before implementation details.
+
+## Code
+
+Import public components from `@limia/design-system` and keep product-specific wrappers in the app layer. If a behavior depends on business logic, routing or content rules, document the pattern separately before promoting it as a package API.
+
+## Accessibility
+
+Every component page should make keyboard interaction, naming and state communication explicit. If the component is not yet fully reviewed, the page should still state the current accessibility expectations and known limits.

@@ -1,30 +1,42 @@
 import { Label, RadioGroup, RadioGroupItem } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Radio Group"
-  description="Radio group atende selecao unica quando todas as opcoes devem permanecer visiveis."
-  status="beta"
-/>
-
-<ComponentPreview className="block">
-  <RadioGroup defaultValue="starter" className="max-w-sm">
-    <div className="flex items-center gap-3">
-      <RadioGroupItem value="starter" id="starter" />
-      <Label htmlFor="starter">Plano Starter</Label>
+<ComponentPreview>
+  <RadioGroup defaultValue="design" className="space-y-3">
+    <div className="flex items-center space-x-2">
+      <RadioGroupItem value="design" id="design" />
+      <Label htmlFor="design">Design</Label>
     </div>
-    <div className="flex items-center gap-3">
-      <RadioGroupItem value="growth" id="growth" />
-      <Label htmlFor="growth">Plano Growth</Label>
+    <div className="flex items-center space-x-2">
+      <RadioGroupItem value="build" id="build" />
+      <Label htmlFor="build">Build</Label>
     </div>
-    <div className="flex items-center gap-3">
-      <RadioGroupItem value="scale" id="scale" />
-      <Label htmlFor="scale">Plano Scale</Label>
+    <div className="flex items-center space-x-2">
+      <RadioGroupItem value="ship" id="ship" />
+      <Label htmlFor="ship">Ship</Label>
     </div>
   </RadioGroup>
 </ComponentPreview>
 
+## Visão geral
+
+Radio group permite escolher uma opção em um conjunto visível.
+
 ## Uso
 
-- Use radio group quando o usuario precisa escolher exatamente uma opcao em um conjunto curto e visivel.
-- Prefira select quando a lista for maior ou o espaco em tela estiver limitado.
-- Mantenha labels mutuamente exclusivas e faceis de comparar.
+Use radio group quando todas as opções precisarem permanecer visíveis e mutuamente exclusivas. Prefira select quando o conjunto for maior ou quando o espaço estiver mais restrito.
+
+## Estilo
+
+Mantenha labels de opção comparáveis em comprimento para facilitar o scan. Ordene as opções com intenção, e não alfabeticamente por padrão.
+
+## Código
+
+```tsx
+import { RadioGroup, RadioGroupItem } from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- Agrupe os radios sob um label compartilhado e claro.
+- Mantenha o estado selecionado visível além da cor.
+- Evite dividir uma única decisão em múltiplos radio groups.

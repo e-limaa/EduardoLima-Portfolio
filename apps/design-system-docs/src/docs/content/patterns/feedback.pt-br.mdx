@@ -1,51 +1,101 @@
-import { Button, Card, CardContent } from '@limia/design-system';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Skeleton,
+} from "@limia/design-system";
+import { CheckCircle2, LoaderCircle } from "lucide-react";
 
-<DocsPageHeader 
-  title="Feedback" 
-  description="Padrões para comunicar o status do sistema ao usuário." 
-  status="draft" 
-/>
+## Visão geral
 
-## Princípios
+Feedback é o pattern para exibir progresso, sucesso, alerta e erro ao longo dos fluxos do produto. Um bom feedback reduz ambiguidade e torna o estado do sistema visível sem interromper o usuário além do necessário.
 
-O sistema deve sempre manter os usuários informados sobre o que está acontecendo, através de feedback apropriado em um tempo razoável.
+## Quando usar
 
-## Estados de Carregamento
+Use este pattern sempre que a interface mudar de estado por causa de uma ação do usuário, processamento em segundo plano ou condição do sistema. Combine a superfície com a urgência: inline para feedback local, toast para confirmação global transitória, alert para mensagem contextual importante e dialog para decisões bloqueantes.
 
-Use spinners de carregamento dentro de botões para ações iniciadas pelo usuário.
+<Callout type="info" title="Escale com intenção">
+  Comece pela superfície menos intrusiva que ainda comunica o problema ou resultado com clareza.
+</Callout>
+
+## Composição
+
+Feedback de carregamento deve ficar próximo da ação que o disparou. Mensagens de sucesso e erro devem explicar tanto o resultado quanto o próximo passo quando houver recuperação necessária.
 
 <ComponentPreview>
-  <div className="flex gap-4">
-    <Button disabled>
-        <span className="mr-2 animate-spin">⟳</span>
-        Salvando...
-    </Button>
-    <Button variant="secondary" disabled>
+  <div className="space-y-4">
+    <div className="flex flex-wrap gap-3">
+      <Button disabled>
+        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+        Salvando alterações
+      </Button>
+      <Button variant="secondary" disabled>
         Processando
-    </Button>
+      </Button>
+    </div>
+
+    <Alert>
+      <CheckCircle2 className="h-4 w-4" />
+      <AlertTitle>Salvo com sucesso</AlertTitle>
+      <AlertDescription>
+        Suas preferências foram atualizadas e já estão ativas no workspace atual.
+      </AlertDescription>
+    </Alert>
+
+    <div className="rounded-xl border border-border bg-card/60 p-4">
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-2/3" />
+      </div>
+    </div>
   </div>
 </ComponentPreview>
 
-## Alertas e Mensagens
+## Código
 
-Use cores semânticas para indicar a natureza da mensagem.
+Monte feedback a partir dos primitives do Limia e mantenha a lógica de negócio na camada do produto. Use alerts para mensagem contextual, affordances de loading perto do controle que iniciou a ação e toasts para confirmações globais não bloqueantes.
 
-<div className="grid gap-4 my-6">
-    <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-900 text-green-800 dark:text-green-300 flex gap-3 items-start">
-        <CheckCircle2 size={20} className="mt-0.5 shrink-0" />
-        <div>
-            <h4 className="font-semibold text-sm">Sucesso</h4>
-            <p className="text-sm opacity-90">Suas alterações foram salvas com sucesso.</p>
-        </div>
+```tsx
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+} from "@limia/design-system";
+import { LoaderCircle } from "lucide-react";
+
+export function SavePanel({ saving }: { saving: boolean }) {
+  return (
+    <div className="space-y-4">
+      <Button disabled={saving}>
+        {saving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : null}
+        {saving ? "Saving changes" : "Save changes"}
+      </Button>
+
+      <Alert>
+        <AlertTitle>Need attention</AlertTitle>
+        <AlertDescription>
+          Review the highlighted fields before publishing.
+        </AlertDescription>
+      </Alert>
     </div>
+  );
+}
+```
 
-     <div className="p-4 rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-900 text-red-800 dark:text-red-300 flex gap-3 items-start">
-        <AlertCircle size={20} className="mt-0.5 shrink-0" />
-        <div>
-            <h4 className="font-semibold text-sm">Erro</h4>
-            <p className="text-sm opacity-90">Não foi possível conectar ao servidor. Por favor, tente novamente.</p>
-        </div>
-    </div>
-</div>
+## Acessibilidade
 
+- Anuncie mudanças de estado de acordo com a urgência. Problemas críticos não devem depender apenas de toast.
+- Mantenha feedback de loading próximo da ação iniciadora para que usuários de teclado e leitor de tela entendam o que mudou.
+- Escreva mensagens de erro acionáveis, que ajudem na recuperação em vez de textos genéricos de falha.
+
+<DoDontContainer>
+  <DoDont type="do" title="Explique o próximo passo">
+    Combine erros e alertas com a próxima ação, como tentar novamente, editar um campo ou verificar a conexão.
+  </DoDont>
+  <DoDont type="dont" title="Esconder progresso só em motion">
+    Spinners e shimmer são apoio visual, mas o rótulo ainda precisa dizer o que está carregando ou salvando.
+  </DoDont>
+</DoDontContainer>

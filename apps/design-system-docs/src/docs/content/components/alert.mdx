@@ -1,18 +1,12 @@
 import { Alert, AlertDescription, AlertTitle } from '@limia/design-system';
 import { AlertTriangle, Info } from 'lucide-react';
 
-<DocsPageHeader
-  title="Alert"
-  description="Alert communicates persistent inline feedback that should remain visible until the user has acknowledged it."
-  status="beta"
-/>
-
 <ComponentPreview className="block space-y-4">
   <Alert>
     <Info />
     <AlertTitle>Heads up</AlertTitle>
     <AlertDescription>
-      Use default alerts for contextual guidance, onboarding reminders and status notes.
+      Use default alerts for contextual guidance, onboarding reminders and persistent notes.
     </AlertDescription>
   </Alert>
   <Alert variant="destructive">
@@ -24,8 +18,28 @@ import { AlertTriangle, Info } from 'lucide-react';
   </Alert>
 </ComponentPreview>
 
+## Overview
+
+Alert communicates persistent inline feedback that should remain visible until the user has acknowledged it.
+
 ## Usage
 
-- Use default alerts for informational messages that should persist on screen.
-- Use `variant="destructive"` for errors with consequence or urgency.
-- Prefer alerts over toast when the message must stay attached to a form or page section.
+- Use default alerts for informational messages that should stay attached to a page or form.
+- Use `variant="destructive"` for urgent or blocking errors.
+- Prefer alerts over toast when the message must remain visible in context.
+
+## Style
+
+Pair the alert with a short title and a compact description. Keep the message actionable and close to the element or section it refers to.
+
+## Code
+
+```tsx
+import { Alert, AlertDescription, AlertTitle } from "@limia/design-system";
+```
+
+## Accessibility
+
+- Alerts should be concise enough to announce clearly to assistive technologies.
+- Do not rely on color alone to communicate severity.
+- Keep the alert near the form or section that requires attention.

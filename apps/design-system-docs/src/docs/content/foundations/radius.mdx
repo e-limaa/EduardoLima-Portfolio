@@ -1,15 +1,26 @@
+export const RadiusCard = ({ token, value, exampleClass }) => (
+  <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6">
+    <div className="flex items-center justify-between">
+      <code className="rounded bg-primary/10 px-2 py-1 text-sm font-semibold text-primary">{token}</code>
+      <span className="font-mono text-xs text-muted-foreground">{value}</span>
+    </div>
+    <div className="flex h-32 items-center justify-center rounded-lg border border-dashed border-border bg-muted/50 p-8">
+      <div className={`flex h-16 w-16 items-center justify-center bg-primary shadow-sm ${exampleClass}`} />
+    </div>
+  </div>
+);
 
-# Radius
+## Overview
 
-Border radius tokens smooth the corners of UI elements. Our system uses a smart base radius that scales automatically across components.
+Radius softens the system and helps separate component roles. Shared radius tokens make nested surfaces feel related instead of visually accidental.
 
-<Callout type="info" title="Adaptive Radius">
-  Our radius system is built on variables. Changing `--radius` in `globals.css` updates the entire system (buttons, inputs, cards) instantly.
-</Callout>
+## Principles
+
+Smaller controls should usually use tighter radii than the surfaces that contain them. Radius is part of component hierarchy, not an isolated decoration choice.
 
 ## Tokens
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+<div className="my-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
   <RadiusCard token="rounded-sm" value="~6px" exampleClass="rounded-sm" />
   <RadiusCard token="rounded-md" value="~8px" exampleClass="rounded-md" />
   <RadiusCard token="rounded-lg" value="10px (Base)" exampleClass="rounded-lg ring-2 ring-primary" />
@@ -18,29 +29,19 @@ Border radius tokens smooth the corners of UI elements. Our system uses a smart 
   <RadiusCard token="rounded-full" value="9999px" exampleClass="rounded-full" />
 </div>
 
-export const RadiusCard = ({ token, value, exampleClass }) => (
-  <div className="flex flex-col gap-4 p-6 border border-border rounded-xl bg-card">
-    <div className="flex items-center justify-between">
-      <code className="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded">{token}</code>
-      <span className="text-xs text-muted-foreground font-mono">{value}</span>
-    </div>
-    <div className="flex items-center justify-center p-8 bg-muted/50 rounded-lg border border-dashed border-border h-32">
-      <div className={`w-16 h-16 bg-primary shadow-sm flex items-center justify-center ${exampleClass}`}>
-      </div>
-    </div>
-  </div>
-);
+## Implementation
 
-## Usage Guidelines
-
-`rounded-md` is typically used for small interactive elements like Buttons and Inputs inside cards.
-`rounded-lg` or `rounded-xl` is used for containers like Cards, Dialogs, and Popovers.
+The system is anchored on `--radius`, then mapped into Tailwind-compatible radius utilities. This keeps buttons, inputs, cards and overlays visually coherent when the base value changes.
 
 <DoDontContainer>
-  <DoDont type="do" title="Nest Radii Correctly">
-    Inner elements should generally have less radius than their containers to look visually concentric.
+  <DoDont type="do" title="Nest radii intentionally">
+    Keep inner elements slightly tighter than their parent surface so the stack feels concentric.
   </DoDont>
-  <DoDont type="dont" title="Mix Shapes">
-    Avoid mixing fully rounded (pill) buttons with sharp rectangular inputs in the same group.
+  <DoDont type="dont" title="Mix unrelated shapes">
+    Avoid combining pill buttons, sharp containers and highly rounded inputs in the same cluster without a documented reason.
   </DoDont>
 </DoDontContainer>
+
+## Accessibility
+
+Radius is mostly visual, but shape consistency improves recognition and reduces ambiguity between input fields, pills and dense surface groupings.

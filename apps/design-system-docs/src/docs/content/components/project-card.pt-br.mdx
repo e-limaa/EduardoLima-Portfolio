@@ -1,51 +1,82 @@
 import { ProjectCardDefaultDemo, ProjectCardGridDemo } from "../examples/project-card-demo";
 
-<DocsPageHeader
-  title="Card de Projeto"
-  description="Um card interativo complexo com efeito spotlight, paralaxe de imagem e visualização de dados. Usado para exibir itens do portfólio."
-  status="stable"
-/>
-
-## Uso
-
-```tsx
-import { ProjectCard } from "@limia/design-system";
-
-<ProjectCard
-  title="Nome do Projeto"
-  category="Design System"
-  image="/caminho/para/imagem.jpg"
-  metric="2024"
-  color="from-blue-500 to-cyan-500"
-  onClick={() => console.log("Clicado")}
-/>
-```
-
-## Exemplos
-
-### Padrão
-
 <ComponentPreview>
   <ProjectCardDefaultDemo />
 </ComponentPreview>
 
-### Layout em Grid
+## Visão geral
 
-O card foi projetado para funcionar perfeitamente dentro de um grid CSS.
+Project Card é um card de alto impacto para superfícies de portfólio e cases. Ele combina narrativa visual com imagem, motion, suporte a teclado e um acento de categoria alinhado à identidade da marca.
+
+## Uso
+
+Use Project Card quando o próprio card for a entrada para uma história mais rica, como um case study, projeto em destaque ou arquivo de trabalhos. Prefira cards mais simples quando motion, imagem em tela cheia ou feedback baseado em hover adicionarem ruído em vez de clareza.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use para destaques navegáveis">
+    Faça o card inteiro ser acionável quando ele abrir o detalhe do projeto, um case externo ou uma coleção filtrada.
+  </DoDont>
+  <DoDont type="dont" title="Forçar em views densas">
+    Evite Project Card em listas administrativas compactas ou dashboards onde um card mais discreto ou uma linha de tabela comunica melhor.
+  </DoDont>
+</DoDontContainer>
+
+## Estilo
+
+O componente funciona melhor com imagens fortes, categorias curtas e uma única métrica de apoio. Mantenha o gradiente ligado à identidade do projeto, mas evite sobrecarregar o card com múltiplos badges ou blocos extras de metadados.
 
 <ComponentPreview>
   <ProjectCardGridDemo />
 </ComponentPreview>
 
-## Props
+<Callout type="info" title="Qualidade da imagem">
+  Use imagens com bom contraste e ponto focal claro. O componente já adiciona um overlay escuro, então evite imagens que já estejam muito escuras ou excessivamente filtradas.
+</Callout>
 
-<TokenTable tokens={[
-  { name: 'title', value: 'string', usage: 'O nome do projeto' },
-  { name: 'category', value: 'string', usage: 'A categoria do projeto (exibida com gradiente)' },
-  { name: 'image', value: 'string', usage: 'URL para a imagem de fundo' },
-  { name: 'metric', value: 'string (opcional)', usage: 'Ponto de dados secundário (ano, estatística)' },
-  { name: 'color', value: 'string', usage: 'Classes de gradiente Tailwind (ex: from-x to-y)' },
-  { name: 'onClick', value: 'function', usage: 'Manipulador de clique' },
-  { name: 'className', value: 'string', usage: 'Classes adicionais para o container' }
-]} />
+## Código
 
+`ProjectCard` é exportado por `@limia/design-system`. Hoje a prop `color` espera classes utilitárias de gradiente e deve continuar restrita a combinações de marca previamente definidas.
+
+```tsx
+import { ProjectCard } from "@limia/design-system";
+
+export function WorkShowcase() {
+  return (
+    <ProjectCard
+      title="Neo Bank App"
+      category="Fintech"
+      image="https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop"
+      metric="2024"
+      color="from-violet-500 to-purple-500"
+      onClick={() => console.log("Open project")}
+    />
+  );
+}
+```
+
+<TokenTable
+  tokens={[
+    { name: "title", value: "string", usage: "Título principal exibido no bloco de conteúdo." },
+    { name: "category", value: "string", usage: "Rótulo curto renderizado com o acento em gradiente." },
+    { name: "image", value: "string", usage: "URL da imagem de fundo usada na superfície imersiva." },
+    { name: "metric", value: "string | undefined", usage: "Valor opcional de apoio, como ano, versão ou KPI." },
+    { name: "color", value: "string", usage: "Classes utilitárias de gradiente para o acento da categoria." },
+    { name: "onClick", value: "() => void", usage: "Manipulador opcional de interação. Ativa semântica de botão e teclado." },
+    { name: "className", value: "string", usage: "Classes adicionais para tamanho ou posicionamento no layout." },
+  ]}
+/>
+
+## Acessibilidade
+
+- Quando `onClick` é informado, o card expõe ativação por teclado com `Enter` e `Space`.
+- Mantenha `title` descritivo, porque ele contribui para o nome acessível quando o card é interativo.
+- Não esconda informação crítica apenas em hover. Categoria, título e métrica de apoio devem continuar visíveis em repouso.
+
+<DoDontContainer>
+  <DoDont type="do" title="Preserve contraste legível">
+    Verifique títulos e métricas contra a imagem escolhida para que o overlay mantenha a leitura em ambos os temas.
+  </DoDont>
+  <DoDont type="dont" title="Depender só do cursor">
+    O spotlight do cursor é decorativo. Ele nunca deve ser o único sinal de que o card é clicável.
+  </DoDont>
+</DoDontContainer>

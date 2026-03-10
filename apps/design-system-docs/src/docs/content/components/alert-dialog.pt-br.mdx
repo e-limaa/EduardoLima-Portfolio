@@ -11,12 +11,6 @@ import {
   Button,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Alert Dialog"
-  description="Alert dialog confirma acoes destrutivas ou de alto impacto antes da execucao."
-  status="beta"
-/>
-
 <ComponentPreview>
   <AlertDialog>
     <AlertDialogTrigger asChild>
@@ -26,7 +20,7 @@ import {
       <AlertDialogHeader>
         <AlertDialogTitle>Excluir este projeto?</AlertDialogTitle>
         <AlertDialogDescription>
-          Esta acao nao pode ser desfeita e removera todos os assets relacionados.
+          Esta ação remove o projeto permanentemente e não pode ser desfeita.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
@@ -37,8 +31,34 @@ import {
   </AlertDialog>
 </ComponentPreview>
 
+## Visão geral
+
+Alert dialog confirma ações destrutivas ou de alto impacto antes da execução.
+
 ## Uso
 
-- Use alert dialog para acoes destrutivas, irreversiveis ou de alto risco.
-- Deixe o titulo explicito sobre a consequencia.
-- Prefira dialog ou sheet para edicoes em varios passos e tarefas nao destrutivas.
+Use alert dialog quando a pessoa estiver prestes a disparar uma mudança destrutiva, custosa ou difícil de recuperar. Não use para confirmações rotineiras que só adicionam atrito sem aumentar segurança.
+
+## Estilo
+
+Mantenha o título direto e orientado à consequência. A pessoa precisa entender o que vai acontecer e se existe reversão antes de escolher.
+
+## Código
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- O dialog mantém o foco preso enquanto estiver aberto.
+- Título e descrição devem explicar consequência e recuperação com clareza.
+- Ações destrutivas precisam de labels explícitos, como "Excluir projeto", em vez de genéricos como "Confirmar".

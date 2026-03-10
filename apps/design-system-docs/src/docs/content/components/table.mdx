@@ -1,46 +1,63 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Table"
-  description="Table presents structured data with strong comparability across rows and columns."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
   <Table>
-    <TableCaption>Project delivery checkpoints</TableCaption>
     <TableHeader>
       <TableRow>
-        <TableHead>Stage</TableHead>
-        <TableHead>Owner</TableHead>
+        <TableHead>Project</TableHead>
         <TableHead>Status</TableHead>
+        <TableHead className="text-right">Revenue</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       <TableRow>
-        <TableCell>Discovery</TableCell>
-        <TableCell>Eduardo</TableCell>
-        <TableCell>Done</TableCell>
+        <TableCell>Limia</TableCell>
+        <TableCell>Active</TableCell>
+        <TableCell className="text-right">$12,400</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell>Prototype</TableCell>
-        <TableCell>Limia</TableCell>
-        <TableCell>In progress</TableCell>
+        <TableCell>Portfolio</TableCell>
+        <TableCell>Beta</TableCell>
+        <TableCell className="text-right">$4,100</TableCell>
       </TableRow>
     </TableBody>
   </Table>
 </ComponentPreview>
 
+## Overview
+
+Table displays structured data in rows and columns with clear hierarchy.
+
 ## Usage
 
-- Use tables for comparable structured data.
-- Prefer cards or lists on small datasets when scanning matters more than comparison.
-- Keep headers explicit and avoid squeezing too many columns into narrow layouts.
+Use table when users need to scan, compare or inspect structured datasets. Avoid it on small screens when a card or list pattern communicates the same information more clearly.
+
+## Style
+
+Keep column labels short, align values consistently and avoid overcrowding rows with unrelated actions. Tables work best when hierarchy is obvious before interaction.
+
+## Code
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@limia/design-system";
+```
+
+## Accessibility
+
+- Use header cells for column and row context where appropriate.
+- Do not rely on alignment or color alone to communicate meaning.
+- Provide responsive alternatives when dense tables break down on mobile.

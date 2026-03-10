@@ -1,35 +1,51 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Accordion"
-  description="Accordion revela conteudo denso de forma progressiva, mantendo secoes relacionadas no mesmo fluxo."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
   <Accordion type="single" collapsible className="w-full max-w-2xl">
     <AccordionItem value="item-1">
       <AccordionTrigger>O que deve entrar em um accordion?</AccordionTrigger>
       <AccordionContent>
-        Use para detalhes opcionais, FAQs e orientacoes secundarias que apoiam a tarefa principal.
+        Guidance secundário, FAQs e detalhes opcionais que apoiam a tarefa principal.
       </AccordionContent>
     </AccordionItem>
     <AccordionItem value="item-2">
       <AccordionTrigger>Quando devo evitar?</AccordionTrigger>
       <AccordionContent>
-        Evite esconder acoes criticas ou informacoes que o usuario precisa antes de decidir.
+        Evite esconder requisitos, preços ou consequências destrutivas que a pessoa precisa conhecer antes de decidir.
       </AccordionContent>
     </AccordionItem>
   </Accordion>
 </ComponentPreview>
 
+## Visão geral
+
+Accordion revela conteúdo denso de forma progressiva, mantendo seções relacionadas dentro do mesmo fluxo.
+
 ## Uso
 
-- Use `type="single"` quando apenas um painel deve permanecer aberto.
-- Use `type="multiple"` em filtros, configuracoes ou fluxos de inspecao.
-- Mantenha labels claras no trigger e conteudo objetivo.
+Use accordion quando o conteúdo for relacionado, mas não tiver a mesma prioridade no primeiro olhar.
+
+- Use `type="single"` quando apenas um painel deve permanecer aberto por vez.
+- Use `type="multiple"` para filtros, configurações ou fluxos de inspeção.
+- Mantenha os labels dos triggers curtos o bastante para leitura em lista.
+
+## Estilo
+
+Os triggers devem se comportar como labels concisos de seção, não como resumos longos. Mantenha os blocos internos compactos e evite aninhar interações complexas em muitos níveis de disclosure.
+
+## Código
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@limia/design-system";
+```
 
 ## Acessibilidade
 
-- Os botões do trigger sao acessiveis por teclado por padrao.
-- Nao esconda validacoes obrigatorias, precificacao ou consequencias destrutivas em conteudo recolhido.
+- Triggers são acessíveis por teclado por padrão.
+- Use labels claros para que o conteúdo recolhido continue compreensível no estado fechado.
+- Não esconda validação crítica, informação legal ou consequências destrutivas dentro de painéis colapsados.

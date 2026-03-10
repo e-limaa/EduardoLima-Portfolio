@@ -1,61 +1,39 @@
-<DocsPageHeader
-  title="Contribuindo"
-  description="Como propor, construir e lançar mudanças no Design System."
-  status="stable"
-/>
+## Visão geral
 
-O Design System é um produto vivo que evolui com as necessidades do time. Aceitamos contribuições de todos.
+Contributing define como mudanças entram no Limia sem transformar o design system em um depósito de necessidades específicas do app. O processo existe para proteger qualidade de API, disciplina de tokens e paridade documental.
 
-## Workflow
+## Política
 
-<div className="relative border-l-2 border-border ml-4 space-y-12 my-12">
-    <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">1. Proposta</h3>
-        <p className="text-muted-foreground text-sm">
-            Antes de codar, abra uma issue ou discussão. Explique o problema.
-            Verifique se algo existente não resolve.
-        </p>
-    </div>
+Toda contribuição deve começar por um problema claro, e não apenas por uma ideia de implementação. Antes de adicionar ou alterar um componente, confirme se a necessidade é:
 
-    <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">2. Design & Spec</h3>
-        <p className="text-muted-foreground text-sm">
-            Defina props, variações e estados. Considere acessibilidade desde o início.
-        </p>
-    </div>
+- um primitive reutilizável do pacote
+- uma composição específica de produto
+- um pattern apenas de documentação
+- uma lacuna de token ou governança, e não de componente
 
-    <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">3. Implementação</h3>
-        <p className="text-muted-foreground text-sm">
-            Construa o componente em `packages/limia-design-system`.
-            Siga as regras de `Do / Don't`.
-        </p>
-    </div>
+<Callout type="info" title="Source of truth primeiro">
+  As mudanças precisam entrar no source of truth do pacote ou dos tokens. Cópias locais no app e overrides pontuais não substituem trabalho de API pública.
+</Callout>
 
-     <div className="relative pl-8">
-        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-primary"></div>
-        <h3 className="font-bold text-lg mb-2">4. Documentação</h3>
-        <p className="text-muted-foreground text-sm">
-            Crie uma página MDX em `apps/design-system-docs`. Inclua exemplos interativos.
-        </p>
-    </div>
-</div>
+## Fluxo
 
-## Padrões de Código
-
-- **Typescript**: Tipagem estrita. Evite `any`.
-- **Tailwind**: Use nossos tokens. Não use valores arbitrários `w-[350px]`.
-- **Exports**: Exporte do `index.ts`.
+1. Enquadre o problema e confirme que o design system é a camada certa para resolvê-lo.
+2. Defina API, estados, semântica e lifecycle alvo antes de codar.
+3. Implemente em `packages/limia-design-system` ou `packages/limia-tokens`, não apenas nos consumidores.
+4. Documente a mudança em inglês e português e atualize o metadata de lifecycle quando necessário.
+5. Valide build, paridade e adoção antes de considerar a mudança pronta.
 
 <DoDontContainer>
-  <DoDont type="do" title="API Pequena">
-    Mantenha poucas props. Use composição (`slots` ou `asChild`).
+  <DoDont type="do" title="Mantenha a API pequena">
+    Prefira composição, slots e variantes semânticas em vez de várias props criadas para uma única tela.
   </DoDont>
-  <DoDont type="dont" title="Regra de Negócio">
-    Nunca inclua lógica de negócio (ex: fetch de dados) no DS. Componentes devem ser apenas visuais.
+  <DoDont type="dont" title="Levar lógica de produto para o pacote">
+    Fetch de dados, analytics, regras de roteamento e copy específica do app devem ficar fora do pacote do design system.
   </DoDont>
 </DoDontContainer>
 
+## Referências
+
+- `packages/limia-design-system/CONTRIBUTING.md`
+- `packages/limia-design-system/COMPONENT_STATUS.md`
+- `apps/design-system-docs/src/docs/registry.ts`

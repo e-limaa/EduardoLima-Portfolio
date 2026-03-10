@@ -1,14 +1,12 @@
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@limia/design-system';
-
-<DocsPageHeader
-  title="Dropdown Menu"
-  description="Dropdown Menu presents compact contextual actions without breaking page flow."
-  status="beta"
-/>
-
-## Usage
-
-Use Dropdown Menu for secondary actions, mode switching and compact action lists anchored to a trigger.
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@limia/design-system';
 
 <ComponentPreview>
   <DropdownMenu>
@@ -16,43 +14,40 @@ Use Dropdown Menu for secondary actions, mode switching and compact action lists
       <Button variant="outline">Open menu</Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuLabel>Profile</DropdownMenuLabel>
-      <DropdownMenuItem>Settings</DropdownMenuItem>
-      <DropdownMenuItem>Notifications</DropdownMenuItem>
+      <DropdownMenuLabel>Project</DropdownMenuLabel>
+      <DropdownMenuItem>Edit details</DropdownMenuItem>
+      <DropdownMenuItem>Duplicate</DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem variant="destructive">Sign out</DropdownMenuItem>
+      <DropdownMenuItem>Archive</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </ComponentPreview>
 
-## Anatomy
+## Overview
+
+Dropdown menu exposes compact contextual actions and lightweight selection in a floating surface.
+
+## Usage
+
+Use dropdown menu for local actions tied to the current object or region. Avoid using it as a substitute for primary navigation or for long, complex option sets.
+
+## Style
+
+Keep labels concise, group actions when needed and separate destructive actions from routine ones. The menu should feel scannable in one pass.
+
+## Code
 
 ```tsx
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@limia/design-system';
-
-export function Example() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost">Actions</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Duplicate</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
+} from "@limia/design-system";
 ```
 
 ## Accessibility
 
-- Use a trigger with a clear visible label or `aria-label`.
-- Keep menu items action-oriented and concise.
-- Prefer destructive styling only for truly irreversible outcomes.
+- Menus are keyboard navigable by default.
+- Trigger labels should explain what kind of menu is being opened.
+- Do not hide critical navigation paths inside contextual menus.

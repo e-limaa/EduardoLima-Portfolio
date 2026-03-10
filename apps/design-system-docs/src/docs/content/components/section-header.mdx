@@ -1,26 +1,20 @@
-import { SectionHeader } from '@limia/design-system';
-
-<DocsPageHeader 
-  title="SectionHeader" 
-  description="A consistent header block for page sections, layout out title, description, and an optional index/label." 
-  status="draft" 
-/>
+import { SectionHeader } from "@limia/design-system";
 
 <ComponentPlayground
   controls={[
-    { name: 'title', type: 'text', defaultValue: 'My Section' },
-    { name: 'description', type: 'text', defaultValue: 'A brief description of this section.' },
-    { name: 'index', type: 'text', defaultValue: '01' },
-    { name: 'label', type: 'text', defaultValue: 'LABEL' },
-    { name: 'align', type: 'select', options: ['left', 'center'], defaultValue: 'left' }
+    { name: "title", type: "text", defaultValue: "Craft with a shared rhythm" },
+    { name: "description", type: "text", defaultValue: "SectionHeader aligns title, description and supporting metadata without making each section invent its own intro block." },
+    { name: "index", type: "text", defaultValue: "01" },
+    { name: "label", type: "text", defaultValue: "SYSTEM" },
+    { name: "align", type: "select", options: ["left", "center"], defaultValue: "left" },
   ]}
   codeTemplate={(props) => `
-import { SectionHeader } from '@limia/design-system';
+import { SectionHeader } from "@limia/design-system";
 
-export default function Example() {
+export function Example() {
   return (
-    <SectionHeader 
-      title="${props.title}" 
+    <SectionHeader
+      title="${props.title}"
       description="${props.description}"
       index="${props.index}"
       label="${props.label}"
@@ -31,23 +25,89 @@ export default function Example() {
   `}
 >
   {(props) => (
-    <div className="p-8 border rounded-lg bg-background">
-        <SectionHeader {...props} />
+    <div className="rounded-lg border border-border bg-background p-8">
+      <SectionHeader {...props} />
     </div>
   )}
 </ComponentPlayground>
 
+## Overview
+
+Section Header is the standardized introduction block for major page regions. It keeps headings, supporting copy and optional index metadata visually aligned across editorial sections.
+
 ## Usage
 
-Use this component at the top of every major section (e.g., Projects, Services, About) to maintain visual consistency.
+Use Section Header at the top of long-form sections such as Projects, Services or Testimonials. It is a composition-level component, so prefer it where a page needs a repeated introduction pattern rather than a generic heading primitive.
 
-### Center Aligned
+<DoDontContainer>
+  <DoDont type="do" title="Keep the copy focused">
+    Use a clear title and one supporting paragraph. Let the section body handle the deeper explanation.
+  </DoDont>
+  <DoDont type="dont" title="Stuff it with controls">
+    Avoid turning the header area into a toolbar. If the section needs multiple actions, place them in the section body or an adjacent control row.
+  </DoDont>
+</DoDontContainer>
+
+## Style
+
+`align` changes the text layout while `index` and `label` add editorial metadata. Use `children` only when you need a custom trailing action or badge instead of the default metadata slot.
 
 <ComponentPreview>
-  <SectionHeader 
-      title="Centered Title" 
-      description="This is center aligned text for sections that need a different layout."
+  <div className="rounded-lg border border-border bg-card/60 p-8">
+    <SectionHeader
+      title="Centered title"
+      description="Use center alignment when the section needs a more symmetrical editorial opening."
       align="center"
-  />
+    />
+  </div>
 </ComponentPreview>
 
+<Callout type="info" title="Children override the metadata slot">
+  When `children` are provided, they replace the default index and label treatment. Use that escape hatch intentionally so the header remains predictable across the product.
+</Callout>
+
+## Code
+
+```tsx
+import { Button, SectionHeader } from "@limia/design-system";
+
+export function ProjectsIntro() {
+  return (
+    <SectionHeader
+      title="Selected work"
+      description="Projects that shaped product direction, design system quality and delivery speed."
+      index="02"
+      label="WORK"
+    >
+      <Button variant="outline">View archive</Button>
+    </SectionHeader>
+  );
+}
+```
+
+<TokenTable
+  tokens={[
+    { name: "title", value: "string", usage: "Required heading text." },
+    { name: "description", value: "string | undefined", usage: "Optional supporting paragraph under the title." },
+    { name: "index", value: "string | undefined", usage: "Optional short sequence marker such as `01` or `02`." },
+    { name: "label", value: "string | undefined", usage: "Optional editorial label shown alongside the index." },
+    { name: "headingId", value: "string | undefined", usage: "Optional `id` forwarded to the heading for accessible references." },
+    { name: "align", value: '"left" | "center"', usage: "Controls the visual alignment of the text block." },
+    { name: "children", value: "ReactNode", usage: "Optional trailing content. Replaces the default metadata slot when present." },
+  ]}
+/>
+
+## Accessibility
+
+- Use `headingId` when the section body or wrapper needs `aria-labelledby`.
+- Keep the title descriptive enough to stand on its own in screen-reader heading navigation.
+- If `children` add interactive controls, make sure they remain keyboard reachable and do not replace critical heading content.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use real heading hierarchy">
+    Pair Section Header with the correct page hierarchy so the heading level fits the surrounding content.
+  </DoDont>
+  <DoDont type="dont" title="Hide important metadata on mobile">
+    If index or label carry meaning, do not rely on desktop-only placement to communicate it.
+  </DoDont>
+</DoDontContainer>

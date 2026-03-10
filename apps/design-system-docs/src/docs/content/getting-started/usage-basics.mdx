@@ -1,3 +1,32 @@
-# Usage Basics
+## Overview
 
-Coming soon.
+Use Limia as a system, not as a parts bin. Adoption is successful when apps consume public exports, semantic tokens and documented patterns without recreating local UI layers.
+
+## Setup
+
+Start from the package entrypoints and shared styles:
+
+- `@limia/design-system` for primitives and patterns
+- `@limia/tokens` for token CSS and token references
+- the shared Tailwind preset when the host app uses Tailwind
+
+## Usage
+
+Adopt the system in this order:
+
+1. Replace local primitives with public Limia exports.
+2. Remove hardcoded colors and spacing in favor of semantic tokens.
+3. Keep product-specific composition in the app layer, not inside the design-system package.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use public APIs">
+    Import from `@limia/design-system` and document any missing capability before creating a local fallback.
+  </DoDont>
+  <DoDont type="dont" title="Keep parallel UI copies">
+    Avoid maintaining local `components/ui` primitives once the package already provides the same surface.
+  </DoDont>
+</DoDontContainer>
+
+## Next steps
+
+Move next into foundations to understand the token contract, then adopt components and patterns with the documented lifecycle in mind.

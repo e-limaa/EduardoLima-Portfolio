@@ -1,32 +1,28 @@
-import { Section, InteractiveGrid } from '@limia/design-system';
-
-<DocsPageHeader 
-  title="Seção" 
-  description="O bloco fundamental para layout de páginas, incorporando espaçamento padronizado, grid de fundo e textura de ruído." 
-  status="draft" 
-/>
+import { InteractiveGrid, Section } from "@limia/design-system";
 
 <ComponentPlayground
   controls={[
-    { name: 'variant', type: 'select', options: ['default', 'subtle'], defaultValue: 'subtle' },
-    { name: 'grid', type: 'boolean', defaultValue: true },
-    { name: 'noise', type: 'boolean', defaultValue: true },
-    { name: 'container', type: 'boolean', defaultValue: true },
+    { name: "variant", type: "select", options: ["default", "subtle"], defaultValue: "subtle" },
+    { name: "grid", type: "boolean", defaultValue: true },
+    { name: "noise", type: "boolean", defaultValue: true },
+    { name: "container", type: "boolean", defaultValue: true },
   ]}
   codeTemplate={(props) => `
-import { Section } from '@limia/design-system';
+import { Section } from "@limia/design-system";
 
-export default function Example() {
+export function Example() {
   return (
-    <Section 
+    <Section
       variant="${props.variant}"
       grid={${props.grid}}
       noise={${props.noise}}
       container={${props.container}}
     >
       <div className="py-20 text-center">
-        <h2 className="text-3xl font-bold mb-4">Conteúdo da Seção</h2>
-        <p className="text-muted-foreground">Este conteúdo é automaticamente envolvido em um container.</p>
+        <h2 className="text-3xl font-bold">Conteúdo da seção</h2>
+        <p className="mt-4 text-muted-foreground">
+          Espaçamento compartilhado, grid opcional e ritmo consistente de página.
+        </p>
       </div>
     </Section>
   );
@@ -34,27 +30,97 @@ export default function Example() {
   `}
 >
   {(props) => (
-    <div className="border rounded-lg overflow-hidden relative min-h-[400px]">
-        <Section {...props} className="absolute inset-0">
-            <div className="py-20 text-center relative z-10">
-                <h2 className="text-3xl font-bold mb-4">Conteúdo da Seção</h2>
-                <p className="text-muted-foreground">Este conteúdo é automaticamente envolvido em um container.</p>
-            </div>
-        </Section>
+    <div className="relative min-h-[400px] overflow-hidden rounded-lg border border-border bg-background">
+      <Section {...props} className="absolute inset-0">
+        <div className="relative z-10 py-20 text-center">
+          <h2 className="text-3xl font-bold">Conteúdo da seção</h2>
+          <p className="mt-4 text-muted-foreground">
+            Espaçamento compartilhado, grid opcional e ritmo consistente de página.
+          </p>
+        </div>
+      </Section>
     </div>
   )}
 </ComponentPlayground>
 
-## Grid Interativo
+## Visão geral
 
-O componente `Section` usa `InteractiveGrid` internamente, mas você também pode usá-lo separadamente para layouts personalizados (como Rodapés).
+Section é o wrapper de layout para superfícies editoriais do portfólio. Ele padroniza ritmo vertical, tratamento de fundo e comportamento opcional de container para que diferentes seções pareçam parte do mesmo sistema.
+
+## Uso
+
+Use Section para definir regiões principais da página, como blocos após o hero, listas de projetos, depoimentos ou áreas de contato. Mantenha lógica de negócio e narrativa específica dentro dos filhos em vez de adicionar props de layout para cada necessidade de produto.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use para criar ritmo">
+    Deixe Section controlar espaçamento e atmosfera de fundo para que as seções funcionais foquem na composição do conteúdo.
+  </DoDont>
+  <DoDont type="dont" title="Transformar em page builder">
+    Evite adicionar props específicas de tela a cada novo caso. Prefira compor conteúdos diferentes dentro do mesmo wrapper compartilhado.
+  </DoDont>
+</DoDontContainer>
+
+## Estilo
+
+`variant`, `grid`, `noise` e `container` permitem ajustar a atmosfera sem quebrar consistência. A recomendação padrão é `variant="subtle"` com `grid` e `noise` ativos em páginas editoriais com identidade de marca.
 
 <ComponentPreview>
-  <div className="relative h-[300px] w-full overflow-hidden border rounded-lg bg-background">
-     <InteractiveGrid variant="subtle" />
-     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <span className="text-muted-foreground">Passe o mouse para ver o efeito de spotlight</span>
-     </div>
+  <div className="relative h-[280px] w-full overflow-hidden rounded-lg border border-border bg-background">
+    <InteractiveGrid variant="subtle" />
+    <div className="absolute inset-0 flex items-center justify-center">
+      <span className="rounded-full border border-border bg-background/80 px-4 py-2 text-sm text-muted-foreground backdrop-blur-sm">
+        InteractiveGrid também pode ser usado separadamente.
+      </span>
+    </div>
   </div>
 </ComponentPreview>
 
+<Callout type="info" title="Comportamento do container">
+  Mantenha `container` ativo quando a seção precisar alinhar com a largura global da página. Desative apenas quando os filhos precisarem controlar uma composição full bleed própria.
+</Callout>
+
+## Código
+
+```tsx
+import { Section } from "@limia/design-system";
+
+export function TestimonialsSection() {
+  return (
+    <Section aria-labelledby="testimonials-heading">
+      <div className="space-y-6">
+        <h2 id="testimonials-heading" className="text-heading-lg font-semibold">
+          What teams say after shipping
+        </h2>
+        <p className="max-w-2xl text-muted-foreground">
+          Shared section spacing keeps the page readable while the content stays product-specific.
+        </p>
+      </div>
+    </Section>
+  );
+}
+```
+
+<TokenTable
+  tokens={[
+    { name: "variant", value: '"default" | "subtle"', usage: "Controla a intensidade do tratamento opcional do InteractiveGrid." },
+    { name: "grid", value: "boolean", usage: "Mostra ou esconde o grid de fundo interativo." },
+    { name: "noise", value: "boolean", usage: "Mostra ou esconde a textura decorativa de ruído." },
+    { name: "container", value: "boolean", usage: "Envolve os filhos no container compartilhado de largura máxima quando ativo." },
+    { name: "...props", value: "HTMLAttributes<HTMLElement>", usage: "Permite atributos semânticos como `id`, `aria-labelledby` ou classes customizadas." },
+  ]}
+/>
+
+## Acessibilidade
+
+- Section renderiza um elemento semântico `<section>` e normalmente deve conter um heading visível ou `aria-labelledby`.
+- Camadas decorativas como grid e noise precisam continuar não essenciais para compreensão.
+- Se a área for puramente visual e não representar um landmark útil, prefira um wrapper neutro em vez de adicionar landmarks desnecessários.
+
+<DoDontContainer>
+  <DoDont type="do" title="Rotule landmarks importantes">
+    Combine seções principais com um heading ou rótulo acessível para que tecnologias assistivas consigam identificá-las.
+  </DoDont>
+  <DoDont type="dont" title="Aninhar landmarks sem motivo">
+    Evite empilhar várias sections sem rótulo umas dentro das outras, o que dificulta a navegação por leitor de tela.
+  </DoDont>
+</DoDontContainer>

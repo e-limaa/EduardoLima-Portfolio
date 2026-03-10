@@ -7,9 +7,74 @@ import {
   ComponentPreview,
   DoDont,
   DoDontContainer,
+  DocsMetaRail,
   DocsPageHeader,
+  DocsPageHero,
+  DocsRelatedLinks,
+  DocsResources,
+  DocsSection,
+  DocsSectionNav,
   TokenTable,
 } from "./ui";
+
+function slugifyHeading(children: React.ReactNode): string | undefined {
+  const text =
+    typeof children === "string"
+      ? children.trim()
+      : Array.isArray(children)
+        ? children
+            .map((child) => (typeof child === "string" ? child : ""))
+            .join(" ")
+            .trim()
+        : "";
+
+  if (!text) return undefined;
+
+  const normalized = text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+
+  const chapterAliasMap: Record<string, string> = {
+    overview: "overview",
+    "visao geral": "overview",
+    usage: "usage",
+    uso: "usage",
+    style: "style",
+    estilo: "style",
+    code: "code",
+    codigo: "code",
+    accessibility: "accessibility",
+    acessibilidade: "accessibility",
+    setup: "setup",
+    "next steps": "next-steps",
+    "proximos passos": "next-steps",
+    principles: "principles",
+    principios: "principles",
+    tokens: "tokens",
+    implementation: "implementation",
+    implementacao: "implementation",
+    related: "related",
+    relacionados: "related",
+    "when to use": "when-to-use",
+    "quando usar": "when-to-use",
+    composition: "composition",
+    composicao: "composition",
+    policy: "policy",
+    politica: "policy",
+    workflow: "workflow",
+    fluxo: "workflow",
+    references: "references",
+    referencias: "references",
+  };
+
+  if (chapterAliasMap[normalized]) {
+    return chapterAliasMap[normalized];
+  }
+
+  return normalized.replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+}
 
 const components = {
   h1: (props: any) => (
@@ -20,7 +85,8 @@ const components = {
   ),
   h2: (props: any) => (
     <h2
-      className="mt-10 mb-4 scroll-m-20 border-b border-border pb-2 text-3xl font-semibold tracking-tight text-foreground first:mt-0"
+      id={props.id ?? slugifyHeading(props.children)}
+      className="mt-12 mb-4 scroll-mt-24 border-b border-border pb-3 text-3xl font-semibold tracking-tight text-foreground first:mt-0"
       {...props}
     />
   ),
@@ -96,6 +162,12 @@ const components = {
   ComponentPreview,
   TokenTable,
   DocsPageHeader,
+  DocsPageHero,
+  DocsSection,
+  DocsSectionNav,
+  DocsMetaRail,
+  DocsResources,
+  DocsRelatedLinks,
   ComponentPlayground,
 };
 

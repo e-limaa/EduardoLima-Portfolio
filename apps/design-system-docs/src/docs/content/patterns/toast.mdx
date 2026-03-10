@@ -1,43 +1,70 @@
-import { Button, Toaster, toast } from '@limia/design-system';
+import { Button, Toaster, toast } from "@limia/design-system";
 
-<DocsPageHeader
-  title="Toast"
-  description="Toast is the lightweight feedback pattern for app-wide success, error and progress messages."
-  status="beta"
-/>
+## Overview
 
-## Usage
+Toast is the lightweight feedback pattern for app-wide confirmation, background updates and non-blocking errors. It keeps momentum high by acknowledging a result without pulling users away from their current task.
 
-Mount a single `Toaster` near the app shell, then trigger feedback with `toast`.
+## When to use
+
+Use toast for transient messages that do not require an immediate decision. If the message needs a response, contains long guidance or communicates a destructive risk, move to inline feedback, alert or dialog instead.
+
+<Callout type="info" title="Toast is not a backlog">
+  If the user may need the message later, it should also exist somewhere persistent in the interface, such as an activity log, settings page or inline status.
+</Callout>
+
+## Composition
+
+Mount one `Toaster` near the app shell, then trigger toasts from product actions. Keep the title short and move supporting context into `description`.
 
 <ComponentPreview>
   <div className="flex flex-col items-start gap-4">
     <Toaster theme="light" />
-    <Button onClick={() => toast.success('Saved', { description: 'Your changes were stored successfully.' })}>
+    <Button
+      onClick={() =>
+        toast.success("Saved", {
+          description: "Your changes were stored successfully.",
+        })
+      }
+    >
       Show success toast
     </Button>
   </div>
 </ComponentPreview>
 
-## Anatomy
+## Code
 
 ```tsx
-import { Toaster, toast } from '@limia/design-system';
+import { Button, Toaster, toast } from "@limia/design-system";
 
 export function AppShell() {
   return (
     <>
       <Toaster theme="system" />
-      <button onClick={() => toast.error('Unable to publish')}>
+      <Button
+        onClick={() =>
+          toast.error("Unable to publish", {
+            description: "Check the required fields and try again.",
+          })
+        }
+      >
         Publish
-      </button>
+      </Button>
     </>
   );
 }
 ```
 
-## Guidance
+## Accessibility
 
-- Use toast for transient feedback that does not block the current task.
-- Keep the title short and move extra context into `description`.
-- Do not use toast for destructive confirmations; prefer dialogs for that.
+- Toast should complement, not replace, critical error communication.
+- Keep titles explicit so they make sense when announced quickly by assistive technology.
+- Avoid firing many toasts in sequence, which can overwhelm visual and screen-reader users alike.
+
+<DoDontContainer>
+  <DoDont type="do" title="Keep it concise">
+    A short title and one supporting sentence are usually enough for transient feedback.
+  </DoDont>
+  <DoDont type="dont" title="Use toast for confirmations with risk">
+    Destructive confirmations and permission requests belong in dialogs, not toasts.
+  </DoDont>
+</DoDontContainer>

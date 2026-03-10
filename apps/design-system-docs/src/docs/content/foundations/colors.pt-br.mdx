@@ -1,53 +1,93 @@
 import { ColorPalette } from '../components/ColorPalette';
 
-<DocsPageHeader
-  title="Cores"
-  description="Nosso sistema de cores baseado em intenção e papéis semânticos."
-  status="stable"
-/>
+## Visão geral
 
-## Cores Primárias
+No Limia, cor é semântica, em camadas e orientada por tema. O sistema separa escalas primitivas de papéis semânticos para que o código do produto expresse intenção como `primary`, `layer-2` ou `success`, sem acoplar comportamento a um matiz específico.
 
-Usadas para ações principais, destaques e identidade da marca.
+## Princípios
 
-<TokenTable tokens={[
-  { name: 'primary', value: 'hsl(var(--primary))', usage: 'Fundos de alta ênfase, botões e ícones' },
-  { name: 'primary-foreground', value: 'hsl(var(--primary-foreground))', usage: 'Texto sobre fundos primários' }
-]} />
-
-### Cores de Superfície
-O canvas onde o conteúdo é posicionado.
-
-<TokenTable tokens={[
-  { name: 'background', value: 'hsl(var(--background))', usage: 'Fundo da página' },
-  { name: 'card', value: 'hsl(var(--card))', usage: 'Fundo de componentes (Cards, Popovers, Modais)' }
-]} />
-
-## Diretrizes de Uso
-
-### Acessibilidade
-
-Garantimos taxas de contraste WCAG AA para todos os pares de texto padrão.
-
-<Callout type="warning" title="Checagem de Contraste">
-  Nunca confie apenas na cor para transmitir significado. Sempre use rótulos de texto ou ícones junto com cores de status para apoiar usuários daltônicos.
-</Callout>
-
-### O Que Fazer
+O Limia segue a mesma direção central adotada por sistemas maduros como o Carbon: cor é documentada por papel, tema e camada antes de ser documentada por paleta. Isso facilita escalar o sistema entre superfícies sem criar forks locais.
 
 <DoDontContainer>
-  <DoDont type="do" title="Use Nomes Semânticos">
-    Use `bg-destructive` para erros ou ações perigosas. Isso lida automaticamente com a escala de vermelho e modo escuro.
+  <DoDont type="do" title="Comece pelos papéis semânticos">
+    Prefira `bg-primary`, `bg-layer-2`, `text-muted-foreground`, `bg-success-subtle` e `border-warning-border` antes de recorrer a uma escala primitiva.
   </DoDont>
-  <DoDont type="dont" title="Hardcode de Hex">
-    Evite usar valores hex arbitrários como `#ff0000`. Isso quebra o tema e requer manutenção manual.
+  <DoDont type="dont" title="Tratar a paleta como API">
+    Escalas primitivas são matéria-prima do sistema. Elas não devem virar o modelo padrão de autoria em apps ou componentes compartilhados.
   </DoDont>
 </DoDontContainer>
 
-## Referência da Paleta
+<Callout type="info" title="Temas e camadas">
+  Light e dark não são apenas inversões. As camadas definem como as superfícies se empilham dentro de cada tema para que cards, popovers e regiões embutidas mantenham um modelo de profundidade claro.
+</Callout>
 
-<ColorPalette />
+## Tokens
 
-<Callout type="info" title="Acessibilidade">
-  Todas as combinações de cores padrão (fundo + texto) passam no teste de contraste WCAG AA.
+### Papéis de tema e camada
+
+<TokenTable tokens={[
+  { name: 'background.default', value: 'var(--background-default)', usage: 'Canvas principal da página dentro do tema ativo.' },
+  { name: 'background.layer-1', value: 'var(--background-layer-1)', usage: 'Superfície elevada base dentro do tema atual.' },
+  { name: 'background.layer-2', value: 'var(--background-layer-2)', usage: 'Camada secundária para superfícies aninhadas e regiões agrupadas.' },
+  { name: 'background.layer-3', value: 'var(--background-layer-3)', usage: 'Camada aninhada de maior ênfase quando a profundidade precisa continuar legível.' },
+  { name: 'background.inverse', value: 'var(--background-inverse)', usage: 'Superfície inversa para momentos de alto contraste, como chips escuros ou destaques editoriais.' },
+  { name: 'text.primary', value: 'var(--text-primary)', usage: 'Texto padrão legível em fundos de página e superfície.' },
+  { name: 'text.on-color', value: 'var(--text-on-color)', usage: 'Texto e ícones legíveis sobre fundos saturados de ação ou suporte.' },
+  { name: 'border.subtle', value: 'var(--border-subtle)', usage: 'Separação de baixo contraste entre camadas próximas.' },
+  { name: 'border.strong', value: 'var(--border-strong)', usage: 'Separação de maior ênfase para layouts densos ou regiões de dados.' }
+]} />
+
+### Papéis de ação e suporte
+
+<TokenTable tokens={[
+  { name: 'action.primary.background', value: 'var(--action-primary-background)', usage: 'Ações de alta ênfase, estados ativos e destaques de marca.' },
+  { name: 'action.primary.active', value: 'var(--action-primary-active)', usage: 'Estado pressionado para superfícies interativas primárias.' },
+  { name: 'support.info.background', value: 'var(--support-info-background)', usage: 'Banners informativos, badges e momentos de status.' },
+  { name: 'support.success.background', value: 'var(--support-success-background)', usage: 'Confirmação positiva e estados concluídos.' },
+  { name: 'support.warning.background', value: 'var(--support-warning-background)', usage: 'Estados de atenção que precisam de cuidado sem tom destrutivo.' },
+  { name: 'support.danger.background', value: 'var(--support-danger-background)', usage: 'Feedback inline crítico e mensagens de alto risco.' },
+  { name: 'support.info.subtle', value: 'var(--support-info-subtle)', usage: 'Fundo contextual de baixa ênfase para informação.' },
+  { name: 'support.success.subtle', value: 'var(--support-success-subtle)', usage: 'Superfícies positivas sutis para blocos de confirmação inline.' },
+  { name: 'support.warning.subtle', value: 'var(--support-warning-subtle)', usage: 'Superfícies de cautela sutis que não devem dominar o layout.' },
+  { name: 'support.danger.subtle', value: 'var(--support-danger-subtle)', usage: 'Superfícies sutis de erro para validação inline ou risco não bloqueante.' }
+]} />
+
+## Implementação
+
+Use classes semânticas em componentes e layouts, e reserve consumo inline de token apenas para casos em que utility classes não forem suficientes. Escalas primitivas devem ficar, na maior parte do tempo, dentro do trabalho de definição de tokens, visualização de dados e momentos de marca cuidadosamente revisados.
+
+<DoDontContainer>
+  <DoDont type="do" title="Construa com papéis e camadas">
+    Use `bg-layer-1`, `bg-layer-2` e `border-subtle` para criar profundidade. Use `bg-success-subtle` ou `bg-warning-subtle` para mensagens de suporte que devem permanecer contextuais em vez de dominantes.
+  </DoDont>
+  <DoDont type="dont" title="Hardcode de paleta local">
+    Evite hex arbitrário, HSL pontual e forks locais de cor em superfícies compartilhadas. Isso quebra paridade de tema e dificulta a governança.
+  </DoDont>
+</DoDontContainer>
+
+```tsx
+import { Badge, Card } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <Card className="border-border-subtle bg-layer-1">
+      <div className="space-y-3 rounded-lg border border-success-border bg-success-subtle p-4 text-success-subtle-foreground">
+        <Badge className="bg-success text-success-foreground">Healthy</Badge>
+        <p className="text-sm">
+          Semantic support colors preserve meaning across light and dark themes.
+        </p>
+      </div>
+    </Card>
+  );
+}
+```
+
+<ColorPalette locale="pt-br" />
+
+## Acessibilidade
+
+Cor deve apoiar significado, nunca carregá-lo sozinha. Combine cores de suporte com texto, iconografia ou estrutura, e trate contraste como critério de release para todos os temas e estados, não apenas para a paleta principal de ação.
+
+<Callout type="warning" title="Contraste e redundância">
+  Nunca dependa apenas da cor para comunicar sucesso, aviso, erro ou seleção. Combine com texto, iconografia, posicionamento ou outro sinal explícito de estado para que usuários com baixa visão ou daltonismo recebam a mesma informação.
 </Callout>

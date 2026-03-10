@@ -1,54 +1,49 @@
-<DocsPageHeader
-  title="Acessibilidade"
-  description="Construindo experiências inclusivas para todos os usuários."
-  status="stable"
-/>
+## Visão geral
 
-Acessibilidade não é uma feature, é um requisito. Nosso Design System segue as diretrizes da WCAG 2.1 nível AA.
+Acessibilidade é um requisito do sistema, não uma camada opcional. Documentação, componentes e guidance de adoção do Limia devem preservar interação inclusiva como parte do contrato do produto.
 
-## Princípios (POUR)
+## Princípios
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-    <div className="p-4 border rounded-lg">
-        <h3 className="font-bold text-primary mb-2">Perceptível</h3>
-        <p className="text-sm text-muted-foreground">
-            A informação e a interface devem ser apresentadas de forma que os usuários possam percebê-las (visão, audição, tato).
-        </p>
-    </div>
-    <div className="p-4 border rounded-lg">
-        <h3 className="font-bold text-primary mb-2">Operável</h3>
-        <p className="text-sm text-muted-foreground">
-            Os componentes de interface e a navegação devem ser operáveis (teclado, mouse, voz).
-        </p>
-    </div>
-    <div className="p-4 border rounded-lg">
-        <h3 className="font-bold text-primary mb-2">Compreensível</h3>
-        <p className="text-sm text-muted-foreground">
-            A informação e a operação da interface devem ser compreensíveis.
-        </p>
-    </div>
-    <div className="p-4 border rounded-lg">
-        <h3 className="font-bold text-primary mb-2">Robusto</h3>
-        <p className="text-sm text-muted-foreground">
-             O conteúdo deve ser robusto o suficiente para ser interpretado por uma variedade de agentes de usuário (browsers, screen readers).
-        </p>
-    </div>
-</div>
+O Limia usa o modelo POUR como baseline operacional:
 
-## Teclado
+- **Perceptível**: a informação precisa ser apresentada de formas que o usuário consiga perceber.
+- **Operável**: a interação precisa funcionar com teclado e tecnologia assistiva.
+- **Compreensível**: labels, fluxos e erros devem ser claros e recuperáveis.
+- **Robusto**: a semântica deve sobreviver entre browsers, devices e ferramentas assistivas.
 
-Todos os componentes interativos devem ser acessíveis via teclado.
+## Implementação
 
-- **Tab**: Navega para o próximo elemento focado.
-- **Enter / Space**: Ativa o elemento.
-- **Esc**: Fecha modais ou popovers.
-- **Setas**: Navega entre itens de lista (menus, radio groups).
+### Teclado e foco
+
+Todos os elementos interativos devem permanecer operáveis apenas com teclado. Não suprima o focus ring do sistema sem substituí-lo por uma alternativa igualmente visível.
+
+### Semântica e labels
+
+Prefira elementos HTML nativos e adicione ARIA apenas quando o texto semântico estiver ausente ou insuficiente.
+
+```tsx
+<button aria-label="Fechar menu">
+  <XIcon />
+</button>
+```
+
+### Cor, movimento e feedback
+
+- Atenda ao contraste WCAG AA para texto padrão e estados de componente.
+- Nunca dependa apenas da cor para comunicar status.
+- Respeite `prefers-reduced-motion` para animações decorativas.
+
+## Acessibilidade
 
 <DoDontContainer>
-  <DoDont type="do" title="Foco Visível">
-    Mantenha o `outline` de foco padrão ou estilize-o claramente (ring).
+  <DoDont type="do" title="Suporte redução de movimento">
+    Desative ou simplifique animações decorativas quando a pessoa pedir menos movimento.
   </DoDont>
-  <DoDont type="dont" title="Remover Outline">
-    Nunca use `outline: none` sem fornecer um estilo alternativo de foco.
+  <DoDont type="dont" title="Auto-play de mídia disruptiva">
+    Evite auto-play de áudio ou vídeo com som porque isso conflita com tecnologias assistivas e orientação espacial.
   </DoDont>
 </DoDontContainer>
+
+<Callout type="warning" title="Responsabilidade em nível de sistema">
+  O trabalho de acessibilidade só está completo quando tokens, componentes, documentação e apps consumidores preservam as mesmas garantias.
+</Callout>

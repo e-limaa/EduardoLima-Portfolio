@@ -1,25 +1,38 @@
-<DocsPageHeader
-  title="Tipografia"
-  description="A tipografia dá voz à interface. Usamos a Inter como nossa fonte principal para garantir legibilidade, neutralidade e estética limpa em todos os dispositivos."
-  status="stable"
-/>
-
-## Escala Tipográfica
-
-Nossa escala foi expandida para oferecer maior flexibilidade visual, dividida em Display, Cabeçalhos e Corpo.
-
 import { TypographyDemo } from '../../ui/TypographyDemo';
+
+## Visão geral
+
+Tipografia dá hierarquia, ritmo e conforto de leitura para a interface. O Limia usa uma única família sans-serif e uma escala tokenizada para que os times criem contraste sem inventar sistemas locais de texto.
+
+## Princípios
+
+Tipografia deve comunicar estrutura antes de decoração. Estilos display criam pontos de entrada, headings organizam seções e body otimiza leitura em contextos densos de produto.
+
+<Callout type="info" title="Uma família, múltiplos papéis">
+  Mantenha a hierarquia por tamanho, peso e espaçamento. Não introduza novas famílias tipográficas para resolver problemas de ênfase que a escala já cobre.
+</Callout>
+
+## Tokens
 
 <TypographyDemo language="pt-br" />
 
-## Diretrizes de Uso
+## Implementação
+
+Use as utilities tipográficas documentadas e os papéis semânticos em vez de importar fontes customizadas ou criar tamanhos arbitrários.
 
 <DoDontContainer>
-  <DoDont type="do" title="Estabeleça Hierarquia">
-     Use `H1`, `H2`, `H3` claramente para delinear a estrutura da página para leitores de tela.
+  <DoDont type="do" title="Construa hierarquia com intenção">
+    Use display para momentos de destaque, headings para estrutura e body para leitura contínua.
   </DoDont>
-  <DoDont type="dont" title="Misturar Fontes Manualmente">
-    Evite importar fontes personalizadas. Mantenha-se na stack de fontes do sistema fornecida pela `Inter`.
+  <DoDont type="dont" title="Misture escalas ad hoc">
+    Evite criar tamanhos únicos ou trazer pesos extras só para corrigir uma única tela.
   </DoDont>
 </DoDontContainer>
 
+## Acessibilidade
+
+Tipografia legível depende de tamanho, contraste, line-height e hierarquia previsível. Headings devem refletir a estrutura do documento, não apenas a aparência.
+
+<Callout type="warning" title="Estrutura importa">
+  Não escolha um heading apenas porque ele parece visualmente correto. Mantenha a ordem semântica e ajuste o visual com a escala de tokens documentada.
+</Callout>

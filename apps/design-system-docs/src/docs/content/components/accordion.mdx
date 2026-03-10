@@ -1,35 +1,51 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Accordion"
-  description="Accordion reveals dense content progressively while keeping related sections grouped in the same flow."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
   <Accordion type="single" collapsible className="w-full max-w-2xl">
     <AccordionItem value="item-1">
-      <AccordionTrigger>What should go inside an accordion?</AccordionTrigger>
+      <AccordionTrigger>What belongs inside an accordion?</AccordionTrigger>
       <AccordionContent>
-        Use it for optional details, FAQs and secondary guidance that supports the main task.
+        Secondary guidance, FAQs and optional details that support the main task.
       </AccordionContent>
     </AccordionItem>
     <AccordionItem value="item-2">
       <AccordionTrigger>When should I avoid it?</AccordionTrigger>
       <AccordionContent>
-        Avoid hiding critical actions or information users need before making a decision.
+        Avoid hiding requirements, pricing or destructive consequences users need before they decide.
       </AccordionContent>
     </AccordionItem>
   </Accordion>
 </ComponentPreview>
 
+## Overview
+
+Accordion reveals dense content progressively while keeping related sections grouped in the same flow.
+
 ## Usage
 
-- Use `type="single"` when only one panel should stay open.
-- Use `type="multiple"` for filters, settings or inspection flows.
-- Keep trigger labels clear and content concise.
+Use accordion when content is related but not equally important at first glance.
+
+- Use `type="single"` when one panel should stay open at a time.
+- Use `type="multiple"` for filters, settings or inspection workflows.
+- Keep trigger labels short enough to scan as a list.
+
+## Style
+
+Triggers should read as concise section labels, not paragraph summaries. Keep content blocks compact and avoid nesting complex interaction inside many levels of disclosure.
+
+## Code
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@limia/design-system";
+```
 
 ## Accessibility
 
-- Accordion trigger buttons are keyboard accessible by default.
-- Do not hide required validation, pricing or destructive consequences inside collapsed content.
+- Triggers are keyboard accessible by default.
+- Use clear labels so collapsed content remains understandable in the closed state.
+- Do not hide critical validation, legal or destructive information inside collapsed panels.

@@ -1,26 +1,49 @@
-import { Button, Tooltip, TooltipContent, TooltipTrigger } from '@limia/design-system';
-
-<DocsPageHeader
-  title="Tooltip"
-  description="Tooltip offers short contextual guidance for controls that benefit from extra clarity on hover or focus."
-  status="beta"
-/>
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@limia/design-system';
 
 <ComponentPreview>
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <Button variant="outline" size="icon" aria-label="Project details">
-        ?
-      </Button>
-    </TooltipTrigger>
-    <TooltipContent sideOffset={8}>
-      Tooltip complements the control. It should not carry critical information.
-    </TooltipContent>
-  </Tooltip>
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant="outline">Hover or focus</Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Short, supplemental guidance.</p>
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
 </ComponentPreview>
+
+## Overview
+
+Tooltip provides short contextual guidance on hover or focus.
 
 ## Usage
 
-- Use tooltip for short, non-essential guidance.
-- Keep content to one short sentence when possible.
-- Prefer visible helper text for instructions users must read before acting.
+Use tooltip for concise supporting hints, such as icon clarification or compact labels. Do not use it for required instructions, complex explanations or critical status feedback.
+
+## Style
+
+Keep tooltip copy to a short phrase or sentence. If the content needs formatting, decisions or longer reading time, use popover or another richer pattern.
+
+## Code
+
+```tsx
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@limia/design-system";
+```
+
+## Accessibility
+
+- Tooltip content must also be available on focus, not hover only.
+- Do not place essential information only in a tooltip.
+- Triggers should still make sense without the tooltip.

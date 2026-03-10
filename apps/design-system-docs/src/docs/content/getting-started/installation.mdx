@@ -1,46 +1,33 @@
 import { Button } from '@limia/design-system';
 
-<DocsPageHeader 
-  title="Installation" 
-  description="How to install, configure, and integrate the Limia Design System into your project." 
-  status="stable" 
-/>
+## Overview
 
-The Limia Design System is a managed dependency that provides a unified language for our portfolio products.
-
-## Requirements
-
-- **Node**: >= 18.0.0
-- **React**: >= 18.0.0
-- **Tailwind CSS**: >= 3.0.0
-
-## Installation
-
-Install the package alongside its peer dependencies:
-
-```bash
-npm install @limia/design-system class-variance-authority clsx tailwind-merge @radix-ui/react-slot
-```
-
----
+Install Limia as a managed dependency. Consumers should import the system packages directly instead of copying primitives or recreating the theme locally.
 
 ## Setup
 
-### 1. Import Global Styles
+### Requirements
 
-In your root layout or entry file (e.g., `main.tsx`, `app/layout.tsx`):
+- Node.js 18+
+- React 18+
+- Tailwind CSS 3.3+
+
+### Install the packages
+
+```bash
+npm install @limia/design-system @limia/tokens
+```
+
+### Import styles
 
 ```tsx
 import "@limia/design-system/styles.css";
 import "@limia/tokens/css";
 ```
 
-### 2. Configure Tailwind
-
-Update `tailwind.config.js` to inherit the system's design tokens.
+### Configure Tailwind
 
 ```js
-// tailwind.config.js
 import { limiaPreset } from "@limia/design-system/tailwind";
 
 export default {
@@ -50,20 +37,17 @@ export default {
   ],
   presets: [limiaPreset],
   darkMode: ["class"],
-  // ... other config
 };
 ```
 
----
+## Usage
 
-## First Working Example
-
-Once installed, you can use components immediately.
+Once styles and preset wiring are in place, primitives are ready to use without additional setup.
 
 <ComponentPreview>
-  <div className="flex gap-4 items-center justify-center p-8">
-    <Button variant="default">Hello World</Button>
-    <Button variant="secondary">Secondary Action</Button>
+  <div className="flex items-center justify-center gap-4 p-8">
+    <Button>Hello World</Button>
+    <Button variant="secondary">Secondary action</Button>
   </div>
 </ComponentPreview>
 
@@ -73,32 +57,22 @@ import { Button } from "@limia/design-system";
 export default function App() {
   return (
     <div className="flex gap-4">
-      <Button variant="default">Hello World</Button>
-      <Button variant="secondary">Secondary Action</Button>
+      <Button>Hello World</Button>
+      <Button variant="secondary">Secondary action</Button>
     </div>
   );
 }
 ```
 
----
+## Next steps
 
-## Common Mistakes
-
-<DoDontContainer>
-  <DoDont type="do" title="Use System Components">
-     Always import primitives like `Button` or `Input` directly from `@limia/design-system`. This ensures you get the latest accessibility fixes and design updates.
-  </DoDont>
-  <DoDont type="dont" title="Create Local Wrappers">
-    Do not wrap DS components in local "convenience" wrappers (e.g., `MyButton`). This breaks the update path and doubles the maintenance burden.
-  </DoDont>
-</DoDontContainer>
+After installation, move to adoption rules and start replacing local primitives with public Limia exports.
 
 <DoDontContainer>
-  <DoDont type="do" title="Use Token Classes">
-     Use standardized sizing tokens like `w-9`, `h-9` or `p-4`.
+  <DoDont type="do" title="Consume public exports">
+    Import primitives directly from `@limia/design-system` so apps inherit the latest accessibility and token updates.
   </DoDont>
-  <DoDont type="dont" title="Use Arbitrary Values">
-    Avoid magic numbers like `w-[37px]`. If a token doesn't exist, question if the design deviation is necessary.
+  <DoDont type="dont" title="Fork the system locally">
+    Avoid duplicating primitives, recreating token variables or introducing arbitrary values before checking if the system already exposes the capability.
   </DoDont>
 </DoDontContainer>
-

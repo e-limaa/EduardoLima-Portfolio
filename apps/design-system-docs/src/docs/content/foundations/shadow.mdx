@@ -1,36 +1,43 @@
+## Overview
 
-# Shadows & Elevation
+Shadow communicates elevation, separation and sometimes interactivity. In Limia it should support surface hierarchy, not decorate every element on the screen.
 
-Elevation serves to lift elements from the background, indicating hierarchy and interactivity. We use shadows to simulate this elevation Z-axis.
+## Principles
 
-## Scale
+Use shadow when an element needs to feel lifted from the current surface. Pair it with border, background and layering decisions instead of relying on blur or opacity alone.
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-8 p-8 bg-muted/20 rounded-xl">
-    <div className="aspect-square bg-card rounded-xl shadow-sm flex items-center justify-center border border-border">
-        <span className="text-xs font-mono text-muted-foreground">shadow-sm</span>
-    </div>
-    <div className="aspect-square bg-card rounded-xl shadow flex items-center justify-center border border-border">
-         <span className="text-xs font-mono text-muted-foreground">shadow</span>
-    </div>
-    <div className="aspect-square bg-card rounded-xl shadow-md flex items-center justify-center border border-border">
-         <span className="text-xs font-mono text-muted-foreground">shadow-md</span>
-    </div>
-    <div className="aspect-square bg-card rounded-xl shadow-lg flex items-center justify-center border border-border">
-         <span className="text-xs font-mono text-muted-foreground">shadow-lg</span>
-    </div>
+## Tokens
+
+<div className="my-8 grid gap-8 rounded-xl bg-muted/20 p-8 md:grid-cols-2 lg:grid-cols-4">
+  <div className="aspect-square rounded-xl border border-border bg-card shadow-sm flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow-sm</span>
+  </div>
+  <div className="aspect-square rounded-xl border border-border bg-card shadow flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow</span>
+  </div>
+  <div className="aspect-square rounded-xl border border-border bg-card shadow-md flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow-md</span>
+  </div>
+  <div className="aspect-square rounded-xl border border-border bg-card shadow-lg flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow-lg</span>
+  </div>
 </div>
 
-## Usage
+## Implementation
 
-- **shadow-sm**: Subtle borders, interactive states like hover on table rows.
-- **shadow (default)**: Cards, dropdowns, low-level poppers.
-- **shadow-lg**: Modals, Dialogs, Floating Action Buttons.
+- `shadow-sm`: subtle interactive lift or light separation from the background.
+- `shadow`: default elevation for cards, menus and low-level overlays.
+- `shadow-lg`: stronger lift for dialogs and critical floating surfaces.
 
 <DoDontContainer>
-  <DoDont type="do" title="Use for depth">
-    Use shadows to separate layers (e.g., a dropdown menu floating above a table).
+  <DoDont type="do" title="Use shadow for hierarchy">
+    Add depth when a layer needs to detach from the current plane, such as a menu above a table or a dialog above page content.
   </DoDont>
-  <DoDont type="dont" title="Overuse on flat design">
-    Don't apply deep shadows to elements that should feel flush with the surface (like internal cards sections).
+  <DoDont type="dont" title="Use shadow as decoration">
+    Avoid stacking strong shadows on flat surfaces or using them to compensate for weak layout hierarchy.
   </DoDont>
 </DoDontContainer>
+
+## Accessibility
+
+Shadow should never be the only cue that an element is interactive or elevated. Pair it with clear borders, backgrounds and focus states so the hierarchy remains perceivable.

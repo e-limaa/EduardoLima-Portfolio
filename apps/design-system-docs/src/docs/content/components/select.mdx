@@ -9,12 +9,6 @@ import {
   SelectValue,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Select"
-  description="Select helps users choose a single option from a structured list while keeping the interface compact."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
   <div className="max-w-sm space-y-2">
     <Label className="text-sm font-medium">Project stage</Label>
@@ -34,8 +28,32 @@ import {
   </div>
 </ComponentPreview>
 
+## Overview
+
+Select helps users choose a single option from a structured list while keeping the interface compact.
+
 ## Usage
 
-- Use select for concise single-choice inputs with more than a few options.
-- Prefer radio group when all options should stay visible at once.
-- Keep placeholder text short and labels external to the trigger when the field needs context.
+Use select for concise single-choice inputs with more than a few options. Prefer radio group when all options should remain visible at once.
+
+## Style
+
+Keep placeholder text short and labels external to the trigger when the field needs more context. Group options only when the grouping helps scanning.
+
+## Code
+
+```tsx
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@limia/design-system";
+```
+
+## Accessibility
+
+- The field still needs a visible label in most forms.
+- Option labels should be concise and unambiguous.
+- Avoid using select for binary decisions better served by switch or radio.

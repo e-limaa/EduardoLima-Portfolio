@@ -1,51 +1,101 @@
-import { Button, Card, CardContent } from '@limia/design-system';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Skeleton,
+} from "@limia/design-system";
+import { CheckCircle2, LoaderCircle } from "lucide-react";
 
-<DocsPageHeader 
-  title="Feedback" 
-  description="Patterns for communicating system status to the user." 
-  status="draft" 
-/>
+## Overview
 
-## Principles
+Feedback is the pattern for showing progress, success, warning and failure across product flows. Good feedback reduces ambiguity and makes system state visible without interrupting users more than necessary.
 
-The system should always keep users informed about what is going on, through appropriate feedback within a reasonable amount of time.
+## When to use
 
-## Loading States
+Use this pattern whenever the interface changes state because of user input, background processing or system conditions. Match the surface to the urgency: inline for local feedback, toast for transient global confirmation, alert for important contextual messaging, and dialog for blocking decisions.
 
-Use loading spinners inside buttons for user-initiated actions.
+<Callout type="info" title="Escalate intentionally">
+  Start with the least disruptive feedback surface that still communicates the problem or result clearly.
+</Callout>
+
+## Composition
+
+Loading feedback should live close to the action that triggered it. Success and error messaging should explain both the result and the next step when recovery is needed.
 
 <ComponentPreview>
-  <div className="flex gap-4">
-    <Button disabled>
-        <span className="mr-2 animate-spin">⟳</span>
-        Saving...
-    </Button>
-    <Button variant="secondary" disabled>
+  <div className="space-y-4">
+    <div className="flex flex-wrap gap-3">
+      <Button disabled>
+        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+        Saving changes
+      </Button>
+      <Button variant="secondary" disabled>
         Processing
-    </Button>
+      </Button>
+    </div>
+
+    <Alert>
+      <CheckCircle2 className="h-4 w-4" />
+      <AlertTitle>Saved successfully</AlertTitle>
+      <AlertDescription>
+        Your preferences were updated and are already active in the current workspace.
+      </AlertDescription>
+    </Alert>
+
+    <div className="rounded-xl border border-border bg-card/60 p-4">
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-2/3" />
+      </div>
+    </div>
   </div>
 </ComponentPreview>
 
-## Alerts and Messages
+## Code
 
-Use semantic colors to indicate the nature of the message.
+Compose feedback from Limia primitives and keep business logic in the product layer. Use alerts for contextual messaging, loading affordances near the triggering control, and toasts for non-blocking app-level confirmation.
 
-<div className="grid gap-4 my-6">
-    <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-900 text-green-800 dark:text-green-300 flex gap-3 items-start">
-        <CheckCircle2 size={20} className="mt-0.5 shrink-0" />
-        <div>
-            <h4 className="font-semibold text-sm">Success</h4>
-            <p className="text-sm opacity-90">Your changes have been saved successfully.</p>
-        </div>
+```tsx
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+} from "@limia/design-system";
+import { LoaderCircle } from "lucide-react";
+
+export function SavePanel({ saving }: { saving: boolean }) {
+  return (
+    <div className="space-y-4">
+      <Button disabled={saving}>
+        {saving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : null}
+        {saving ? "Saving changes" : "Save changes"}
+      </Button>
+
+      <Alert>
+        <AlertTitle>Need attention</AlertTitle>
+        <AlertDescription>
+          Review the highlighted fields before publishing.
+        </AlertDescription>
+      </Alert>
     </div>
+  );
+}
+```
 
-     <div className="p-4 rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-900 text-red-800 dark:text-red-300 flex gap-3 items-start">
-        <AlertCircle size={20} className="mt-0.5 shrink-0" />
-        <div>
-            <h4 className="font-semibold text-sm">Error</h4>
-            <p className="text-sm opacity-90">Unable to connect to the server. Please try again.</p>
-        </div>
-    </div>
-</div>
+## Accessibility
 
+- Announce status changes in a way that matches urgency. Critical issues should not rely on toast alone.
+- Keep loading feedback near the initiating action so keyboard and screen-reader users understand what changed.
+- Write actionable error messages that help users recover instead of generic failure text.
+
+<DoDontContainer>
+  <DoDont type="do" title="Explain what happens next">
+    Pair errors and warnings with the next action, such as retrying, editing a field or checking a connection.
+  </DoDont>
+  <DoDont type="dont" title="Hide progress behind motion only">
+    Spinners and shimmer effects are supportive, but the label should still say what is loading or saving.
+  </DoDont>
+</DoDontContainer>

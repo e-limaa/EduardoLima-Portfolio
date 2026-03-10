@@ -9,12 +9,6 @@ import {
   SelectValue,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Select"
-  description="Select ajuda o usuario a escolher uma unica opcao em uma lista estruturada sem ocupar espaco demais na interface."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
   <div className="max-w-sm space-y-2">
     <Label className="text-sm font-medium">Etapa do projeto</Label>
@@ -25,17 +19,41 @@ import {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Fluxo</SelectLabel>
-          <SelectItem value="discovery">Descoberta</SelectItem>
+          <SelectItem value="discovery">Discovery</SelectItem>
           <SelectItem value="design">Design</SelectItem>
-          <SelectItem value="build">Construcao</SelectItem>
+          <SelectItem value="build">Build</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
   </div>
 </ComponentPreview>
 
+## Visão geral
+
+Select ajuda a escolher uma única opção em uma lista estruturada mantendo a interface compacta.
+
 ## Uso
 
-- Use select para escolhas unicas concisas com mais de poucas opcoes.
-- Prefira radio group quando todas as opcoes precisarem permanecer visiveis.
-- Mantenha o placeholder curto e use label externa quando o campo precisar de contexto.
+Use select para escolhas únicas e concisas quando houver mais do que poucas opções. Prefira radio group quando todas as opções precisarem ficar visíveis ao mesmo tempo.
+
+## Estilo
+
+Mantenha o placeholder curto e o label fora do trigger quando o campo exigir mais contexto. Agrupe opções apenas quando isso realmente ajudar no scan.
+
+## Código
+
+```tsx
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- O campo continua precisando de label visível na maioria dos formulários.
+- Labels das opções devem ser concisos e sem ambiguidade.
+- Evite usar select para decisões binárias que funcionam melhor com switch ou radio.

@@ -1,5 +1,7 @@
 import {
   Button,
+  Input,
+  Label,
   Sheet,
   SheetContent,
   SheetDescription,
@@ -9,35 +11,57 @@ import {
   SheetTrigger,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Sheet"
-  description="Sheet abre um fluxo de apoio a partir da borda da viewport, preservando o contexto da pagina."
-  status="beta"
-/>
-
 <ComponentPreview>
   <Sheet>
     <SheetTrigger asChild>
-      <Button variant="outline">Abrir sheet</Button>
+      <Button variant="outline">Editar configurações</Button>
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Configuracoes do projeto</SheetTitle>
+        <SheetTitle>Configurações de perfil</SheetTitle>
         <SheetDescription>
-          Use sheet para tarefas de apoio que precisam de mais espaco do que um popover, mas menos peso do que uma pagina inteira.
+          Faça ajustes rápidos sem perder o contexto da página atual.
         </SheetDescription>
       </SheetHeader>
-      <div className="px-4 pb-4 text-sm text-muted-foreground">
-        A superficie permanece ligada a pagina atual, deixando edicoes e revisoes mais leves.
+      <div className="space-y-4 py-6">
+        <div className="space-y-2">
+          <Label htmlFor="name">Nome</Label>
+          <Input id="name" defaultValue="Eduardo Lima" />
+        </div>
       </div>
       <SheetFooter>
-        <Button>Salvar alteracoes</Button>
+        <Button>Salvar alterações</Button>
       </SheetFooter>
     </SheetContent>
   </Sheet>
 </ComponentPreview>
 
+## Visão geral
+
+Sheet abre fluxos de apoio a partir da borda da viewport, preservando o contexto da página.
+
 ## Uso
 
-- Use sheet para fluxos de apoio, filtros, paineis laterais e revisao de detalhes.
-- Prefira dialog para confirmacoes curtas e popover para conteudo contextual compacto.
+Use sheet para edição secundária, configurações de apoio e tarefas contextuais que se beneficiam de continuar ancoradas à página atual. Prefira dialog quando a tarefa for mais crítica do que a página de fundo.
+
+## Estilo
+
+Mantenha o conteúdo do sheet focado e organizado na vertical. A entrada pela borda deve parecer uma extensão do fluxo atual, não uma página escondida.
+
+## Código
+
+```tsx
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- Sheet gerencia o foco enquanto estiver aberto.
+- Título e descrição devem explicar para que o painel serve antes que a pessoa alcance os campos.
+- Evite sobrecarregar o sheet com fluxos longos e multi-step.

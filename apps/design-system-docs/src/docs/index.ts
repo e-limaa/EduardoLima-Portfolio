@@ -3,3 +3,4 @@ export * from "./registry";
 export * from "./renderer";
 export * from "./mdx-provider";
 export * from "./overview";
+export * from "./context";

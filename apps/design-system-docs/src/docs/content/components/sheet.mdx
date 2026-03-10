@@ -1,5 +1,7 @@
 import {
   Button,
+  Input,
+  Label,
   Sheet,
   SheetContent,
   SheetDescription,
@@ -9,26 +11,23 @@ import {
   SheetTrigger,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Sheet"
-  description="Sheet opens a supporting flow from the edge of the viewport while preserving page context."
-  status="beta"
-/>
-
 <ComponentPreview>
   <Sheet>
     <SheetTrigger asChild>
-      <Button variant="outline">Open sheet</Button>
+      <Button variant="outline">Edit settings</Button>
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Project settings</SheetTitle>
+        <SheetTitle>Profile settings</SheetTitle>
         <SheetDescription>
-          Use sheet for supporting tasks that need more room than a popover but less weight than a full page.
+          Make quick updates without leaving the current page context.
         </SheetDescription>
       </SheetHeader>
-      <div className="px-4 pb-4 text-sm text-muted-foreground">
-        The surface stays attached to the current page, making edits or reviews feel lightweight.
+      <div className="space-y-4 py-6">
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" defaultValue="Eduardo Lima" />
+        </div>
       </div>
       <SheetFooter>
         <Button>Save changes</Button>
@@ -37,7 +36,32 @@ import {
   </Sheet>
 </ComponentPreview>
 
+## Overview
+
+Sheet opens supporting flows from the edge of the viewport while preserving page context.
+
 ## Usage
 
-- Use sheet for supporting workflows, filters, side panels and detail review.
-- Prefer dialog for short confirmation flows and popover for compact contextual content.
+Use sheet for secondary editing, supportive settings and contextual tasks that benefit from staying anchored to the current page. Prefer dialog when the task is more critical than the underlying page.
+
+## Style
+
+Keep sheet content focused and vertically structured. The edge entry should feel like an extension of the current workflow, not a hidden full page.
+
+## Code
+
+```tsx
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@limia/design-system";
+```
+
+## Accessibility
+
+- Sheet manages focus while open.
+- Titles and descriptions should explain what the panel is for before the user reaches the form fields.
+- Avoid overloading sheet with long multi-step flows.

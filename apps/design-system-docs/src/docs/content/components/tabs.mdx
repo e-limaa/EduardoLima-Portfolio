@@ -1,11 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Tabs"
-  description="Tabs switch between related views without forcing navigation away from the current page."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
   <Tabs defaultValue="overview" className="w-full max-w-2xl">
     <TabsList>
@@ -20,12 +14,31 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@limia/design-system';
       Keep labels short and comparable so users can scan the set quickly.
     </TabsContent>
     <TabsContent value="usage" className="rounded-xl border border-border bg-card/40 p-4">
-      Do not use tabs when users must compare content across all sections simultaneously.
+      Do not use tabs when users must compare all sections simultaneously.
     </TabsContent>
   </Tabs>
 </ComponentPreview>
 
+## Overview
+
+Tabs switch between related views without forcing navigation away from the current page.
+
+## Usage
+
+Use tabs when views belong to the same context and users benefit from quick switching. Prefer separate pages when each section needs its own URL, hierarchy or long-form reading.
+
+## Style
+
+Labels should be concise, comparable and horizontally scannable. Too many tabs usually indicate that the information architecture needs another layer.
+
+## Code
+
+```tsx
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@limia/design-system";
+```
+
 ## Accessibility
 
-- Tabs are keyboard navigable with arrow keys once focused.
-- Use concise labels and keep the number of tabs manageable.
+- Tabs support keyboard navigation with arrow keys once focused.
+- Keep active state visible beyond color alone.
+- Do not force long or wrapping labels into the tab list.

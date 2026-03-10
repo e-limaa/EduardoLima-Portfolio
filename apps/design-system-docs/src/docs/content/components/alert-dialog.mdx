@@ -11,12 +11,6 @@ import {
   Button,
 } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Alert Dialog"
-  description="Alert dialog confirms destructive or high-impact actions before they happen."
-  status="beta"
-/>
-
 <ComponentPreview>
   <AlertDialog>
     <AlertDialogTrigger asChild>
@@ -26,7 +20,7 @@ import {
       <AlertDialogHeader>
         <AlertDialogTitle>Delete this project?</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone and will remove all related assets.
+          This action removes the project permanently and cannot be undone.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
@@ -37,8 +31,34 @@ import {
   </AlertDialog>
 </ComponentPreview>
 
+## Overview
+
+Alert dialog confirms destructive or high-impact actions before execution.
+
 ## Usage
 
-- Use alert dialog for destructive, irreversible or high-risk actions.
-- Keep the title explicit about the consequence.
-- Prefer dialog or sheet for multi-step edits and non-destructive tasks.
+Use alert dialog when the user is about to trigger a change that is destructive, costly or hard to recover from. Do not use it for routine confirmation that slows the flow without adding safety.
+
+## Style
+
+Keep titles direct and consequence-focused. Users should understand what will happen and whether the action can be reversed before they choose.
+
+## Code
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@limia/design-system";
+```
+
+## Accessibility
+
+- The dialog traps focus while open.
+- Title and description should explain consequence and recovery clearly.
+- Destructive actions should have explicit labels such as "Delete project" instead of generic "Confirm".

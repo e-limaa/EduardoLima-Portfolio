@@ -1,95 +1,303 @@
-// This would ideally come from the tokens package, but for docs we can hardcode key intents or map them
-// Since we have CSS variables, we can just use them.
+import { primitiveTokens, tokens } from "@limia/tokens";
 
-const SWATCHES: Record<string, { name: string, token: string, text: string, border?: boolean }[]> = {
-    brand: [
-        { name: 'Primary', token: 'bg-primary', text: 'text-primary-foreground' },
-        { name: 'Secondary', token: 'bg-secondary', text: 'text-secondary-foreground' },
-        { name: 'Accent', token: 'bg-accent', text: 'text-accent-foreground' },
-    ],
-    status: [
-        { name: 'Destructive', token: 'bg-destructive', text: 'text-destructive-foreground' },
-        { name: 'Muted', token: 'bg-muted', text: 'text-muted-foreground' },
-    ],
-    backgrounds: [
-        { name: 'Background', token: 'bg-background', text: 'text-foreground', border: true },
-        { name: 'Card', token: 'bg-card', text: 'text-card-foreground', border: true },
-        { name: 'Popover', token: 'bg-popover', text: 'text-popover-foreground', border: true },
-    ]
+type Locale = "en" | "pt-br";
+
+type Swatch = {
+  label: string;
+  background: string;
+  foreground: string;
+  border?: string;
 };
 
-const PRIMITIVES = {
-    Slate: [
-        'bg-slate-50', 'bg-slate-100', 'bg-slate-200', 'bg-slate-300', 'bg-slate-400',
-        'bg-slate-500', 'bg-slate-600', 'bg-slate-700', 'bg-slate-800', 'bg-slate-900', 'bg-slate-950'
-    ],
-    Blue: [
-        'bg-blue-50', 'bg-blue-100', 'bg-blue-200', 'bg-blue-300', 'bg-blue-400',
-        'bg-blue-500', 'bg-blue-600', 'bg-blue-700', 'bg-blue-800', 'bg-blue-900', 'bg-blue-950'
-    ],
-    Red: [
-        'bg-red-50', 'bg-red-100', 'bg-red-200', 'bg-red-300', 'bg-red-400',
-        'bg-red-500', 'bg-red-600', 'bg-red-700', 'bg-red-800', 'bg-red-900', 'bg-red-950'
-    ],
-};
+const PRIMITIVE_STEPS = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"] as const;
+const PRIMITIVE_FAMILIES = ["zinc", "brand", "cyan", "teal", "emerald", "amber", "violet", "rose", "red"] as const;
 
-export function ColorPalette() {
-    return (
-        <div className="space-y-12">
-            {/* Semantic Colors */}
-            <div className="space-y-8">
-                <h3 className="text-2xl font-bold tracking-tight">Semantic Colors</h3>
-                {Object.entries(SWATCHES).map(([category, items]) => (
-                    <div key={category}>
-                        <h4 className="capitalize text-lg font-semibold mb-4 text-foreground">{category}</h4>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {items.map((item) => (
-                                <div key={item.name} className="flex flex-col space-y-2">
-                                    <div
-                                        className={`h-24 w-full rounded-md flex items-center justify-center border shadow-sm ${item.token} ${item.border ? 'border-border' : 'border-transparent'}`}
-                                    >
-                                        <span className={`text-sm font-medium ${item.text}`}>Aa</span>
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-medium text-foreground">{item.name}</span>
-                                        <code className="text-xs text-muted-foreground">{item.token}</code>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
+const COPY = {
+  en: {
+    semanticTitle: "Semantic roles",
+    semanticDescription: "Roles stay stable across themes. Hue is a tool; intent is the contract.",
+    layersTitle: "Themes and layers",
+    actionsTitle: "Action tokens",
+    supportTitle: "Support colors",
+    primitivesTitle: "Primitive scales",
+    primitivesDescription: "Raw scales are available for system work, but product code should usually consume semantic roles first.",
+    sample: "Aa",
+    categories: {
+      page: "Page background",
+      surface: "Surface",
+      layer1: "Layer 1",
+      layer2: "Layer 2",
+      layer3: "Layer 3",
+      popover: "Popover",
+      inverse: "Inverse surface",
+      primary: "Primary",
+      secondary: "Secondary",
+      accent: "Accent",
+      destructive: "Destructive",
+      info: "Info",
+      success: "Success",
+      warning: "Warning",
+      danger: "Danger",
+      subtleInfo: "Info subtle",
+      subtleSuccess: "Success subtle",
+      subtleWarning: "Warning subtle",
+      subtleDanger: "Danger subtle",
+    },
+  },
+  "pt-br": {
+    semanticTitle: "Papéis semânticos",
+    semanticDescription: "Os papéis permanecem estáveis entre temas. Matiz é ferramenta; intenção é o contrato.",
+    layersTitle: "Temas e camadas",
+    actionsTitle: "Tokens de ação",
+    supportTitle: "Cores de suporte",
+    primitivesTitle: "Escalas primitivas",
+    primitivesDescription: "As escalas brutas ficam disponíveis para trabalho de sistema, mas o código do produto deve consumir primeiro os papéis semânticos.",
+    sample: "Aa",
+    categories: {
+      page: "Fundo da página",
+      surface: "Superfície",
+      layer1: "Camada 1",
+      layer2: "Camada 2",
+      layer3: "Camada 3",
+      popover: "Popover",
+      inverse: "Superfície inversa",
+      primary: "Primário",
+      secondary: "Secundário",
+      accent: "Accent",
+      destructive: "Destrutivo",
+      info: "Informação",
+      success: "Sucesso",
+      warning: "Aviso",
+      danger: "Perigo",
+      subtleInfo: "Informação sutil",
+      subtleSuccess: "Sucesso sutil",
+      subtleWarning: "Aviso sutil",
+      subtleDanger: "Perigo sutil",
+    },
+  },
+} as const;
 
-            {/* Primitive Colors */}
-            <div className="space-y-8">
-                <h3 className="text-2xl font-bold tracking-tight">Primitives</h3>
-                <p className="text-muted-foreground">The raw color scales used to build the semantic system.</p>
+function colorForStep(step: string) {
+  return Number(step) >= 500 ? tokens["text.on-color"] : tokens["text.primary"];
+}
 
-                {Object.entries(PRIMITIVES).map(([name, classes]) => (
-                    <div key={name}>
-                        <h4 className="capitalize text-lg font-semibold mb-4 text-foreground">{name}</h4>
-                        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11 gap-2">
-                            {classes.map((className) => {
-                                // Extract step number from class: "bg-slate-500" -> "500"
-                                const step = className.split('-').pop();
-                                // Naive contrast logic: 50-400 dark text, 500+ light text
-                                const textColor = parseInt(step || '0') > 400 ? 'text-white' : 'text-slate-900';
+function SemanticSwatch({
+  label,
+  background,
+  foreground,
+  border,
+  sample,
+}: Swatch & { sample: string }) {
+  return (
+    <div className="space-y-2">
+      <div
+        className="flex h-24 items-center justify-center rounded-lg border shadow-sm"
+        style={{
+          backgroundColor: background,
+          color: foreground,
+          borderColor: border ?? tokens["border.default"],
+        }}
+      >
+        <span className="text-sm font-semibold">{sample}</span>
+      </div>
+      <div className="space-y-1">
+        <p className="text-sm font-medium text-foreground">{label}</p>
+        <code className="block text-xs text-muted-foreground">{background}</code>
+      </div>
+    </div>
+  );
+}
 
-                                return (
-                                    <div key={className} className="flex flex-col gap-2">
-                                        <div
-                                            className={`h-16 w-full rounded-md flex items-center justify-center border shadow-sm ${className} border-transparent`}
-                                        >
-                                            <span className={`text-xs font-medium ${textColor}`}>{step}</span>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-                ))}
-            </div>
+export function ColorPalette({ locale = "en" }: { locale?: Locale }) {
+  const copy = COPY[locale];
+
+  const layers: Swatch[] = [
+    {
+      label: copy.categories.page,
+      background: tokens["background.default"],
+      foreground: tokens["text.primary"],
+      border: tokens["border.default"],
+    },
+    {
+      label: copy.categories.surface,
+      background: tokens["background.surface"],
+      foreground: tokens["text.primary"],
+      border: tokens["border.default"],
+    },
+    {
+      label: copy.categories.layer1,
+      background: tokens["background.layer-1"],
+      foreground: tokens["text.primary"],
+      border: tokens["border.subtle"],
+    },
+    {
+      label: copy.categories.layer2,
+      background: tokens["background.layer-2"],
+      foreground: tokens["text.primary"],
+      border: tokens["border.default"],
+    },
+    {
+      label: copy.categories.layer3,
+      background: tokens["background.layer-3"],
+      foreground: tokens["text.primary"],
+      border: tokens["border.strong"],
+    },
+    {
+      label: copy.categories.popover,
+      background: tokens["background.popover"],
+      foreground: tokens["text.primary"],
+      border: tokens["border.default"],
+    },
+    {
+      label: copy.categories.inverse,
+      background: tokens["background.inverse"],
+      foreground: tokens["text.inverse"],
+      border: tokens["border.inverse"],
+    },
+  ];
+
+  const actions: Swatch[] = [
+    {
+      label: copy.categories.primary,
+      background: tokens["action.primary.background"],
+      foreground: tokens["action.primary.foreground"],
+    },
+    {
+      label: copy.categories.secondary,
+      background: tokens["action.secondary.background"],
+      foreground: tokens["action.secondary.foreground"],
+      border: tokens["border.default"],
+    },
+    {
+      label: copy.categories.accent,
+      background: tokens["action.accent.background"],
+      foreground: tokens["action.accent.foreground"],
+    },
+    {
+      label: copy.categories.destructive,
+      background: tokens["action.destructive.background"],
+      foreground: tokens["action.destructive.foreground"],
+    },
+  ];
+
+  const support: Swatch[] = [
+    {
+      label: copy.categories.info,
+      background: tokens["support.info.background"],
+      foreground: tokens["support.info.foreground"],
+    },
+    {
+      label: copy.categories.success,
+      background: tokens["support.success.background"],
+      foreground: tokens["support.success.foreground"],
+    },
+    {
+      label: copy.categories.warning,
+      background: tokens["support.warning.background"],
+      foreground: tokens["support.warning.foreground"],
+    },
+    {
+      label: copy.categories.danger,
+      background: tokens["support.danger.background"],
+      foreground: tokens["support.danger.foreground"],
+    },
+    {
+      label: copy.categories.subtleInfo,
+      background: tokens["support.info.subtle"],
+      foreground: tokens["support.info.subtle-foreground"],
+      border: tokens["support.info.border"],
+    },
+    {
+      label: copy.categories.subtleSuccess,
+      background: tokens["support.success.subtle"],
+      foreground: tokens["support.success.subtle-foreground"],
+      border: tokens["support.success.border"],
+    },
+    {
+      label: copy.categories.subtleWarning,
+      background: tokens["support.warning.subtle"],
+      foreground: tokens["support.warning.subtle-foreground"],
+      border: tokens["support.warning.border"],
+    },
+    {
+      label: copy.categories.subtleDanger,
+      background: tokens["support.danger.subtle"],
+      foreground: tokens["support.danger.subtle-foreground"],
+      border: tokens["support.danger.border"],
+    },
+  ];
+
+  return (
+    <div className="space-y-12">
+      <section className="space-y-6">
+        <div className="space-y-2">
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">{copy.semanticTitle}</h3>
+          <p className="max-w-3xl text-sm text-muted-foreground">{copy.semanticDescription}</p>
         </div>
-    );
+
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-foreground">{copy.layersTitle}</h4>
+          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
+            {layers.map((swatch) => (
+              <SemanticSwatch key={swatch.label} {...swatch} sample={copy.sample} />
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-foreground">{copy.actionsTitle}</h4>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {actions.map((swatch) => (
+              <SemanticSwatch key={swatch.label} {...swatch} sample={copy.sample} />
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-foreground">{copy.supportTitle}</h4>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {support.map((swatch) => (
+              <SemanticSwatch key={swatch.label} {...swatch} sample={copy.sample} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <div className="space-y-2">
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">{copy.primitivesTitle}</h3>
+          <p className="max-w-3xl text-sm text-muted-foreground">{copy.primitivesDescription}</p>
+        </div>
+
+        <div className="space-y-8">
+          {PRIMITIVE_FAMILIES.map((family) => (
+            <div key={family} className="space-y-3">
+              <h4 className="text-lg font-semibold capitalize text-foreground">{family}</h4>
+              <div className="grid grid-cols-3 gap-2 md:grid-cols-6 xl:grid-cols-11">
+                {PRIMITIVE_STEPS.map((step) => {
+                  const tokenKey = `${family}.${step}` as keyof typeof primitiveTokens;
+                  const backgroundColor = primitiveTokens[tokenKey];
+
+                  return (
+                    <div key={tokenKey} className="space-y-2">
+                      <div
+                        className="flex h-16 items-center justify-center rounded-md border border-transparent shadow-sm"
+                        style={{
+                          backgroundColor,
+                          color: colorForStep(step),
+                        }}
+                      >
+                        <span className="text-xs font-semibold">{step}</span>
+                      </div>
+                      <code className="block text-center text-[11px] text-muted-foreground">{tokenKey}</code>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
 }

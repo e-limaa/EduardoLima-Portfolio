@@ -1,63 +1,31 @@
-<DocsPageHeader
-  title="Versioning"
-  description="Our strategy for managing changes and ensuring stability across the system usage."
-  status="stable"
-/>
+## Overview
 
-We follow [Semantic Versioning 2.0.0](https://semver.org/) (SemVer) to manage releases. This ensures that consumers of the Design System can upgrade with confidence.
+Versioning defines how Limia communicates change risk to consumers. The goal is not only release hygiene, but predictable upgrades across apps that depend on the package and tokens.
 
-## Version Format
+## Policy
 
-Given a version number `MAJOR.MINOR.PATCH` (e.g., `1.2.3`), increment the:
+Limia follows Semantic Versioning and treats visual behavior, API contract and token semantics as part of the versioned surface.
 
-1. **MAJOR** version when you make incompatible API changes.
-2. **MINOR** version when you add functionality in a backward compatible manner.
-3. **PATCH** version when you make backward compatible bug fixes.
+- `MAJOR`: breaking API changes, removed exports or visual shifts that require consumer migration
+- `MINOR`: backward-compatible additions such as new components, optional props or variants
+- `PATCH`: backward-compatible fixes, documentation corrections and internal improvements
 
----
-
-## When to Version
-
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-    <div className="p-6 border rounded-xl bg-card">
-        <div className="text-3xl font-bold text-primary mb-2">Major</div>
-        <div className="text-sm font-mono text-muted-foreground mb-4">x.0.0</div>
-        <ul className="list-disc pl-4 space-y-2 text-sm text-muted-foreground">
-            <li>Renaming or removing a prop</li>
-            <li>Deleting a component</li>
-            <li>Changing a default value that alters layout</li>
-        </ul>
-    </div>
-
-    <div className="p-6 border rounded-xl bg-card">
-        <div className="text-3xl font-bold text-blue-500 mb-2">Minor</div>
-        <div className="text-sm font-mono text-muted-foreground mb-4">1.x.0</div>
-         <ul className="list-disc pl-4 space-y-2 text-sm text-muted-foreground">
-            <li>Adding a new component</li>
-            <li>Adding a new optional prop</li>
-            <li>Adding a new variant</li>
-        </ul>
-    </div>
-
-    <div className="p-6 border rounded-xl bg-card">
-        <div className="text-3xl font-bold text-green-500 mb-2">Patch</div>
-        <div className="text-sm font-mono text-muted-foreground mb-4">1.2.x</div>
-         <ul className="list-disc pl-4 space-y-2 text-sm text-muted-foreground">
-            <li>Fixing a typo in documentation</li>
-            <li>Adjusting internal implementation without visual change</li>
-            <li>Improving performance</li>
-        </ul>
-    </div>
-</div>
-
-## Deprecation Policy
-
-When a component is slated for removal, we follow a strict multi-phase process to give teams time to migrate.
-
-1.  **Mark as Deprecated**: Add a `@deprecated` TSDoc tag and a console warning in development mode.
-2.  **Grace Period**: Provide a migration guide and keep the component for at least one MAJOR version cycle.
-3.  **Removal**: Remove the component in the next MAJOR release.
-
-<Callout type="warning" title="Breaking Changes">
-  Breaking changes are **only** allowed in Major versions. Never introduce a breaking change in a Minor or Patch release.
+<Callout type="warning" title="Breaking changes">
+  Breaking changes belong only in major releases. A minor release cannot silently change layout expectations, required props or semantic token meaning.
 </Callout>
+
+## Workflow
+
+When planning a release, evaluate the change from the consumer point of view:
+
+1. Does an existing import, prop or token meaning stop working
+2. Does a visual default change in a way that forces layout or QA updates
+3. Is there a migration path or deprecation window when needed
+
+If the answer is yes, the release should be classified accordingly and documented in lifecycle or migration notes.
+
+## References
+
+- [Semantic Versioning](https://semver.org/)
+- `packages/limia-design-system/COMPONENT_STATUS.md`
+- `packages/limia-design-system/CONTRIBUTING.md`

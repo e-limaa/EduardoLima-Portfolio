@@ -1,23 +1,66 @@
 import { Badge } from "@limia/design-system";
 
-<DocsPageHeader
-  title="Badge"
-  description="Indicadores de status e rótulos."
-  status="stable"
-/>
+<ComponentPreview>
+  <div className="flex flex-wrap gap-3">
+    <Badge>Ativo</Badge>
+    <Badge variant="secondary">Rascunho</Badge>
+    <Badge variant="outline">Design System</Badge>
+    <Badge variant="destructive">Depreciado</Badge>
+  </div>
+</ComponentPreview>
+
+## Visão geral
+
+Badges são indicadores compactos de status e metadados. Use-os para manter contexto leve visível dentro de cards, cabeçalhos, tabelas ou navegação sem competir com o conteúdo principal.
 
 ## Uso
 
+Use badges para estados curtos, marcadores de lifecycle e pequenas categorias. Prefira texto corrido ou copy de apoio quando a informação for explicativa em vez de escaneável.
+
+<DoDontContainer>
+  <DoDont type="do" title="Mantenha rótulos curtos">
+    Uma ou duas palavras normalmente bastam. O conteúdo do badge precisa ser entendido rapidamente.
+  </DoDont>
+  <DoDont type="dont" title="Usar badge como botão">
+    Badge não é interativo por padrão. Se o rótulo acionar um filtro ou ação, use um botão ou outro controle com a semântica correta.
+  </DoDont>
+</DoDontContainer>
+
+## Estilo
+
+Escolha a variante pelo significado do rótulo, não apenas pela cor desejada. `default` e `secondary` funcionam para ênfase neutra, `outline` é mais discreto e `destructive` deve ficar restrito a alertas ou depreciação.
+
+<Callout type="info" title="Consistência de status">
+  Reaproveite o mesmo vocabulário de rótulos entre docs e produto. Por exemplo, use a mesma palavra para lifecycle em todos os lugares, em vez de misturar "Beta", "Em progresso" e "Experimental" para o mesmo conceito.
+</Callout>
+
+## Código
+
 ```tsx
 import { Badge } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <div className="flex gap-2">
+      <Badge>Stable</Badge>
+      <Badge variant="secondary">Beta</Badge>
+      <Badge variant="outline">Internal</Badge>
+    </div>
+  );
+}
 ```
 
-<ComponentPreview>
-    <div className="flex gap-4">
-        <Badge>Default</Badge>
-        <Badge variant="secondary">Secondary</Badge>
-        <Badge variant="outline">Outline</Badge>
-        <Badge variant="destructive">Destructive</Badge>
-    </div>
-</ComponentPreview>
+## Acessibilidade
 
+- Badges comunicam contexto de apoio e não devem ser o único lugar onde um significado crítico aparece.
+- Evite usar só cor para diferenciar estados. O texto precisa continuar compreensível sem o tratamento visual.
+- Se o badge estiver dentro de uma região complexa, verifique se o rótulo ainda faz sentido quando lido fora do contexto.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use rótulos explícitos">
+    Prefira palavras como "Stable", "Erro" ou "Rascunho" em vez de iniciais abstratas ou marcadores só com emoji.
+  </DoDont>
+  <DoDont type="dont" title="Depender só de matiz">
+    Não espere que o usuário infira o significado apenas por vermelho, verde ou estilo neutro.
+  </DoDont>
+</DoDontContainer>

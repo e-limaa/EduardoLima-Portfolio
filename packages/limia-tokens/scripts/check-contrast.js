@@ -101,6 +101,14 @@ const CHECKS = [
     { fg: 'text.secondary', bg: 'background.default', name: 'Secondary Text vs Background' },
     { fg: 'action.primary.foreground', bg: 'action.primary.background', name: 'Primary Button' },
     { fg: 'action.destructive.foreground', bg: 'action.destructive.background', name: 'Destructive Button' },
+    { fg: 'support.info.foreground', bg: 'support.info.background', name: 'Info Surface' },
+    { fg: 'support.success.foreground', bg: 'support.success.background', name: 'Success Surface' },
+    { fg: 'support.warning.foreground', bg: 'support.warning.background', name: 'Warning Surface' },
+    { fg: 'support.danger.foreground', bg: 'support.danger.background', name: 'Danger Surface' },
+    { fg: 'support.info.subtle-foreground', bg: 'support.info.subtle', name: 'Info Subtle Surface' },
+    { fg: 'support.success.subtle-foreground', bg: 'support.success.subtle', name: 'Success Subtle Surface' },
+    { fg: 'support.warning.subtle-foreground', bg: 'support.warning.subtle', name: 'Warning Subtle Surface' },
+    { fg: 'support.danger.subtle-foreground', bg: 'support.danger.subtle', name: 'Danger Subtle Surface' },
 ];
 
 function checkMode(modeName, tokens) {

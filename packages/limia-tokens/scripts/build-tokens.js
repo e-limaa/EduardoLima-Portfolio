@@ -90,6 +90,16 @@ function toCssVars(obj, indent = '    ') {
     return css;
 }
 
+function toPrimitiveColorVars(obj, indent = '    ') {
+    const flattened = flattenObject(obj);
+    let css = '';
+    for (const key in flattened) {
+        const varName = '--color-' + key.replace(/\./g, '-');
+        css += `${indent}${varName}: ${flattened[key]};\n`;
+    }
+    return css;
+}
+
 // --- Main Execution ---
 
 // 1. Resolve Semantic Tokens
@@ -112,6 +122,12 @@ if (primitives.spacing) {
         const varName = '--spacing-' + key.replace(/\./g, '-');
         cssContent += `    ${varName}: ${flatSpacing[key]};\n`;
     }
+}
+
+// Add Primitive Colors
+if (primitives.color) {
+    cssContent += `\n    /* Primitive Colors */\n`;
+    cssContent += toPrimitiveColorVars(primitives.color, '    ');
 }
 
 // Add Typography Scale
@@ -153,11 +169,18 @@ fs.writeFileSync(STYLES_OUTPUT_FILE, cssContent);
 const semanticLight = resolvedSemantic.light || {};
 const flattenedSemantic = flattenObject(semanticLight);
 const tsTokenMap = {};
+const flattenedPrimitiveColors = flattenObject(primitives.color || {});
+const primitiveTokenMap = {};
 
 Object.keys(flattenedSemantic).forEach(key => {
     // Convert dots to hyphens for the var name
     const varName = '--' + key.replace(/\./g, '-');
     tsTokenMap[key] = `var(${varName})`;
+});
+
+Object.keys(flattenedPrimitiveColors).forEach(key => {
+    const varName = '--color-' + key.replace(/\./g, '-');
+    primitiveTokenMap[key] = `var(${varName})`;
 });
 
 console.log(`✅ Tokens built successfully to ${OUTPUT_FILE}`);
@@ -168,15 +191,16 @@ const SOURCE_OUTPUT_FILE = path.join(SOURCE_DIR, 'index.ts');
 
 const jsContent = `/**
  * THIS FILE IS AUTO-GENERATED. DO NOT EDIT MANUALLY.
- * Source: packages/limia-tokens/tokens/semantic.json
+ * Source: packages/limia-tokens/tokens/primitives.json + semantic.json
  */
 
 export const tokens = ${JSON.stringify(tsTokenMap, null, 2)};
+export const primitiveTokens = ${JSON.stringify(primitiveTokenMap, null, 2)};
 `;
 
 const dtsContent = `/**
  * THIS FILE IS AUTO-GENERATED. DO NOT EDIT MANUALLY.
- * Source: packages/limia-tokens/tokens/semantic.json
+ * Source: packages/limia-tokens/tokens/primitives.json + semantic.json
  */
 
 export declare const tokens: {
@@ -185,18 +209,27 @@ ${Object.keys(tsTokenMap)
     .join('\n')}
 };
 
+export declare const primitiveTokens: {
+${Object.keys(primitiveTokenMap)
+    .map((key) => `  readonly "${key}": "${primitiveTokenMap[key]}";`)
+    .join('\n')}
+};
+
 export type TokenPath = keyof typeof tokens;
-export type ColorTokenPath = Extract<TokenPath, \`\${'background' | 'text' | 'border' | 'action' | 'chart' | 'sidebar'}\${string}\`>;
+export type PrimitiveTokenPath = keyof typeof primitiveTokens;
+export type ColorTokenPath = Extract<TokenPath, \`\${'background' | 'text' | 'border' | 'action' | 'support' | 'chart' | 'sidebar'}\${string}\`>;
 `;
 const sourceContent = `/**
  * THIS FILE IS AUTO-GENERATED. DO NOT EDIT MANUALLY.
- * Source: packages/limia-tokens/tokens/semantic.json
+ * Source: packages/limia-tokens/tokens/primitives.json + semantic.json
  */
 
 export const tokens = ${JSON.stringify(tsTokenMap, null, 2)} as const;
+export const primitiveTokens = ${JSON.stringify(primitiveTokenMap, null, 2)} as const;
 
 export type TokenPath = keyof typeof tokens;
-export type ColorTokenPath = Extract<TokenPath, \`\${'background' | 'text' | 'border' | 'action' | 'chart' | 'sidebar'}\${string}\`>;
+export type PrimitiveTokenPath = keyof typeof primitiveTokens;
+export type ColorTokenPath = Extract<TokenPath, \`\${'background' | 'text' | 'border' | 'action' | 'support' | 'chart' | 'sidebar'}\${string}\`>;
 `;
 
 fs.writeFileSync(JS_OUTPUT_FILE, jsContent);

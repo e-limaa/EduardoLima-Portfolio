@@ -1,20 +1,32 @@
 import { Label, Switch } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Switch"
-  description="Switch toggles an immediate on or off state for a setting, preference or feature flag."
-  status="beta"
-/>
-
-<ComponentPreview className="block">
-  <div className="flex items-center gap-3">
-    <Switch id="notifications" defaultChecked />
-    <Label htmlFor="notifications">Enable product updates</Label>
+<ComponentPreview>
+  <div className="flex items-center space-x-3">
+    <Switch id="airplane-mode" />
+    <Label htmlFor="airplane-mode">Enable notifications</Label>
   </div>
 </ComponentPreview>
 
+## Overview
+
+Switch toggles a setting on or off immediately.
+
 ## Usage
 
-- Use switch for immediate binary states.
-- Prefer checkbox when the change is part of a larger form submission.
-- Keep labels action-oriented so users understand the resulting state.
+Use switch for binary settings that take effect instantly. Prefer checkbox when the control participates in a form submission rather than applying state immediately.
+
+## Style
+
+Pair switch with a direct label that reads as a stateful setting. If the consequence needs explanation, add helper text near the control.
+
+## Code
+
+```tsx
+import { Switch } from "@limia/design-system";
+```
+
+## Accessibility
+
+- Label the switch clearly with the setting being controlled.
+- Use switch only when users can understand the on/off consequence immediately.
+- Do not mix switch semantics with submit-based checkbox behavior.

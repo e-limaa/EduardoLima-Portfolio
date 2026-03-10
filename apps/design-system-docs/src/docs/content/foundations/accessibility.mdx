@@ -1,87 +1,49 @@
-<DocsPageHeader
-  title="Accessibility"
-  description="Guidelines for creating inclusive digital experiences that work for everyone."
-  status="stable"
-/>
+## Overview
 
-## Our Principles
+Accessibility is a system requirement, not a feature layer. Limia documentation, components and adoption guidance should all preserve inclusive interaction as part of the product contract.
 
-We believe that accessibility is not a feature, but a fundamental requirement. Our Design System is built on the **POUR** validation method:
+## Principles
 
-**Perceivable**: Information and user interface components must be presentable to users in ways they can perceive.<br/>
-**Operable**: User interface components and navigation must be operable.<br/>
-**Understandable**: Information and the operation of user interface must be understandable.<br/>
-**Robust**: Content must be robust enough that it can be interpreted reliably by a wide variety of user agents, including assistive technologies.
+Limia follows the POUR model as an operational baseline:
 
----
+- **Perceivable**: information must be presented in ways users can detect.
+- **Operable**: interaction must work with keyboard and assistive technology.
+- **Understandable**: labels, flows and errors must be clear and recoverable.
+- **Robust**: semantics should survive across browsers, devices and assistive tools.
 
-## Keyboard Navigation
+## Implementation
 
-All interactive elements must be usable with a keyboard alone.
+### Keyboard and focus
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-    <div className="p-4 border rounded-lg bg-yellow-500/10 border-yellow-500/20">
-        <h4 className="font-bold text-yellow-500 mb-2">Focus Visible</h4>
-        <p className="text-sm text-muted-foreground">
-            Never suppress the focus ring outline unless you are providing a custom, high-contrast alternative.
-            The Design System provides a standardized `focus-visible` ring.
-        </p>
-    </div>
-    <div className="p-4 border rounded-lg bg-blue-500/10 border-blue-500/20">
-        <h4 className="font-bold text-blue-500 mb-2">Tab Order</h4>
-        <p className="text-sm text-muted-foreground">
-            Ensure the tab order follows the visual flow of the page (left to right, top to bottom).
-            Avoid using positive `tabindex` values (e.g., `tabindex="1"`).
-        </p>
-    </div>
-</div>
+All interactive elements must remain operable with keyboard alone. Do not suppress the system focus ring without replacing it with an equally visible alternative.
 
-## Screen Readers
+### Semantics and labels
 
-### Semantic HTML
-Use standard HTML elements (`<button>`, `<a href>`, `<input>`) whenever possible. They come with built-in accessibility features that div-soups lack.
-
-### ARIA Labels
-Use `aria-label` or `aria-labelledby` only when the visual text label is missing or insufficient (e.g., an icon-only button).
+Prefer native HTML elements and add ARIA only when semantic text is missing or insufficient.
 
 ```tsx
-// ✅ Do this
 <button aria-label="Close menu">
-  <XIcon />
-</button>
-
-// ❌ Avoid this (screen reader reads "button")
-<button>
   <XIcon />
 </button>
 ```
 
----
+### Color, motion and feedback
 
-## Color and Contrast
+- Meet WCAG AA contrast for standard text and component states.
+- Never rely on color alone to convey status.
+- Respect `prefers-reduced-motion` for decorative animation.
 
-We strictly adhere to **WCAG 2.1 AA** standards for contrast. This means:
-- **4.5:1** for normal text.
-- **3:1** for large text (18pt+) and UI components (borders, icons).
-
-<Callout type="warning" title="Don't rely on color alone">
-    Status indicators like "Error" or "Success" must be accompanied by an icon or text label, not just a color change, to accommodate colorblind users.
-</Callout>
-
----
-
-## Animation & Motion
-
-Respect the user's `prefers-reduced-motion` setting.
-
-- **Essential Motion**: Transitions that guide the user (e.g., an accordion opening) are allowed but should be instant or cross-fade when reduced motion is requested.
-- **Decorative Motion**: parallax, auto-playing videos, and heavy animations must be disabled.
+## Accessibility
 
 <DoDontContainer>
-  <DoDont type="do" title="Support Reduced Motion">
-    Use CSS media queries or the `framer-motion` `useReducedMotion` hook to conditionally render animations.
+  <DoDont type="do" title="Support reduced motion">
+    Disable or simplify decorative motion when users request reduced movement.
   </DoDont>
-  <DoDont type="dont" title="Auto-play Audio">
-    Never auto-play audio or video with sound. It interferes with screen readers and can be disorienting.
+  <DoDont type="dont" title="Auto-play disruptive media">
+    Avoid auto-playing audio or sound-enabled video because it conflicts with assistive technology and orientation.
   </DoDont>
 </DoDontContainer>
+
+<Callout type="warning" title="System-level responsibility">
+  Accessibility work is only complete when tokens, components, documentation and consuming apps all preserve the same guarantees.
+</Callout>

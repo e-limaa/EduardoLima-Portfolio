@@ -1,32 +1,58 @@
-import { Avatar, AvatarFallback, AvatarImage, HoverCard, HoverCardContent, HoverCardTrigger } from '@limia/design-system';
-
-<DocsPageHeader
-  title="Hover Card"
-  description="Hover card revela contexto leve e detalhes de perfil sem forcar um salto de navegacao."
-  status="beta"
-/>
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@limia/design-system';
 
 <ComponentPreview>
   <HoverCard>
     <HoverCardTrigger asChild>
-      <button className="text-sm font-medium text-primary underline-offset-4 hover:underline">
-        @eduardolima
-      </button>
+      <a href="#" className="text-primary underline underline-offset-4">@limia</a>
     </HoverCardTrigger>
-    <HoverCardContent className="flex gap-3">
-      <Avatar>
-        <AvatarImage src="/assets/images/Edu-image.webp" alt="Eduardo Lima" />
-        <AvatarFallback>EL</AvatarFallback>
-      </Avatar>
-      <div className="space-y-1">
-        <p className="text-sm font-medium text-foreground">Eduardo Lima</p>
-        <p className="text-sm text-muted-foreground">Designer e builder focado em experiencias habilitadas por IA.</p>
+    <HoverCardContent className="w-80">
+      <div className="flex gap-4">
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" alt="Limia" />
+          <AvatarFallback>LI</AvatarFallback>
+        </Avatar>
+        <div className="space-y-1">
+          <h4 className="text-sm font-semibold">Limia Design System</h4>
+          <p className="text-sm text-muted-foreground">
+            Prévia contextual leve para documentação e metadados de interface.
+          </p>
+        </div>
       </div>
     </HoverCardContent>
   </HoverCard>
 </ComponentPreview>
 
+## Visão geral
+
+Hover card revela uma prévia contextual leve em hover ou foco.
+
 ## Uso
 
-- Use hover card para preview de perfil, metadados e contexto leve.
-- Nao esconda acoes essenciais ou instrucoes importantes em conteudo visivel apenas por hover.
+Use hover card para metadados suplementares, como prévias de perfil, labels ou pequenos detalhes de referência. Não use para informação crítica necessária para completar a tarefa.
+
+## Estilo
+
+Mantenha o conteúdo curto e fácil de escanear. Hover card deve parecer uma prévia, não um dialog completo ou um formulário.
+
+## Código
+
+```tsx
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- O conteúdo também precisa ser alcançável por foco, e não apenas por hover.
+- Não coloque ações obrigatórias ou instruções essenciais apenas dentro do card.
+- O texto do trigger deve continuar significativo fora da prévia.

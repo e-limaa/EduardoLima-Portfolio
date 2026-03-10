@@ -1,81 +1,78 @@
-import { Button } from "@limia/design-system";
+import { Button } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Instalação"
-  description="Como instalar e configurar o Design System."
-  status="stable"
-/>
+## Visão geral
 
-## Pré-requisitos
+Instale o Limia como uma dependência gerenciada. Apps consumidores devem importar os pacotes do sistema diretamente, em vez de copiar primitives ou recriar o tema localmente.
 
-Certifique-se de que seu projeto está usando as seguintes versões (ou superiores):
+## Setup
+
+### Requisitos
 
 - Node.js 18+
 - React 18+
 - Tailwind CSS 3.3+
 
-## Instalando o Pacote
+### Instale os pacotes
 
 ```bash
-npm install @limia/design-system
-# ou
-yarn add @limia/design-system
+npm install @limia/design-system @limia/tokens
 ```
 
-## Configuração
-
-### 1. Adicionar ao Tailwind
-
-Adicione o preset do nosso Design System ao seu `tailwind.config.js` para herdar todos os tokens e cores.
-
-```js
-// tailwind.config.js
-module.exports = {
-  content: [
-    "./src/**/*.{ts,tsx}",
-    "./node_modules/@limia/design-system/dist/**/*.{js,ts,jsx,tsx}" // Importante!
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [
-    require("@tailwindcss/typography"),
-     // Outros plugins
-  ],
-}
-```
-
-### 2. Importar Estilos Globais
-
-No arquivo raiz do seu projeto (ex: `App.tsx` ou `main.tsx`), importe o CSS:
+### Importe os estilos
 
 ```tsx
 import "@limia/design-system/styles.css";
 import "@limia/tokens/css";
 ```
 
-## Exemplo de Uso
+### Configure o Tailwind
 
-Agora você pode usar os componentes em qualquer lugar:
+```js
+import { limiaPreset } from "@limia/design-system/tailwind";
+
+export default {
+  content: [
+    "./src/**/*.{ts,tsx}",
+    "./node_modules/@limia/design-system/dist/**/*.{js,mjs}"
+  ],
+  presets: [limiaPreset],
+  darkMode: ["class"],
+};
+```
+
+## Uso
+
+Depois que estilos e preset estiverem ligados, os primitives ficam prontos para uso sem configuração adicional.
 
 <ComponentPreview>
-    <div className="flex gap-4 items-center">
-        <Button>Clique aqui</Button>
-        <Button variant="secondary">Secundário</Button>
-    </div>
+  <div className="flex items-center justify-center gap-4 p-8">
+    <Button>Olá mundo</Button>
+    <Button variant="secondary">Ação secundária</Button>
+  </div>
 </ComponentPreview>
 
 ```tsx
 import { Button } from "@limia/design-system";
 
-export default function Page() {
+export default function App() {
   return (
-    <div className="p-10">
-      <Button onClick={() => alert("Funcionou!")}>
-        Clique aqui
-      </Button>
+    <div className="flex gap-4">
+      <Button>Olá mundo</Button>
+      <Button variant="secondary">Ação secundária</Button>
     </div>
-  )
+  );
 }
 ```
 
+## Próximos passos
+
+Depois da instalação, avance para as regras de adoção e comece a substituir primitives locais pelos exports públicos do Limia.
+
+<DoDontContainer>
+  <DoDont type="do" title="Consuma os exports públicos">
+    Importe primitives diretamente de `@limia/design-system` para que os apps recebam as atualizações mais recentes de acessibilidade e tokens.
+  </DoDont>
+  <DoDont type="dont" title="Faça fork local do sistema">
+    Evite duplicar primitives, recriar variáveis de token ou introduzir valores arbitrários antes de verificar se o sistema já expõe a capacidade necessária.
+  </DoDont>
+</DoDontContainer>

@@ -1,56 +1,76 @@
-import { Button, Input, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@limia/design-system';
-import { Label } from '@limia/design-system';
-
-<DocsPageHeader 
-  title="Forms" 
-  description="Guidelines for data entry layouts and validation feedback." 
-  status="draft" 
-/>
+import { Button, Input, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Label } from '@limia/design-system';
 
 ## Overview
 
-Forms are the primary way users interact with the system. A well-designed form guides the user, minimizes errors, and creates a sense of confidence.
+Forms are the highest-friction interaction pattern in most products. Good form composition reduces ambiguity, groups related fields and keeps validation tied to the input that needs attention.
 
-## Structure
+## When to use
 
-Group related fields into sections or Cards. Use a clear primary action at the bottom right or left aligned depending on context.
+Use this pattern when users need to enter or update structured data over more than one field. Prefer direct manipulation, toggles or single-purpose controls when a full form would add unnecessary friction.
+
+<Callout type="info" title="Progressive complexity">
+  Start with the smallest useful set of fields. Add advanced fields only when the task or user role genuinely requires them.
+</Callout>
+
+## Composition
+
+Group related fields into sections and anchor the primary action at the end of the form. Long forms should expose rhythm through spacing, headings and help text.
 
 <ComponentPreview>
-  <Card className="w-full max-w-lg mx-auto">
+  <Card className="mx-auto w-full max-w-lg">
     <CardHeader>
-        <CardTitle>Profile Settings</CardTitle>
-        <CardDescription>Update your personal information.</CardDescription>
+      <CardTitle>Profile settings</CardTitle>
+      <CardDescription>Update your public information and contact details.</CardDescription>
     </CardHeader>
     <CardContent className="space-y-4">
-        <div className="space-y-1.5">
-            <Label htmlFor="username">Username</Label>
-            <Input id="username" defaultValue="@johndoe" />
-        </div>
-        <div className="space-y-1.5">
-            <Label htmlFor="email">Email Address</Label>
-            <Input id="email" type="email" placeholder="john@example.com" />
-            <p className="text-[0.8rem] text-muted-foreground">We won't spam you.</p>
-        </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="username">Username</Label>
+        <Input id="username" defaultValue="@johndoe" />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="email">Email address</Label>
+        <Input id="email" type="email" placeholder="john@example.com" />
+        <p className="text-[0.8rem] text-muted-foreground">We only use this address for account and product communication.</p>
+      </div>
     </CardContent>
     <CardFooter className="flex justify-end gap-2">
-        <Button variant="ghost">Cancel</Button>
-        <Button>Save Changes</Button>
+      <Button variant="ghost">Cancel</Button>
+      <Button>Save changes</Button>
     </CardFooter>
   </Card>
 </ComponentPreview>
 
-## Validation
+## Code
 
-### Inline Validation
-Show errors immediately when functionality allows (e.g., password strength), or on blur for format errors (email).
+Compose forms from public Limia primitives such as `Input`, `Label`, `Button`, `Checkbox`, `RadioGroup` and `Select`. Keep validation and submission logic in the product layer.
+
+```tsx
+import { Button, Input, Label } from "@limia/design-system";
+
+export function ProfileForm() {
+  return (
+    <form className="space-y-4">
+      <div className="space-y-1.5">
+        <Label htmlFor="email">Email address</Label>
+        <Input id="email" type="email" placeholder="name@example.com" />
+      </div>
+      <Button type="submit">Save changes</Button>
+    </form>
+  );
+}
+```
+
+## Accessibility
+
+- Keep labels visible and programmatically associated with inputs.
+- Show validation close to the field that needs correction.
+- Do not trigger error messaging on the first keystroke unless the control is explicitly real-time, such as password strength.
 
 <DoDontContainer>
-  <DoDont type="do" title="Clear Error Messages">
-    "Password must contain at least 8 characters" is better than "Invalid password".
+  <DoDont type="do" title="Explain the problem">
+    Write errors that help users recover, such as "Password must contain at least 8 characters."
   </DoDont>
-   <DoDont type="dont" title="Validate too early">
-    Don't show an error while the user is still typing the first character.
+  <DoDont type="dont" title="Validate too early">
+    Avoid showing an error while users are still entering the first characters of a field.
   </DoDont>
 </DoDontContainer>
-
-

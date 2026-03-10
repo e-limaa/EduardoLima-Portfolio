@@ -1,48 +1,66 @@
-import { Badge } from '@limia/design-system';
-
-# Badge
-
-Badges are small visual indicators used to communicate status, categories, or numerical values.
-
-## Variants
-
-### Default (Primary)
-Used for the most important status or active state.
+import { Badge } from "@limia/design-system";
 
 <ComponentPreview>
-  <Badge>Active</Badge>
+  <div className="flex flex-wrap gap-3">
+    <Badge>Active</Badge>
+    <Badge variant="secondary">Draft</Badge>
+    <Badge variant="outline">Design System</Badge>
+    <Badge variant="destructive">Deprecated</Badge>
+  </div>
 </ComponentPreview>
 
-### Secondary
-For neutral or informational tags.
+## Overview
 
-<ComponentPreview>
-  <Badge variant="secondary">Draft</Badge>
-</ComponentPreview>
-
-### Outline
-Subtle emphasis key-value pairs or categories.
-
-<ComponentPreview>
-  <Badge variant="outline">Design System</Badge>
-</ComponentPreview>
-
-### Destructive
-For critical alerts, errors, or removed items.
-
-<ComponentPreview>
-  <Badge variant="destructive">Deprecated</Badge>
-</ComponentPreview>
+Badges are compact status and metadata indicators. Use them to keep lightweight context visible inside cards, headers, tables or navigation without competing with the primary content.
 
 ## Usage
 
+Use badges for short states, lifecycle markers and small categorical labels. Prefer text or supporting copy when the information is explanatory rather than scannable.
+
 <DoDontContainer>
-  <DoDont type="do" title="Use for status">
-    Badges are perfect for statuses like "New", "Paid", "Pending".
+  <DoDont type="do" title="Keep labels short">
+    One or two words are usually enough. Badge content should be glanceable, not sentence-like.
   </DoDont>
-  <DoDont type="dont" title="Make interactive">
-    Badges are not buttons. If you need a clickable tag, use a Button with a pill shape or verify it has `onClick` handlers and role.
+  <DoDont type="dont" title="Use badges as buttons">
+    A badge is not interactive by default. If the label triggers a filter or action, use a button or another control with the right semantics.
   </DoDont>
 </DoDontContainer>
 
+## Style
 
+Choose the variant according to the meaning of the label, not only the desired color. `default` and `secondary` work for neutral emphasis, `outline` stays quiet, and `destructive` should be reserved for warnings or deprecation.
+
+<Callout type="info" title="Status consistency">
+  Reuse the same label vocabulary across docs and product surfaces. For example, use the same wording for lifecycle states everywhere instead of mixing "Beta", "In progress" and "Experimental" for the same concept.
+</Callout>
+
+## Code
+
+```tsx
+import { Badge } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <div className="flex gap-2">
+      <Badge>Stable</Badge>
+      <Badge variant="secondary">Beta</Badge>
+      <Badge variant="outline">Internal</Badge>
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+- Badges communicate supporting context and should not be the only place where critical meaning is expressed.
+- Avoid using color alone to differentiate states. The text label must remain understandable without the visual treatment.
+- If a badge is placed inside a complex region, make sure its wording still makes sense when read out of context.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use explicit labels">
+    Prefer words like "Stable", "Error" or "Draft" over abstract initials or emoji-only markers.
+  </DoDont>
+  <DoDont type="dont" title="Depend on hue alone">
+    Do not expect users to infer meaning only from red, green or neutral styling.
+  </DoDont>
+</DoDontContainer>

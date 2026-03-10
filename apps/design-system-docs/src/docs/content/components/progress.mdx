@@ -1,23 +1,32 @@
 import { Progress } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Progress"
-  description="Progress communicates completion over time and helps users calibrate expectation during a running task."
-  status="beta"
-/>
-
-<ComponentPreview className="block">
-  <div className="max-w-md space-y-3">
-    <div className="flex items-center justify-between text-sm">
-      <span className="text-foreground">Uploading assets</span>
-      <span className="text-muted-foreground">72%</span>
-    </div>
-    <Progress value={72} />
+<ComponentPreview>
+  <div className="w-full max-w-sm space-y-3">
+    <Progress value={64} />
+    <p className="text-sm text-muted-foreground">64% complete</p>
   </div>
 </ComponentPreview>
 
+## Overview
+
+Progress shows task completion or loading progress over time.
+
 ## Usage
 
-- Use progress when completion can be estimated.
-- Pair the bar with a label or percentage when the task matters.
-- Prefer skeleton when the system knows the layout but not the duration.
+Use progress when completion can be estimated or measured. Prefer skeleton when the system is still loading structure and cannot provide a meaningful completion value.
+
+## Style
+
+Pair progress with nearby text when the number or outcome matters. The bar alone should support the message, not replace it.
+
+## Code
+
+```tsx
+import { Progress } from "@limia/design-system";
+```
+
+## Accessibility
+
+- Expose progress context in surrounding text when the numeric state matters.
+- Do not use progress as the only feedback for a blocked or failed state.
+- Keep determinate and indeterminate loading patterns visually distinct.

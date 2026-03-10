@@ -1,37 +1,43 @@
-<DocsPageHeader
-  title="Sombras & Elevação"
-  description="A elevação serve para levantar elementos do fundo, indicando hierarquia e interatividade. Usamos sombras para simular este eixo Z de elevação."
-  status="beta"
-/>
+## Visão geral
 
-## Escala
+Sombra comunica elevação, separação e, às vezes, interatividade. No Limia, ela deve apoiar a hierarquia das superfícies, não decorar todos os elementos da tela.
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-8 p-8 bg-muted/20 rounded-xl">
-    <div className="aspect-square bg-card rounded-xl shadow-sm flex items-center justify-center border border-border">
-        <span className="text-xs font-mono text-muted-foreground">shadow-sm</span>
-    </div>
-    <div className="aspect-square bg-card rounded-xl shadow flex items-center justify-center border border-border">
-         <span className="text-xs font-mono text-muted-foreground">shadow</span>
-    </div>
-    <div className="aspect-square bg-card rounded-xl shadow-md flex items-center justify-center border border-border">
-         <span className="text-xs font-mono text-muted-foreground">shadow-md</span>
-    </div>
-    <div className="aspect-square bg-card rounded-xl shadow-lg flex items-center justify-center border border-border">
-         <span className="text-xs font-mono text-muted-foreground">shadow-lg</span>
-    </div>
+## Princípios
+
+Use sombra quando um elemento precisar parecer destacado da superfície atual. Combine com border, background e decisões de camada, em vez de depender apenas de blur ou opacidade.
+
+## Tokens
+
+<div className="my-8 grid gap-8 rounded-xl bg-muted/20 p-8 md:grid-cols-2 lg:grid-cols-4">
+  <div className="aspect-square rounded-xl border border-border bg-card shadow-sm flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow-sm</span>
+  </div>
+  <div className="aspect-square rounded-xl border border-border bg-card shadow flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow</span>
+  </div>
+  <div className="aspect-square rounded-xl border border-border bg-card shadow-md flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow-md</span>
+  </div>
+  <div className="aspect-square rounded-xl border border-border bg-card shadow-lg flex items-center justify-center">
+    <span className="font-mono text-xs text-muted-foreground">shadow-lg</span>
+  </div>
 </div>
 
-## Uso
+## Implementação
 
-- **shadow-sm**: Bordas sutis, estados interativos como hover em linhas de tabela.
-- **shadow (default)**: Cartões, dropdowns, poppers de baixo nível.
-- **shadow-lg**: Modais, Diálogos, Botões de Ação Flutuante.
+- `shadow-sm`: leve destaque interativo ou separação sutil do fundo.
+- `shadow`: elevação padrão para cards, menus e overlays de baixo nível.
+- `shadow-lg`: destaque mais forte para dialogs e superfícies flutuantes críticas.
 
 <DoDontContainer>
-  <DoDont type="do" title="Use para profundidade">
-    Use sombras para separar camadas (ex: um menu dropdown flutuando sobre uma tabela).
+  <DoDont type="do" title="Use sombra para hierarquia">
+    Adicione profundidade quando uma camada precisar se destacar do plano atual, como um menu sobre uma tabela ou um dialog sobre o conteúdo da página.
   </DoDont>
-  <DoDont type="dont" title="Excesso em design flat">
-    Não aplique sombras profundas em elementos que devem parecer nivelados com a superfície (como seções internas de cartões).
+  <DoDont type="dont" title="Use sombra como decoração">
+    Evite empilhar sombras fortes em superfícies planas ou usá-las para compensar uma hierarquia fraca de layout.
   </DoDont>
 </DoDontContainer>
+
+## Acessibilidade
+
+Sombra nunca deve ser o único indício de que um elemento é interativo ou elevado. Combine com borders, backgrounds e estados de foco claros para manter a hierarquia perceptível.

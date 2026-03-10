@@ -1,21 +1,35 @@
 import { Skeleton } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Skeleton"
-  description="Skeleton antecipa a forma do conteudo antes da chegada dos dados reais, reduzindo layout shift e latencia percebida."
-  status="beta"
-/>
-
-<ComponentPreview className="block">
-  <div className="max-w-md space-y-3">
-    <Skeleton className="h-6 w-1/2" />
-    <Skeleton className="h-4 w-full" />
-    <Skeleton className="h-4 w-5/6" />
-    <Skeleton className="h-24 w-full rounded-xl" />
+<ComponentPreview>
+  <div className="flex w-full max-w-sm items-center space-x-4">
+    <Skeleton className="h-12 w-12 rounded-full" />
+    <div className="space-y-2">
+      <Skeleton className="h-4 w-[240px]" />
+      <Skeleton className="h-4 w-[180px]" />
+    </div>
   </div>
 </ComponentPreview>
 
+## Visão geral
+
+Skeleton antecipa a estrutura de carregamento antes da chegada do conteúdo real.
+
 ## Uso
 
-- Reproduza aproximadamente o layout do conteudo final.
-- Prefira skeleton a spinner quando a estrutura da pagina ja for conhecida.
+Use skeleton quando o layout já for conhecido e a pessoa se beneficiar de enxergar a forma do conteúdo que está chegando. Prefira progress quando a conclusão puder ser medida.
+
+## Estilo
+
+Faça o placeholder se aproximar do layout final. Skeleton deve reduzir a percepção de espera, e não introduzir uma estrutura diferente que mude demais quando os dados chegarem.
+
+## Código
+
+```tsx
+import { Skeleton } from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- Skeleton apoia o carregamento, mas não o explica; mantenha uma mensagem real de status por perto quando o loading for significativo.
+- Evite estados muito longos só com skeleton e sem outro feedback.
+- A troca para o conteúdo real deve gerar o mínimo possível de layout shift.

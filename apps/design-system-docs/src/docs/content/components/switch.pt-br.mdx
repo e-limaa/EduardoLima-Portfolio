@@ -1,20 +1,32 @@
 import { Label, Switch } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Switch"
-  description="Switch alterna imediatamente entre ligado e desligado para configuracoes, preferencias ou feature flags."
-  status="beta"
-/>
-
-<ComponentPreview className="block">
-  <div className="flex items-center gap-3">
-    <Switch id="notifications" defaultChecked />
-    <Label htmlFor="notifications">Receber atualizacoes do produto</Label>
+<ComponentPreview>
+  <div className="flex items-center space-x-3">
+    <Switch id="airplane-mode" />
+    <Label htmlFor="airplane-mode">Ativar notificações</Label>
   </div>
 </ComponentPreview>
 
+## Visão geral
+
+Switch alterna uma configuração entre ligado e desligado imediatamente.
+
 ## Uso
 
-- Use switch para estados binarios imediatos.
-- Prefira checkbox quando a mudanca fizer parte de um envio maior de formulario.
-- Mantenha labels orientadas a acao para deixar claro o estado resultante.
+Use switch para configurações binárias que produzem efeito imediato. Prefira checkbox quando o controle participar de um envio de formulário em vez de aplicar estado instantaneamente.
+
+## Estilo
+
+Combine o switch com um label direto que leia como configuração com estado. Se a consequência precisar de explicação, adicione helper text próximo ao controle.
+
+## Código
+
+```tsx
+import { Switch } from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- Dê ao switch um label claro com a configuração que ele controla.
+- Use switch apenas quando a consequência de ligado/desligado for imediatamente compreensível.
+- Não misture semântica de switch com comportamento de checkbox baseado em submit.

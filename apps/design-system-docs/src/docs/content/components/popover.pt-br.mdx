@@ -1,27 +1,46 @@
-import { Button, Popover, PopoverContent, PopoverTrigger } from '@limia/design-system';
-
-<DocsPageHeader
-  title="Popover"
-  description="Popover revela conteudo contextual perto do gatilho sem tirar o usuario da superficie atual."
-  status="beta"
-/>
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@limia/design-system';
 
 <ComponentPreview>
   <Popover>
     <PopoverTrigger asChild>
-      <Button variant="outline">Abrir detalhes</Button>
+      <Button variant="outline">Opções de compartilhamento</Button>
     </PopoverTrigger>
-    <PopoverContent className="space-y-2">
-      <h4 className="font-medium text-foreground">Painel contextual</h4>
-      <p className="text-sm text-muted-foreground">
-        Use popover para conteudo de apoio leve, configuracoes rapidas ou ajuda inline.
-      </p>
+    <PopoverContent className="w-72">
+      <div className="space-y-2">
+        <h4 className="text-sm font-semibold">Compartilhar projeto</h4>
+        <p className="text-sm text-muted-foreground">
+          Copie o link ou envie um convite rápido sem sair da página atual.
+        </p>
+      </div>
     </PopoverContent>
   </Popover>
 </ComponentPreview>
 
+## Visão geral
+
+Popover revela conteúdo contextual em uma superfície flutuante leve.
+
 ## Uso
 
-- Use popover para conteudo pequeno e contextual, ligado ao gatilho.
-- Prefira dialog ou sheet quando o fluxo exigir mais espaco, foco ou varios passos.
-- Mantenha o conteudo compacto e proximo da tarefa.
+Use popover quando o conteúdo for disparado pela pessoa, contextual e pequeno o bastante para manter a página atual como referência principal. Evite para formulários longos, decisões complexas ou fluxos críticos que mereçam um dialog.
+
+## Estilo
+
+Mantenha título, texto e ações compactos. Popover deve ajudar a agir rápido sem criar um segundo modelo mental de tela inteira.
+
+## Código
+
+```tsx
+import { Popover, PopoverContent, PopoverTrigger } from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- Triggers precisam de labels claros.
+- O foco deve entrar no popover de forma previsível quando a interação começar.
+- Não coloque conteúdo crítico e extenso dentro de popover.

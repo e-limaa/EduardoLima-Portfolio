@@ -1,44 +1,37 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Avatar"
-  description="Avatar exibe mídia de identidade para pessoas, times e bots com fallback consistente."
-  status="beta"
-/>
-
-## Uso
-
-Use Avatar quando uma pessoa, assistente ou organização precisa de identidade visual reconhecível em pouco espaço.
-
 <ComponentPreview>
   <div className="flex items-center gap-4">
     <Avatar>
-      <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop" alt="Sarah Collins" />
-      <AvatarFallback>SC</AvatarFallback>
+      <AvatarImage src="https://github.com/shadcn.png" alt="Shadcn" />
+      <AvatarFallback>CN</AvatarFallback>
     </Avatar>
-    <Avatar className="size-12">
-      <AvatarFallback>AI</AvatarFallback>
+    <Avatar>
+      <AvatarFallback>LI</AvatarFallback>
     </Avatar>
   </div>
 </ComponentPreview>
 
-## Anatomia
+## Visão geral
+
+Avatar exibe mídia de identidade para pessoas, times e bots em uma superfície compacta e reutilizável.
+
+## Uso
+
+Use avatar quando identidade ajudar a pessoa a escanear conversas, atribuições, ownership ou autoria. Combine com labels de texto em contextos densos em que iniciais sozinhas não bastam.
+
+## Estilo
+
+Mantenha o tamanho dos avatares consistente dentro do mesmo grupo e trate o fallback como um estado desenhado e suportado, não como erro.
+
+## Código
 
 ```tsx
-import { Avatar, AvatarFallback, AvatarImage } from '@limia/design-system';
-
-export function Example() {
-  return (
-    <Avatar>
-      <AvatarImage src="/avatar.png" alt="Eduardo Lima" />
-      <AvatarFallback>EL</AvatarFallback>
-    </Avatar>
-  );
-}
+import { Avatar, AvatarFallback, AvatarImage } from "@limia/design-system";
 ```
 
-## Diretrizes
+## Acessibilidade
 
-- Prefira fallback curto, como iniciais ou rótulos de assistente.
-- Sempre passe `alt` significativo quando a imagem comunicar identidade.
-- Trate o Avatar como decorativo apenas quando o texto ao redor já nomear o sujeito.
+- Forneça `alt` significativo quando a imagem acrescentar informação de identidade.
+- Use fallback estável para que layout e reconhecimento sobrevivam a falhas de carregamento.
+- Não dependa apenas do avatar para comunicar ownership ou estado.

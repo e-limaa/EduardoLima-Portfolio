@@ -1,28 +1,33 @@
 import { ToggleGroup, ToggleGroupItem } from '@limia/design-system';
-import { AlignCenter, AlignLeft, AlignRight } from 'lucide-react';
-
-<DocsPageHeader
-  title="Toggle Group"
-  description="Toggle group organizes related toggles into a structured set with single or multiple selection."
-  status="beta"
-/>
 
 <ComponentPreview>
-  <ToggleGroup type="single" defaultValue="left" aria-label="Text alignment">
-    <ToggleGroupItem value="left" aria-label="Align left">
-      <AlignLeft />
-    </ToggleGroupItem>
-    <ToggleGroupItem value="center" aria-label="Align center">
-      <AlignCenter />
-    </ToggleGroupItem>
-    <ToggleGroupItem value="right" aria-label="Align right">
-      <AlignRight />
-    </ToggleGroupItem>
+  <ToggleGroup type="single" defaultValue="grid" variant="outline">
+    <ToggleGroupItem value="grid" aria-label="Grid view">Grid</ToggleGroupItem>
+    <ToggleGroupItem value="list" aria-label="List view">List</ToggleGroupItem>
+    <ToggleGroupItem value="kanban" aria-label="Kanban view">Kanban</ToggleGroupItem>
   </ToggleGroup>
 </ComponentPreview>
 
+## Overview
+
+Toggle group organizes related toggles into a structured pressed-state set.
+
 ## Usage
 
-- Use toggle group for related formatting or mode controls.
-- Use `type="single"` for mutually exclusive states.
-- Use `type="multiple"` when several pressed states can coexist.
+Use toggle group when multiple related pressed states must be presented together. Choose `type="single"` for mutually exclusive states and `type="multiple"` for combinable options.
+
+## Style
+
+Option labels should be comparable and visually balanced. Large differences in label length make the group harder to scan and interpret.
+
+## Code
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@limia/design-system";
+```
+
+## Accessibility
+
+- Give the group a clear surrounding label in forms or toolbars.
+- Use icon-only items only when each one has an accessible label.
+- Keep the selection model obvious: single choice should not look like multi-select.

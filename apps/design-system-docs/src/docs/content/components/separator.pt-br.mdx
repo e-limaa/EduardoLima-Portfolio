@@ -1,22 +1,39 @@
 import { Separator } from '@limia/design-system';
 
-<DocsPageHeader
-  title="Separator"
-  description="Separator cria estrutura visual entre blocos de conteudo relacionados sem competir por destaque."
-  status="beta"
-/>
-
 <ComponentPreview className="block">
-  <div className="flex items-center gap-4">
-    <span className="text-sm text-muted-foreground">Visao geral</span>
-    <Separator orientation="vertical" className="h-6" />
-    <span className="text-sm text-muted-foreground">Tokens</span>
-    <Separator orientation="vertical" className="h-6" />
-    <span className="text-sm text-muted-foreground">Governanca</span>
+  <div className="max-w-md space-y-4">
+    <div>Detalhes do projeto</div>
+    <Separator />
+    <div className="flex items-center gap-4">
+      <span>Design</span>
+      <Separator orientation="vertical" className="h-4" />
+      <span>Build</span>
+      <Separator orientation="vertical" className="h-4" />
+      <span>Ship</span>
+    </div>
   </div>
 </ComponentPreview>
 
+## Visão geral
+
+Separator divide regiões relacionadas de conteúdo sem adicionar ruído visual.
+
 ## Uso
 
-- Use separator para organizar grupos, toolbars e secoes empilhadas.
-- Evite quando o espacamento sozinho ja comunicar a separacao com clareza.
+Use separator quando o agrupamento sozinho não bastar para distinguir regiões adjacentes. Evite usá-lo como substituto de espaçamento ou de hierarquia por heading.
+
+## Estilo
+
+Separators devem ser sutis e secundários. Se a divisão parecer forte demais, provavelmente o layout precisa de ritmo, não de mais linhas.
+
+## Código
+
+```tsx
+import { Separator } from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- Use a orientação correta para separadores verticais e horizontais.
+- Não dependa do separator como único sinal de hierarquia.
+- Mantenha títulos e labels de seção disponíveis para tecnologia assistiva.

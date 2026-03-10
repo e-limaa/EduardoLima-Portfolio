@@ -1,3 +1,19 @@
-# Visão Geral dos Componentes
+## Visão geral
 
-Em breve.
+A coleção de Components documenta os blocos públicos de UI do Limia, desde primitives de input e feedback até composições editoriais mais altas, como Section e Project Card.
+
+## Uso
+
+Comece pelo primitive mais simples que resolve o problema e componha para cima apenas quando o padrão realmente se repetir no produto. Os componentes desta coleção devem funcionar com tokens do Limia, lifecycle documentado e paridade entre inglês e português.
+
+## Estilo
+
+Os componentes do Limia devem herdar sua identidade de tokens semânticos, ritmo de espaçamento e hierarquia tipográfica, em vez de valores hardcoded pontuais. A documentação segue a mesma regra: cada página explica ênfase, densidade e comportamento visual antes dos detalhes de implementação.
+
+## Código
+
+Importe componentes públicos de `@limia/design-system` e mantenha wrappers específicos de produto na camada do app. Se um comportamento depender de regra de negócio, roteamento ou conteúdo, documente o pattern separadamente antes de promovê-lo como API do pacote.
+
+## Acessibilidade
+
+Cada página de componente deve explicitar interação por teclado, naming e comunicação de estado. Se o componente ainda não estiver totalmente revisado, a página ainda assim precisa registrar as expectativas atuais de acessibilidade e os limites conhecidos.

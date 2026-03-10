@@ -1,14 +1,12 @@
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@limia/design-system';
-
-<DocsPageHeader
-  title="Dropdown Menu"
-  description="Dropdown Menu apresenta ações contextuais compactas sem quebrar o fluxo da página."
-  status="beta"
-/>
-
-## Uso
-
-Use Dropdown Menu para ações secundárias, troca de modos e listas compactas de ação ancoradas em um trigger.
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@limia/design-system';
 
 <ComponentPreview>
   <DropdownMenu>
@@ -16,43 +14,40 @@ Use Dropdown Menu para ações secundárias, troca de modos e listas compactas d
       <Button variant="outline">Abrir menu</Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuLabel>Perfil</DropdownMenuLabel>
-      <DropdownMenuItem>Configurações</DropdownMenuItem>
-      <DropdownMenuItem>Notificações</DropdownMenuItem>
+      <DropdownMenuLabel>Projeto</DropdownMenuLabel>
+      <DropdownMenuItem>Editar detalhes</DropdownMenuItem>
+      <DropdownMenuItem>Duplicar</DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem variant="destructive">Sair</DropdownMenuItem>
+      <DropdownMenuItem>Arquivar</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </ComponentPreview>
 
-## Anatomia
+## Visão geral
+
+Dropdown menu expõe ações contextuais compactas e seleção leve em uma superfície flutuante.
+
+## Uso
+
+Use dropdown menu para ações locais ligadas ao objeto ou região atual. Evite usá-lo como substituto de navegação principal ou para listas longas e complexas de opções.
+
+## Estilo
+
+Mantenha os labels concisos, agrupe ações quando necessário e separe ações destrutivas das rotineiras. O menu deve permitir leitura em uma passada.
+
+## Código
 
 ```tsx
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@limia/design-system';
-
-export function Example() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost">Ações</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem>Editar</DropdownMenuItem>
-        <DropdownMenuItem>Duplicar</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
+} from "@limia/design-system";
 ```
 
 ## Acessibilidade
 
-- Use um trigger com rótulo visível claro ou `aria-label`.
-- Mantenha os itens orientados por ação e concisos.
-- Use estilo destrutivo apenas para resultados realmente irreversíveis.
+- Menus são navegáveis por teclado por padrão.
+- O label do trigger deve explicar que tipo de menu está sendo aberto.
+- Não esconda caminhos críticos de navegação dentro de menus contextuais.

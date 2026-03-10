@@ -1,7 +1,11 @@
-import { type DocPage, DesignSystemDocsPage } from "../docs";
+import { type DocPage, CurrentDocProvider, DesignSystemDocsPage } from "../docs";
 import { useLanguage } from "./language-provider";
 
 export function DocsPageLoader({ doc }: { doc: DocPage }) {
   const { language } = useLanguage();
-  return <DesignSystemDocsPage doc={doc} language={language} />;
+  return (
+    <CurrentDocProvider doc={doc}>
+      <DesignSystemDocsPage doc={doc} language={language} />
+    </CurrentDocProvider>
+  );
 }

@@ -1,26 +1,20 @@
-import { SectionHeader } from '@limia/design-system';
-
-<DocsPageHeader 
-  title="Cabeçalho de Seção" 
-  description="Um bloco de cabeçalho consistente para seções da página, dispondo título, descrição e uma etiqueta/índice opcional." 
-  status="draft" 
-/>
+import { SectionHeader } from "@limia/design-system";
 
 <ComponentPlayground
   controls={[
-    { name: 'title', type: 'text', defaultValue: 'Minha Seção' },
-    { name: 'description', type: 'text', defaultValue: 'Uma breve descrição desta seção.' },
-    { name: 'index', type: 'text', defaultValue: '01' },
-    { name: 'label', type: 'text', defaultValue: 'RÓTULO' },
-    { name: 'align', type: 'select', options: ['left', 'center'], defaultValue: 'left' }
+    { name: "title", type: "text", defaultValue: "Ritmo compartilhado entre seções" },
+    { name: "description", type: "text", defaultValue: "SectionHeader alinha título, descrição e metadados de apoio sem que cada seção precise reinventar seu próprio bloco de introdução." },
+    { name: "index", type: "text", defaultValue: "01" },
+    { name: "label", type: "text", defaultValue: "SYSTEM" },
+    { name: "align", type: "select", options: ["left", "center"], defaultValue: "left" },
   ]}
   codeTemplate={(props) => `
-import { SectionHeader } from '@limia/design-system';
+import { SectionHeader } from "@limia/design-system";
 
-export default function Example() {
+export function Example() {
   return (
-    <SectionHeader 
-      title="${props.title}" 
+    <SectionHeader
+      title="${props.title}"
       description="${props.description}"
       index="${props.index}"
       label="${props.label}"
@@ -31,23 +25,89 @@ export default function Example() {
   `}
 >
   {(props) => (
-    <div className="p-8 border rounded-lg bg-background">
-        <SectionHeader {...props} />
+    <div className="rounded-lg border border-border bg-background p-8">
+      <SectionHeader {...props} />
     </div>
   )}
 </ComponentPlayground>
 
+## Visão geral
+
+Section Header é o bloco padronizado de introdução para regiões principais da página. Ele mantém heading, texto de apoio e metadados opcionais visualmente alinhados entre diferentes seções editoriais.
+
 ## Uso
 
-Use este componente no topo de cada seção principal (ex: Projetos, Serviços, Sobre) para manter consistência visual.
+Use Section Header no topo de seções longas como Projetos, Serviços ou Depoimentos. Ele é um componente de composição, então faz mais sentido quando a página precisa repetir um padrão de abertura, e não como um heading genérico.
 
-### Alinhado ao Centro
+<DoDontContainer>
+  <DoDont type="do" title="Mantenha o texto focado">
+    Use um título claro e um único parágrafo de apoio. Deixe a seção explicar o restante.
+  </DoDont>
+  <DoDont type="dont" title="Virar barra de ferramentas">
+    Evite transformar a área do cabeçalho em toolbar. Se a seção precisar de muitas ações, mova isso para o corpo ou para uma linha de controles adjacente.
+  </DoDont>
+</DoDontContainer>
+
+## Estilo
+
+`align` muda o layout do texto, enquanto `index` e `label` adicionam metadados editoriais. Use `children` apenas quando você realmente precisar de uma ação ou badge customizado no lugar do slot padrão.
 
 <ComponentPreview>
-  <SectionHeader 
-      title="Título Centralizado" 
-      description="Este é um texto alinhado ao centro para seções que precisam de um layout diferente."
+  <div className="rounded-lg border border-border bg-card/60 p-8">
+    <SectionHeader
+      title="Título centralizado"
+      description="Use alinhamento central quando a seção pedir uma abertura editorial mais simétrica."
       align="center"
-  />
+    />
+  </div>
 </ComponentPreview>
 
+<Callout type="info" title="Children substitui o slot de metadados">
+  Quando `children` é fornecido, ele substitui o tratamento padrão de índice e label. Use essa saída de escape com parcimônia para manter o padrão previsível no produto.
+</Callout>
+
+## Código
+
+```tsx
+import { Button, SectionHeader } from "@limia/design-system";
+
+export function ProjectsIntro() {
+  return (
+    <SectionHeader
+      title="Selected work"
+      description="Projects that shaped product direction, design system quality and delivery speed."
+      index="02"
+      label="WORK"
+    >
+      <Button variant="outline">View archive</Button>
+    </SectionHeader>
+  );
+}
+```
+
+<TokenTable
+  tokens={[
+    { name: "title", value: "string", usage: "Texto obrigatório do heading." },
+    { name: "description", value: "string | undefined", usage: "Parágrafo opcional de apoio abaixo do título." },
+    { name: "index", value: "string | undefined", usage: "Marcador opcional curto de sequência, como `01` ou `02`." },
+    { name: "label", value: "string | undefined", usage: "Label editorial opcional exibido ao lado do índice." },
+    { name: "headingId", value: "string | undefined", usage: "Opcionalmente encaminha um `id` para o heading para referências acessíveis." },
+    { name: "align", value: '"left" | "center"', usage: "Controla o alinhamento visual do bloco de texto." },
+    { name: "children", value: "ReactNode", usage: "Conteúdo opcional na lateral. Quando presente, substitui o slot padrão de metadados." },
+  ]}
+/>
+
+## Acessibilidade
+
+- Use `headingId` quando o wrapper ou corpo da seção precisar de `aria-labelledby`.
+- Mantenha o título descritivo o suficiente para funcionar sozinho na navegação por headings do leitor de tela.
+- Se `children` adicionar controles interativos, garanta que eles continuem alcançáveis por teclado e não substituam o conteúdo essencial do heading.
+
+<DoDontContainer>
+  <DoDont type="do" title="Use hierarquia real de headings">
+    Combine Section Header com a hierarquia correta da página para que o nível do heading faça sentido no contexto.
+  </DoDont>
+  <DoDont type="dont" title="Esconder metadado importante no mobile">
+    Se índice ou label carregam significado, não dependa de um posicionamento só de desktop para comunicá-los.
+  </DoDont>
+</DoDontContainer>
