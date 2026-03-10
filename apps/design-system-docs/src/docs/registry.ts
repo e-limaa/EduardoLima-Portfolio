@@ -164,6 +164,236 @@ export const docsRegistry: DocPage[] = [
     ),
   },
   {
+    title: "docs.avatar.title",
+    href: "/design-system/components/avatar",
+    section: "Components",
+    status: "beta",
+    description: "docs.avatar.description",
+    component: React.lazy(() => import("./content/components/avatar.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/avatar.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.accordion.title",
+    href: "/design-system/components/accordion",
+    section: "Components",
+    status: "beta",
+    description: "docs.accordion.description",
+    component: React.lazy(() => import("./content/components/accordion.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/accordion.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.alert-dialog.title",
+    href: "/design-system/components/alert-dialog",
+    section: "Components",
+    status: "beta",
+    description: "docs.alert-dialog.description",
+    component: React.lazy(
+      () => import("./content/components/alert-dialog.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/alert-dialog.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.alert.title",
+    href: "/design-system/components/alert",
+    section: "Components",
+    status: "beta",
+    description: "docs.alert.description",
+    component: React.lazy(() => import("./content/components/alert.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/alert.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.checkbox.title",
+    href: "/design-system/components/checkbox",
+    section: "Components",
+    status: "beta",
+    description: "docs.checkbox.description",
+    component: React.lazy(() => import("./content/components/checkbox.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/checkbox.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.dropdown-menu.title",
+    href: "/design-system/components/dropdown-menu",
+    section: "Components",
+    status: "beta",
+    description: "docs.dropdown-menu.description",
+    component: React.lazy(
+      () => import("./content/components/dropdown-menu.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/dropdown-menu.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.popover.title",
+    href: "/design-system/components/popover",
+    section: "Components",
+    status: "beta",
+    description: "docs.popover.description",
+    component: React.lazy(() => import("./content/components/popover.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/popover.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.hover-card.title",
+    href: "/design-system/components/hover-card",
+    section: "Components",
+    status: "beta",
+    description: "docs.hover-card.description",
+    component: React.lazy(
+      () => import("./content/components/hover-card.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/hover-card.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.progress.title",
+    href: "/design-system/components/progress",
+    section: "Components",
+    status: "beta",
+    description: "docs.progress.description",
+    component: React.lazy(() => import("./content/components/progress.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/progress.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.radio-group.title",
+    href: "/design-system/components/radio-group",
+    section: "Components",
+    status: "beta",
+    description: "docs.radio-group.description",
+    component: React.lazy(
+      () => import("./content/components/radio-group.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/radio-group.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.select.title",
+    href: "/design-system/components/select",
+    section: "Components",
+    status: "beta",
+    description: "docs.select.description",
+    component: React.lazy(() => import("./content/components/select.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/select.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.separator.title",
+    href: "/design-system/components/separator",
+    section: "Components",
+    status: "beta",
+    description: "docs.separator.description",
+    component: React.lazy(() => import("./content/components/separator.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/separator.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.sheet.title",
+    href: "/design-system/components/sheet",
+    section: "Components",
+    status: "beta",
+    description: "docs.sheet.description",
+    component: React.lazy(() => import("./content/components/sheet.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/sheet.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.skeleton.title",
+    href: "/design-system/components/skeleton",
+    section: "Components",
+    status: "beta",
+    description: "docs.skeleton.description",
+    component: React.lazy(() => import("./content/components/skeleton.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/skeleton.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.switch.title",
+    href: "/design-system/components/switch",
+    section: "Components",
+    status: "beta",
+    description: "docs.switch.description",
+    component: React.lazy(() => import("./content/components/switch.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/switch.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.table.title",
+    href: "/design-system/components/table",
+    section: "Components",
+    status: "beta",
+    description: "docs.table.description",
+    component: React.lazy(() => import("./content/components/table.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/table.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.tabs.title",
+    href: "/design-system/components/tabs",
+    section: "Components",
+    status: "beta",
+    description: "docs.tabs.description",
+    component: React.lazy(() => import("./content/components/tabs.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/tabs.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.toggle.title",
+    href: "/design-system/components/toggle",
+    section: "Components",
+    status: "beta",
+    description: "docs.toggle.description",
+    component: React.lazy(() => import("./content/components/toggle.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/toggle.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.toggle-group.title",
+    href: "/design-system/components/toggle-group",
+    section: "Components",
+    status: "beta",
+    description: "docs.toggle-group.description",
+    component: React.lazy(
+      () => import("./content/components/toggle-group.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/toggle-group.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.tooltip.title",
+    href: "/design-system/components/tooltip",
+    section: "Components",
+    status: "beta",
+    description: "docs.tooltip.description",
+    component: React.lazy(() => import("./content/components/tooltip.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/tooltip.pt-br.mdx"),
+    ),
+  },
+  {
     title: "docs.forms.title",
     href: "/design-system/patterns/forms",
     section: "Patterns",
@@ -183,6 +413,17 @@ export const docsRegistry: DocPage[] = [
     component: React.lazy(() => import("./content/patterns/feedback.mdx")),
     componentPt: React.lazy(
       () => import("./content/patterns/feedback.pt-br.mdx"),
+    ),
+  },
+  {
+    title: "docs.toast.title",
+    href: "/design-system/patterns/toast",
+    section: "Patterns",
+    status: "beta",
+    description: "docs.toast.description",
+    component: React.lazy(() => import("./content/patterns/toast.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/patterns/toast.pt-br.mdx"),
     ),
   },
   {

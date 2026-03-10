@@ -1,0 +1,43 @@
+import {
+  Button,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@limia/design-system';
+
+<DocsPageHeader
+  title="Sheet"
+  description="Sheet opens a supporting flow from the edge of the viewport while preserving page context."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button variant="outline">Open sheet</Button>
+    </SheetTrigger>
+    <SheetContent>
+      <SheetHeader>
+        <SheetTitle>Project settings</SheetTitle>
+        <SheetDescription>
+          Use sheet for supporting tasks that need more room than a popover but less weight than a full page.
+        </SheetDescription>
+      </SheetHeader>
+      <div className="px-4 pb-4 text-sm text-muted-foreground">
+        The surface stays attached to the current page, making edits or reviews feel lightweight.
+      </div>
+      <SheetFooter>
+        <Button>Save changes</Button>
+      </SheetFooter>
+    </SheetContent>
+  </Sheet>
+</ComponentPreview>
+
+## Usage
+
+- Use sheet for supporting workflows, filters, side panels and detail review.
+- Prefer dialog for short confirmation flows and popover for compact contextual content.

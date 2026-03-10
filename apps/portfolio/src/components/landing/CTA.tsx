@@ -32,9 +32,11 @@ export const CTA = () => {
   return (
     <footer
       id="contact"
-      className="relative isolate pt-16 pb-12 md:pt-32 bg-zinc-50 dark:bg-black overflow-hidden border-t border-zinc-200 dark:border-white/10 transition-colors duration-300 [background-image:url('/noise.svg'),radial-gradient(ellipse_at_50%_100%,rgba(59,130,246,0.14),transparent_58%)]"
+      className="relative isolate overflow-hidden border-t border-border bg-background pt-16 pb-12 transition-colors duration-300 md:pt-32"
     >
       <InteractiveGrid variant="subtle" className="z-0" />
+      <div className="pointer-events-none absolute inset-0 bg-[url('/noise.svg')] opacity-20" />
+      <div className="pointer-events-none absolute left-1/2 bottom-0 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
 
       <div className="relative z-10 w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12">
 
@@ -54,18 +56,16 @@ export const CTA = () => {
             className="flex flex-wrap justify-center gap-4 mt-12"
           >
             <ContactFormModal>
-              <Button
-                size="lg"
-                className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 hover:scale-105 duration-300 rounded-full px-8 h-14 text-base font-bold shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-              >
+              <Button size="xl" className="duration-300 hover:scale-105">
                 <Mail className="mr-2 h-4 w-4" />
                 {t("cta.button.email")}
               </Button>
             </ContactFormModal>
 
             <Button
-              size="lg"
-              className="bg-[#25D366] text-white hover:bg-[#128C7E] hover:scale-105 duration-300 rounded-full px-8 h-14 text-base font-bold shadow-[0_0_30px_rgba(37,211,102,0.3)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-[#25D366]"
+              size="xl"
+              variant="secondary"
+              className="duration-300 hover:scale-105"
               onClick={() => openExternal(whatsappUrl)}
               disabled={!whatsappUrl}
               title={!whatsappUrl ? "Configure VITE_WHATSAPP_NUMBER to enable WhatsApp contact" : undefined}
@@ -77,8 +77,9 @@ export const CTA = () => {
             </Button>
 
             <Button
-              size="lg"
-              className="bg-[#0077B5] text-white hover:bg-[#006097] hover:scale-105 duration-300 rounded-full px-8 h-14 text-base font-bold shadow-[0_0_30px_rgba(0,119,181,0.3)]"
+              size="xl"
+              variant="outline"
+              className="duration-300 hover:scale-105"
               onClick={() => openExternal(linkedinUrl)}
             >
               <Linkedin className="mr-2 h-4 w-4" />
@@ -88,10 +89,10 @@ export const CTA = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-zinc-200 dark:border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex flex-col items-center justify-between gap-6 border-t border-border pt-8 md:flex-row">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12">
-            <div className="text-heading-md font-bold tracking-tighter text-zinc-900 dark:text-white">
-              Eduardo Lima<span className="text-blue-600 dark:text-blue-500">.</span>
+            <div className="text-heading-md font-bold tracking-tighter text-foreground">
+              Eduardo Lima<span className="text-primary">.</span>
             </div>
             <div className="flex gap-6">
               {footerSocialLinks.map((link) => (
@@ -100,7 +101,7 @@ export const CTA = () => {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors text-sm uppercase tracking-wider font-mono"
+                  className="font-mono text-sm uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {link.label}
                 </a>
@@ -108,7 +109,7 @@ export const CTA = () => {
             </div>
           </div>
 
-          <div className="text-zinc-500 dark:text-zinc-600 font-mono text-xs uppercase tracking-widest text-center md:text-right">
+          <div className="text-center font-mono text-xs uppercase tracking-widest text-muted-foreground md:text-right">
             <p>© {new Date().getFullYear()} Design Portfolio</p>
             <p className="mt-1">Developed with React & Tailwind</p>
           </div>

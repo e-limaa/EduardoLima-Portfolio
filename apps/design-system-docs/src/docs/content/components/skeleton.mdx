@@ -1,0 +1,21 @@
+import { Skeleton } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Skeleton"
+  description="Skeleton previews the shape of content before real data arrives, reducing layout shift and perceived latency."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <div className="space-y-3 max-w-md">
+    <Skeleton className="h-6 w-1/2" />
+    <Skeleton className="h-4 w-full" />
+    <Skeleton className="h-4 w-5/6" />
+    <Skeleton className="h-24 w-full rounded-xl" />
+  </div>
+</ComponentPreview>
+
+## Usage
+
+- Match the approximate layout of the final content.
+- Prefer skeleton over spinners when the page structure is already known.

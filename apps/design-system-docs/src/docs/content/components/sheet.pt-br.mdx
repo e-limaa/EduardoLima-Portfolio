@@ -1,0 +1,43 @@
+import {
+  Button,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@limia/design-system';
+
+<DocsPageHeader
+  title="Sheet"
+  description="Sheet abre um fluxo de apoio a partir da borda da viewport, preservando o contexto da pagina."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button variant="outline">Abrir sheet</Button>
+    </SheetTrigger>
+    <SheetContent>
+      <SheetHeader>
+        <SheetTitle>Configuracoes do projeto</SheetTitle>
+        <SheetDescription>
+          Use sheet para tarefas de apoio que precisam de mais espaco do que um popover, mas menos peso do que uma pagina inteira.
+        </SheetDescription>
+      </SheetHeader>
+      <div className="px-4 pb-4 text-sm text-muted-foreground">
+        A superficie permanece ligada a pagina atual, deixando edicoes e revisoes mais leves.
+      </div>
+      <SheetFooter>
+        <Button>Salvar alteracoes</Button>
+      </SheetFooter>
+    </SheetContent>
+  </Sheet>
+</ComponentPreview>
+
+## Uso
+
+- Use sheet para fluxos de apoio, filtros, paineis laterais e revisao de detalhes.
+- Prefira dialog para confirmacoes curtas e popover para conteudo contextual compacto.

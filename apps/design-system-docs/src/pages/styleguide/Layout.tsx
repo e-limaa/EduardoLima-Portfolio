@@ -1,9 +1,10 @@
 import React from "react";
 import { Moon, Sun, Menu } from "lucide-react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Button, cn } from "@limia/design-system";
 import { DocsMDXProvider, docsRegistry } from "../../docs";
+import { DocStatusBadge } from "../../docs/ui";
 import { useTheme } from "../../components/theme-provider";
 import { useLanguage } from "../../components/language-provider";
 import { LanguageToggle } from "../../components/language-toggle";
@@ -12,7 +13,6 @@ export function StyleGuideLayout() {
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
   const location = useLocation();
-  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -64,31 +64,27 @@ export function StyleGuideLayout() {
                   </h4>
                   <div className="space-y-1">
                     {items.map((item) => {
-                      const isActive = location.pathname === item.href;
-
                       return (
-                        <button
+                        <NavLink
                           key={item.href}
-                          onClick={() => navigate(item.href)}
-                          className={cn(
-                            "flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                            isActive
-                              ? "bg-primary/10 text-primary"
-                              : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                          )}
+                          to={item.href}
+                          className={({ isActive }) =>
+                            cn(
+                              "flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                              isActive
+                                ? "bg-primary/10 text-primary"
+                                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                            )
+                          }
                         >
                           <span>{t(item.title)}</span>
-                          {item.status === "beta" && (
-                            <span className="rounded bg-secondary px-1.5 py-0.5 text-[10px] text-secondary-foreground">
-                              Beta
-                            </span>
+                          {(item.status === "beta" || item.status === "draft") && (
+                            <DocStatusBadge
+                              status={item.status}
+                              className="font-mono text-[10px] uppercase tracking-wider"
+                            />
                           )}
-                          {item.status === "draft" && (
-                            <span className="rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground opacity-70">
-                              Draft
-                            </span>
-                          )}
-                        </button>
+                        </NavLink>
                       );
                     })}
                   </div>
@@ -110,6 +106,8 @@ export function StyleGuideLayout() {
             size="icon"
             className="lg:hidden"
             onClick={() => setIsMobileMenuOpen(true)}
+            aria-label={t("docs.actions.open-menu")}
+            title={t("docs.actions.open-menu")}
           >
             <Menu size={20} />
           </Button>
@@ -121,6 +119,16 @@ export function StyleGuideLayout() {
             size="icon"
             className="rounded-full"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            aria-label={
+              theme === "dark"
+                ? t("docs.actions.switch-light")
+                : t("docs.actions.switch-dark")
+            }
+            title={
+              theme === "dark"
+                ? t("docs.actions.switch-light")
+                : t("docs.actions.switch-dark")
+            }
           >
             {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
           </Button>

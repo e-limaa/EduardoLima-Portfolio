@@ -6,7 +6,6 @@ export const CursorTrail = React.memo(() => {
     // Configuration
     const TRAIL_LENGTH = 50;
     const STROKE_WIDTH = 3;
-    const STROKE_COLOR = "#2563eb";
     const FRICTION = 0.05;
 
     useEffect(() => {
@@ -16,11 +15,17 @@ export const CursorTrail = React.memo(() => {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
+        const resolveStrokeColor = () => {
+            const rootStyles = getComputedStyle(document.documentElement);
+            return rootStyles.getPropertyValue("--color-primary").trim() || "currentColor";
+        };
+
         const points: { x: number; y: number }[] = [];
         let mouse = { x: 0, y: 0 };
         let currentPos = { x: 0, y: 0 };
         let isActive = false;
         let isInitialized = false;
+        let strokeColor = resolveStrokeColor();
 
         // Cache for expensive DOM checks
         let lastTarget: EventTarget | null = null;
@@ -29,6 +34,7 @@ export const CursorTrail = React.memo(() => {
         const resizeValues = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            strokeColor = resolveStrokeColor();
         };
         window.addEventListener("resize", resizeValues);
         resizeValues();
@@ -90,10 +96,13 @@ export const CursorTrail = React.memo(() => {
                     ctx.lineTo(p2.x, p2.y);
 
                     const alpha = i / points.length;
-                    ctx.strokeStyle = `rgba(37, 99, 235, ${alpha})`;
+                    ctx.strokeStyle = strokeColor;
+                    ctx.globalAlpha = alpha;
                     ctx.lineWidth = STROKE_WIDTH * alpha;
                     ctx.stroke();
                 }
+
+                ctx.globalAlpha = 1;
             }
 
             animationFrameId = requestAnimationFrame(animate);

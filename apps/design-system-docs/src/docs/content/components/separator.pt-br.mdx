@@ -1,0 +1,22 @@
+import { Separator } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Separator"
+  description="Separator cria estrutura visual entre blocos de conteudo relacionados sem competir por destaque."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <div className="flex items-center gap-4">
+    <span className="text-sm text-muted-foreground">Visao geral</span>
+    <Separator orientation="vertical" className="h-6" />
+    <span className="text-sm text-muted-foreground">Tokens</span>
+    <Separator orientation="vertical" className="h-6" />
+    <span className="text-sm text-muted-foreground">Governanca</span>
+  </div>
+</ComponentPreview>
+
+## Uso
+
+- Use separator para organizar grupos, toolbars e secoes empilhadas.
+- Evite quando o espacamento sozinho ja comunicar a separacao com clareza.

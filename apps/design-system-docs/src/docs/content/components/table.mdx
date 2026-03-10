@@ -1,0 +1,46 @@
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@limia/design-system';
+
+<DocsPageHeader
+  title="Table"
+  description="Table presents structured data with strong comparability across rows and columns."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <Table>
+    <TableCaption>Project delivery checkpoints</TableCaption>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Stage</TableHead>
+        <TableHead>Owner</TableHead>
+        <TableHead>Status</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableCell>Discovery</TableCell>
+        <TableCell>Eduardo</TableCell>
+        <TableCell>Done</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Prototype</TableCell>
+        <TableCell>Limia</TableCell>
+        <TableCell>In progress</TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+</ComponentPreview>
+
+## Usage
+
+- Use tables for comparable structured data.
+- Prefer cards or lists on small datasets when scanning matters more than comparison.
+- Keep headers explicit and avoid squeezing too many columns into narrow layouts.

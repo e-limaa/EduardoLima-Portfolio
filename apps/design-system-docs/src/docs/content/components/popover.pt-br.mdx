@@ -1,0 +1,27 @@
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Popover"
+  description="Popover revela conteudo contextual perto do gatilho sem tirar o usuario da superficie atual."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button variant="outline">Abrir detalhes</Button>
+    </PopoverTrigger>
+    <PopoverContent className="space-y-2">
+      <h4 className="font-medium text-foreground">Painel contextual</h4>
+      <p className="text-sm text-muted-foreground">
+        Use popover para conteudo de apoio leve, configuracoes rapidas ou ajuda inline.
+      </p>
+    </PopoverContent>
+  </Popover>
+</ComponentPreview>
+
+## Uso
+
+- Use popover para conteudo pequeno e contextual, ligado ao gatilho.
+- Prefira dialog ou sheet quando o fluxo exigir mais espaco, foco ou varios passos.
+- Mantenha o conteudo compacto e proximo da tarefa.

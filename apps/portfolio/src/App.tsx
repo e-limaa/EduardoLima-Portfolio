@@ -10,13 +10,13 @@ import { MouseSpotlight } from "./components/landing/MouseSpotlight";
 import { Navbar } from "./components/landing/Navbar";
 import { BrandMarquee } from "./components/landing/BrandMarquee";
 import { Services } from "./components/landing/Services";
-import { ThemeProvider } from "./components/theme-provider";
+import { ThemeProvider, useTheme } from "./components/theme-provider";
 import { LanguageProvider } from "./components/language-provider";
 import { AudioPlayer } from "./components/landing/AudioPlayer";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { CursorTrail } from "./components/ui/CursorTrail";
 import { RequireAdmin } from "./components/auth/RequireAdmin";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@limia/design-system";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
 
 // Lazy load pages for bundle splitting
@@ -78,6 +78,58 @@ const LandingPage = () => {
   );
 };
 
+function AppShell({
+  hasEntered,
+  shouldSkipIntro,
+  setHasEntered,
+}: {
+  hasEntered: boolean;
+  shouldSkipIntro: boolean;
+  setHasEntered: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const location = useLocation();
+  const { theme } = useTheme();
+
+  return (
+    <>
+      <Toaster theme={theme} />
+      {/* ALTERADO: Aplicação de classes de tema dinâmicas 
+        - bg-background e text-foreground mapeiam para as variáveis CSS que mudam com o tema 
+        - transition-colors permite a troca suave entre dark/light mode
+    */}
+      <div className="min-h-screen w-full overflow-x-hidden bg-background font-sans text-foreground selection:bg-primary/20 transition-colors duration-300">
+        <AnimatePresence>
+          {!hasEntered && !shouldSkipIntro && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
+        </AnimatePresence>
+
+        <CursorTrail />
+        <MouseSpotlight />
+
+        {!shouldSkipIntro && <AudioPlayer shouldPlay={hasEntered} />}
+
+        <main className="z-10" key={hasEntered ? "entered" : "loading"}>
+          <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/newsletter" element={<Newsletter />} />
+
+              <Route path="/project/:slug" element={<ProjectDetail />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <RequireAdmin>
+                    <Dashboard />
+                  </RequireAdmin>
+                }
+              />
+            </Routes>
+          </React.Suspense>
+        </main>
+      </div>
+    </>
+  );
+}
+
 export default function App() {
   const location = useLocation();
   const [hasEntered, setHasEntered] = useState(() => {
@@ -99,40 +151,7 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
       <LanguageProvider defaultLanguage="en" storageKey="portfolio-language">
-        <Toaster />
-        {/* ALTERADO: Aplicação de classes de tema dinâmicas 
-          - bg-background e text-foreground mapeiam para as variáveis CSS que mudam com o tema 
-          - transition-colors permite a troca suave entre dark/light mode
-      */}
-        <div className="min-h-screen w-full bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden font-sans transition-colors duration-300">
-          <AnimatePresence>
-            {!hasEntered && !shouldSkipIntro && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
-          </AnimatePresence>
-
-          <CursorTrail />
-          <MouseSpotlight />
-
-            {!shouldSkipIntro && <AudioPlayer shouldPlay={hasEntered} />}
-
-          <main className="z-10" key={hasEntered ? "entered" : "loading"}>
-            <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
-              <Routes location={location} key={location.pathname}>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/newsletter" element={<Newsletter />} />
-
-                <Route path="/project/:slug" element={<ProjectDetail />} />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <RequireAdmin>
-                      <Dashboard />
-                    </RequireAdmin>
-                  }
-                />
-              </Routes>
-            </React.Suspense>
-          </main>
-        </div>
+        <AppShell hasEntered={hasEntered} shouldSkipIntro={shouldSkipIntro} setHasEntered={setHasEntered} />
       </LanguageProvider>
     </ThemeProvider>
   );

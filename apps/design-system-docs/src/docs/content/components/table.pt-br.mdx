@@ -1,0 +1,46 @@
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@limia/design-system';
+
+<DocsPageHeader
+  title="Table"
+  description="Table apresenta dados estruturados com alta capacidade de comparacao entre linhas e colunas."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <Table>
+    <TableCaption>Checkpoints de entrega do projeto</TableCaption>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Etapa</TableHead>
+        <TableHead>Responsavel</TableHead>
+        <TableHead>Status</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableCell>Discovery</TableCell>
+        <TableCell>Eduardo</TableCell>
+        <TableCell>Concluido</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Prototipo</TableCell>
+        <TableCell>Limia</TableCell>
+        <TableCell>Em andamento</TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+</ComponentPreview>
+
+## Uso
+
+- Use tables para dados estruturados e comparaveis.
+- Prefira cards ou listas em datasets pequenos quando o escaneamento importar mais do que a comparacao.
+- Mantenha cabecalhos explicitos e evite comprimir colunas demais em layouts estreitos.

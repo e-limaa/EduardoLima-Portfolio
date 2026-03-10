@@ -1,0 +1,58 @@
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Dropdown Menu"
+  description="Dropdown Menu presents compact contextual actions without breaking page flow."
+  status="beta"
+/>
+
+## Usage
+
+Use Dropdown Menu for secondary actions, mode switching and compact action lists anchored to a trigger.
+
+<ComponentPreview>
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="outline">Open menu</Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuLabel>Profile</DropdownMenuLabel>
+      <DropdownMenuItem>Settings</DropdownMenuItem>
+      <DropdownMenuItem>Notifications</DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem variant="destructive">Sign out</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</ComponentPreview>
+
+## Anatomy
+
+```tsx
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@limia/design-system';
+
+export function Example() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost">Actions</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem>Duplicate</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+```
+
+## Accessibility
+
+- Use a trigger with a clear visible label or `aria-label`.
+- Keep menu items action-oriented and concise.
+- Prefer destructive styling only for truly irreversible outcomes.

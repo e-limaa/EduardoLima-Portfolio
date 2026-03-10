@@ -1,0 +1,31 @@
+import { Alert, AlertDescription, AlertTitle } from '@limia/design-system';
+import { AlertTriangle, Info } from 'lucide-react';
+
+<DocsPageHeader
+  title="Alert"
+  description="Alert comunica feedback inline persistente que deve permanecer visivel ate o usuario reconhecer a mensagem."
+  status="beta"
+/>
+
+<ComponentPreview className="block space-y-4">
+  <Alert>
+    <Info />
+    <AlertTitle>Aviso</AlertTitle>
+    <AlertDescription>
+      Use alerts padrao para orientacoes contextuais, lembretes de onboarding e notas de status.
+    </AlertDescription>
+  </Alert>
+  <Alert variant="destructive">
+    <AlertTriangle />
+    <AlertTitle>Acao necessaria</AlertTitle>
+    <AlertDescription>
+      Use a variante destrutiva quando perda de dados, falha de cobranca ou acesso bloqueado exigirem atencao imediata.
+    </AlertDescription>
+  </Alert>
+</ComponentPreview>
+
+## Uso
+
+- Use o alert padrao para mensagens informativas que precisam permanecer na tela.
+- Use `variant="destructive"` para erros com consequencia ou urgencia.
+- Prefira alert a toast quando a mensagem precisa continuar ligada ao formulario ou a secao da pagina.

@@ -1,0 +1,32 @@
+import { Avatar, AvatarFallback, AvatarImage, HoverCard, HoverCardContent, HoverCardTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Hover Card"
+  description="Hover card surfaces lightweight context and profile details without forcing a navigation jump."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <HoverCard>
+    <HoverCardTrigger asChild>
+      <button className="text-sm font-medium text-primary underline-offset-4 hover:underline">
+        @eduardolima
+      </button>
+    </HoverCardTrigger>
+    <HoverCardContent className="flex gap-3">
+      <Avatar>
+        <AvatarImage src="/assets/images/Edu-image.webp" alt="Eduardo Lima" />
+        <AvatarFallback>EL</AvatarFallback>
+      </Avatar>
+      <div className="space-y-1">
+        <p className="text-sm font-medium text-foreground">Eduardo Lima</p>
+        <p className="text-sm text-muted-foreground">Product designer and builder focused on AI-enabled experiences.</p>
+      </div>
+    </HoverCardContent>
+  </HoverCard>
+</ComponentPreview>
+
+## Usage
+
+- Use hover card for profile previews, metadata and lightweight context.
+- Do not hide essential actions or instructions inside hover-only content.

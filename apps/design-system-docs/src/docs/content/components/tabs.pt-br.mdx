@@ -1,0 +1,31 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Tabs"
+  description="Tabs alternam entre visoes relacionadas sem tirar o usuario da pagina atual."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <Tabs defaultValue="overview" className="w-full max-w-2xl">
+    <TabsList>
+      <TabsTrigger value="overview">Visao geral</TabsTrigger>
+      <TabsTrigger value="tokens">Tokens</TabsTrigger>
+      <TabsTrigger value="usage">Uso</TabsTrigger>
+    </TabsList>
+    <TabsContent value="overview" className="rounded-xl border border-border bg-card/40 p-4">
+      Use tabs quando a mesma pagina precisa oferecer visoes relacionadas com baixo custo de navegacao.
+    </TabsContent>
+    <TabsContent value="tokens" className="rounded-xl border border-border bg-card/40 p-4">
+      Mantenha labels curtas e comparaveis para facilitar o escaneamento.
+    </TabsContent>
+    <TabsContent value="usage" className="rounded-xl border border-border bg-card/40 p-4">
+      Evite tabs quando o usuario precisar comparar conteudo entre todas as secoes ao mesmo tempo.
+    </TabsContent>
+  </Tabs>
+</ComponentPreview>
+
+## Acessibilidade
+
+- Tabs sao navegaveis por teclado com setas apos receberem foco.
+- Use labels curtas e mantenha a quantidade de abas sob controle.

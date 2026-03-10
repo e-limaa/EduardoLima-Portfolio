@@ -1,0 +1,31 @@
+import { Alert, AlertDescription, AlertTitle } from '@limia/design-system';
+import { AlertTriangle, Info } from 'lucide-react';
+
+<DocsPageHeader
+  title="Alert"
+  description="Alert communicates persistent inline feedback that should remain visible until the user has acknowledged it."
+  status="beta"
+/>
+
+<ComponentPreview className="block space-y-4">
+  <Alert>
+    <Info />
+    <AlertTitle>Heads up</AlertTitle>
+    <AlertDescription>
+      Use default alerts for contextual guidance, onboarding reminders and status notes.
+    </AlertDescription>
+  </Alert>
+  <Alert variant="destructive">
+    <AlertTriangle />
+    <AlertTitle>Action required</AlertTitle>
+    <AlertDescription>
+      Use destructive alerts when data loss, billing failure or blocked access needs immediate attention.
+    </AlertDescription>
+  </Alert>
+</ComponentPreview>
+
+## Usage
+
+- Use default alerts for informational messages that should persist on screen.
+- Use `variant="destructive"` for errors with consequence or urgency.
+- Prefer alerts over toast when the message must stay attached to a form or page section.

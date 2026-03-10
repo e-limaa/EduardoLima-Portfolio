@@ -1,0 +1,43 @@
+import { Button, Toaster, toast } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Toast"
+  description="Toast é o padrão de feedback leve para mensagens globais de sucesso, erro e progresso."
+  status="beta"
+/>
+
+## Uso
+
+Monte um único `Toaster` próximo ao shell do app e dispare feedback com `toast`.
+
+<ComponentPreview>
+  <div className="flex flex-col items-start gap-4">
+    <Toaster theme="light" />
+    <Button onClick={() => toast.success('Salvo', { description: 'Suas alterações foram persistidas com sucesso.' })}>
+      Mostrar toast de sucesso
+    </Button>
+  </div>
+</ComponentPreview>
+
+## Anatomia
+
+```tsx
+import { Toaster, toast } from '@limia/design-system';
+
+export function AppShell() {
+  return (
+    <>
+      <Toaster theme="system" />
+      <button onClick={() => toast.error('Não foi possível publicar')}>
+        Publicar
+      </button>
+    </>
+  );
+}
+```
+
+## Diretrizes
+
+- Use toast para feedback transitório que não bloqueia a tarefa atual.
+- Mantenha o título curto e mova contexto extra para `description`.
+- Não use toast para confirmações destrutivas; prefira dialogs nesses casos.

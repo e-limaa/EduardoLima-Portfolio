@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { TextReveal, InteractiveGrid, Badge } from "@limia/design-system";
+import { TextReveal, InteractiveGrid, Badge, Button } from "@limia/design-system";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ChatWidget } from "./ChatWidget";
@@ -35,11 +35,11 @@ export const Hero = () => {
       <div className="absolute inset-0 z-0 pointer-events-none">
         <motion.div
           style={{ y: y1 }}
-          className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen animate-pulse"
+          className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/15 blur-[120px] mix-blend-screen animate-pulse"
         />
         <motion.div
           style={{ y: y2 }}
-          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-zinc-600/10 rounded-full blur-[120px] mix-blend-screen"
+          className="absolute bottom-0 right-1/4 h-[500px] w-[500px] rounded-full bg-muted/80 blur-[120px] mix-blend-screen"
         />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20"></div>
       </div>
@@ -52,7 +52,7 @@ export const Hero = () => {
       >
         <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 text-center lg:text-left">
           <span className="text-heading-sm font-semibold text-foreground tracking-tight pointer-events-auto inline-block">
-            Eduardo Lima<span className="text-blue-600 dark:text-blue-500">.</span>
+            Eduardo Lima<span className="text-primary">.</span>
           </span>
         </div>
       </motion.div>
@@ -70,7 +70,7 @@ export const Hero = () => {
               alt="Eduardo Lima"
               width={548}
               height={981}
-              className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] block md:hidden"
+              className="block h-full w-full object-contain drop-shadow-2xl md:hidden"
             />
 
             {!videoFailed ? (
@@ -81,7 +81,7 @@ export const Hero = () => {
                 muted
                 playsInline
                 onError={() => setVideoFailed(true)}
-                className="relative z-40 w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
+                className="relative z-40 hidden h-auto w-full object-contain drop-shadow-2xl md:block"
               />
             ) : (
               <img
@@ -89,7 +89,7 @@ export const Hero = () => {
                 alt="Eduardo Lima"
                 width={548}
                 height={981}
-                className="relative z-40 w-full h-full object-contain drop-shadow-[0_0_60px_rgba(37,99,235,0.25)] hidden md:block"
+                className="relative z-40 hidden h-full w-full object-contain drop-shadow-2xl md:block"
               />
             )}
           </motion.div>
@@ -114,13 +114,19 @@ export const Hero = () => {
             className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto"
           >
             <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500 hover:to-zinc-900 dark:from-white dark:to-zinc-400 dark:hover:to-white transition-colors duration-500 pr-2 leading-[1.0] md:leading-[1.15]">{t("hero.word1")}</span>
+              <span className="block bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text pr-2 leading-[1.0] text-transparent transition-colors duration-500 md:leading-[1.15]">
+                {t("hero.word1")}
+              </span>
             </TextReveal>
             <TextReveal delay={0.2} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-700 via-zinc-500 to-zinc-300 dark:from-zinc-200 dark:via-zinc-400 dark:to-zinc-600 leading-[1.0] md:leading-[1.15]">{t("hero.word2")}</span>
+              <span className="block bg-gradient-to-r from-muted-foreground via-foreground/80 to-muted-foreground/70 bg-clip-text leading-[1.0] text-transparent md:leading-[1.15]">
+                {t("hero.word2")}
+              </span>
             </TextReveal>
             <TextReveal delay={0.3} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 leading-[1.0] md:leading-[1.15]">{t("hero.word3")}</span>
+              <span className="block bg-gradient-to-r from-primary to-primary/70 bg-clip-text leading-[1.0] text-transparent md:leading-[1.15]">
+                {t("hero.word3")}
+              </span>
             </TextReveal>
           </motion.h1>
 
@@ -139,21 +145,17 @@ export const Hero = () => {
             transition={{ delay: 0.8 }}
             className="flex flex-wrap gap-4 justify-center lg:justify-start mt-4 pointer-events-auto mb-10 lg:mb-0"
           >
-            <a
-              href="#projects"
-              onClick={handleScrollToProjects}
-              className="flex items-center gap-2 px-6 py-2 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
-            >
-              {t("hero.cta")}
-              <ArrowRight className="w-4 h-4" />
-            </a>
-            <Link
-              to="/newsletter"
-              state={{ fromInternal: true }}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-full px-6 py-2 h-auto text-base font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 cursor-pointer"
-            >
-              {t("newsletter.trigger")}
-            </Link>
+            <Button asChild size="lg" className="shadow-lg">
+              <a href="#projects" onClick={handleScrollToProjects}>
+                {t("hero.cta")}
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </Button>
+            <Button asChild variant="secondary" size="lg">
+              <Link to="/newsletter" state={{ fromInternal: true }}>
+                {t("newsletter.trigger")}
+              </Link>
+            </Button>
           </motion.div>
         </div>
 
@@ -175,8 +177,8 @@ export const Hero = () => {
         transition={{ delay: 1.5, duration: 2, repeat: Infinity }}
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Scroll</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-500 to-transparent"></div>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Scroll</span>
+        <div className="h-12 w-px bg-gradient-to-b from-border to-transparent"></div>
       </motion.div>
     </section>
   );

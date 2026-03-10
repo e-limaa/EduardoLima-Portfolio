@@ -1,0 +1,44 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Button,
+} from '@limia/design-system';
+
+<DocsPageHeader
+  title="Alert Dialog"
+  description="Alert dialog confirms destructive or high-impact actions before they happen."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <AlertDialog>
+    <AlertDialogTrigger asChild>
+      <Button variant="destructive">Delete project</Button>
+    </AlertDialogTrigger>
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Delete this project?</AlertDialogTitle>
+        <AlertDialogDescription>
+          This action cannot be undone and will remove all related assets.
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogAction>Delete</AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+</ComponentPreview>
+
+## Usage
+
+- Use alert dialog for destructive, irreversible or high-risk actions.
+- Keep the title explicit about the consequence.
+- Prefer dialog or sheet for multi-step edits and non-destructive tasks.

@@ -24,7 +24,7 @@ export const MouseSpotlight = () => {
 
   return (
     <motion.div
-      className="hidden md:block fixed top-0 left-0 w-[500px] h-[500px] bg-blue-500/05 rounded-full blur-[120px] pointer-events-none z-0 mix-blend-screen"
+      className="fixed top-0 left-0 z-0 hidden h-[500px] w-[500px] rounded-full bg-primary/5 blur-[120px] mix-blend-screen pointer-events-none md:block"
       style={{ x: mouseX, y: mouseY }}
     />
   );

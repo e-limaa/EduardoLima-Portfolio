@@ -36,7 +36,7 @@ export const ProjectDetail = () => {
   if (projectLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     )
   }
@@ -46,7 +46,7 @@ export const ProjectDetail = () => {
   const mainImageUrl = getImageUrl(project.mainImage)
 
   return (
-    <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden selection:bg-blue-500/30 transition-colors duration-300">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary/20 transition-colors duration-300">
       <Navbar />
       <nav className="fixed top-0 left-0 right-0 z-50 p-6 lg:px-12 flex justify-between items-center">
         <Button
@@ -59,20 +59,24 @@ export const ProjectDetail = () => {
         </Button>
 
         <div className="flex gap-2">
-          <button
+          <Button
             onClick={() => navigation.prevId && handlePrev(navigation.prevId)}
             disabled={!navigation.prevId}
-            className="w-10 h-10 rounded-full border border-zinc-200 dark:border-white/10 bg-background/50 backdrop-blur-md flex items-center justify-center hover:bg-foreground hover:text-background transition-colors group text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="outline"
+            size="icon"
+            className="group bg-background/70 backdrop-blur-md"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => navigation.nextId && handleNext(navigation.nextId)}
             disabled={!navigation.nextId}
-            className="w-10 h-10 rounded-full border border-zinc-200 dark:border-white/10 bg-background/50 backdrop-blur-md flex items-center justify-center hover:bg-foreground hover:text-background transition-colors group text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="outline"
+            size="icon"
+            className="group bg-background/70 backdrop-blur-md"
           >
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Button>
         </div>
       </nav>
 
@@ -93,7 +97,7 @@ export const ProjectDetail = () => {
               animate={{y: 0, opacity: 1}}
               transition={{duration: 0.8, delay: 0.2}}
             >
-              <span className={`inline-block mb-4 px-3 py-1 rounded-full border border-zinc-200 dark:border-white/20 bg-zinc-100 dark:bg-white/5 backdrop-blur-md text-xs font-mono tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r ${project.color}`}>
+              <span className={`inline-block mb-4 rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-mono uppercase tracking-widest text-transparent backdrop-blur-md bg-clip-text bg-gradient-to-r ${project.color}`}>
                 {project.category}
               </span>
             </motion.div>
@@ -108,7 +112,7 @@ export const ProjectDetail = () => {
               initial={{opacity: 0}}
               animate={{opacity: 1}}
               transition={{delay: 0.6}}
-              className="flex flex-wrap items-center w-full gap-8 md:gap-16 mt-8 border-t border-zinc-200 dark:border-white/10 pt-8 text-sm md:text-base"
+              className="mt-8 flex w-full flex-wrap items-center gap-8 border-t border-border pt-8 text-sm md:gap-16 md:text-base"
             >
               <div className="flex flex-col gap-2">
                 <span className="text-muted-foreground uppercase tracking-wider font-mono text-xs">{t('project.client')}</span>
@@ -147,10 +151,10 @@ export const ProjectDetail = () => {
                 </div>
               </div>
 
-              <div className={`flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r ${project.color} shadow-lg ml-auto`}>
-                <span className="font-sans text-white/90 text-sm font-medium">{project.metricLabel || t('project.keyMetric')}</span>
-                <div className="w-px h-3 bg-white/40" />
-                <div className="font-sans text-white font-bold text-sm leading-none">{project.metric}</div>
+              <div className={`ml-auto flex items-center gap-3 rounded-full bg-gradient-to-r px-5 py-2.5 shadow-lg ${project.color}`}>
+                <span className="font-sans text-sm font-medium text-primary-foreground/90">{project.metricLabel || t('project.keyMetric')}</span>
+                <div className="h-3 w-px bg-primary-foreground/40" />
+                <div className="font-sans text-sm font-bold leading-none text-primary-foreground">{project.metric}</div>
               </div>
             </motion.div>
           </div>
@@ -167,7 +171,7 @@ export const ProjectDetail = () => {
               </div>
             </section>
 
-            <section className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg">
+            <section className="rounded-lg border border-border bg-card/70 p-8">
               <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">{t('project.challenge')}</h3>
               <div className="text-muted-foreground leading-relaxed">{project.challenge}</div>
             </section>
@@ -182,7 +186,7 @@ export const ProjectDetail = () => {
                         initial={{opacity: 0, y: 20}}
                         whileInView={{opacity: 1, y: 0}}
                         viewport={{once: true}}
-                        className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 p-8 rounded-lg my-8"
+                        className="my-8 rounded-lg border border-border bg-card/70 p-8"
                       >
                         <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">{t('project.solution')}</h3>
                         <div className="text-muted-foreground leading-relaxed">{item.text}</div>
@@ -198,7 +202,7 @@ export const ProjectDetail = () => {
                       whileInView={{opacity: 1, y: 0}}
                       transition={{delay: 0.1}}
                       viewport={{once: true}}
-                      className="rounded-lg overflow-hidden border border-zinc-200 dark:border-white/10"
+                      className="overflow-hidden rounded-lg border border-border"
                     >
                       <div className="w-full h-full">
                         <ImageWithFallback
@@ -217,10 +221,10 @@ export const ProjectDetail = () => {
       </main>
 
       <div
-        className="w-full py-20 border-t border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer group relative overflow-hidden transition-colors"
+        className="group relative w-full cursor-pointer overflow-hidden border-t border-border bg-card/60 py-20 transition-colors"
         onClick={() => navigation.nextId && handleNext(navigation.nextId)}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 dark:via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+        <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-foreground/5 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
 
         <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 text-center">
           <span className="text-muted-foreground uppercase tracking-widest font-mono text-sm mb-4 block">{t('project.next')}</span>
@@ -228,7 +232,7 @@ export const ProjectDetail = () => {
             {t('project.viewNext')}
           </h2>
           <div className="mt-6 flex justify-center">
-            <div className="w-16 h-16 rounded-full border border-zinc-200 dark:border-white/20 flex items-center justify-center group-hover:bg-foreground group-hover:text-background transition-colors text-foreground">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-border text-foreground transition-colors group-hover:bg-foreground group-hover:text-background">
               <ArrowRight className="w-6 h-6" />
             </div>
           </div>

@@ -1,7 +1,6 @@
 import { motion } from "motion/react";
 import { Quote } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Section, Card, CardContent } from "@limia/design-system";
+import { Avatar, AvatarFallback, AvatarImage, Section, Card, CardContent, SectionHeader } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
 
 const testimonials = [
@@ -29,22 +28,18 @@ export const Testimonials = () => {
   const { t } = useLanguage();
 
   return (
-    <Section className="py-32 bg-black" container={false}>
+    <Section className="py-32 bg-background" container={false}>
       {/* Background blob */}
-      <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen animate-pulse"></div>
+      <div className="pointer-events-none absolute left-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-primary/10 blur-[120px] mix-blend-screen animate-pulse"></div>
 
       <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 relative z-10">
-        <div className="mb-20 border-b border-white/10 pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
-          <div>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-2">{t("testimonials.title")}</h2>
-            <p className="text-zinc-500 text-lg max-w-md mt-4">
-              {t("testimonials.subtitle")}
-            </p>
-          </div>
-          <div className="text-right hidden md:block">
-            <span className="text-zinc-600 font-mono text-sm">03 — TESTIMONIALS</span>
-          </div>
-        </div>
+        <SectionHeader
+          title={t("testimonials.title")}
+          description={t("testimonials.subtitle")}
+          index="03"
+          label="Testimonials"
+          className="mb-20"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, i) => (
@@ -55,11 +50,11 @@ export const Testimonials = () => {
               transition={{ delay: i * 0.1, duration: 0.5 }}
               className="group"
             >
-              <Card className="h-full bg-white/5 border-white/5 backdrop-blur-sm hover:border-blue-500/20 transition-colors relative">
+              <Card className="relative h-full border-border bg-card/70 backdrop-blur-sm transition-colors hover:border-primary/20">
                 <CardContent className="p-8 pt-12">
-                  <Quote className="w-10 h-10 text-zinc-700 group-hover:text-blue-500/40 transition-colors mb-6 absolute top-6 right-6" />
+                  <Quote className="absolute top-6 right-6 mb-6 h-10 w-10 text-muted-foreground/60 transition-colors group-hover:text-primary/40" />
 
-                  <p className="text-zinc-300 mb-8 leading-relaxed relative z-10">
+                  <p className="relative z-10 mb-8 leading-relaxed text-foreground/85">
                     "{t(testimonial.textKey)}"
                   </p>
 
@@ -69,8 +64,8 @@ export const Testimonials = () => {
                       <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <h4 className="text-white font-bold text-sm">{testimonial.name}</h4>
-                      <p className="text-zinc-500 text-xs">{t(testimonial.roleKey)}</p>
+                      <h4 className="text-sm font-bold text-foreground">{testimonial.name}</h4>
+                      <p className="text-xs text-muted-foreground">{t(testimonial.roleKey)}</p>
                     </div>
                   </div>
                 </CardContent>

@@ -1,0 +1,30 @@
+import { Label, RadioGroup, RadioGroupItem } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Radio Group"
+  description="Radio group atende selecao unica quando todas as opcoes devem permanecer visiveis."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <RadioGroup defaultValue="starter" className="max-w-sm">
+    <div className="flex items-center gap-3">
+      <RadioGroupItem value="starter" id="starter" />
+      <Label htmlFor="starter">Plano Starter</Label>
+    </div>
+    <div className="flex items-center gap-3">
+      <RadioGroupItem value="growth" id="growth" />
+      <Label htmlFor="growth">Plano Growth</Label>
+    </div>
+    <div className="flex items-center gap-3">
+      <RadioGroupItem value="scale" id="scale" />
+      <Label htmlFor="scale">Plano Scale</Label>
+    </div>
+  </RadioGroup>
+</ComponentPreview>
+
+## Uso
+
+- Use radio group quando o usuario precisa escolher exatamente uma opcao em um conjunto curto e visivel.
+- Prefira select quando a lista for maior ou o espaco em tela estiver limitado.
+- Mantenha labels mutuamente exclusivas e faceis de comparar.

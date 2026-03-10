@@ -9,25 +9,25 @@ const timelineData = [
     id: 1,
     image: "/assets/images/curiosidade-aplicada.webp",
     icon: ScanSearch,
-    color: "text-zinc-400",
+    color: "text-muted-foreground",
   },
   {
     id: 2,
     image: "/assets/images/pensamento-sistemico.webp",
     icon: Workflow,
-    color: "text-blue-500",
+    color: "text-primary",
   },
   {
     id: 3,
     image: "/assets/images/execucao-tecnica.webp",
     icon: Code2,
-    color: "text-zinc-300",
+    color: "text-foreground/80",
   },
   {
     id: 4,
     image: "/assets/images/evolucao-continua.webp",
     icon: Zap,
-    color: "text-blue-400",
+    color: "text-primary",
   }
 ];
 
@@ -122,20 +122,20 @@ export const Storytelling = () => {
                 </div>
 
                 <div className="order-2 flex items-center gap-4 lg:order-2 lg:flex-col lg:gap-3">
-                  <span aria-hidden className="hidden lg:block h-14 w-px bg-gradient-to-b from-transparent via-zinc-300 dark:via-zinc-700 to-zinc-300 dark:to-zinc-700" />
+                  <span aria-hidden className="hidden h-14 w-px bg-gradient-to-b from-transparent via-border to-border lg:block" />
                   <motion.div
                     variants={getIconVariants(shouldReduceMotion)}
-                    className={`w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 bg-background flex items-center justify-center shadow-[0_0_30px_-5px_rgba(0,0,0,0.5)] dark:shadow-none ${item.color}`}
+                    className={`flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card shadow-sm ${item.color}`}
                   >
                     <item.icon aria-hidden="true" className="w-5 h-5" />
                   </motion.div>
-                  <span aria-hidden className="hidden lg:block h-14 w-px bg-gradient-to-b from-zinc-300 dark:from-zinc-700 via-zinc-300 dark:via-zinc-700 to-transparent" />
+                  <span aria-hidden className="hidden h-14 w-px bg-gradient-to-b from-border via-border to-transparent lg:block" />
                 </div>
 
                 <div className={`order-3 ${isEven ? "lg:order-3 lg:pl-8" : "lg:order-1 lg:pr-8"}`}>
                   <motion.div
                     variants={getMediaVariants(isEven, shouldReduceMotion)}
-                    className="rounded-2xl overflow-hidden aspect-[3/2] transition-colors duration-500 shadow-sm dark:shadow-none bg-zinc-900/5"
+                    className="aspect-[3/2] overflow-hidden rounded-2xl bg-muted/30 shadow-sm transition-colors duration-500"
                   >
                     <motion.div variants={getImageVariants(shouldReduceMotion)} className="w-full h-full">
                       <ImageWithFallback

@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
-import { Card, CardContent, CardHeader, CardTitle } from '@limia/design-system';
-
-import { Input } from '@limia/design-system';
-import { Button } from '@limia/design-system';
+import { Alert, AlertDescription, AlertTitle, Badge, Button, Card, CardContent, CardHeader, CardTitle, Input, t as token } from '@limia/design-system';
 import { Search, MessageSquare, BarChart, User, Bot, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart as RechartsBar, Bar, ResponsiveContainer } from 'recharts';
@@ -230,7 +227,7 @@ export const Dashboard = () => {
     }, [messages]);
 
     return (
-        <div className={`bg-black text-foreground p-4 md:p-8 flex flex-col ${selectedSessionId ? 'h-screen overflow-hidden' : 'min-h-screen lg:h-screen lg:overflow-hidden'}`}>
+        <div className={`bg-background text-foreground p-4 md:p-8 flex flex-col ${selectedSessionId ? 'h-screen overflow-hidden' : 'min-h-screen lg:h-screen lg:overflow-hidden'}`}>
             <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col min-h-0">
                 <div className={selectedSessionId ? 'hidden lg:block' : ''}>
                     {/* Header */}
@@ -247,10 +244,9 @@ export const Dashboard = () => {
 
                         <div className="flex gap-4 text-sm text-muted-foreground">
                             <Button
-                                variant="outline"
+                                variant="destructive"
                                 size="sm"
                                 onClick={() => void handleSignOut()}
-                                className="border-red-900/30 text-red-500 hover:text-red-400 hover:bg-red-900/20"
                             >
                                 Sair
                             </Button>
@@ -267,38 +263,38 @@ export const Dashboard = () => {
 
                     {/* Analytics Row */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                        <Card className="bg-zinc-900 border-zinc-800">
+                        <Card className="border-border bg-card/95">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">Total de Mensagens</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-white">{stats.totalMessages}</div>
+                                <div className="text-2xl font-bold text-foreground">{stats.totalMessages}</div>
                             </CardContent>
                         </Card>
-                        <Card className="bg-zinc-900 border-zinc-800">
+                        <Card className="border-border bg-card/95">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">Usuários</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-blue-400">{stats.userMessages}</div>
+                                <div className="text-2xl font-bold text-primary">{stats.userMessages}</div>
                             </CardContent>
                         </Card>
-                        <Card className="bg-zinc-900 border-zinc-800">
+                        <Card className="border-border bg-card/95">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">Bot</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-green-400">{stats.botMessages}</div>
+                                <div className="text-2xl font-bold text-foreground">{stats.botMessages}</div>
                             </CardContent>
                         </Card>
-                        <Card className="bg-zinc-900 border-zinc-800 col-span-1">
+                        <Card className="col-span-1 border-border bg-card/95">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">Atividade Recente</CardTitle>
                             </CardHeader>
                             <CardContent className="h-[80px]">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <RechartsBar data={activityData}>
-                                        <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="value" fill={token('action.primary.background')} radius={[4, 4, 0, 0]} />
                                     </RechartsBar>
                                 </ResponsiveContainer>
                             </CardContent>
@@ -308,28 +304,30 @@ export const Dashboard = () => {
 
                     {/* Error Alert */}
                     {error && (
-                        <div className="bg-red-900/20 border border-red-900/50 text-red-200 p-4 rounded-lg mb-8 flex items-center justify-between">
+                        <Alert variant="destructive" className="mb-8 flex items-center justify-between">
                             <div>
-                                <p className="font-bold">Erro ao carregar dados do Supabase</p>
-                                <p className="text-sm font-mono mt-1">{error}</p>
-                                <p className="text-xs text-red-400 mt-2">Falha na conexão com interaction_logs.</p>
+                                <AlertTitle>Erro ao carregar dados do Supabase</AlertTitle>
+                                <AlertDescription>
+                                    <p className="mt-1 font-mono text-sm">{error}</p>
+                                    <p className="mt-2 text-xs">Falha na conexao com interaction_logs.</p>
+                                </AlertDescription>
                             </div>
-                            <Button variant="outline" size="sm" onClick={fetchMessages} className="border-red-900/50 hover:bg-red-900/30">
+                            <Button variant="outline" size="sm" onClick={fetchMessages}>
                                 Tentar Novamente
                             </Button>
-                        </div>
+                        </Alert>
                     )}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
                     {/* Sidebar - Session List */}
-                    <Card className={`bg-zinc-900 border-zinc-800 flex flex-col h-full overflow-hidden ${selectedSessionId ? 'hidden lg:flex' : 'flex'}`}>
-                        <div className="p-4 border-b border-zinc-800">
+                    <Card className={`flex h-full flex-col overflow-hidden border-border bg-card/95 ${selectedSessionId ? 'hidden lg:flex' : 'flex'}`}>
+                        <div className="border-b border-border p-4">
                             <div className="relative">
                                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                                 <Input
                                     placeholder="Buscar ID ou conteúdo..."
-                                    className="pl-9 bg-zinc-950 border-zinc-800 focus:ring-blue-500"
+                                    className="bg-input-background pl-9"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -350,21 +348,21 @@ export const Dashboard = () => {
                                         <button
                                             key={sid}
                                             onClick={() => handleSessionClick(sid)}
-                                            className={`flex flex-col items-start gap-1 p-3 rounded-lg text-left transition-colors ${selectedSessionId === sid ? 'bg-blue-600/20 border border-blue-600/30' : 'hover:bg-zinc-800 border border-transparent'
+                                            className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-colors ${selectedSessionId === sid ? 'border-primary/30 bg-primary/10' : 'border-transparent hover:bg-muted/40'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between w-full">
-                                                <span className="font-mono text-xs text-blue-400 font-medium truncate max-w-[150px]">{sid}</span>
+                                                <span className="max-w-[150px] truncate font-mono text-xs font-medium text-primary">{sid}</span>
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-[10px] text-zinc-500">{new Date(lastMsg.created_at).toLocaleDateString()}</span>
+                                                    <span className="text-[10px] text-muted-foreground">{new Date(lastMsg.created_at).toLocaleDateString()}</span>
                                                     {unreadCount > 0 && (
-                                                        <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-500 text-[10px] font-bold text-white">
+                                                        <Badge className="flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px]">
                                                             {unreadCount}
-                                                        </div>
+                                                        </Badge>
                                                     )}
                                                 </div>
                                             </div>
-                                            <p className="text-sm text-zinc-300 line-clamp-1 w-full">
+                                            <p className="w-full line-clamp-1 text-sm text-foreground/80">
                                                 {lastMsg.content}
                                             </p>
                                         </button>
@@ -375,18 +373,18 @@ export const Dashboard = () => {
                     </Card>
 
                     {/* Main - Chat View */}
-                    <Card className={`bg-zinc-900 border-zinc-800 col-span-1 lg:col-span-2 flex flex-col h-full overflow-hidden ${selectedSessionId ? 'flex' : 'hidden lg:flex'}`}>
+                    <Card className={`col-span-1 flex h-full flex-col overflow-hidden border-border bg-card/95 lg:col-span-2 ${selectedSessionId ? 'flex' : 'hidden lg:flex'}`}>
                         {selectedSessionId ? (
                             <>
-                                <div className="p-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center justify-between">
+                                <div className="flex items-center justify-between border-b border-border bg-muted/20 p-4">
                                     <div className="flex items-center gap-2">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 lg:hidden mr-1 text-zinc-400" onClick={() => setSelectedSessionId(null)}>
+                                        <Button variant="ghost" size="icon" className="mr-1 h-8 w-8 lg:hidden" onClick={() => setSelectedSessionId(null)}>
                                             <ArrowLeft className="w-4 h-4" />
                                         </Button>
-                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                        <span className="font-mono text-sm text-zinc-400">Session: {selectedSessionId}</span>
+                                        <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+                                        <span className="font-mono text-sm text-muted-foreground">Session: {selectedSessionId}</span>
                                     </div>
-                                    <Button variant="outline" size="sm" className="h-8 text-xs border-zinc-700 bg-zinc-800" onClick={() => setSelectedSessionId(null)}>
+                                    <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => setSelectedSessionId(null)}>
                                         Fechar
                                     </Button>
                                 </div>
@@ -396,17 +394,17 @@ export const Dashboard = () => {
                                             const isBot = msg.role === 'assistant';
                                             return (
                                                 <div key={msg.id} className={`flex gap-4 ${isBot ? '' : 'flex-row-reverse'}`}>
-                                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isBot ? 'bg-zinc-800' : 'bg-blue-600'}`}>
-                                                        {isBot ? <Bot className="w-4 h-4 text-zinc-400" /> : <User className="w-4 h-4 text-white" />}
+                                                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${isBot ? 'bg-muted text-muted-foreground' : 'bg-primary text-primary-foreground'}`}>
+                                                        {isBot ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
                                                     </div>
                                                     <div className={`flex flex-col gap-1 max-w-[80%] ${isBot ? '' : 'items-end'}`}>
                                                         <div className={`p-4 rounded-2xl ${isBot
-                                                            ? 'bg-zinc-800 text-zinc-300 rounded-tl-none'
-                                                            : 'bg-blue-600 text-white rounded-tr-none'
+                                                            ? 'border border-border bg-muted/40 text-foreground rounded-tl-none'
+                                                            : 'bg-primary text-primary-foreground rounded-tr-none'
                                                             }`}>
                                                             <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                                                         </div>
-                                                        <span className="text-[10px] text-zinc-600">
+                                                        <span className="text-[10px] text-muted-foreground">
                                                             {new Date(msg.created_at).toLocaleString()}
                                                         </span>
                                                     </div>
@@ -417,8 +415,8 @@ export const Dashboard = () => {
                                 </div>
                             </>
                         ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 gap-4">
-                                <div className="w-16 h-16 rounded-full bg-zinc-800/50 flex items-center justify-center">
+                            <div className="flex flex-1 flex-col items-center justify-center gap-4 text-muted-foreground">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted/50">
                                     <MessageSquare className="w-8 h-8 opacity-20" />
                                 </div>
                                 <p>Selecione uma conversa para visualizar o histórico</p>

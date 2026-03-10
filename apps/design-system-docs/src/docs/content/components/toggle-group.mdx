@@ -1,0 +1,28 @@
+import { ToggleGroup, ToggleGroupItem } from '@limia/design-system';
+import { AlignCenter, AlignLeft, AlignRight } from 'lucide-react';
+
+<DocsPageHeader
+  title="Toggle Group"
+  description="Toggle group organizes related toggles into a structured set with single or multiple selection."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <ToggleGroup type="single" defaultValue="left" aria-label="Text alignment">
+    <ToggleGroupItem value="left" aria-label="Align left">
+      <AlignLeft />
+    </ToggleGroupItem>
+    <ToggleGroupItem value="center" aria-label="Align center">
+      <AlignCenter />
+    </ToggleGroupItem>
+    <ToggleGroupItem value="right" aria-label="Align right">
+      <AlignRight />
+    </ToggleGroupItem>
+  </ToggleGroup>
+</ComponentPreview>
+
+## Usage
+
+- Use toggle group for related formatting or mode controls.
+- Use `type="single"` for mutually exclusive states.
+- Use `type="multiple"` when several pressed states can coexist.

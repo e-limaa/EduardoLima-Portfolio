@@ -1,0 +1,26 @@
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Tooltip"
+  description="Tooltip oferece orientacao contextual curta para controles que se beneficiam de mais clareza em hover ou foco."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Button variant="outline" size="icon" aria-label="Detalhes do projeto">
+        ?
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent sideOffset={8}>
+      Tooltip complementa o controle. Ele nao deve carregar informacao critica.
+    </TooltipContent>
+  </Tooltip>
+</ComponentPreview>
+
+## Uso
+
+- Use tooltip para orientacoes curtas e nao essenciais.
+- Mantenha o conteudo em uma frase curta sempre que possivel.
+- Prefira texto visivel quando a instrucao precisar ser lida antes da acao.

@@ -1,12 +1,12 @@
 import { Languages } from "lucide-react"
-import { Button } from "@limia/design-system"
-import { useLanguage } from "./language-provider"
 import {
+    Button,
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@limia/design-system"
+import { useLanguage } from "./language-provider"
 
 export function LanguageToggle() {
     const { setLanguage } = useLanguage()

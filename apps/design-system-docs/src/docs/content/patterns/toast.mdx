@@ -1,0 +1,43 @@
+import { Button, Toaster, toast } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Toast"
+  description="Toast is the lightweight feedback pattern for app-wide success, error and progress messages."
+  status="beta"
+/>
+
+## Usage
+
+Mount a single `Toaster` near the app shell, then trigger feedback with `toast`.
+
+<ComponentPreview>
+  <div className="flex flex-col items-start gap-4">
+    <Toaster theme="light" />
+    <Button onClick={() => toast.success('Saved', { description: 'Your changes were stored successfully.' })}>
+      Show success toast
+    </Button>
+  </div>
+</ComponentPreview>
+
+## Anatomy
+
+```tsx
+import { Toaster, toast } from '@limia/design-system';
+
+export function AppShell() {
+  return (
+    <>
+      <Toaster theme="system" />
+      <button onClick={() => toast.error('Unable to publish')}>
+        Publish
+      </button>
+    </>
+  );
+}
+```
+
+## Guidance
+
+- Use toast for transient feedback that does not block the current task.
+- Keep the title short and move extra context into `description`.
+- Do not use toast for destructive confirmations; prefer dialogs for that.

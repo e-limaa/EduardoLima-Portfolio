@@ -1,0 +1,21 @@
+import { Skeleton } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Skeleton"
+  description="Skeleton antecipa a forma do conteudo antes da chegada dos dados reais, reduzindo layout shift e latencia percebida."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <div className="max-w-md space-y-3">
+    <Skeleton className="h-6 w-1/2" />
+    <Skeleton className="h-4 w-full" />
+    <Skeleton className="h-4 w-5/6" />
+    <Skeleton className="h-24 w-full rounded-xl" />
+  </div>
+</ComponentPreview>
+
+## Uso
+
+- Reproduza aproximadamente o layout do conteudo final.
+- Prefira skeleton a spinner quando a estrutura da pagina ja for conhecida.

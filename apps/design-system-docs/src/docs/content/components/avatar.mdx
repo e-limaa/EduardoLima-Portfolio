@@ -1,0 +1,44 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Avatar"
+  description="Avatar displays identity media for people, teams and bots with graceful fallback behavior."
+  status="beta"
+/>
+
+## Usage
+
+Use Avatar when a person, assistant or organization needs a recognizable visual identity in a compact space.
+
+<ComponentPreview>
+  <div className="flex items-center gap-4">
+    <Avatar>
+      <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop" alt="Sarah Collins" />
+      <AvatarFallback>SC</AvatarFallback>
+    </Avatar>
+    <Avatar className="size-12">
+      <AvatarFallback>AI</AvatarFallback>
+    </Avatar>
+  </div>
+</ComponentPreview>
+
+## Anatomy
+
+```tsx
+import { Avatar, AvatarFallback, AvatarImage } from '@limia/design-system';
+
+export function Example() {
+  return (
+    <Avatar>
+      <AvatarImage src="/avatar.png" alt="Eduardo Lima" />
+      <AvatarFallback>EL</AvatarFallback>
+    </Avatar>
+  );
+}
+```
+
+## Guidance
+
+- Prefer short fallback content such as initials or assistant labels.
+- Always pass meaningful `alt` text when an image conveys identity.
+- Keep Avatar decorative only when the surrounding text already names the subject.

@@ -1,6 +1,15 @@
 import React from "react";
 import type { Session } from "@supabase/supabase-js";
-import { Button, Input } from "@limia/design-system";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
+} from "@limia/design-system";
 import { supabase } from "@/lib/supabase";
 
 const resolveIsAdmin = async () => {
@@ -40,35 +49,47 @@ const DashboardSignIn = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-foreground flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-        <h1 className="text-xl font-bold text-white">Acesso ao Dashboard</h1>
-        <p className="mt-2 text-sm text-zinc-400">Entre com sua conta administrativa.</p>
-        <form onSubmit={handleSignIn} className="mt-6 flex flex-col gap-4">
-          <Input
-            type="email"
-            autoComplete="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="bg-zinc-950 border-zinc-800"
-            required
-          />
-          <Input
-            type="password"
-            autoComplete="current-password"
-            placeholder="Senha"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="bg-zinc-950 border-zinc-800"
-            required
-          />
-          {error && <p className="text-sm text-red-400">{error}</p>}
-          <Button type="submit" disabled={submitting || !email || !password}>
-            {submitting ? "Entrando..." : "Entrar"}
-          </Button>
-        </form>
-      </div>
+    <div className="flex min-h-screen items-center justify-center bg-background p-4 text-foreground">
+      <Card className="w-full max-w-md border-border/70 bg-card/95 shadow-xl backdrop-blur">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold">Acesso ao Dashboard</CardTitle>
+          <CardDescription>Entre com sua conta administrativa.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSignIn} className="flex flex-col gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="admin-email">Email</Label>
+              <Input
+                id="admin-email"
+                type="email"
+                autoComplete="email"
+                placeholder="Email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                className="h-11 bg-input-background"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="admin-password">Senha</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="Senha"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                className="h-11 bg-input-background"
+                required
+              />
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <Button type="submit" disabled={submitting || !email || !password}>
+              {submitting ? "Entrando..." : "Entrar"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
@@ -83,16 +104,20 @@ const DashboardUnauthorized = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-foreground flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-        <h1 className="text-xl font-bold text-white">Acesso negado</h1>
-        <p className="mt-2 text-sm text-zinc-400">
-          Sua conta não possui permissão de administrador para visualizar este dashboard.
-        </p>
-        <Button className="mt-6 w-full" variant="outline" onClick={handleSignOut} disabled={signingOut}>
-          {signingOut ? "Saindo..." : "Sair"}
-        </Button>
-      </div>
+    <div className="flex min-h-screen items-center justify-center bg-background p-4 text-foreground">
+      <Card className="w-full max-w-md border-border/70 bg-card/95 shadow-xl backdrop-blur">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold">Acesso negado</CardTitle>
+          <CardDescription>
+            Sua conta nao possui permissao de administrador para visualizar este dashboard.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button className="w-full" variant="outline" onClick={handleSignOut} disabled={signingOut}>
+            {signingOut ? "Saindo..." : "Sair"}
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 };
@@ -143,8 +168,8 @@ export const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-foreground flex items-center justify-center">
-        <p className="text-sm text-zinc-400">Validando acesso...</p>
+      <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
+        <p className="text-sm text-muted-foreground">Validando acesso...</p>
       </div>
     );
   }

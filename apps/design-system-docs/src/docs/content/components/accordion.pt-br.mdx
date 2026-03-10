@@ -1,0 +1,35 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Accordion"
+  description="Accordion revela conteudo denso de forma progressiva, mantendo secoes relacionadas no mesmo fluxo."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <Accordion type="single" collapsible className="w-full max-w-2xl">
+    <AccordionItem value="item-1">
+      <AccordionTrigger>O que deve entrar em um accordion?</AccordionTrigger>
+      <AccordionContent>
+        Use para detalhes opcionais, FAQs e orientacoes secundarias que apoiam a tarefa principal.
+      </AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="item-2">
+      <AccordionTrigger>Quando devo evitar?</AccordionTrigger>
+      <AccordionContent>
+        Evite esconder acoes criticas ou informacoes que o usuario precisa antes de decidir.
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
+</ComponentPreview>
+
+## Uso
+
+- Use `type="single"` quando apenas um painel deve permanecer aberto.
+- Use `type="multiple"` em filtros, configuracoes ou fluxos de inspecao.
+- Mantenha labels claras no trigger e conteudo objetivo.
+
+## Acessibilidade
+
+- Os botões do trigger sao acessiveis por teclado por padrao.
+- Nao esconda validacoes obrigatorias, precificacao ou consequencias destrutivas em conteudo recolhido.

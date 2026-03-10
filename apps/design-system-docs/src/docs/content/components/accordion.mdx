@@ -1,0 +1,35 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Accordion"
+  description="Accordion reveals dense content progressively while keeping related sections grouped in the same flow."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <Accordion type="single" collapsible className="w-full max-w-2xl">
+    <AccordionItem value="item-1">
+      <AccordionTrigger>What should go inside an accordion?</AccordionTrigger>
+      <AccordionContent>
+        Use it for optional details, FAQs and secondary guidance that supports the main task.
+      </AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="item-2">
+      <AccordionTrigger>When should I avoid it?</AccordionTrigger>
+      <AccordionContent>
+        Avoid hiding critical actions or information users need before making a decision.
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
+</ComponentPreview>
+
+## Usage
+
+- Use `type="single"` when only one panel should stay open.
+- Use `type="multiple"` for filters, settings or inspection flows.
+- Keep trigger labels clear and content concise.
+
+## Accessibility
+
+- Accordion trigger buttons are keyboard accessible by default.
+- Do not hide required validation, pricing or destructive consequences inside collapsed content.

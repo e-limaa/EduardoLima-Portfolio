@@ -1,0 +1,41 @@
+import {
+  Label,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@limia/design-system';
+
+<DocsPageHeader
+  title="Select"
+  description="Select ajuda o usuario a escolher uma unica opcao em uma lista estruturada sem ocupar espaco demais na interface."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <div className="max-w-sm space-y-2">
+    <Label className="text-sm font-medium">Etapa do projeto</Label>
+    <Select defaultValue="discovery">
+      <SelectTrigger>
+        <SelectValue placeholder="Escolha uma etapa" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Fluxo</SelectLabel>
+          <SelectItem value="discovery">Descoberta</SelectItem>
+          <SelectItem value="design">Design</SelectItem>
+          <SelectItem value="build">Construcao</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  </div>
+</ComponentPreview>
+
+## Uso
+
+- Use select para escolhas unicas concisas com mais de poucas opcoes.
+- Prefira radio group quando todas as opcoes precisarem permanecer visiveis.
+- Mantenha o placeholder curto e use label externa quando o campo precisar de contexto.

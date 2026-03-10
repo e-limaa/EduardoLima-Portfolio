@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {SectionHeader, Section, ProjectCard} from '@limia/design-system'
+import {SectionHeader, Section, ProjectCard, ToggleGroup, ToggleGroupItem} from '@limia/design-system'
 import {getImageUrl, useProjects} from '../../lib/project-service'
 import {useLanguage} from '../language-provider'
 
@@ -33,24 +33,20 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
         index="01"
         label={t('projects.label')}
       >
-        <div className="inline-flex items-center p-1 bg-zinc-100 dark:bg-zinc-800/50 rounded-full border border-zinc-200 dark:border-white/5 no-cursor-trail">
-          <button
-            onClick={() => setActiveTab('study')}
-            className={`px-4 py-1.5 md:px-5 md:py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === 'study'
-              ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm border border-black/5 dark:border-white/5'
-              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'}`}
-          >
+        <ToggleGroup
+          type="single"
+          value={activeTab}
+          onValueChange={(value) => value && setActiveTab(value as 'ui' | 'study')}
+          variant="outline"
+          className="no-cursor-trail rounded-full border border-border/70 bg-card/80 p-1"
+        >
+          <ToggleGroupItem value="study" className="rounded-full px-4 py-1.5 md:px-5 md:py-2">
             {t('projects.tab.ux')}
-          </button>
-          <button
-            onClick={() => setActiveTab('ui')}
-            className={`px-4 py-1.5 md:px-5 md:py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === 'ui'
-              ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm border border-black/5 dark:border-white/5'
-              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70'}`}
-          >
+          </ToggleGroupItem>
+          <ToggleGroupItem value="ui" className="rounded-full px-4 py-1.5 md:px-5 md:py-2">
             {t('projects.tab.ui')}
-          </button>
-        </div>
+          </ToggleGroupItem>
+        </ToggleGroup>
       </SectionHeader>
 
       <ul className="list-none m-0 p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12 md:mt-16 no-cursor-trail">
@@ -67,7 +63,7 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
           </li>
         ))}
         {featuredProjects.length === 0 && (
-          <li className="col-span-1 md:col-span-3 text-center py-12 text-muted-foreground bg-zinc-50 dark:bg-white/5 rounded-2xl border border-zinc-200 dark:border-white/10">
+          <li className="col-span-1 rounded-2xl border border-border bg-card/60 py-12 text-center text-muted-foreground md:col-span-3">
             {t('projects.empty')}
           </li>
         )}

@@ -1,0 +1,27 @@
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Popover"
+  description="Popover reveals contextual content close to the trigger without taking users away from the current surface."
+  status="beta"
+/>
+
+<ComponentPreview>
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button variant="outline">Open details</Button>
+    </PopoverTrigger>
+    <PopoverContent className="space-y-2">
+      <h4 className="font-medium text-foreground">Context panel</h4>
+      <p className="text-sm text-muted-foreground">
+        Use popover for lightweight supporting content, quick settings or inline help.
+      </p>
+    </PopoverContent>
+  </Popover>
+</ComponentPreview>
+
+## Usage
+
+- Use popover for small, contextual content that belongs near its trigger.
+- Prefer dialog or sheet when the flow requires more space, focus or multiple steps.
+- Keep the content compact and task-adjacent.

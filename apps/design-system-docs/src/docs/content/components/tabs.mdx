@@ -1,0 +1,31 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Tabs"
+  description="Tabs switch between related views without forcing navigation away from the current page."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <Tabs defaultValue="overview" className="w-full max-w-2xl">
+    <TabsList>
+      <TabsTrigger value="overview">Overview</TabsTrigger>
+      <TabsTrigger value="tokens">Tokens</TabsTrigger>
+      <TabsTrigger value="usage">Usage</TabsTrigger>
+    </TabsList>
+    <TabsContent value="overview" className="rounded-xl border border-border bg-card/40 p-4">
+      Use tabs when the same page needs multiple related views with low navigation cost.
+    </TabsContent>
+    <TabsContent value="tokens" className="rounded-xl border border-border bg-card/40 p-4">
+      Keep labels short and comparable so users can scan the set quickly.
+    </TabsContent>
+    <TabsContent value="usage" className="rounded-xl border border-border bg-card/40 p-4">
+      Do not use tabs when users must compare content across all sections simultaneously.
+    </TabsContent>
+  </Tabs>
+</ComponentPreview>
+
+## Accessibility
+
+- Tabs are keyboard navigable with arrow keys once focused.
+- Use concise labels and keep the number of tabs manageable.

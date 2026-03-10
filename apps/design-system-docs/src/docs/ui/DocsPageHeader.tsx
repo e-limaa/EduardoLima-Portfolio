@@ -1,5 +1,6 @@
-import { Badge, cn } from "@limia/design-system";
+import { cn } from "@limia/design-system";
 import type { DocStatus } from "../types";
+import { DocStatusBadge } from "./DocStatusBadge";
 
 interface DocsPageHeaderProps {
   title: string;
@@ -7,16 +8,6 @@ interface DocsPageHeaderProps {
   status?: DocStatus;
   className?: string;
 }
-
-const statusColorMap: Record<
-  DocStatus,
-  "default" | "secondary" | "outline" | "destructive"
-> = {
-  draft: "secondary",
-  beta: "default",
-  stable: "outline",
-  deprecated: "destructive",
-};
 
 export function DocsPageHeader({
   title,
@@ -30,14 +21,7 @@ export function DocsPageHeader({
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           {title}
         </h1>
-        {status && (
-          <Badge
-            variant={statusColorMap[status]}
-            className="font-mono text-[10px] uppercase tracking-wider"
-          >
-            {status}
-          </Badge>
-        )}
+        {status && <DocStatusBadge status={status} />}
       </div>
       {description && (
         <p className="max-w-3xl text-xl leading-relaxed text-muted-foreground">

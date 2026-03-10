@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { Send } from "lucide-react";
-import { Button } from "@limia/design-system";
-import { Input } from "@limia/design-system";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage, Button, Input } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
 
 interface Message {
@@ -178,19 +176,19 @@ export const ChatWidget = () => {
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="w-full max-w-md bg-white/80 dark:bg-black/40 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[480px] md:h-[580px]"
+      className="flex h-[480px] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl backdrop-blur-xl md:h-[580px]"
     >
       {/* Header */}
-      <div className="p-4 border-b border-zinc-200 dark:border-white/5 flex items-center justify-between bg-zinc-50/50 dark:bg-white/5">
+      <div className="flex items-center justify-between border-b border-border bg-muted/30 p-4">
         <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+          <Avatar className="h-10 w-10 border border-primary/30 shadow-sm">
             <AvatarImage src="/assets/images/avatar-bot.webp" />
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
           <div>
             <h3 className="font-medium text-foreground text-sm flex items-center gap-2">
               Edu Lima
-              <span className="h-2.5 w-2.5 rounded-full bg-green-500 border border-white dark:border-black" />
+              <span className="h-2.5 w-2.5 rounded-full border border-background bg-primary" />
             </h3>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               {t("chat.assistant")}
@@ -203,7 +201,7 @@ export const ChatWidget = () => {
       {/* Messages */}
       <div
         ref={scrollAreaRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-white/10 scrollbar-track-transparent"
+        className="flex-1 space-y-4 overflow-y-auto p-4"
       >
         {messages.map((msg) => (
           <motion.div
@@ -214,8 +212,8 @@ export const ChatWidget = () => {
           >
             <div
               className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.sender === "user"
-                ? "bg-blue-600 text-white rounded-br-none"
-                : "bg-zinc-100 dark:bg-white/10 text-zinc-800 dark:text-white/90 rounded-bl-none border border-zinc-200 dark:border-white/5"
+                ? "bg-primary text-primary-foreground rounded-br-none"
+                : "border border-border bg-card/80 text-foreground rounded-bl-none"
                 }`}
             >
               {msg.text.split('\n').map((line, i) => {
@@ -255,28 +253,28 @@ export const ChatWidget = () => {
             animate={{ opacity: 1, y: 0 }}
             className="flex justify-start"
           >
-            <div className="bg-zinc-100 dark:bg-white/10 p-3 rounded-2xl rounded-bl-none border border-zinc-200 dark:border-white/5 flex gap-1 items-center h-10 w-16 justify-center">
-              <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/50 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-              <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/50 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-              <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/50 rounded-full animate-bounce"></span>
+            <div className="flex h-10 w-16 items-center justify-center gap-1 rounded-2xl rounded-bl-none border border-border bg-card/80 p-3">
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 animate-bounce"></span>
             </div>
           </motion.div>
         )}
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSendMessage} className="p-3 border-t border-zinc-200 dark:border-white/10 bg-zinc-50/50 dark:bg-white/5 flex gap-2">
+      <form onSubmit={handleSendMessage} className="flex gap-2 border-t border-border bg-muted/30 p-3">
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={t("chat.placeholder")}
-          className="bg-white dark:bg-black/20 border-zinc-200 dark:border-white/10 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-white/30 focus-visible:ring-blue-500/50 focus-visible:border-blue-500/50"
+          className="bg-input-background"
         />
         <Button
           type="submit"
           size="icon-md"
-          className="bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)]"
           disabled={!inputValue.trim() || isTyping}
+          aria-label={t("chat.send") || "Send message"}
         >
           <Send className="h-4 w-4" />
         </Button>

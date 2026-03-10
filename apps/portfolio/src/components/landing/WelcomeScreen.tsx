@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { InteractiveGrid } from "@limia/design-system";
+import { Button, InteractiveGrid, Progress } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
 
 interface WelcomeScreenProps {
@@ -47,7 +47,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
 
     return (
         <motion.div
-            className="fixed inset-0 h-[100dvh] z-[100] flex flex-col items-center justify-center bg-zinc-950 text-white overflow-hidden"
+            className="fixed inset-0 z-[100] flex h-[100dvh] flex-col items-center justify-center overflow-hidden bg-background text-foreground"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
         >
@@ -62,11 +62,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.8 }}
                 >
-                    Eduardo Lima<span className="text-blue-600">.</span>
+                    Eduardo Lima<span className="text-primary">.</span>
                 </motion.h1>
 
                 <motion.p
-                    className="text-zinc-500 text-sm md:text-base mb-12 whitespace-normal md:whitespace-nowrap"
+                    className="mb-12 whitespace-normal text-sm text-muted-foreground md:text-base md:whitespace-nowrap"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.8 }}
@@ -83,27 +83,24 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.5 }}
                             >
-                                <div className="flex-1 h-[2px] bg-zinc-800 rounded-full overflow-hidden">
-                                    <motion.div
-                                        className="h-full bg-white"
-                                        style={{ width: `${progress}%` }}
-                                    />
+                                <div className="flex-1 overflow-hidden rounded-full bg-border/60">
+                                    <Progress value={progress} className="h-[2px]" />
                                 </div>
-                                <span className="text-xs font-mono text-zinc-400 w-8 text-right">
+                                <span className="w-8 text-right font-mono text-xs text-muted-foreground">
                                     {Math.round(progress)}%
                                 </span>
                             </motion.div>
                         ) : (
-                            <motion.button
+                            <motion.div
                                 key="button"
-                                onClick={handleEnter}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="group flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300 text-sm font-medium text-zinc-200"
                             >
-                                {t("welcome.enter")}
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </motion.button>
+                                <Button onClick={handleEnter} size="lg" variant="outline" className="group">
+                                    {t("welcome.enter")}
+                                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                </Button>
+                            </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
@@ -115,7 +112,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                 transition={{ delay: 2, duration: 1 }}
                 className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-20 px-4"
             >
-                <p className="text-[10px] md:text-xs text-zinc-600 font-mono">
+                <p className="font-mono text-[10px] text-muted-foreground/80 md:text-xs">
                     {t("welcome.audioHelp")}
                 </p>
             </motion.div>

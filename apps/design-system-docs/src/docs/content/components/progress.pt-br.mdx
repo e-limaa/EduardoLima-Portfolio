@@ -1,0 +1,23 @@
+import { Progress } from '@limia/design-system';
+
+<DocsPageHeader
+  title="Progress"
+  description="Progress comunica conclusao ao longo do tempo e ajuda o usuario a calibrar expectativa durante uma tarefa em andamento."
+  status="beta"
+/>
+
+<ComponentPreview className="block">
+  <div className="max-w-md space-y-3">
+    <div className="flex items-center justify-between text-sm">
+      <span className="text-foreground">Enviando assets</span>
+      <span className="text-muted-foreground">72%</span>
+    </div>
+    <Progress value={72} />
+  </div>
+</ComponentPreview>
+
+## Uso
+
+- Use progress quando a conclusao puder ser estimada.
+- Combine a barra com label ou percentual quando a tarefa importar.
+- Prefira skeleton quando o sistema conhecer o layout, mas nao a duracao.

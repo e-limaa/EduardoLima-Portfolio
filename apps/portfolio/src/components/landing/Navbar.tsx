@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { Home, User, Briefcase, Layers, Mail, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { cn } from "@limia/design-system";
 import { ModeToggle } from "../mode-toggle";
 import { useLanguage } from "../language-provider";
 
@@ -77,7 +78,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
       >
         <nav
           aria-label={language === "pt-br" ? "Navegação de seções" : "Section navigation"}
-          className="px-1 py-1 sm:px-2 sm:py-2 rounded-[2rem] sm:rounded-full bg-zinc-100/80 dark:bg-black/50 backdrop-blur-xl border border-zinc-200 dark:border-[#155DFC] shadow-lg dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+          className="rounded-[2rem] border border-border/70 bg-background/85 px-1 py-1 shadow-lg shadow-black/10 backdrop-blur-xl sm:rounded-full sm:px-2 sm:py-2"
         >
           <ul
             ref={scrollRef}
@@ -94,28 +95,30 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
                   whileTap={{ scale: 0.9 }}
                   aria-label={t(item.translationKey)}
                   title={t(item.translationKey)}
-                  className="group p-1.5 sm:p-3 rounded-full hover:bg-white dark:hover:bg-white/10 transition-colors"
+                  className="group rounded-full p-1.5 transition-colors hover:bg-accent sm:p-3"
                 >
-                  <item.icon className="w-5 h-5 sm:w-5 sm:h-5 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors" />
+                  <item.icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent-foreground sm:h-5 sm:w-5" />
                 </motion.button>
               </li>
             ))}
 
-            <li aria-hidden className="flex-shrink-0 w-px h-6 bg-zinc-300 dark:bg-zinc-700 mx-1 sm:mx-2" />
+            <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
 
             <li className="flex-shrink-0">
               <div
                 role="group"
                 aria-label={language === "pt-br" ? "Selecionar idioma" : "Select language"}
-                className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800/50 p-1 rounded-lg border border-zinc-200 dark:border-white/5"
+                className="flex items-center gap-1 rounded-lg border border-border/70 bg-card/80 p-1"
               >
                 <button
                   type="button"
                   onClick={() => setLanguage("en")}
-                  className={`px-2 py-0.5 text-xs font-bold font-mono uppercase rounded-md transition-all ${language === "en"
-                    ? "bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm"
-                    : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70"
-                    }`}
+                  className={cn(
+                    "rounded-md px-2 py-0.5 font-mono text-xs font-bold uppercase transition-all",
+                    language === "en"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  )}
                   title="English"
                 >
                   EN
@@ -123,10 +126,12 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
                 <button
                   type="button"
                   onClick={() => setLanguage("pt-br")}
-                  className={`px-2 py-0.5 text-xs font-bold font-mono uppercase rounded-md transition-all ${language === "pt-br"
-                    ? "bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm"
-                    : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70"
-                    }`}
+                  className={cn(
+                    "rounded-md px-2 py-0.5 font-mono text-xs font-bold uppercase transition-all",
+                    language === "pt-br"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  )}
                   title="Português"
                 >
                   PT
@@ -134,7 +139,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
               </div>
             </li>
 
-            <li aria-hidden className="flex-shrink-0 w-px h-6 bg-zinc-300 dark:bg-zinc-700 mx-1 sm:mx-2" />
+            <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
 
             <li className="flex-shrink-0 flex items-center">
               <ModeToggle />
