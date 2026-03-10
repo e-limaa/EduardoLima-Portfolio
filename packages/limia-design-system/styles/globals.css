@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
     /* Typography */
-    --font-sans: "Inter", sans-serif;
+    --font-limia-sans: "Inter", sans-serif;
     --font-size: 16px;
 
     /*
@@ -165,44 +164,7 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --font-sans: var(--font-sans);
-
-    /* Spacing overrides to use CSS variables as source of truth */
-    --spacing-0: var(--spacing-0);
-    --spacing-px: var(--spacing-px);
-    --spacing-0_5: var(--spacing-0-5);
-    --spacing-1: var(--spacing-1);
-    --spacing-1_5: var(--spacing-1-5);
-    --spacing-2: var(--spacing-2);
-    --spacing-2_5: var(--spacing-2-5);
-    --spacing-3: var(--spacing-3);
-    --spacing-3_5: var(--spacing-3-5);
-    --spacing-4: var(--spacing-4);
-    --spacing-5: var(--spacing-5);
-    --spacing-6: var(--spacing-6);
-    --spacing-7: var(--spacing-7);
-    --spacing-8: var(--spacing-8);
-    --spacing-9: var(--spacing-9);
-    --spacing-10: var(--spacing-10);
-    --spacing-11: var(--spacing-11);
-    --spacing-12: var(--spacing-12);
-    --spacing-14: var(--spacing-14);
-    --spacing-16: var(--spacing-16);
-    --spacing-20: var(--spacing-20);
-    --spacing-24: var(--spacing-24);
-    --spacing-28: var(--spacing-28);
-    --spacing-32: var(--spacing-32);
-    --spacing-36: var(--spacing-36);
-    --spacing-40: var(--spacing-40);
-    --spacing-44: var(--spacing-44);
-    --spacing-48: var(--spacing-48);
-    --spacing-52: var(--spacing-52);
-    --spacing-56: var(--spacing-56);
-    --spacing-60: var(--spacing-60);
-    --spacing-64: var(--spacing-64);
-    --spacing-72: var(--spacing-72);
-    --spacing-80: var(--spacing-80);
-    --spacing-96: var(--spacing-96);
+    --font-sans: var(--font-limia-sans);
 }
 
 @layer base {
@@ -212,7 +174,7 @@
 
     body {
         @apply bg-background text-foreground transition-colors duration-300;
-        font-family: var(--font-sans);
+        font-family: var(--font-limia-sans);
     }
 
     button:not(:disabled),

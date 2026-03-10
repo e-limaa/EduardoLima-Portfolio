@@ -1,2 +1,4 @@
+@source "../../../../packages/limia-design-system/src";
+
 @import "../../../../packages/limia-tokens/styles/tokens.css";
 @import "../../../../packages/limia-design-system/styles/globals.css";

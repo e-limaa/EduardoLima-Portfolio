@@ -33,6 +33,12 @@ Build completo:
 npm run build
 ```
 
+Notas de arquitetura:
+
+- os apps (`apps/portfolio` e `apps/design-system-docs`) resolvem `@limia/design-system` e `@limia/tokens` via aliases de source no Vite durante desenvolvimento e deploy
+- o runtime publicável continua sendo gerado pelo pacote em `packages/limia-design-system/dist`
+- as fontes do sistema são carregadas pelos apps host em `index.html`; o pacote do DS não injeta fontes externas
+
 ## Variáveis de ambiente
 
 Portfolio client:
@@ -71,6 +77,7 @@ Importante:
 - a function de chat do portfolio vive em [apps/portfolio/api/chat.js](C:/Users/dulim/Downloads/EduardoLima-Portfolio/apps/portfolio/api/chat.js)
 - o docs app é estático e não depende de `/api`
 - o root do repositório não deve mais ser usado como projeto Vercel
+- sempre que o Vercel ficar com cache de build inconsistente, prefira `Redeploy` sem cache
 
 ## Domínio e subdomínio
 

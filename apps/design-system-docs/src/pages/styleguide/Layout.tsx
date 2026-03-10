@@ -1,5 +1,5 @@
 import React from "react";
-import { Moon, Sun, Menu, ArrowLeft } from "lucide-react";
+import { Moon, Sun, Menu } from "lucide-react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Button, cn } from "@limia/design-system";
@@ -14,10 +14,6 @@ export function StyleGuideLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const portfolioUrl =
-    window.location.hostname === "localhost"
-      ? "http://localhost:3000"
-      : "https://elimaj.com.br";
 
   React.useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -45,15 +41,6 @@ export function StyleGuideLayout() {
       >
         <div className="flex h-full flex-col">
           <div className="border-b border-border p-6">
-            <button
-              className="mb-2 flex items-center gap-2 text-xs font-mono text-muted-foreground"
-              onClick={() => {
-                window.location.href = portfolioUrl;
-              }}
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>{t("docs.sidebar.back")}</span>
-            </button>
             <h1 className="flex items-center gap-2 text-xl font-bold tracking-tight">
               {t("docs.header.title")}
               <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-xs text-primary">
