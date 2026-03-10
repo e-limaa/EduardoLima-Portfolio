@@ -19,20 +19,20 @@ const TextSwitch = React.forwardRef<
       data-slot="text-switch"
       checked={checked}
       className={cn(
-        "relative inline-flex h-9.6 w-[4.6rem] shrink-0 items-center justify-between overflow-hidden rounded-full border border-border p-1 backdrop-blur transition-colors outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50",
+        "group relative inline-flex h-9.6 w-[4.6rem] shrink-0 items-center justify-between overflow-hidden rounded-full border border-border p-1 backdrop-blur transition-colors outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       style={{ backgroundColor: t("background.layer-2"), ...style }}
       {...props}
     >
       <span className="pointer-events-none relative z-10 flex size-7.5 shrink-0 items-center justify-center font-mono text-[0.625rem] font-bold uppercase tracking-[0.12em]">
-        <span className={cn(checked ? "text-muted-foreground" : "text-primary-foreground")}>
+        <span className={cn(checked ? "text-muted-foreground group-hover:text-foreground" : "text-primary-foreground")}>
           {uncheckedLabel}
         </span>
       </span>
 
       <span className="pointer-events-none relative z-10 flex size-7.5 shrink-0 items-center justify-center font-mono text-[0.625rem] font-bold uppercase tracking-[0.12em]">
-        <span className={cn(checked ? "text-primary-foreground" : "text-muted-foreground")}>
+        <span className={cn(checked ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground")}>
           {checkedLabel}
         </span>
       </span>

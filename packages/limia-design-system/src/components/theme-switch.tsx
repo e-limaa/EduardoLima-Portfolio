@@ -19,7 +19,7 @@ const ThemeSwitch = React.forwardRef<
       data-slot="theme-switch"
       checked={checked}
       className={cn(
-        "relative inline-flex h-9.6 w-[4.6rem] shrink-0 items-center justify-between overflow-hidden rounded-full border border-border p-1 backdrop-blur transition-colors outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50",
+        "group relative inline-flex h-9.6 w-[4.6rem] shrink-0 items-center justify-between overflow-hidden rounded-full border border-border p-1 backdrop-blur transition-colors outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       style={{ backgroundColor: t("background.layer-2"), ...style }}
@@ -29,7 +29,7 @@ const ThemeSwitch = React.forwardRef<
         <Sun
           className={cn(
             "size-4 transition-colors duration-200",
-            isDark ? "text-muted-foreground" : "text-primary-foreground",
+            isDark ? "text-muted-foreground group-hover:text-foreground" : "text-primary-foreground",
           )}
         />
       </span>
@@ -38,7 +38,7 @@ const ThemeSwitch = React.forwardRef<
         <Moon
           className={cn(
             "size-4 transition-colors duration-200",
-            isDark ? "text-primary-foreground" : "text-muted-foreground",
+            isDark ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground",
           )}
         />
       </span>
