@@ -40,11 +40,11 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
           variant="outline"
           className="no-cursor-trail rounded-full border border-border/70 bg-card/80 p-1"
         >
-          <ToggleGroupItem value="study" className="rounded-full px-4 py-1.5 md:px-5 md:py-2">
-            {t('projects.tab.ux')}
-          </ToggleGroupItem>
-          <ToggleGroupItem value="ui" className="rounded-full px-4 py-1.5 md:px-5 md:py-2">
+          <ToggleGroupItem value="ui" className="px-4 py-1.5 md:px-5 md:py-2">
             {t('projects.tab.ui')}
+          </ToggleGroupItem>
+          <ToggleGroupItem value="study" className="px-4 py-1.5 md:px-5 md:py-2">
+            {t('projects.tab.ux')}
           </ToggleGroupItem>
         </ToggleGroup>
       </SectionHeader>
