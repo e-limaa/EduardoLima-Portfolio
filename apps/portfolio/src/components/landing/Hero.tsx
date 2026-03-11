@@ -1,6 +1,11 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { TextReveal, InteractiveGrid, Badge, Button } from "@limia/design-system";
+import {
+  TrueFocus,
+  InteractiveGrid,
+  Badge,
+  Button,
+} from "@limia/design-system";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ChatWidget } from "./ChatWidget";
@@ -27,23 +32,24 @@ export const Hero = () => {
       id="hero"
       className="relative isolate min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pt-0 md:pb-0 perspective-[1000px]"
     >
-      <InteractiveGrid
-        variant="subtle"
-        className="-z-10 opacity-80"
-      />
+      <InteractiveGrid variant="subtle" className="-z-10 opacity-80" />
 
       <div className="absolute inset-0 z-0 pointer-events-none">
         <motion.div
           style={{ y: y1 }}
-          className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/15 blur-[120px] mix-blend-screen animate-pulse"
+          className="absolute top-20 left-4/12 h-[500px] w-[500px] rounded-full bg-primary/15 blur-[120px] mix-blend-screen"
+        />
+        <motion.div
+          style={{ y: y1 }}
+          className="absolute top-40 left-0/4 h-[500px] w-[300px] rounded-full bg-primary/15 blur-[150px] mix-blend-screen"
         />
         <motion.div
           style={{ y: y2 }}
-          className="absolute bottom-0 right-1/4 h-[500px] w-[500px] rounded-full bg-muted/80 blur-[120px] mix-blend-screen"
+          //className="absolute bottom-0 right-1/4 h-[500px] w-[500px] rounded-full bg-muted/80 blur-[120px] mix-blend-screen"
         />
         <motion.div
           style={{ y: y2 }}
-          className="absolute right-[8%] top-[8%] h-[360px] w-[360px] rounded-full bg-primary/12 blur-[140px] mix-blend-screen"
+          className="absolute right-[8%] top-[8%] h-[400px] w-[400px] rounded-full bg-primary/12 blur-[140px] mix-blend-screen"
         />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20"></div>
       </div>
@@ -106,7 +112,10 @@ export const Hero = () => {
             transition={{ delay: 0.1, duration: 0.8 }}
             className="flex justify-center lg:justify-start"
           >
-            <Badge variant="secondary" className="mb-4 text-body-sm font-medium px-4 py-1">
+            <Badge
+              variant="secondary"
+              className="mb-4 text-body-sm font-medium px-4 py-1"
+            >
               {t("hero.badge")}
             </Badge>
           </motion.div>
@@ -117,28 +126,48 @@ export const Hero = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto"
           >
-            <TextReveal delay={0.1} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text pr-2 leading-[1.0] text-transparent transition-colors duration-500 md:leading-[1.15]">
-                {t("hero.word1")}
-              </span>
-            </TextReveal>
-            <TextReveal delay={0.2} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block bg-gradient-to-r from-muted-foreground via-foreground/80 to-muted-foreground/70 bg-clip-text leading-[1.0] text-transparent md:leading-[1.15]">
-                {t("hero.word2")}
-              </span>
-            </TextReveal>
-            <TextReveal delay={0.3} className="-mb-3 md:-mb-6 pb-2" priority>
-              <span className="block bg-gradient-to-r from-primary to-primary/70 bg-clip-text leading-[1.0] text-transparent md:leading-[1.15]">
-                {t("hero.word3")}
-              </span>
-            </TextReveal>
+            <TrueFocus
+              priority
+              blurAmount={6}
+              animationDuration={0.55}
+              pauseBetweenAnimations={1.8}
+              className="flex flex-col items-center lg:items-start"
+              itemClassName="-mb-3 pb-2 md:-mb-6"
+              items={[
+                {
+                  key: "hero-word-1",
+                  className: "pr-2",
+                  content: (
+                    <span className="block bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text leading-[1.0] text-transparent transition-colors duration-500 md:leading-[1.15]">
+                      {t("hero.word1")}
+                    </span>
+                  ),
+                },
+                {
+                  key: "hero-word-2",
+                  content: (
+                    <span className="block bg-gradient-to-r from-muted-foreground via-foreground/80 to-muted-foreground/70 bg-clip-text leading-[1.0] text-transparent md:leading-[1.15]">
+                      {t("hero.word2")}
+                    </span>
+                  ),
+                },
+                {
+                  key: "hero-word-3",
+                  content: (
+                    <span className="block bg-gradient-to-r from-primary to-primary/70 bg-clip-text leading-[1.0] text-transparent md:leading-[1.15]">
+                      {t("hero.word3")}
+                    </span>
+                  ),
+                },
+              ]}
+            />
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-body-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
+            className="mt-8 text-body-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
           >
             {t("hero.description")}
           </motion.p>
@@ -181,10 +210,11 @@ export const Hero = () => {
         transition={{ delay: 1.5, duration: 2, repeat: Infinity }}
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Scroll</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+          Scroll
+        </span>
         <div className="h-12 w-px bg-gradient-to-b from-border to-transparent"></div>
       </motion.div>
     </section>
   );
 };
-

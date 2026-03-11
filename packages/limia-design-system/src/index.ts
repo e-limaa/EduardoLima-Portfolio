@@ -5,6 +5,7 @@ export * from "./components/ui/textarea";
 export * from "./components/ui/label";
 export * from "./components/card";
 export * from "./components/text-reveal";
+export * from "./components/true-focus";
 export * from "./components/section-header";
 export * from "./components/interactive-grid";
 export * from "./components/project-card";
