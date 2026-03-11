@@ -25,6 +25,20 @@ export default defineConfig({
       "@": path.resolve(rootDir, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("motion") || id.includes("framer-motion")) return "vendor-motion";
+            if (id.includes("react-router")) return "vendor-router";
+            return "vendor";
+          }
+          return undefined;
+        },
+      },
+    },
+  },
   server: {
     port: 3001,
     open: true,

@@ -3,7 +3,6 @@ import { motion } from "motion/react";
 import {
   TrueFocus,
   InteractiveGrid,
-  LiquidEther,
   Badge,
   Button,
 } from "@limia/design-system";
@@ -11,6 +10,13 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ChatWidget } from "./ChatWidget";
 import { useLanguage } from "../language-provider";
+
+const LIQUID_ETHER_COLORS = ["#2563eb", "#5089fb", "#0735c0"];
+
+const LiquidEtherBackground = React.lazy(async () => {
+  const module = await import("@limia/design-system");
+  return { default: module.LiquidEther };
+});
 
 export const Hero = () => {
   const [videoFailed, setVideoFailed] = React.useState(false);
@@ -31,22 +37,20 @@ export const Hero = () => {
       className="relative isolate min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pt-0 md:pb-0 perspective-[1000px]"
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <LiquidEther
-          autoIntensity={1.4}
-          autoSpeed={0.3}
-          colors={[
-            "#2563eb",
-            "#5089fb",
-            "#0735c0",
-          ]}
-          autoDemo
-          cursorSize={150}
-          isViscous
-          mouseForce={13}
-          resolution={0.5}
-          viscous={30}
-          className="opacity-75"
-        />
+        <React.Suspense fallback={null}>
+          <LiquidEtherBackground
+            autoIntensity={1.4}
+            autoSpeed={0.3}
+            colors={LIQUID_ETHER_COLORS}
+            autoDemo
+            cursorSize={150}
+            isViscous
+            mouseForce={13}
+            resolution={0.5}
+            viscous={30}
+            className="opacity-75"
+          />
+        </React.Suspense>
         <InteractiveGrid variant="subtle" className="opacity-75" />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-12"></div>
       </div>
