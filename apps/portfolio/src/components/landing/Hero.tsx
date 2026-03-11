@@ -1,8 +1,9 @@
 import React from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import {
   TrueFocus,
   InteractiveGrid,
+  LiquidEther,
   Badge,
   Button,
 } from "@limia/design-system";
@@ -12,9 +13,6 @@ import { ChatWidget } from "./ChatWidget";
 import { useLanguage } from "../language-provider";
 
 export const Hero = () => {
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const [videoFailed, setVideoFailed] = React.useState(false);
 
   const { t } = useLanguage();
@@ -32,26 +30,26 @@ export const Hero = () => {
       id="hero"
       className="relative isolate min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pt-0 md:pb-0 perspective-[1000px]"
     >
-      <InteractiveGrid variant="subtle" className="-z-10 opacity-80" />
-
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <motion.div
-          style={{ y: y1 }}
-          className="absolute top-20 left-4/12 h-[500px] w-[500px] rounded-full bg-primary/15 blur-[120px] mix-blend-screen"
+        <LiquidEther
+          autoIntensity={1.1}
+          autoSpeed={0.7}
+          colors={[
+            "#2563eb",
+            "#5089fb",
+            "#0735c0",
+          ]}
+          autoDemo
+          cursorSize={200}
+          isBounce
+          isViscous
+          mouseForce={8}
+          resolution={0.5}
+          viscous={100}
+          className="opacity-75"
         />
-        <motion.div
-          style={{ y: y1 }}
-          className="absolute top-40 left-0/4 h-[500px] w-[300px] rounded-full bg-primary/15 blur-[150px] mix-blend-screen"
-        />
-        <motion.div
-          style={{ y: y2 }}
-          //className="absolute bottom-0 right-1/4 h-[500px] w-[500px] rounded-full bg-muted/80 blur-[120px] mix-blend-screen"
-        />
-        <motion.div
-          style={{ y: y2 }}
-          className="absolute right-[8%] top-[8%] h-[400px] w-[400px] rounded-full bg-primary/12 blur-[140px] mix-blend-screen"
-        />
-        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20"></div>
+        <InteractiveGrid variant="subtle" className="opacity-75" />
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-12"></div>
       </div>
 
       <motion.div

@@ -25,6 +25,7 @@
 | **Theme Switch** | 🧪 Beta | 0.9 | Dark/light mode switch built on the Switch primitive with semantic surface styling. |
 | **Text Switch** | 🧪 Beta | 0.9 | Binary text switch for short labels such as locale or compact mode controls. |
 | **True Focus** | 🧪 Beta | 0.9 | Sequential focus animation for short headlines with reduced-motion fallback. |
+| **Liquid Ether** | 🧪 Beta | 0.9 | Ambient fluid background surface aligned to semantic brand colors and layered background use. |
 | **Table** | 🧪 Beta | 0.9 | Data presentation primitive with muted structural emphasis. |
 | **Tabs** | 🧪 Beta | 0.9 | Segmented content navigation with surface-aware active states. |
 | **Toggle** | 🧪 Beta | 0.9 | Pressed-state control for formatting and mode selection. |

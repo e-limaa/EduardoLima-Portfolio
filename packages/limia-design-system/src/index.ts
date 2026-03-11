@@ -8,6 +8,7 @@ export * from "./components/text-reveal";
 export * from "./components/true-focus";
 export * from "./components/section-header";
 export * from "./components/interactive-grid";
+export * from "./components/liquid-ether";
 export * from "./components/project-card";
 export * from "./components/section";
 export * from "./components/theme-switch";
