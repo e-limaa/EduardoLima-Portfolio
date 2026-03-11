@@ -130,7 +130,7 @@ export const Hero = () => {
               priority
               blurAmount={6}
               animationDuration={0.55}
-              pauseBetweenAnimations={1.8}
+              pauseBetweenAnimations={2.2}
               className="flex flex-col items-center lg:items-start"
               itemClassName="-mb-3 pb-2 md:-mb-6"
               items={[
