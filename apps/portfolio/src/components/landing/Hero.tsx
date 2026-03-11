@@ -32,20 +32,19 @@ export const Hero = () => {
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
         <LiquidEther
-          autoIntensity={1.1}
-          autoSpeed={0.7}
+          autoIntensity={1.4}
+          autoSpeed={0.3}
           colors={[
             "#2563eb",
             "#5089fb",
             "#0735c0",
           ]}
           autoDemo
-          cursorSize={200}
-          isBounce
+          cursorSize={150}
           isViscous
-          mouseForce={8}
+          mouseForce={13}
           resolution={0.5}
-          viscous={100}
+          viscous={30}
           className="opacity-75"
         />
         <InteractiveGrid variant="subtle" className="opacity-75" />
