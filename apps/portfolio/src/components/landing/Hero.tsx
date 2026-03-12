@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../language-provider";
 import { useDeferredActivation } from "../../lib/use-deferred-activation";
+import posthog from "posthog-js";
 
 const LIQUID_ETHER_COLORS = ["#2563eb", "#5089fb", "#0735c0"];
 
@@ -63,6 +64,7 @@ export const Hero = () => {
 
   const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    posthog.capture("Hero CTA Clicked", { type: "projects" });
     const element = document.getElementById("projects");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -224,7 +226,7 @@ export const Hero = () => {
                 <ArrowRight className="h-4 w-4" />
               </a>
             </Button>
-            <Button asChild variant="secondary" size="lg">
+            <Button asChild variant="secondary" size="lg" onClick={() => posthog.capture("Hero CTA Clicked", { type: "newsletter" })}>
               <Link to="/newsletter" state={{ fromInternal: true }}>
                 {t("newsletter.trigger")}
               </Link>

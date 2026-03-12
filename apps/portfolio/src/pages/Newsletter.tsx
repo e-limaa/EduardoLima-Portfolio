@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/landing/Navbar";
 import { supabase } from "../lib/supabase";
+import posthog from "posthog-js";
 
 const socialLinks = [
   {
@@ -47,6 +48,8 @@ export const Newsletter = () => {
     e.preventDefault();
     if (!name || !email) return;
 
+    posthog.capture("Newsletter Subscription Attempt");
+
     setStatus("loading");
     try {
       const { error } = await supabase
@@ -63,12 +66,14 @@ export const Newsletter = () => {
       setStatus("success");
       setName("");
       setEmail("");
+      posthog.capture("Newsletter Subscribed");
       toast.success("Inscrito com sucesso!", {
         description: "Voce foi adicionado a nossa lista.",
       });
     } catch (error: any) {
       console.error("Error subscribing:", error);
       setStatus("error");
+      posthog.capture("Newsletter Subscription Failed", { error_code: error?.code || "unknown_error" });
       if (error?.code === "23505") {
         toast.error("Voce ja esta inscrito!", {
           description: "Este e-mail ja faz parte da nossa lista.",
@@ -315,6 +320,7 @@ export const Newsletter = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-mono uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+                  onClick={() => posthog.capture("Social Link Clicked", { network: link.label })}
                 >
                   {link.label}
                 </a>

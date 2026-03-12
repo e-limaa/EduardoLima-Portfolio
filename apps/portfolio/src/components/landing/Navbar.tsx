@@ -4,6 +4,7 @@ import { Home, User, Briefcase, Layers, Mail, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TextSwitch } from "@limia/design-system-src/components/text-switch";
 import { ModeToggle } from "../mode-toggle";
+import posthog from "posthog-js";
 import { useLanguage } from "../language-provider";
 
 const navItems = [
@@ -47,6 +48,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
   };
 
   const handleNavigation = (id: string) => {
+    posthog.capture("Navbar Clicked", { destination: id });
     if (onNavigate && location.pathname === "/") {
       onNavigate(id);
       return;
@@ -107,7 +109,11 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
             <li className="flex-shrink-0">
               <TextSwitch
                 checked={language === "pt-br"}
-                onCheckedChange={(checked) => setLanguage(checked ? "pt-br" : "en")}
+                onCheckedChange={(checked) => {
+                  const newLanguage = checked ? "pt-br" : "en";
+                  setLanguage(newLanguage);
+                  posthog.capture("Language Changed", { language: newLanguage });
+                }}
                 uncheckedLabel="EN"
                 checkedLabel="PT"
                 aria-label={language === "pt-br" ? "Selecionar idioma" : "Select language"}

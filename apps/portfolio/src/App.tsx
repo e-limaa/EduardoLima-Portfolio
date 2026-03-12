@@ -9,6 +9,7 @@ import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { Toaster } from "@limia/design-system-src/components/ui/sonner";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
 import { useDeferredActivation } from "./lib/use-deferred-activation";
+import posthog from "posthog-js";
 
 // Lazy load pages for bundle splitting
 
@@ -144,6 +145,10 @@ export default function App() {
 
     return localStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true" || location.hash.includes("figmacapture=");
   });
+
+  useEffect(() => {
+    posthog.capture("$pageview");
+  }, [location.pathname]);
 
   // Dashboard skips the intro flow.
   const isDashboard = location.pathname.startsWith('/dashboard');
