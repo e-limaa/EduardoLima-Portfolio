@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
       alias: {
+        "@limia/design-system": path.resolve(rootDir, "../../packages/limia-design-system/src/index.ts"),
         "@limia/design-system-src": path.resolve(rootDir, "../../packages/limia-design-system/src"),
         "@limia/tokens": path.resolve(rootDir, "../../packages/limia-tokens/src/index.ts"),
         "@limia/design-system/styles.css": path.resolve(rootDir, "../../packages/limia-design-system/styles/globals.css"),
