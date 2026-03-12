@@ -83,8 +83,8 @@ export const getProjects = async (language: AppLanguage): Promise<Project[]> => 
   return Array.isArray(remoteProjects) ? remoteProjects : []
 }
 
-export const useProjects = (language: AppLanguage) => {
-  const {data, error, isLoading} = useSWR(['projects', language], () => getProjects(language), {
+export const useProjects = (language: AppLanguage, enabled = true) => {
+  const {data, error, isLoading} = useSWR(enabled ? ['projects', language] : null, () => getProjects(language), {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

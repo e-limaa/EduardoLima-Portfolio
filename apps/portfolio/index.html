@@ -11,20 +11,27 @@
       content="Portfolio de Eduardo Lima, Senior UI/UX Designer focado em criar experiências digitais impactantes unindo design e inteligência artificial."
     />
 
-    <link rel="preconnect" href="https://mxq3x3cp.apicdn.sanity.io" />
-    <link rel="preconnect" href="https://audio-assets.vercel.app" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="preload"
+      as="image"
+      href="/assets/images/Edu-image.webp"
+      fetchpriority="high"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <script type="module">
       if (import.meta.env.DEV) {
         import("react-grab");
+        const captureScript = document.createElement("script");
+        captureScript.src = "https://mcp.figma.com/mcp/html-to-design/capture.js";
+        captureScript.async = true;
+        document.head.append(captureScript);
       }
     </script>
-    <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   </head>
 
   <body>

@@ -29,7 +29,7 @@ export const Section = ({
             {grid && <InteractiveGrid variant={variant} />}
 
             {noise && (
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-10 pointer-events-none"></div>
             )}
 
             {container ? (

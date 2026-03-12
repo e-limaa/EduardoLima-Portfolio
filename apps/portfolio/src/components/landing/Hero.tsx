@@ -10,6 +10,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ChatWidget } from "./ChatWidget";
 import { useLanguage } from "../language-provider";
+import { useDeferredActivation } from "../../lib/use-deferred-activation";
 
 const LIQUID_ETHER_COLORS = ["#2563eb", "#5089fb", "#0735c0"];
 
@@ -20,8 +21,40 @@ const LiquidEtherBackground = React.lazy(async () => {
 
 export const Hero = () => {
   const [videoFailed, setVideoFailed] = React.useState(false);
+  const [isCoarsePointer, setIsCoarsePointer] = React.useState(false);
 
   const { t } = useLanguage();
+  const shouldActivateBackground = useDeferredActivation({
+    waitForLoad: true,
+    delayMs: 400,
+  });
+  const shouldLoadDesktopVideo = useDeferredActivation({
+    waitForLoad: true,
+    delayMs: 700,
+  });
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia("(pointer: coarse), (hover: none)");
+    const updatePointerMode = () => {
+      setIsCoarsePointer(mediaQuery.matches);
+    };
+
+    updatePointerMode();
+
+    if ("addEventListener" in mediaQuery) {
+      mediaQuery.addEventListener("change", updatePointerMode);
+      return () => {
+        mediaQuery.removeEventListener("change", updatePointerMode);
+      };
+    }
+
+    mediaQuery.addListener(updatePointerMode);
+    return () => {
+      mediaQuery.removeListener(updatePointerMode);
+    };
+  }, []);
 
   const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -37,20 +70,24 @@ export const Hero = () => {
       className="relative isolate min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pt-0 md:pb-0 perspective-[1000px]"
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <React.Suspense fallback={null}>
-          <LiquidEtherBackground
-            autoIntensity={1.4}
-            autoSpeed={0.3}
-            colors={LIQUID_ETHER_COLORS}
-            autoDemo
-            cursorSize={150}
-            isViscous
-            mouseForce={13}
-            resolution={0.5}
-            viscous={30}
-            className="opacity-75"
-          />
-        </React.Suspense>
+        {shouldActivateBackground && (
+          <React.Suspense fallback={null}>
+            <LiquidEtherBackground
+              autoIntensity={1.4}
+              autoSpeed={0.3}
+              colors={LIQUID_ETHER_COLORS}
+              autoDemo
+              cursorSize={150}
+              isViscous
+              mouseForce={13}
+              resolution={0.5}
+              viscous={30}
+              enableMouseInteraction={!isCoarsePointer}
+              enableTouchInteraction={false}
+              className="opacity-75"
+            />
+          </React.Suspense>
+        )}
         <InteractiveGrid variant="subtle" className="opacity-75" />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-12"></div>
       </div>
@@ -81,28 +118,25 @@ export const Hero = () => {
               alt="Eduardo Lima"
               width={548}
               height={981}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              sizes="(max-width: 767px) 250px, 405px"
               className="block h-full w-full object-contain drop-shadow-2xl md:hidden"
             />
 
-            {!videoFailed ? (
+            {shouldLoadDesktopVideo && !videoFailed ? (
               <video
                 src="https://audio-assets.vercel.app/Edu-video.webm"
                 autoPlay
                 loop
                 muted
                 playsInline
+                preload="auto"
                 onError={() => setVideoFailed(true)}
                 className="relative z-40 hidden h-auto w-full object-contain drop-shadow-2xl md:block"
               />
-            ) : (
-              <img
-                src="/assets/images/Edu-image.webp"
-                alt="Eduardo Lima"
-                width={548}
-                height={981}
-                className="relative z-40 hidden h-full w-full object-contain drop-shadow-2xl md:block"
-              />
-            )}
+            ) : null}
           </motion.div>
         </div>
 

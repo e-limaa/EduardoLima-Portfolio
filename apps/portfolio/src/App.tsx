@@ -18,6 +18,7 @@ import { CursorTrail } from "./components/ui/CursorTrail";
 import { RequireAdmin } from "./components/auth/RequireAdmin";
 import { Toaster } from "@limia/design-system";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
+import { useDeferredActivation } from "./lib/use-deferred-activation";
 
 // Lazy load pages for bundle splitting
 
@@ -89,6 +90,14 @@ function AppShell({
 }) {
   const location = useLocation();
   const { theme } = useTheme();
+  const isHomeRoute = location.pathname === "/";
+  const deferredHomeChrome = useDeferredActivation({
+    enabled: isHomeRoute,
+    waitForLoad: true,
+    delayMs: 1200,
+  });
+  const shouldMountAmbientChrome =
+    (hasEntered || shouldSkipIntro) && (!isHomeRoute || deferredHomeChrome);
 
   return (
     <>
@@ -102,10 +111,12 @@ function AppShell({
           {!hasEntered && !shouldSkipIntro && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
         </AnimatePresence>
 
-        <CursorTrail />
-        <MouseSpotlight />
+        {shouldMountAmbientChrome && <CursorTrail />}
+        {shouldMountAmbientChrome && <MouseSpotlight />}
 
-        {!shouldSkipIntro && <AudioPlayer shouldPlay={hasEntered} />}
+        {!shouldSkipIntro && shouldMountAmbientChrome && (
+          <AudioPlayer shouldPlay={hasEntered} />
+        )}
 
         <main className="z-10" key={hasEntered ? "entered" : "loading"}>
           <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>

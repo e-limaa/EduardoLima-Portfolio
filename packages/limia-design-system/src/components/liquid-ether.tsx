@@ -36,6 +36,8 @@ export interface LiquidEtherProps {
   takeoverDuration?: number;
   autoResumeDelay?: number;
   autoRampDuration?: number;
+  enableMouseInteraction?: boolean;
+  enableTouchInteraction?: boolean;
 }
 
 export function LiquidEther({
@@ -57,7 +59,9 @@ export function LiquidEther({
   autoIntensity = 2.2,
   takeoverDuration = 0.25,
   autoResumeDelay = 1000,
-  autoRampDuration = 0.6
+  autoRampDuration = 0.6,
+  enableMouseInteraction = true,
+  enableTouchInteraction = true
 }: LiquidEtherProps) {
   const mountRef = useRef(null);
   const webglRef = useRef(null);
@@ -182,18 +186,25 @@ export function LiquidEther({
         this._onTouchEnd = this.onTouchEnd.bind(this);
         this._onDocumentLeave = this.onDocumentLeave.bind(this);
       }
-      init(container) {
+      init(container, options = {}) {
         this.container = container;
         this.docTarget = container.ownerDocument || null;
         const defaultView =
           (this.docTarget && this.docTarget.defaultView) || (typeof window !== 'undefined' ? window : null);
         if (!defaultView) return;
         this.listenerTarget = defaultView;
-        this.listenerTarget.addEventListener('mousemove', this._onMouseMove);
-        this.listenerTarget.addEventListener('touchstart', this._onTouchStart, { passive: true });
-        this.listenerTarget.addEventListener('touchmove', this._onTouchMove, { passive: true });
-        this.listenerTarget.addEventListener('touchend', this._onTouchEnd);
-        if (this.docTarget) {
+
+        if (options.enableMouseInteraction !== false) {
+          this.listenerTarget.addEventListener('mousemove', this._onMouseMove);
+        }
+
+        if (options.enableTouchInteraction !== false) {
+          this.listenerTarget.addEventListener('touchstart', this._onTouchStart, { passive: true });
+          this.listenerTarget.addEventListener('touchmove', this._onTouchMove, { passive: true });
+          this.listenerTarget.addEventListener('touchend', this._onTouchEnd);
+        }
+
+        if (this.docTarget && options.enableMouseInteraction !== false) {
           this.docTarget.addEventListener('mouseleave', this._onDocumentLeave);
         }
       }
@@ -966,7 +977,10 @@ export function LiquidEther({
       constructor(props) {
         this.props = props;
         Common.init(props.$wrapper);
-        Mouse.init(props.$wrapper);
+        Mouse.init(props.$wrapper, {
+          enableMouseInteraction: props.enableMouseInteraction,
+          enableTouchInteraction: props.enableTouchInteraction
+        });
         Mouse.autoIntensity = props.autoIntensity;
         Mouse.takeoverDuration = props.takeoverDuration;
         this.lastUserInteraction = performance.now();
@@ -1053,7 +1067,9 @@ export function LiquidEther({
       autoIntensity,
       takeoverDuration,
       autoResumeDelay,
-      autoRampDuration
+      autoRampDuration,
+      enableMouseInteraction,
+      enableTouchInteraction
     });
     webglRef.current = webgl;
 
@@ -1149,7 +1165,9 @@ export function LiquidEther({
     autoIntensity,
     takeoverDuration,
     autoResumeDelay,
-    autoRampDuration
+    autoRampDuration,
+    enableMouseInteraction,
+    enableTouchInteraction
   ]);
 
   useEffect(() => {
