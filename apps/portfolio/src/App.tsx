@@ -6,8 +6,7 @@ import { Navbar } from "./components/landing/Navbar";
 import { ThemeProvider, useTheme } from "./components/theme-provider";
 import { LanguageProvider } from "./components/language-provider";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
-import { RequireAdmin } from "./components/auth/RequireAdmin";
-import { Toaster } from "@limia/design-system";
+import { Toaster } from "@limia/design-system-src/components/ui/sonner";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
 import { useDeferredActivation } from "./lib/use-deferred-activation";
 
@@ -20,6 +19,7 @@ const LandingSections = React.lazy(() => import("./components/landing/LandingSec
 const MouseSpotlight = React.lazy(() => import("./components/landing/MouseSpotlight").then(module => ({ default: module.MouseSpotlight })));
 const AudioPlayer = React.lazy(() => import("./components/landing/AudioPlayer").then(module => ({ default: module.AudioPlayer })));
 const CursorTrail = React.lazy(() => import("./components/ui/CursorTrail").then(module => ({ default: module.CursorTrail })));
+const RequireAdmin = React.lazy(() => import("./components/auth/RequireAdmin").then(module => ({ default: module.RequireAdmin })));
 
 const LandingPage = () => {
   const navigate = useNavigate();

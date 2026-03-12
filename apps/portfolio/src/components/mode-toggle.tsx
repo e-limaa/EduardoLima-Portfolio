@@ -1,4 +1,4 @@
-import { ThemeSwitch } from "@limia/design-system"
+import { ThemeSwitch } from "@limia/design-system-src/components/theme-switch"
 import { useTheme } from "./theme-provider"
 
 export function ModeToggle() {

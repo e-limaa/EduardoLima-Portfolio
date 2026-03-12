@@ -1,11 +1,9 @@
 import React from "react";
 import { motion } from "motion/react";
-import {
-  TrueFocus,
-  InteractiveGrid,
-  Badge,
-  Button,
-} from "@limia/design-system";
+import { Button } from "@limia/design-system-src/components/button";
+import { InteractiveGrid } from "@limia/design-system-src/components/interactive-grid";
+import { TrueFocus } from "@limia/design-system-src/components/true-focus";
+import { Badge } from "@limia/design-system-src/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../language-provider";
@@ -13,10 +11,11 @@ import { useDeferredActivation } from "../../lib/use-deferred-activation";
 
 const LIQUID_ETHER_COLORS = ["#2563eb", "#5089fb", "#0735c0"];
 
-const LiquidEtherBackground = React.lazy(async () => {
-  const module = await import("@limia/design-system");
-  return { default: module.LiquidEther };
-});
+const LiquidEtherBackground = React.lazy(() =>
+  import("@limia/design-system-src/components/liquid-ether").then((module) => ({
+    default: module.LiquidEther,
+  }))
+);
 const ChatWidget = React.lazy(() =>
   import("./ChatWidget").then((module) => ({ default: module.ChatWidget }))
 );
@@ -120,14 +119,14 @@ export const Hero = () => {
             className="relative z-40 isolate lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
           >
             <img
-              src="/assets/images/Edu-image.webp"
+              src="/assets/images/Edu-image-mobile.webp"
               alt="Eduardo Lima"
-              width={548}
-              height={981}
+              width={320}
+              height={573}
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              sizes="(max-width: 767px) 250px, 405px"
+              sizes="250px"
               className="block h-full w-full object-contain drop-shadow-2xl md:hidden"
             />
 

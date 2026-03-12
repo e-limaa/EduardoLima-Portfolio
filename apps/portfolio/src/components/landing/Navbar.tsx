@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { Home, User, Briefcase, Layers, Mail, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { TextSwitch } from "@limia/design-system";
+import { TextSwitch } from "@limia/design-system-src/components/text-switch";
 import { ModeToggle } from "../mode-toggle";
 import { useLanguage } from "../language-provider";
 

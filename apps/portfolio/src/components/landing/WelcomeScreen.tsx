@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { Button, InteractiveGrid, Progress } from "@limia/design-system";
+import { Button } from "@limia/design-system-src/components/button";
+import { InteractiveGrid } from "@limia/design-system-src/components/interactive-grid";
+import { Progress } from "@limia/design-system-src/components/ui/progress";
 import { useLanguage } from "../language-provider";
 
 interface WelcomeScreenProps {

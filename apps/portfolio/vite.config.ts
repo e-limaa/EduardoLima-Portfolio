@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
       alias: {
+        "@limia/design-system-src": path.resolve(rootDir, "../../packages/limia-design-system/src"),
         "@limia/tokens": path.resolve(rootDir, "../../packages/limia-tokens/src/index.ts"),
         "@limia/design-system/styles.css": path.resolve(rootDir, "../../packages/limia-design-system/styles/globals.css"),
         "@limia/tokens/css": path.resolve(rootDir, "../../packages/limia-tokens/styles/tokens.css"),
@@ -49,7 +50,9 @@ export default defineConfig(({ mode }) => {
               if (id.includes("@radix-ui") || id.includes("@floating-ui")) return "vendor-radix";
               if (id.includes("lucide-react")) return "vendor-icons";
               if (id.includes("recharts") || id.includes("d3-")) return "vendor-charts";
-              if (id.includes("@sanity") || id.includes("@supabase") || id.includes("swr")) return "vendor-data";
+              if (id.includes("@sanity")) return "vendor-sanity";
+              if (id.includes("@supabase")) return "vendor-supabase";
+              if (id.includes("swr")) return "vendor-swr";
               if (id.includes("motion") || id.includes("framer-motion")) return "vendor-motion";
               if (id.includes("react-router")) return "vendor-router";
               return "vendor";
