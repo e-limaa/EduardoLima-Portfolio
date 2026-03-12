@@ -2,19 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "motion/react";
 import { Hero } from "./components/landing/Hero";
-import { Storytelling } from "./components/landing/Storytelling";
-import { Projects } from "./components/landing/Projects";
-import { Stack } from "./components/landing/Stack";
-import { CTA } from "./components/landing/CTA";
-import { MouseSpotlight } from "./components/landing/MouseSpotlight";
 import { Navbar } from "./components/landing/Navbar";
-import { BrandMarquee } from "./components/landing/BrandMarquee";
-import { Services } from "./components/landing/Services";
 import { ThemeProvider, useTheme } from "./components/theme-provider";
 import { LanguageProvider } from "./components/language-provider";
-import { AudioPlayer } from "./components/landing/AudioPlayer";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
-import { CursorTrail } from "./components/ui/CursorTrail";
 import { RequireAdmin } from "./components/auth/RequireAdmin";
 import { Toaster } from "@limia/design-system";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
@@ -25,6 +16,10 @@ import { useDeferredActivation } from "./lib/use-deferred-activation";
 const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
 const Dashboard = React.lazy(() => import("./pages/Dashboard").then(module => ({ default: module.Dashboard })));
 const Newsletter = React.lazy(() => import("./pages/Newsletter").then(module => ({ default: module.Newsletter })));
+const LandingSections = React.lazy(() => import("./components/landing/LandingSections").then(module => ({ default: module.LandingSections })));
+const MouseSpotlight = React.lazy(() => import("./components/landing/MouseSpotlight").then(module => ({ default: module.MouseSpotlight })));
+const AudioPlayer = React.lazy(() => import("./components/landing/AudioPlayer").then(module => ({ default: module.AudioPlayer })));
+const CursorTrail = React.lazy(() => import("./components/ui/CursorTrail").then(module => ({ default: module.CursorTrail })));
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -63,18 +58,9 @@ const LandingPage = () => {
     <>
       <Navbar onNavigate={handleNavigate} />
       <Hero />
-
-      <BrandMarquee />
-
-      <Projects onProjectClick={handleProjectClick} />
-
-      <Services />
-
-      <Storytelling />
-
-      <Stack />
-
-      <CTA />
+      <React.Suspense fallback={null}>
+        <LandingSections onProjectClick={handleProjectClick} />
+      </React.Suspense>
     </>
   );
 };
@@ -111,11 +97,21 @@ function AppShell({
           {!hasEntered && !shouldSkipIntro && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
         </AnimatePresence>
 
-        {shouldMountAmbientChrome && <CursorTrail />}
-        {shouldMountAmbientChrome && <MouseSpotlight />}
+        {shouldMountAmbientChrome && (
+          <React.Suspense fallback={null}>
+            <CursorTrail />
+          </React.Suspense>
+        )}
+        {shouldMountAmbientChrome && (
+          <React.Suspense fallback={null}>
+            <MouseSpotlight />
+          </React.Suspense>
+        )}
 
         {!shouldSkipIntro && shouldMountAmbientChrome && (
-          <AudioPlayer shouldPlay={hasEntered} />
+          <React.Suspense fallback={null}>
+            <AudioPlayer shouldPlay={hasEntered} />
+          </React.Suspense>
         )}
 
         <main className="z-10" key={hasEntered ? "entered" : "loading"}>

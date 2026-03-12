@@ -8,7 +8,6 @@ import {
 } from "@limia/design-system";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ChatWidget } from "./ChatWidget";
 import { useLanguage } from "../language-provider";
 import { useDeferredActivation } from "../../lib/use-deferred-activation";
 
@@ -18,6 +17,9 @@ const LiquidEtherBackground = React.lazy(async () => {
   const module = await import("@limia/design-system");
   return { default: module.LiquidEther };
 });
+const ChatWidget = React.lazy(() =>
+  import("./ChatWidget").then((module) => ({ default: module.ChatWidget }))
+);
 
 export const Hero = () => {
   const [videoFailed, setVideoFailed] = React.useState(false);
@@ -31,6 +33,10 @@ export const Hero = () => {
   const shouldLoadDesktopVideo = useDeferredActivation({
     waitForLoad: true,
     delayMs: 700,
+  });
+  const shouldLoadChatWidget = useDeferredActivation({
+    waitForLoad: true,
+    delayMs: 250,
   });
 
   React.useEffect(() => {
@@ -234,7 +240,13 @@ export const Hero = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            <ChatWidget />
+            {shouldLoadChatWidget ? (
+              <React.Suspense fallback={<ChatWidgetPlaceholder />}>
+                <ChatWidget />
+              </React.Suspense>
+            ) : (
+              <ChatWidgetPlaceholder />
+            )}
           </motion.div>
         </div>
       </div>
@@ -253,3 +265,29 @@ export const Hero = () => {
     </section>
   );
 };
+
+function ChatWidgetPlaceholder() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex h-[480px] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl backdrop-blur-xl md:h-[580px]"
+    >
+      <div className="flex items-center gap-3 border-b border-border bg-layer-2 p-4">
+        <div className="h-10 w-10 rounded-full border border-primary/30 bg-muted/50 shadow-sm" />
+        <div className="space-y-2">
+          <div className="h-3 w-24 rounded-full bg-muted/50" />
+          <div className="h-2.5 w-20 rounded-full bg-muted/40" />
+        </div>
+      </div>
+      <div className="flex-1 space-y-4 p-4">
+        <div className="ml-auto h-16 w-3/4 rounded-2xl rounded-br-none bg-primary/15" />
+        <div className="h-20 w-[82%] rounded-2xl rounded-bl-none border border-border bg-layer-2/70" />
+        <div className="ml-auto h-14 w-2/3 rounded-2xl rounded-br-none bg-primary/10" />
+      </div>
+      <div className="flex gap-2 border-t border-border bg-layer-1 p-3">
+        <div className="h-10 flex-1 rounded-xl bg-input-background/70" />
+        <div className="h-10 w-10 rounded-xl bg-primary/20" />
+      </div>
+    </div>
+  );
+}
