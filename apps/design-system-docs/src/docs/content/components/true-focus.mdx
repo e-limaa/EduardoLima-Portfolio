@@ -1,0 +1,49 @@
+import { TrueFocus } from "@limia/design-system";
+
+<ComponentPreview className="block">
+  <TrueFocus
+    priority
+    items={[
+      { content: "Clarity" },
+      { content: "Systems" },
+      { content: "Momentum" },
+    ]}
+    className="text-3xl font-semibold tracking-tight text-foreground"
+  />
+</ComponentPreview>
+
+## Overview
+
+True Focus animates emphasis across a list of text items by blurring inactive entries and drawing a moving focus frame around the active one. Use it for editorial hero moments, rotating value propositions or staged headline treatments.
+
+## Usage
+
+Use `TrueFocus` when the text sequence itself is the story and motion supports comprehension. Prefer static type or simpler transitions when the user needs to compare all items at once without changing focus.
+
+## Style
+
+Keep the number of items small and their visual rhythm comparable. Similar text lengths make the focus frame feel intentional and easier to parse.
+
+## Code
+
+```tsx
+import { TrueFocus } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <TrueFocus
+      items={[
+        { content: "Research" },
+        { content: "Design" },
+        { content: "Delivery" },
+      ]}
+    />
+  );
+}
+```
+
+## Accessibility
+
+- The content should remain understandable even if motion is reduced or disabled.
+- Avoid using the rotating focus as the only way to reveal critical information.
+- Keep the item list short so users can maintain context as focus changes.

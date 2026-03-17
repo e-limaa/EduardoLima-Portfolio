@@ -1,0 +1,58 @@
+import { Button, Toaster, toast } from "@limia/design-system";
+
+<ComponentPreview className="flex justify-center">
+  <div className="flex flex-col items-center gap-4">
+    <Toaster />
+    <Button
+      variant="outline"
+      onClick={() =>
+        toast("Salvo", {
+          description: "As alteracoes ja estao disponiveis.",
+        })
+      }
+    >
+      Disparar toast
+    </Button>
+  </div>
+</ComponentPreview>
+
+## Visão geral
+
+Sonner e a superfície pública de toast do Limia por meio de `Toaster` e do helper `toast`. Use-o para feedback transitório de escopo global que confirme uma ação, reporte um resultado em background ou mostre status leve sem bloquear o usuário.
+
+## Uso
+
+Monte um único `Toaster` próximo da raiz do app e chame `toast(...)` nos pontos de interação que precisem de feedback temporário. Prefira `Alert` inline ou mensagem persistente de página quando a informação precisar continuar visível no contexto.
+
+## Estilo
+
+O texto do toast deve ser breve e imediatamente compreensível. Reserve esse padrão para feedback secundário, não para instruções principais ou fluxos complexos de recuperação.
+
+## Código
+
+```tsx
+import { Toaster, toast } from "@limia/design-system";
+
+export function AppShell() {
+  return (
+    <>
+      <Toaster />
+      <button
+        onClick={() =>
+          toast("Salvo", {
+            description: "O perfil foi atualizado.",
+          })
+        }
+      >
+        Salvar
+      </button>
+    </>
+  );
+}
+```
+
+## Acessibilidade
+
+- Toasts devem confirmar ou resumir, não conter a única cópia necessária para concluir uma tarefa.
+- Mantenha título e descrição curtos o bastante para leitura clara por tecnologias assistivas.
+- Prefira padrões inline persistentes quando a recuperação de erro exigir mais tempo ou tomada de decisão.

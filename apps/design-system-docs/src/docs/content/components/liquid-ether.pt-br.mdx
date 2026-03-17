@@ -1,0 +1,36 @@
+## Visão geral
+
+Liquid Ether é uma superfície de background fluida baseada em WebGL para layouts mais expressivos e orientados por movimento. O componente expõe props de ajuste para força de interação, viscosidade, autoplay e paleta, permitindo construir seções imersivas sem reimplementar o sistema de renderização.
+
+## Uso
+
+Use `LiquidEther` apenas em áreas de alta ênfase, como hero sections, landing pages ou momentos de marca mais imersivos. Ele é intencionalmente mais dramático do que o restante do sistema e não deve virar fundo padrão de página.
+
+## Estilo
+
+Mantenha o layout em primeiro plano simples e legível ao posicionar conteúdo acima do efeito. O componente funciona melhor quando escolha de cor, densidade de movimento e hierarquia de copy são controladas em conjunto, não ajustadas de forma isolada.
+
+## Código
+
+```tsx
+import { LiquidEther } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <div className="relative h-[420px] overflow-hidden rounded-3xl">
+      <LiquidEther
+        className="absolute inset-0"
+        colors={["var(--color-brand-500)", "var(--color-cyan-400)", "var(--color-brand-200)"]}
+        autoDemo
+      />
+      <div className="relative z-10 p-8">Conteúdo hero</div>
+    </div>
+  );
+}
+```
+
+## Acessibilidade
+
+- Trate o efeito como decorativo e garanta que o conteúdo principal continue legível sem depender dele.
+- Evite combiná-lo com movimento denso em primeiro plano que possa sobrecarregar o usuário.
+- Prefira configurações mais calmas ou menor ênfase em contextos sensíveis a movimento.

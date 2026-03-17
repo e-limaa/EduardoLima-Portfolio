@@ -1,0 +1,44 @@
+import { Label, Textarea } from "@limia/design-system";
+
+<ComponentPreview className="block space-y-4">
+  <div className="grid w-full max-w-xl gap-2">
+    <Label htmlFor="project-brief">Resumo do projeto</Label>
+    <Textarea
+      id="project-brief"
+      placeholder="Descreva o problema, os objetivos e as restricoes."
+    />
+  </div>
+</ComponentPreview>
+
+## Visão geral
+
+Textarea coleta entrada livre mais longa quando um campo de linha única é restritivo demais. Use-o para descrições, anotações, resumos ou qualquer resposta que se beneficie de múltiplas linhas e quebra de texto visível.
+
+## Uso
+
+Use textarea para texto de tamanho médio ou longo, quando o usuário precisa de espaço para pensar e editar. Prefira `Input` para valores curtos e estruturados, como nomes, e-mails ou identificadores compactos.
+
+## Estilo
+
+Mantenha a largura do campo alinhada ao layout do formulário e reserve altura suficiente para o tipo de resposta esperado. Combine textarea com `Label` visível e placeholder que esclareça o tipo de resposta, sem ser o único nome acessível.
+
+## Código
+
+```tsx
+import { Label, Textarea } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor="message">Mensagem</Label>
+      <Textarea id="message" placeholder="Conte mais sobre a sua necessidade." />
+    </div>
+  );
+}
+```
+
+## Acessibilidade
+
+- Sempre associe textarea a um rótulo visível ou nome acessível explícito.
+- Não dependa do placeholder como única instrução.
+- Use texto de apoio quando tamanho, formato ou tom da resposta precisarem de orientação adicional.

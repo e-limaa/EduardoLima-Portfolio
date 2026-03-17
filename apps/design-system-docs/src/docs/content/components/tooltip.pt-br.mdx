@@ -4,16 +4,25 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@limia/design-system';
+} from "@limia/design-system";
 
-<ComponentPreview>
+<ComponentPreview className="flex flex-wrap gap-4">
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="outline">Hover ou foco</Button>
+        <Button variant="outline">Tooltip default</Button>
       </TooltipTrigger>
-      <TooltipContent>
-        <p>Guidance curto e suplementar.</p>
+      <TooltipContent side="top" sideOffset={10}>
+        Orientacao contextual neutra.
+      </TooltipContent>
+    </Tooltip>
+
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button>Tooltip brand</Button>
+      </TooltipTrigger>
+      <TooltipContent variant="brand" side="top" sideOffset={10}>
+        Orientacao com mais destaque.
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>
@@ -21,15 +30,28 @@ import {
 
 ## Visão geral
 
-Tooltip fornece orientação contextual curta em hover ou foco.
+Tooltip oferece orientação contextual curta em hover ou foco sem interromper o fluxo ao redor. No Limia, a superfície default é neutra e atende a maior parte dos hints de produto, enquanto a variante opcional `brand` adiciona mais ênfase quando a mensagem de apoio precisa se destacar.
 
 ## Uso
 
-Use tooltip para hints de apoio concisos, como esclarecimento de ícones ou labels compactos. Não use para instruções obrigatórias, explicações complexas ou feedback crítico de status.
+Use tooltip para hints de apoio concisos, como esclarecimento de ícones, labels compactos ou ajuda breve. Não use para instruções obrigatórias, explicações longas, decisões que exigem tempo de leitura ou feedback crítico de status.
+
+<DoDontContainer>
+  <DoDont type="do" title="Mantenha como apoio">
+    Trate o conteúdo do tooltip como contexto complementar. O trigger deve continuar compreensível antes mesmo do tooltip aparecer.
+  </DoDont>
+  <DoDont type="dont" title="Esconder instrução essencial">
+    Se o usuário precisa ler o conteúdo para concluir a tarefa corretamente, prefira popover, ajuda inline ou outro padrão mais rico.
+  </DoDont>
+</DoDontContainer>
 
 ## Estilo
 
-Mantenha o texto do tooltip em uma frase curta. Se o conteúdo exigir formatação, decisões ou tempo maior de leitura, use popover ou outro pattern mais rico.
+Mantenha o texto do tooltip em uma frase curta. A variante default de `TooltipContent` é a opção preferencial para o uso cotidiano porque se apoia de forma discreta sobre a interface. Use `variant="brand"` apenas quando a ênfase extra for intencional e ainda secundária em relação à ação principal.
+
+<Callout type="info" title="Guia de variantes">
+  Use o default neutro para a maior parte dos hints de componentes e labels de ícones. Reserve `brand` para momentos de ajuda destacados em que uma ênfase visual maior melhora o escaneamento sem fazer o tooltip parecer um alerta.
+</Callout>
 
 ## Código
 
@@ -40,10 +62,35 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="outline">Hover ou foco</Button>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={10}>
+          Orientacao contextual neutra.
+        </TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button>Destaque brand</Button>
+        </TooltipTrigger>
+        <TooltipContent variant="brand" side="top" sideOffset={10}>
+          Orientacao com mais destaque.
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 ```
 
 ## Acessibilidade
 
-- O conteúdo do tooltip também precisa aparecer em foco, não apenas em hover.
-- Não coloque informação essencial apenas dentro do tooltip.
+- O conteúdo do tooltip também precisa aparecer em foco de teclado, não apenas em hover.
+- Não coloque informação essencial apenas dentro de um tooltip.
 - Os triggers devem continuar fazendo sentido sem o tooltip.
+- Para triggers somente com ícone, forneça um nome acessível além do texto do tooltip.

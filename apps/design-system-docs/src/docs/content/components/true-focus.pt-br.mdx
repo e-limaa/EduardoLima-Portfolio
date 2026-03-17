@@ -1,0 +1,49 @@
+import { TrueFocus } from "@limia/design-system";
+
+<ComponentPreview className="block">
+  <TrueFocus
+    priority
+    items={[
+      { content: "Clareza" },
+      { content: "Sistemas" },
+      { content: "Ritmo" },
+    ]}
+    className="text-3xl font-semibold tracking-tight text-foreground"
+  />
+</ComponentPreview>
+
+## Visão geral
+
+True Focus anima a ênfase entre itens de texto ao desfocar entradas inativas e desenhar uma moldura móvel ao redor da ativa. Use-o para momentos editoriais de hero, propostas de valor rotativas ou tratamentos de headline em etapas.
+
+## Uso
+
+Use `TrueFocus` quando a própria sequência de texto fizer parte da narrativa e o movimento apoiar a compreensão. Prefira tipografia estática ou transições mais simples quando o usuário precisar comparar todos os itens ao mesmo tempo sem mudança de foco.
+
+## Estilo
+
+Mantenha o número de itens pequeno e o ritmo visual comparável. Comprimentos de texto semelhantes fazem a moldura parecer mais intencional e fácil de ler.
+
+## Código
+
+```tsx
+import { TrueFocus } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <TrueFocus
+      items={[
+        { content: "Pesquisa" },
+        { content: "Design" },
+        { content: "Entrega" },
+      ]}
+    />
+  );
+}
+```
+
+## Acessibilidade
+
+- O conteúdo deve continuar compreensível mesmo se o movimento for reduzido ou desabilitado.
+- Evite usar o foco rotativo como única forma de revelar informação crítica.
+- Mantenha a lista de itens curta para preservar contexto conforme o foco muda.

@@ -279,6 +279,46 @@ export const docsRegistry: DocPage[] = [
     ),
   }),
   defineDoc({
+    title: "docs.textarea.title",
+    href: "/design-system/components/textarea",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.textarea.description",
+    resources: componentResources(
+      "Textarea",
+      "packages/limia-design-system/src/components/ui/textarea.tsx",
+    ),
+    related: [
+      "/design-system/components/inputs",
+      "/design-system/patterns/forms",
+    ],
+    component: React.lazy(() => import("./content/components/textarea.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/textarea.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
+    title: "docs.label.title",
+    href: "/design-system/components/label",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.label.description",
+    resources: componentResources(
+      "Label",
+      "packages/limia-design-system/src/components/ui/label.tsx",
+    ),
+    related: [
+      "/design-system/components/inputs",
+      "/design-system/patterns/forms",
+    ],
+    component: React.lazy(() => import("./content/components/label.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/label.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
     title: "docs.card.title",
     href: "/design-system/components/cards",
     section: "Components",
@@ -344,6 +384,78 @@ export const docsRegistry: DocPage[] = [
     component: React.lazy(() => import("./content/components/section.mdx")),
     componentPt: React.lazy(
       () => import("./content/components/section.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
+    title: "docs.text-reveal.title",
+    href: "/design-system/components/text-reveal",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.text-reveal.description",
+    resources: componentResources(
+      "TextReveal",
+      "packages/limia-design-system/src/components/text-reveal.tsx",
+    ),
+    component: React.lazy(
+      () => import("./content/components/text-reveal.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/text-reveal.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
+    title: "docs.true-focus.title",
+    href: "/design-system/components/true-focus",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.true-focus.description",
+    resources: componentResources(
+      "TrueFocus",
+      "packages/limia-design-system/src/components/true-focus.tsx",
+    ),
+    component: React.lazy(
+      () => import("./content/components/true-focus.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/true-focus.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
+    title: "docs.interactive-grid.title",
+    href: "/design-system/components/interactive-grid",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.interactive-grid.description",
+    resources: componentResources(
+      "InteractiveGrid",
+      "packages/limia-design-system/src/components/interactive-grid.tsx",
+    ),
+    component: React.lazy(
+      () => import("./content/components/interactive-grid.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/interactive-grid.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
+    title: "docs.liquid-ether.title",
+    href: "/design-system/components/liquid-ether",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.liquid-ether.description",
+    resources: componentResources(
+      "LiquidEther",
+      "packages/limia-design-system/src/components/liquid-ether.tsx",
+    ),
+    component: React.lazy(
+      () => import("./content/components/liquid-ether.mdx"),
+    ),
+    componentPt: React.lazy(
+      () => import("./content/components/liquid-ether.pt-br.mdx"),
     ),
   }),
   defineDoc({
@@ -430,6 +542,22 @@ export const docsRegistry: DocPage[] = [
     ),
   }),
   defineDoc({
+    title: "docs.dialog.title",
+    href: "/design-system/components/dialog",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.dialog.description",
+    resources: componentResources(
+      "Dialog, DialogContent, DialogTrigger",
+      "packages/limia-design-system/src/components/ui/dialog.tsx",
+    ),
+    component: React.lazy(() => import("./content/components/dialog.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/dialog.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
     title: "docs.checkbox.title",
     href: "/design-system/components/checkbox",
     section: "Components",
@@ -462,6 +590,23 @@ export const docsRegistry: DocPage[] = [
     ),
     componentPt: React.lazy(
       () => import("./content/components/dropdown-menu.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
+    title: "docs.form.title",
+    href: "/design-system/components/form",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.form.description",
+    resources: componentResources(
+      "Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage",
+      "packages/limia-design-system/src/components/ui/form.tsx",
+    ),
+    related: ["/design-system/patterns/forms"],
+    component: React.lazy(() => import("./content/components/form.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/form.pt-br.mdx"),
     ),
   }),
   defineDoc({
@@ -714,6 +859,23 @@ export const docsRegistry: DocPage[] = [
     component: React.lazy(() => import("./content/components/tooltip.mdx")),
     componentPt: React.lazy(
       () => import("./content/components/tooltip.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
+    title: "docs.sonner.title",
+    href: "/design-system/components/sonner",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.sonner.description",
+    resources: componentResources(
+      "Toaster, toast",
+      "packages/limia-design-system/src/components/ui/sonner.tsx",
+    ),
+    related: ["/design-system/patterns/toast", "/design-system/patterns/feedback"],
+    component: React.lazy(() => import("./content/components/sonner.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/sonner.pt-br.mdx"),
     ),
   }),
   defineDoc({

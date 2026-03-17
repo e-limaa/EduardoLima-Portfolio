@@ -1,0 +1,7 @@
+interface:
+  display_name: "Limia Doc Sync"
+  short_description: "Keep Limia component docs aligned"
+  default_prompt: "Use $limia-component-doc-sync when adding or changing Limia components so the Docs do Limia stay updated in English and Portuguese."
+
+policy:
+  allow_implicit_invocation: true

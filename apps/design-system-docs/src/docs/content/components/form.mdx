@@ -1,0 +1,54 @@
+## Overview
+
+Form provides structural helpers that connect Limia fields to `react-hook-form` while preserving accessible IDs, descriptions and error messaging. It is not a visual container by itself; it is the composition layer around `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription` and `FormMessage`.
+
+## Usage
+
+Use these primitives when the form state is already managed by `react-hook-form` and the interface needs consistent labeling, helper text and validation output. Prefer the base field primitives alone only when no form-state abstraction is required.
+
+## Style
+
+Treat the form helpers as semantic scaffolding rather than a standalone look. Spacing, field choice and visual emphasis should come from the components you place inside `FormControl`, not from the helper wrappers themselves.
+
+## Code
+
+```tsx
+import { Button, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@limia/design-system";
+import { useForm } from "react-hook-form";
+
+export function Example() {
+  const form = useForm({
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form className="grid gap-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="name@company.com" {...field} />
+              </FormControl>
+              <FormDescription>Use a work email whenever possible.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Save</Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+## Accessibility
+
+- Keep `FormLabel`, `FormDescription` and `FormMessage` inside the same `FormItem` so generated IDs stay connected.
+- Validation messaging should be specific enough to help recovery, not just announce failure.
+- Do not remove visible labels even when placeholders are present.

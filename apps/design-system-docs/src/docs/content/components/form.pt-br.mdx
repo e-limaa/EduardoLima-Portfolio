@@ -1,0 +1,54 @@
+## Visão geral
+
+Form fornece helpers estruturais que conectam campos do Limia ao `react-hook-form`, preservando IDs acessíveis, descrições e mensagens de erro. Ele não é um container visual por si só; é a camada de composição ao redor de `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription` e `FormMessage`.
+
+## Uso
+
+Use essas primitivas quando o estado do formulário já for gerenciado por `react-hook-form` e a interface precisar de rotulagem consistente, texto de apoio e saída de validação. Prefira os campos base isolados apenas quando não houver necessidade dessa abstração de estado.
+
+## Estilo
+
+Trate os helpers de form como estrutura semântica, não como visual standalone. Espaçamento, escolha de campo e ênfase visual devem vir dos componentes colocados dentro de `FormControl`, não dos wrappers auxiliares.
+
+## Código
+
+```tsx
+import { Button, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@limia/design-system";
+import { useForm } from "react-hook-form";
+
+export function Example() {
+  const form = useForm({
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form className="grid gap-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>E-mail</FormLabel>
+              <FormControl>
+                <Input placeholder="nome@empresa.com" {...field} />
+              </FormControl>
+              <FormDescription>Prefira um e-mail de trabalho quando fizer sentido.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Salvar</Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+## Acessibilidade
+
+- Mantenha `FormLabel`, `FormDescription` e `FormMessage` dentro do mesmo `FormItem` para preservar a conexão entre IDs gerados.
+- As mensagens de validação devem ser específicas o bastante para ajudar na recuperação, não apenas anunciar falha.
+- Não remova labels visíveis só porque existe placeholder.

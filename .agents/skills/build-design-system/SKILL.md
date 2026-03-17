@@ -25,6 +25,7 @@ Treat the design system in this repository as a product with a real package, rea
 
 - Decide whether the task is about foundations, package components, app adoption, documentation, governance, or migration.
 - Keep the scope explicit: token change, new component, component hardening, docs update, lifecycle status change, or styleguide parity fix.
+- If the task adds a new public component to `@limia/design-system` or changes a public component API, also use `limia-component-doc-sync` so the Docs do Limia are updated in the same task.
 
 ### 2. Change the right source of truth
 
@@ -32,6 +33,7 @@ Treat the design system in this repository as a product with a real package, rea
 - Change package components in `packages/limia-design-system/src/components/**`, not only in app consumers.
 - Change package exports in `packages/limia-design-system/src/index.ts` when a new public API is added.
 - Change documentation in `src/app/docs/**` and keep the registry in sync.
+- For new or changed public components, documentation is part of the source-of-truth change set, not optional follow-up work.
 
 ### 3. Preserve the stack conventions
 
@@ -53,6 +55,7 @@ Treat the design system in this repository as a product with a real package, rea
 - Update both the English and Portuguese MDX files when changing public behavior or adding design system pages.
 - Keep `src/app/docs/registry.ts` aligned with new docs pages and statuses.
 - Reflect design system changes in app-facing demos or styleguide views when needed.
+- When the work introduces a new public component page or changes an existing component contract, follow `limia-component-doc-sync` and do not stop after package code alone.
 
 ### 6. Verify with repository commands
 
@@ -69,6 +72,7 @@ Treat the design system in this repository as a product with a real package, rea
 - Prefer public package exports that are intentional and documented.
 - Prefer MDX documentation and component status updates as part of the same change.
 - Prefer accessibility checks and contrast validation as release gates, not optional cleanup.
+- Prefer invoking `limia-component-doc-sync` whenever component work affects public package behavior or docs coverage.
 
 ## References
 

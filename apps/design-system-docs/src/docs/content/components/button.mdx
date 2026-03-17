@@ -31,7 +31,7 @@ Buttons trigger actions, confirm decisions and move users through flows. Use the
 
 ## Usage
 
-Use one primary action per region whenever possible. When several actions compete, reduce emphasis with `secondary`, `outline` or `ghost`.
+Use one primary action per region whenever possible. When several actions compete, reduce emphasis with `secondary`, `outline` or `ghost`. Reserve `destructive` for irreversible or high-risk actions.
 
 <ComponentPreview>
   <div className="flex flex-wrap gap-4">
@@ -39,6 +39,7 @@ Use one primary action per region whenever possible. When several actions compet
     <Button variant="secondary">Save draft</Button>
     <Button variant="outline">Cancel</Button>
     <Button variant="ghost">Export</Button>
+    <Button variant="link">Learn more</Button>
   </div>
 </ComponentPreview>
 
@@ -53,7 +54,7 @@ Use one primary action per region whenever possible. When several actions compet
 
 ## Style
 
-Button styling communicates emphasis, not only brand. Size should reflect the surrounding density and the amount of text. Use icon sizes only when the action is widely recognizable or already labeled nearby.
+Button styling communicates emphasis, not only brand. Size should reflect the surrounding density and the amount of text. Use `link` when the action should read as inline navigation instead of a surface-level CTA. Use icon sizes only when the action is widely recognizable or already labeled nearby.
 
 <ComponentPreview>
   <div className="flex items-end gap-2">

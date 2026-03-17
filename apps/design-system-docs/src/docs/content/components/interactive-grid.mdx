@@ -1,0 +1,41 @@
+import { InteractiveGrid } from "@limia/design-system";
+
+<ComponentPreview className="relative h-48 overflow-hidden rounded-xl border border-border bg-card">
+  <InteractiveGrid />
+  <div className="relative z-10 flex h-full items-end p-6 text-sm text-muted-foreground">
+    Ambient grid motion behind content.
+  </div>
+</ComponentPreview>
+
+## Overview
+
+Interactive Grid renders an ambient background grid with moving pulse lines and cursor-responsive glow. Use it as a decorative foundation behind hero sections, feature callouts or other surfaces that benefit from subtle atmosphere.
+
+## Usage
+
+Use `InteractiveGrid` as a non-essential visual layer inside a relative container. It should support hierarchy and mood, not compete with the primary content or carry semantic meaning on its own.
+
+## Style
+
+Choose the default variant when the grid can be visibly present and `subtle` when the content above it needs a calmer backdrop. Keep foreground text and controls on a separate layer above the effect.
+
+## Code
+
+```tsx
+import { InteractiveGrid } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <div className="relative overflow-hidden rounded-2xl">
+      <InteractiveGrid variant="subtle" />
+      <div className="relative z-10 p-8">Content</div>
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+- Treat the grid as decorative; it should not be required to understand the interface.
+- Ensure sufficient contrast between foreground content and the animated background.
+- Respect reduced-motion expectations when composing additional effects around it.

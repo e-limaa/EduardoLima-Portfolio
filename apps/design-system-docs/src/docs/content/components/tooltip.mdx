@@ -4,16 +4,25 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@limia/design-system';
+} from "@limia/design-system";
 
-<ComponentPreview>
+<ComponentPreview className="flex flex-wrap gap-4">
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="outline">Hover or focus</Button>
+        <Button variant="outline">Default tooltip</Button>
       </TooltipTrigger>
-      <TooltipContent>
-        <p>Short, supplemental guidance.</p>
+      <TooltipContent side="top" sideOffset={10}>
+        Neutral contextual guidance.
+      </TooltipContent>
+    </Tooltip>
+
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button>Brand tooltip</Button>
+      </TooltipTrigger>
+      <TooltipContent variant="brand" side="top" sideOffset={10}>
+        Emphasized guidance.
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>
@@ -21,15 +30,28 @@ import {
 
 ## Overview
 
-Tooltip provides short contextual guidance on hover or focus.
+Tooltip provides short contextual guidance on hover or focus without interrupting the surrounding flow. In Limia, the default surface is neutral and suitable for most product hints, while the optional `brand` variant adds stronger emphasis when the supporting message needs to stand out.
 
 ## Usage
 
-Use tooltip for concise supporting hints, such as icon clarification or compact labels. Do not use it for required instructions, complex explanations or critical status feedback.
+Use tooltip for concise supporting hints, such as icon clarification, compact labels or lightweight helper copy. Do not use it for required instructions, long explanations, decisions that need reading time or critical status feedback.
+
+<DoDontContainer>
+  <DoDont type="do" title="Keep it supplemental">
+    Treat tooltip content as supporting context. The trigger should still be understandable before the tooltip appears.
+  </DoDont>
+  <DoDont type="dont" title="Hide core instructions">
+    If the user must read the content to complete a task correctly, use popover, inline help or another richer pattern instead.
+  </DoDont>
+</DoDontContainer>
 
 ## Style
 
-Keep tooltip copy to a short phrase or sentence. If the content needs formatting, decisions or longer reading time, use popover or another richer pattern.
+Keep tooltip copy to a short phrase or sentence. The default `TooltipContent` variant is the preferred option for everyday usage because it sits quietly on top of the interface. Use `variant="brand"` only when extra emphasis is intentional and still secondary to the main action.
+
+<Callout type="info" title="Variant guidance">
+  Use the neutral default for most component hints and icon labels. Reserve `brand` for highlighted helper moments where stronger visual emphasis improves scanning without making the tooltip feel like an alert.
+</Callout>
 
 ## Code
 
@@ -40,10 +62,35 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="outline">Hover or focus</Button>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={10}>
+          Neutral contextual guidance.
+        </TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button>Brand emphasis</Button>
+        </TooltipTrigger>
+        <TooltipContent variant="brand" side="top" sideOffset={10}>
+          Emphasized guidance.
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 ```
 
 ## Accessibility
 
-- Tooltip content must also be available on focus, not hover only.
-- Do not place essential information only in a tooltip.
+- Tooltip content must also be available on keyboard focus, not hover only.
+- Do not place essential information only inside a tooltip.
 - Triggers should still make sense without the tooltip.
+- For icon-only triggers, provide an accessible label in addition to the tooltip text.

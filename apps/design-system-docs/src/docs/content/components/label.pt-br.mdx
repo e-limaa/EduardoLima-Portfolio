@@ -1,0 +1,45 @@
+import { Checkbox, Input, Label } from "@limia/design-system";
+
+<ComponentPreview className="block space-y-5">
+  <div className="grid w-full max-w-sm gap-2">
+    <Label htmlFor="email-label-demo">E-mail</Label>
+    <Input id="email-label-demo" type="email" placeholder="nome@empresa.com" />
+  </div>
+  <div className="flex items-center gap-3">
+    <Checkbox id="terms-label-demo" />
+    <Label htmlFor="terms-label-demo">Concordo com os termos</Label>
+  </div>
+</ComponentPreview>
+
+## Visão geral
+
+Label fornece o nome textual acessível para um controle de formulário ou opção selecionável. Ele mantém formulários, configurações e grupos de escolha compreensíveis sem depender apenas de placeholder ou proximidade visual.
+
+## Uso
+
+Use `Label` com inputs, textarea, checkbox, radio ou qualquer controle de formulário que precise de um nome visível associado. Prefira wording explícito que explique o significado do campo, não apenas o tipo de dado.
+
+## Estilo
+
+Labels devem ficar próximos do controle e soar naturais quando lidos isoladamente. Mantenha o texto curto, mas específico o bastante para continuar claro quando mensagens de erro ou apoio aparecerem ao redor do campo.
+
+## Código
+
+```tsx
+import { Input, Label } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor="company">Nome da empresa</Label>
+      <Input id="company" placeholder="Limia" />
+    </div>
+  );
+}
+```
+
+## Acessibilidade
+
+- Use `htmlFor` para associar o rótulo programaticamente ao controle.
+- Não substitua labels por nomeação baseada apenas em placeholder.
+- Mantenha o texto do label estável mesmo quando mensagens de ajuda ou validação mudarem ao redor do campo.

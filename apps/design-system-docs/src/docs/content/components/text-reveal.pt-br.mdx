@@ -1,0 +1,39 @@
+import { TextReveal } from "@limia/design-system";
+
+<ComponentPreview className="block">
+  <TextReveal priority className="text-3xl font-semibold tracking-tight text-foreground">
+    Motion can introduce text with restraint.
+  </TextReveal>
+</ComponentPreview>
+
+## Visão geral
+
+Text Reveal anima o conteúdo verticalmente para dentro da viewport, ou imediatamente quando `priority` está habilitado. Use-o para introduzir copy de hero, headings de seção ou momentos editoriais que se beneficiem de uma ênfase sutil por movimento.
+
+## Uso
+
+Use `TextReveal` ao redor de um bloco de texto único ou grupo inline compacto. Prefira texto estático quando o conteúdo aparecer repetidamente em regiões densas da interface ou quando a animação gerar distração em vez de hierarquia.
+
+## Estilo
+
+O componente funciona melhor com conteúdo curto e ritmo tipográfico forte. Mantenha os momentos de reveal intencionais e evite empilhar muitos blocos animados na mesma viewport.
+
+## Código
+
+```tsx
+import { TextReveal } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <TextReveal delay={0.1}>
+      <h2>Construa sistemas com intenção visível.</h2>
+    </TextReveal>
+  );
+}
+```
+
+## Acessibilidade
+
+- Respeite preferências de redução de movimento ao compor animações adicionais ao redor do reveal.
+- Não use movimento como única pista de significado ou hierarquia.
+- Mantenha o texto legível antes, durante e depois da transição.

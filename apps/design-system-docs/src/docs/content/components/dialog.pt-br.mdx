@@ -1,0 +1,53 @@
+import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@limia/design-system";
+
+<ComponentPreview className="flex justify-center">
+  <Dialog>
+    <DialogTrigger asChild>
+      <Button variant="outline">Abrir dialog</Button>
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Convidar integrante</DialogTitle>
+        <DialogDescription>
+          Use dialog para fluxos focados que exigem confirmacao ou entrada curta estruturada.
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <Button variant="ghost">Cancelar</Button>
+        <Button>Enviar convite</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</ComponentPreview>
+
+## Visão geral
+
+Dialog abre uma camada modal para fluxos focados que interrompem temporariamente a tarefa atual. Use-o para confirmações curtas, formulários compactos ou decisões que merecem atenção dedicada antes de o usuário voltar à página.
+
+## Uso
+
+Use dialog quando o fluxo for importante o bastante para bloquear temporariamente a interação com a interface de fundo. Prefira `Popover` ou `Sheet` quando o conteúdo puder permanecer mais leve ou ancorado ao contexto ao redor.
+
+## Estilo
+
+Mantenha títulos explícitos e texto de apoio compacto. Um modal deve parecer intencional, então evite transformá-lo em uma página longa ou em depósito de conteúdo secundário.
+
+## Código
+
+```tsx
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@limia/design-system";
+```
+
+## Acessibilidade
+
+- O dialog deve incluir um título visível e, quando útil, uma descrição curta.
+- Mantenha o número de ações pequeno e deixe o resultado principal óbvio.
+- Evite abrir dialogs aninhados sem desenho e teste cuidadosos do fluxo.

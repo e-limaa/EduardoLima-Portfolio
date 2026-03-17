@@ -4,6 +4,7 @@ import { Toggle } from '@limia/design-system';
   <div className="flex gap-3">
     <Toggle aria-label="Toggle bold">Bold</Toggle>
     <Toggle aria-label="Toggle italic">Italic</Toggle>
+    <Toggle variant="outline" aria-label="Toggle underline">Underline</Toggle>
   </div>
 </ComponentPreview>
 
@@ -17,7 +18,7 @@ Use toggle when the pressed state itself is the main interaction, such as format
 
 ## Style
 
-Keep the content short and recognizable. Toggles work best with short labels or familiar icons, especially when several controls appear together.
+Keep the content short and recognizable. Toggles work best with short labels or familiar icons, especially when several controls appear together. Use the default variant for quiet inline controls and `variant="outline"` when the toggle needs clearer boundaries inside toolbars or dense settings clusters.
 
 ## Code
 

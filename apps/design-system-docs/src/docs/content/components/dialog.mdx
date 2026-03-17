@@ -1,0 +1,53 @@
+import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@limia/design-system";
+
+<ComponentPreview className="flex justify-center">
+  <Dialog>
+    <DialogTrigger asChild>
+      <Button variant="outline">Open dialog</Button>
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Invite teammate</DialogTitle>
+        <DialogDescription>
+          Use dialog for focused tasks that need confirmation or short structured input.
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <Button variant="ghost">Cancel</Button>
+        <Button>Send invite</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</ComponentPreview>
+
+## Overview
+
+Dialog opens a modal layer for focused flows that interrupt the current task. Use it for short confirmations, compact forms or decisions that deserve dedicated attention before the user returns to the page.
+
+## Usage
+
+Use dialog when the flow is important enough to temporarily block interaction with the underlying interface. Prefer `Popover` or `Sheet` when the content should stay more lightweight or remain anchored to surrounding context.
+
+## Style
+
+Keep dialog titles explicit and body copy compact. A modal should feel purposeful, so avoid turning it into a long page or a dumping ground for secondary content.
+
+## Code
+
+```tsx
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@limia/design-system";
+```
+
+## Accessibility
+
+- Dialog should include a visible title and, when helpful, a short description.
+- Keep the number of actions small and make the primary outcome obvious.
+- Avoid opening nested dialogs unless the flow is carefully designed and tested.

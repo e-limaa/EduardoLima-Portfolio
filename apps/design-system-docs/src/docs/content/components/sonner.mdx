@@ -1,0 +1,58 @@
+import { Button, Toaster, toast } from "@limia/design-system";
+
+<ComponentPreview className="flex justify-center">
+  <div className="flex flex-col items-center gap-4">
+    <Toaster />
+    <Button
+      variant="outline"
+      onClick={() =>
+        toast("Saved", {
+          description: "The changes are now available.",
+        })
+      }
+    >
+      Trigger toast
+    </Button>
+  </div>
+</ComponentPreview>
+
+## Overview
+
+Sonner is Limia's public toast surface through `Toaster` and the `toast` helper. Use it for transient app-wide feedback that should confirm an action, report a background result or surface lightweight status without blocking the user.
+
+## Usage
+
+Mount one `Toaster` near the app root and call `toast(...)` from interaction points that need temporary feedback. Prefer inline `Alert` or persistent page messaging when the user needs the information to remain visible in context.
+
+## Style
+
+Toast copy should be brief and immediately understandable. Reserve them for secondary feedback, not for primary instructions or complex recovery steps.
+
+## Code
+
+```tsx
+import { Toaster, toast } from "@limia/design-system";
+
+export function AppShell() {
+  return (
+    <>
+      <Toaster />
+      <button
+        onClick={() =>
+          toast("Saved", {
+            description: "The profile has been updated.",
+          })
+        }
+      >
+        Save
+      </button>
+    </>
+  );
+}
+```
+
+## Accessibility
+
+- Toasts should confirm or summarize, not contain the only copy required to complete a task.
+- Keep the title and description short enough to be announced clearly.
+- Prefer persistent inline patterns when failure recovery needs more time or decision-making.

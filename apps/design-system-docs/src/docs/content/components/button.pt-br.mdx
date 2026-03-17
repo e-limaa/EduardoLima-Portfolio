@@ -31,7 +31,7 @@ Botões disparam ações, confirmam decisões e conduzem o usuário por um fluxo
 
 ## Uso
 
-Use uma ação primária por região sempre que possível. Quando várias ações competirem, reduza a ênfase com `secondary`, `outline` ou `ghost`.
+Use uma ação primária por região sempre que possível. Quando várias ações competirem, reduza a ênfase com `secondary`, `outline` ou `ghost`. Reserve `destructive` para ações irreversíveis ou de maior risco.
 
 <ComponentPreview>
   <div className="flex flex-wrap gap-4">
@@ -39,6 +39,7 @@ Use uma ação primária por região sempre que possível. Quando várias açõe
     <Button variant="secondary">Salvar rascunho</Button>
     <Button variant="outline">Cancelar</Button>
     <Button variant="ghost">Exportar</Button>
+    <Button variant="link">Saiba mais</Button>
   </div>
 </ComponentPreview>
 
@@ -53,7 +54,7 @@ Use uma ação primária por região sempre que possível. Quando várias açõe
 
 ## Estilo
 
-O estilo do botão comunica ênfase, não só marca. O tamanho deve refletir a densidade do contexto e a quantidade de texto. Use tamanhos de ícone apenas quando a ação for amplamente reconhecível ou já estiver rotulada por perto.
+O estilo do botão comunica ênfase, não só marca. O tamanho deve refletir a densidade do contexto e a quantidade de texto. Use `link` quando a ação deve soar como navegação inline em vez de CTA de superfície. Use tamanhos de ícone apenas quando a ação for amplamente reconhecível ou já estiver rotulada por perto.
 
 <ComponentPreview>
   <div className="flex items-end gap-2">
