@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/landing/Navbar";
 import { supabase } from "../lib/supabase";
 import posthog from "posthog-js";
+import { useLanguage } from "../components/language-provider";
 
 const socialLinks = [
   {
@@ -21,28 +22,16 @@ const socialLinks = [
   },
 ];
 
-const automationSteps = [
-  "Busca noticias em fontes confiaveis via RSS",
-  "Organiza e estrutura o conteudo",
-  "Filtra o que realmente importa",
-  "Cria o e-mail HTML com a minha identidade",
-  "Dispara automaticamente tres vezes por semana",
-];
-
-const differentiators = [
-  "Fontes confiaveis",
-  "Atualizacao constante",
-  "Menos ruido",
-  "Foco pratico",
-];
-
 export const Newsletter = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const isInternal = location.state?.fromInternal;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const automationSteps = [1, 2, 3, 4, 5].map((step) => t(`newsletter.page.step.${step}`));
+  const differentiators = [1, 2, 3, 4].map((item) => t(`newsletter.page.diff.${item}`));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,20 +56,20 @@ export const Newsletter = () => {
       setName("");
       setEmail("");
       posthog.capture("Newsletter Subscribed");
-      toast.success("Inscrito com sucesso!", {
-        description: "Voce foi adicionado a nossa lista.",
+      toast.success(t("newsletter.page.toast.successTitle"), {
+        description: t("newsletter.page.toast.successDescription"),
       });
     } catch (error: any) {
       console.error("Error subscribing:", error);
       setStatus("error");
       posthog.capture("Newsletter Subscription Failed", { error_code: error?.code || "unknown_error" });
       if (error?.code === "23505") {
-        toast.error("Voce ja esta inscrito!", {
-          description: "Este e-mail ja faz parte da nossa lista.",
+        toast.error(t("newsletter.page.toast.duplicateTitle"), {
+          description: t("newsletter.page.toast.duplicateDescription"),
         });
       } else {
-        toast.error("Erro ao se inscrever.", {
-          description: "Tente novamente mais tarde.",
+        toast.error(t("newsletter.page.toast.errorTitle"), {
+          description: t("newsletter.page.toast.errorDescription"),
         });
       }
     }
@@ -131,7 +120,7 @@ export const Newsletter = () => {
           )}
           <div className="flex items-center text-lg font-bold tracking-tight md:text-xl">
             <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Newsletter AI
+              {t("newsletter.page.badge")}
             </span>
             <span className="ml-1 text-foreground">.</span>
           </div>
@@ -141,7 +130,7 @@ export const Newsletter = () => {
           <div className="relative order-1 -mt-[72px] flex w-[calc(100%+48px)] items-center justify-center pointer-events-none -mx-6 md:hidden">
             <img
               src="/assets/images/mobile-email.webp"
-              alt="Newsletter Preview Mobile"
+              alt={t("newsletter.page.mobilePreviewAlt")}
               loading="lazy"
               className="mask-image-b h-auto w-full rounded-none object-cover"
               style={{
@@ -154,18 +143,16 @@ export const Newsletter = () => {
           <div className="relative z-10 order-2 mx-auto -mt-32 flex w-full flex-col gap-12 pt-4 lg:order-1 lg:mx-0 lg:mt-0 lg:max-w-[434px] lg:gap-14">
             <div className="flex flex-col gap-4">
               <h1 className="items-center text-3xl font-bold leading-[1.1] tracking-[-0.71px] text-foreground md:text-[48px] md:leading-none">
-                Fique a frente da revolucao da IA.
+                {t("newsletter.page.title")}
               </h1>
               <p className="mt-2 text-[16px] leading-[1.4] text-muted-foreground">
-                Tres vezes por semana envio uma curadoria estrategica das principais noticias de
-                Inteligencia Artificial, coletadas automaticamente via RSS e organizadas por uma
-                automacao que eu mesmo desenvolvi com n8n.
+                {t("newsletter.page.description")}
               </p>
             </div>
 
             <div className="flex flex-col gap-6">
               <h2 className="text-base font-bold leading-[1.4] text-foreground md:text-[18px]">
-                Automacao com criterio. Informacao sem ruido.
+                {t("newsletter.page.eyebrow")}
               </h2>
 
               <form
@@ -174,12 +161,12 @@ export const Newsletter = () => {
               >
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="name" className="text-[16px] font-medium">
-                    Nome
+                    {t("newsletter.page.nameLabel")}
                   </Label>
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Como gosta de ser chamado(a)?"
+                    placeholder={t("newsletter.page.namePlaceholder")}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -189,12 +176,12 @@ export const Newsletter = () => {
 
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="email" className="text-[16px] font-medium">
-                    E-mail
+                    {t("newsletter.page.emailLabel")}
                   </Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="seu.melhor@email.com"
+                    placeholder={t("newsletter.page.emailPlaceholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -211,10 +198,10 @@ export const Newsletter = () => {
                   >
                     <span className="font-normal text-primary-foreground">
                       {status === "loading"
-                        ? "Inscrevendo..."
+                        ? t("newsletter.page.submitLoading")
                         : status === "success"
-                          ? "Inscrito com sucesso!"
-                          : "Entrar na lista"}
+                          ? t("newsletter.page.submitSuccess")
+                          : t("newsletter.page.submitIdle")}
                     </span>
                     {status === "success" ? null : (
                       <ArrowRight className="ml-2 h-5 w-5 text-primary-foreground transition-transform group-hover:translate-x-1" />
@@ -223,13 +210,13 @@ export const Newsletter = () => {
                 </div>
                 {status === "success" && (
                   <p className="mt-2 text-center text-sm font-medium text-primary">
-                    Voce foi adicionado a lista. Verifique seu email.
+                    {t("newsletter.page.successInline")}
                   </p>
                 )}
               </form>
 
               <p className="-mt-2 text-[12px] text-muted-foreground">
-                Sem spam. Cancelamento a qualquer momento.
+                {t("newsletter.page.disclaimer")}
               </p>
             </div>
 
@@ -237,14 +224,14 @@ export const Newsletter = () => {
 
             <div className="flex flex-col gap-6">
               <h3 className="text-2xl font-bold tracking-[-0.71px] text-foreground md:text-[32px]">
-                Como funciona?
+                {t("newsletter.page.howItWorksTitle")}
               </h3>
               <p className="text-[16px] text-muted-foreground">
-                A newsletter e alimentada por uma automacao criada por mim utilizando n8n.
+                {t("newsletter.page.howItWorksDescription")}
               </p>
 
               <div className="flex flex-col gap-4">
-                <p className="text-[16px] font-bold text-foreground">Ela:</p>
+                <p className="text-[16px] font-bold text-foreground">{t("newsletter.page.listTitle")}</p>
                 <ul className="flex flex-col gap-3 text-[16px] text-muted-foreground">
                   {automationSteps.map((step) => (
                     <li key={step} className="flex items-start gap-3">
@@ -257,11 +244,10 @@ export const Newsletter = () => {
 
               <div className="mt-4 flex flex-col gap-4">
                 <p className="text-lg font-bold tracking-tight text-primary md:text-[20px]">
-                  Resultado:
+                  {t("newsletter.page.resultTitle")}
                 </p>
                 <p className="text-[16px] text-muted-foreground">
-                  Voce recebe informacao relevante, com consistencia e sem depender de redes
-                  sociais ou algoritmo.
+                  {t("newsletter.page.resultDescription")}
                 </p>
               </div>
             </div>
@@ -270,14 +256,14 @@ export const Newsletter = () => {
 
             <div className="flex flex-col gap-6 pb-20">
               <h3 className="text-2xl font-bold tracking-[-0.71px] text-foreground md:text-[32px]">
-                Por que isso e diferente?
+                {t("newsletter.page.whyTitle")}
               </h3>
               <p className="text-[16px] text-muted-foreground">
-                A maioria dos conteudos sobre IA vive de hype.
+                {t("newsletter.page.whyDescription")}
               </p>
 
               <div className="flex flex-col gap-4">
-                <p className="text-[16px] font-bold text-foreground">Minha proposta e simples:</p>
+                <p className="text-[16px] font-bold text-foreground">{t("newsletter.page.proposalTitle")}</p>
                 <ul className="flex flex-col gap-3 text-[16px] text-muted-foreground">
                   {differentiators.map((item) => (
                     <li key={item} className="flex items-start gap-3">
@@ -288,9 +274,9 @@ export const Newsletter = () => {
                 </ul>
 
                 <p className="mt-4 text-[16px] font-bold leading-[1.4] text-foreground">
-                  Automacao garante consistencia.
+                  {t("newsletter.page.closingLine1")}
                   <br />
-                  Criterio garante qualidade.
+                  {t("newsletter.page.closingLine2")}
                 </p>
               </div>
             </div>
@@ -299,7 +285,7 @@ export const Newsletter = () => {
           <div className="order-1 mt-12 hidden w-full items-center justify-center pointer-events-none md:flex lg:absolute lg:-top-10 lg:left-[calc(50%+306.5px)] lg:mt-0 lg:w-[996px] lg:-translate-x-1/2 lg:order-2">
             <img
               src="/assets/images/frame-email.webp"
-              alt="Newsletter Preview"
+              alt={t("newsletter.page.previewAlt")}
               loading="lazy"
               className="h-auto w-full object-contain"
             />
@@ -328,8 +314,8 @@ export const Newsletter = () => {
             </div>
           </div>
           <div className="flex flex-col gap-1 text-right font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            <p>© {new Date().getFullYear()} Design Portfolio</p>
-            <p>Developed with React & Tailwind</p>
+            <p>© {new Date().getFullYear()} {t("newsletter.page.footerCopyright")}</p>
+            <p>{t("newsletter.page.footerTech")}</p>
           </div>
         </footer>
       </div>

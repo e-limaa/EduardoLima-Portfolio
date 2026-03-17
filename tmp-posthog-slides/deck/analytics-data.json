@@ -1,0 +1,73 @@
+{
+  "project": {
+    "id": 340503,
+    "name": "Default project",
+    "timezone": "UTC",
+    "source": "PostHog API queries"
+  },
+  "period": {
+    "start": "2026-03-15T00:00:00Z",
+    "end_exclusive": "2026-03-18T00:00:00Z",
+    "label": "15-17 Mar 2026"
+  },
+  "summary": {
+    "pageviews": 46,
+    "unique_visitors": 12,
+    "pageviews_per_visitor": 3.8,
+    "newsletter_attempts": 1,
+    "newsletter_subscribed": 1,
+    "newsletter_conversion_rate": 1
+  },
+  "daily": {
+    "labels": ["2026-03-15", "2026-03-16", "2026-03-17"],
+    "pageviews": [30, 12, 4],
+    "unique_visitors": [5, 5, 2]
+  },
+  "pages": [
+    { "pathname": "/", "views": 37 },
+    { "pathname": "/newsletter", "views": 9 }
+  ],
+  "events": [
+    { "event": "$pageview", "total": 46 },
+    { "event": "Language Changed", "total": 9 },
+    { "event": "Theme Toggled", "total": 8 },
+    { "event": "Hero CTA Clicked", "total": 4 },
+    { "event": "Newsletter Subscribed", "total": 1 },
+    { "event": "Newsletter Subscription Attempt", "total": 1 },
+    { "event": "Navbar Clicked", "total": 1 }
+  ],
+  "hero_cta": [
+    { "type": "newsletter", "total": 3 },
+    { "type": "projects", "total": 1 }
+  ],
+  "navbar": [
+    { "destination": "hero", "total": 1 }
+  ],
+  "countries": [
+    { "country": "Brazil", "views": 34 },
+    { "country": "China", "views": 8 },
+    { "country": "United States", "views": 4 }
+  ],
+  "devices": [
+    { "device_type": "Desktop", "views": 44 },
+    { "device_type": "Mobile", "views": 2 }
+  ],
+  "hourly_pageviews_utc": [
+    { "hour": "2026-03-15 02:00", "pageviews": 2 },
+    { "hour": "2026-03-15 03:00", "pageviews": 14 },
+    { "hour": "2026-03-15 17:00", "pageviews": 2 },
+    { "hour": "2026-03-15 18:00", "pageviews": 10 },
+    { "hour": "2026-03-15 19:00", "pageviews": 2 },
+    { "hour": "2026-03-16 01:00", "pageviews": 2 },
+    { "hour": "2026-03-16 07:00", "pageviews": 2 },
+    { "hour": "2026-03-16 14:00", "pageviews": 2 },
+    { "hour": "2026-03-16 17:00", "pageviews": 2 },
+    { "hour": "2026-03-16 20:00", "pageviews": 4 },
+    { "hour": "2026-03-17 12:00", "pageviews": 2 },
+    { "hour": "2026-03-17 14:00", "pageviews": 2 }
+  ],
+  "activity_window": {
+    "first_event": "2026-03-15T02:58:34.818Z",
+    "last_event": "2026-03-17T14:30:58.263Z"
+  }
+}
