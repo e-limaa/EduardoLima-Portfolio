@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { Home, User, Briefcase, Layers, Mail, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@limia/design-system";
 import { TextSwitch } from "@limia/design-system-src/components/text-switch";
 import { ModeToggle } from "../mode-toggle";
 import posthog from "posthog-js";
@@ -82,51 +83,59 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
           aria-label={language === "pt-br" ? "Navegação de seções" : "Section navigation"}
           className="bg-surface-glass rounded-[2rem] border border-border/70 px-1 py-1 shadow-lg shadow-black/10 sm:rounded-full sm:px-2 sm:py-2"
         >
-          <ul
-            ref={scrollRef}
-            onScroll={checkScroll}
-            style={maskImage ? { maskImage, WebkitMaskImage: maskImage } : undefined}
-            className="list-none m-0 -my-2 p-0 flex items-center gap-1.5 sm:gap-2 px-1 py-3 sm:-my-2 sm:px-2 sm:py-3 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transition-all"
-          >
-            {navItems.map((item) => (
-              <li key={item.id} className="flex-shrink-0">
-                <motion.button
-                  type="button"
-                  onClick={() => handleNavigation(item.id)}
-                  whileHover={{ scale: 1.2, y: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                  aria-label={t(item.translationKey)}
-                  title={t(item.translationKey)}
-                  className="group rounded-full p-1.5 transition-colors hover:bg-accent sm:p-3"
-                >
-                  <item.icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent-foreground sm:h-5 sm:w-5" />
-                </motion.button>
+          <TooltipProvider delayDuration={120}>
+            <ul
+              ref={scrollRef}
+              onScroll={checkScroll}
+              style={maskImage ? { maskImage, WebkitMaskImage: maskImage } : undefined}
+              className="list-none m-0 -my-2 p-0 flex items-center gap-1.5 sm:gap-2 px-1 py-3 sm:-my-2 sm:px-2 sm:py-3 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transition-all"
+            >
+              {navItems.map((item) => (
+                <li key={item.id} className="flex-shrink-0">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <motion.button
+                        type="button"
+                        onClick={() => handleNavigation(item.id)}
+                        whileHover={{ scale: 1.2, y: -5 }}
+                        whileTap={{ scale: 0.9 }}
+                        aria-label={t(item.translationKey)}
+                        className="group rounded-full p-1.5 transition-colors hover:bg-accent sm:p-3"
+                      >
+                        <item.icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent-foreground sm:h-5 sm:w-5" />
+                      </motion.button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" sideOffset={10}>
+                      {t(item.translationKey)}
+                    </TooltipContent>
+                  </Tooltip>
+                </li>
+              ))}
+
+              <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
+
+              <li className="flex-shrink-0">
+                <TextSwitch
+                  checked={language === "pt-br"}
+                  onCheckedChange={(checked) => {
+                    const newLanguage = checked ? "pt-br" : "en";
+                    setLanguage(newLanguage);
+                    posthog.capture("Language Changed", { language: newLanguage });
+                  }}
+                  uncheckedLabel="EN"
+                  checkedLabel="PT"
+                  aria-label={language === "pt-br" ? "Selecionar idioma" : "Select language"}
+                  title={language === "pt-br" ? "Selecionar idioma" : "Select language"}
+                />
               </li>
-            ))}
 
-            <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
+              <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
 
-            <li className="flex-shrink-0">
-              <TextSwitch
-                checked={language === "pt-br"}
-                onCheckedChange={(checked) => {
-                  const newLanguage = checked ? "pt-br" : "en";
-                  setLanguage(newLanguage);
-                  posthog.capture("Language Changed", { language: newLanguage });
-                }}
-                uncheckedLabel="EN"
-                checkedLabel="PT"
-                aria-label={language === "pt-br" ? "Selecionar idioma" : "Select language"}
-                title={language === "pt-br" ? "Selecionar idioma" : "Select language"}
-              />
-            </li>
-
-            <li aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
-
-            <li className="flex-shrink-0 flex items-center">
-              <ModeToggle />
-            </li>
-          </ul>
+              <li className="flex-shrink-0 flex items-center">
+                <ModeToggle />
+              </li>
+            </ul>
+          </TooltipProvider>
         </nav>
       </motion.div>
     </div>
