@@ -6,6 +6,9 @@ const localizedStringDescription =
 const localizedTextDescription =
   'Fill English and Portuguese (Brazil). Portuguese is the editorial fallback when a translation is missing.'
 
+const hasLocalizedValue = (value?: {en?: string; ptBr?: string}) =>
+  Boolean(value?.ptBr?.trim() || value?.en?.trim())
+
 export default defineType({
   name: 'project',
   title: 'Project',
@@ -29,6 +32,12 @@ export default defineType({
       type: 'localizedString',
       description: localizedStringDescription,
       fieldset: 'header',
+      validation: (Rule) =>
+        Rule.custom((value) =>
+          hasLocalizedValue(value)
+            ? true
+            : 'Provide at least one localized title so the project page can be resolved.'
+        ),
     }),
     defineField({
       name: 'slug',
@@ -40,6 +49,7 @@ export default defineType({
         maxLength: 96,
       },
       fieldset: 'header',
+      validation: (Rule) => Rule.required().error('Slug is required to resolve the project page route.'),
     }),
     defineField({
       name: 'categoryRef',
@@ -47,6 +57,7 @@ export default defineType({
       type: 'reference',
       to: [{type: 'category'}],
       fieldset: 'header',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'thumbnail',
@@ -66,6 +77,7 @@ export default defineType({
         hotspot: true,
       },
       fieldset: 'header',
+      validation: (Rule) => Rule.required().assetRequired(),
     }),
     defineField({
       name: 'metricLabel',
@@ -86,6 +98,7 @@ export default defineType({
       title: 'Metric Value',
       type: 'string',
       fieldset: 'header',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'color',
@@ -93,6 +106,7 @@ export default defineType({
       type: 'string',
       description: 'e.g., "from-blue-600 to-blue-400"',
       fieldset: 'header',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'order',
@@ -114,12 +128,17 @@ export default defineType({
       type: 'localizedString',
       description: localizedStringDescription,
       fieldset: 'details',
+      validation: (Rule) =>
+        Rule.custom((value) =>
+          hasLocalizedValue(value) ? true : 'Provide at least one localized role.'
+        ),
     }),
     defineField({
       name: 'year',
       title: 'Year',
       type: 'string',
       fieldset: 'details',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'client',
@@ -134,6 +153,10 @@ export default defineType({
       type: 'localizedString',
       description: localizedStringDescription,
       fieldset: 'details',
+      validation: (Rule) =>
+        Rule.custom((value) =>
+          hasLocalizedValue(value) ? true : 'Provide at least one localized client name.'
+        ),
     }),
     defineField({
       name: 'stack',
@@ -141,6 +164,7 @@ export default defineType({
       type: 'array',
       of: [{type: 'string'}],
       fieldset: 'details',
+      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: 'description',
@@ -155,6 +179,10 @@ export default defineType({
       type: 'localizedText',
       description: localizedTextDescription,
       fieldset: 'content',
+      validation: (Rule) =>
+        Rule.custom((value) =>
+          hasLocalizedValue(value) ? true : 'Provide at least one localized description.'
+        ),
     }),
     defineField({
       name: 'challenge',
@@ -169,6 +197,10 @@ export default defineType({
       type: 'localizedText',
       description: localizedTextDescription,
       fieldset: 'content',
+      validation: (Rule) =>
+        Rule.custom((value) =>
+          hasLocalizedValue(value) ? true : 'Provide at least one localized challenge.'
+        ),
     }),
     defineField({
       name: 'solution',
@@ -183,6 +215,10 @@ export default defineType({
       type: 'localizedText',
       description: localizedTextDescription,
       fieldset: 'content',
+      validation: (Rule) =>
+        Rule.custom((value) =>
+          hasLocalizedValue(value) ? true : 'Provide at least one localized solution.'
+        ),
     }),
     defineField({
       name: 'gallery',
@@ -207,11 +243,42 @@ export default defineType({
               title: 'Localized Content',
               type: 'localizedText',
               description: localizedTextDescription,
+              validation: (Rule) =>
+                Rule.custom((value) =>
+                  hasLocalizedValue(value)
+                    ? true
+                    : 'Provide at least one localized content value for each solution block.'
+                ),
             },
           ],
         },
       ],
       fieldset: 'content',
+      validation: (Rule) => Rule.required().min(1),
     }),
   ],
+  preview: {
+    select: {
+      titlePtBr: 'titleI18n.ptBr',
+      titleEn: 'titleI18n.en',
+      slug: 'slug.current',
+      media: 'thumbnail',
+      fallbackMedia: 'mainImage',
+      categoryTitle: 'categoryRef.title',
+      categoryTitlePtBr: 'categoryRef.titleI18n.ptBr',
+      categoryTitleEn: 'categoryRef.titleI18n.en',
+    },
+    prepare(selection) {
+      const title = selection.titlePtBr || selection.titleEn || 'Untitled project'
+      const category =
+        selection.categoryTitlePtBr || selection.categoryTitleEn || selection.categoryTitle || 'No category'
+      const route = selection.slug ? `/project/${selection.slug}` : 'Missing slug'
+
+      return {
+        title,
+        subtitle: `${category} • ${route}`,
+        media: selection.media || selection.fallbackMedia,
+      }
+    },
+  },
 })
