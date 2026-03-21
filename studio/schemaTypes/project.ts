@@ -13,10 +13,10 @@ export default defineType({
   name: 'project',
   title: 'Project',
   type: 'document',
-  fieldsets: [
-    {name: 'header', title: 'Header & Card Info', options: {collapsible: true, collapsed: false}},
-    {name: 'details', title: 'Project Details', options: {collapsible: true, collapsed: false}},
-    {name: 'content', title: 'Case Study Content', options: {collapsible: true, collapsed: true}},
+  groups: [
+    {name: 'card', title: 'Card & URL', default: true},
+    {name: 'details', title: 'Project Details'},
+    {name: 'page', title: 'Project Page'},
   ],
   fields: [
     defineField({
@@ -24,14 +24,14 @@ export default defineType({
       title: 'Title (legacy fallback)',
       type: 'string',
       hidden: true,
-      fieldset: 'header',
+      group: 'card',
     }),
     defineField({
       name: 'titleI18n',
-      title: 'Localized Title',
+      title: 'Project title',
       type: 'localizedString',
-      description: localizedStringDescription,
-      fieldset: 'header',
+      description: 'This title appears on the project card and on the project page.',
+      group: 'card',
       validation: (Rule) =>
         Rule.custom((value) =>
           hasLocalizedValue(value)
@@ -41,14 +41,15 @@ export default defineType({
     }),
     defineField({
       name: 'slug',
-      title: 'Slug',
+      title: 'Project URL slug',
       type: 'slug',
+      description: 'Used in the route `/project/<slug>`.',
       options: {
         source: (doc: {title?: string; titleI18n?: {en?: string; ptBr?: string}}) =>
           doc.titleI18n?.ptBr || doc.titleI18n?.en || doc.title || '',
         maxLength: 96,
       },
-      fieldset: 'header',
+      group: 'card',
       validation: (Rule) => Rule.required().error('Slug is required to resolve the project page route.'),
     }),
     defineField({
@@ -56,27 +57,29 @@ export default defineType({
       title: 'Category',
       type: 'reference',
       to: [{type: 'category'}],
-      fieldset: 'header',
+      description: 'Controls how the project is grouped in the portfolio.',
+      group: 'card',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'thumbnail',
-      title: 'Thumbnail',
+      title: 'Card thumbnail',
       type: 'image',
-      description: 'Image used for the project card in the list view. If not set, Main Image will be used.',
+      description: 'Image used on listing cards. If empty, the main image is used.',
       options: {
         hotspot: true,
       },
-      fieldset: 'header',
+      group: 'card',
     }),
     defineField({
       name: 'mainImage',
-      title: 'Main image',
+      title: 'Hero image',
       type: 'image',
+      description: 'Main image shown in the header of the project page.',
       options: {
         hotspot: true,
       },
-      fieldset: 'header',
+      group: 'card',
       validation: (Rule) => Rule.required().assetRequired(),
     }),
     defineField({
@@ -84,50 +87,61 @@ export default defineType({
       title: 'Metric Label (legacy fallback)',
       type: 'string',
       hidden: true,
-      fieldset: 'header',
+      group: 'card',
     }),
     defineField({
       name: 'metricLabelI18n',
-      title: 'Localized Metric Label',
+      title: 'Metric label',
       type: 'localizedString',
-      description: localizedStringDescription,
-      fieldset: 'header',
+      description: 'Short label shown next to the project KPI.',
+      group: 'card',
     }),
     defineField({
       name: 'metric',
-      title: 'Metric Value',
+      title: 'Metric value (legacy fallback)',
       type: 'string',
-      fieldset: 'header',
-      validation: (Rule) => Rule.required(),
+      hidden: true,
+      group: 'card',
+    }),
+    defineField({
+      name: 'metricI18n',
+      title: 'Metric value',
+      type: 'localizedString',
+      description: 'Main KPI shown on cards and on the project page.',
+      group: 'card',
+      validation: (Rule) =>
+        Rule.custom((value) =>
+          hasLocalizedValue(value) ? true : 'Provide at least one localized metric value.'
+        ),
     }),
     defineField({
       name: 'color',
-      title: 'Color Gradient Classes',
+      title: 'Accent gradient classes',
       type: 'string',
-      description: 'e.g., "from-blue-600 to-blue-400"',
-      fieldset: 'header',
+      description: 'Example: `from-blue-600 to-blue-400`.',
+      group: 'card',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'order',
-      title: 'Order',
+      title: 'List order',
       type: 'number',
-      description: 'Used to sort projects. Lower numbers appear first.',
-      fieldset: 'header',
+      description: 'Lower numbers appear first.',
+      group: 'card',
     }),
     defineField({
       name: 'role',
       title: 'Role (legacy fallback)',
       type: 'string',
       hidden: true,
-      fieldset: 'details',
+      group: 'details',
     }),
     defineField({
       name: 'roleI18n',
-      title: 'Localized Role',
+      title: 'Role',
       type: 'localizedString',
       description: localizedStringDescription,
-      fieldset: 'details',
+      group: 'details',
       validation: (Rule) =>
         Rule.custom((value) =>
           hasLocalizedValue(value) ? true : 'Provide at least one localized role.'
@@ -137,7 +151,7 @@ export default defineType({
       name: 'year',
       title: 'Year',
       type: 'string',
-      fieldset: 'details',
+      group: 'details',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -145,14 +159,14 @@ export default defineType({
       title: 'Client (legacy fallback)',
       type: 'string',
       hidden: true,
-      fieldset: 'details',
+      group: 'details',
     }),
     defineField({
       name: 'clientI18n',
-      title: 'Localized Client',
+      title: 'Client',
       type: 'localizedString',
       description: localizedStringDescription,
-      fieldset: 'details',
+      group: 'details',
       validation: (Rule) =>
         Rule.custom((value) =>
           hasLocalizedValue(value) ? true : 'Provide at least one localized client name.'
@@ -160,25 +174,48 @@ export default defineType({
     }),
     defineField({
       name: 'stack',
-      title: 'Tech Stack',
+      title: 'Tech stack (legacy fallback)',
       type: 'array',
       of: [{type: 'string'}],
-      fieldset: 'details',
-      validation: (Rule) => Rule.required().min(1),
+      description: 'Legacy fallback. Use "Technology stack" below for new content.',
+      group: 'details',
+      hidden: true,
+    }),
+    defineField({
+      name: 'technologyStack',
+      title: 'Technology stack',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'technology'}],
+        },
+      ],
+      description: 'Preferred structured stack field. Reuse shared technology documents.',
+      group: 'details',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const document = context.document as {stack?: string[]} | undefined
+          const hasLegacyStack = Array.isArray(document?.stack) && document!.stack!.length > 0
+          const hasStructuredStack = Array.isArray(value) && value.length > 0
+          return hasStructuredStack || hasLegacyStack
+            ? true
+            : 'Provide at least one technology in the stack.'
+        }),
     }),
     defineField({
       name: 'description',
       title: 'Description (legacy fallback)',
       type: 'text',
       hidden: true,
-      fieldset: 'content',
+      group: 'page',
     }),
     defineField({
       name: 'descriptionI18n',
-      title: 'Localized Description',
+      title: 'Overview',
       type: 'localizedText',
-      description: localizedTextDescription,
-      fieldset: 'content',
+      description: 'Introductory copy shown in the "Overview" section.',
+      group: 'page',
       validation: (Rule) =>
         Rule.custom((value) =>
           hasLocalizedValue(value) ? true : 'Provide at least one localized description.'
@@ -189,14 +226,14 @@ export default defineType({
       title: 'Challenge (legacy fallback)',
       type: 'text',
       hidden: true,
-      fieldset: 'content',
+      group: 'page',
     }),
     defineField({
       name: 'challengeI18n',
-      title: 'Localized Challenge',
+      title: 'Challenge section',
       type: 'localizedText',
-      description: localizedTextDescription,
-      fieldset: 'content',
+      description: 'Text shown in the dedicated challenge block.',
+      group: 'page',
       validation: (Rule) =>
         Rule.custom((value) =>
           hasLocalizedValue(value) ? true : 'Provide at least one localized challenge.'
@@ -207,29 +244,59 @@ export default defineType({
       title: 'Solution (legacy fallback)',
       type: 'text',
       hidden: true,
-      fieldset: 'content',
+      group: 'page',
     }),
     defineField({
       name: 'solutionI18n',
-      title: 'Localized Solution',
+      title: 'Main solution section',
       type: 'localizedText',
-      description: localizedTextDescription,
-      fieldset: 'content',
+      description:
+        'This is the main solution text block. Use "Content flow blocks" below only for extra inline text/image sections.',
+      group: 'page',
       validation: (Rule) =>
         Rule.custom((value) =>
           hasLocalizedValue(value) ? true : 'Provide at least one localized solution.'
         ),
     }),
     defineField({
+      name: 'solutionPlacement',
+      title: 'Main solution position',
+      type: 'string',
+      initialValue: 'afterChallenge',
+      description: 'Choose where the main solution section should appear on the project page.',
+      options: {
+        layout: 'radio',
+        list: [
+          {title: 'Right after the challenge', value: 'afterChallenge'},
+          {title: 'After the content flow blocks', value: 'afterGallery'},
+        ],
+      },
+      hidden: ({document}) => !hasLocalizedValue(document?.solutionI18n) && !document?.solution,
+      group: 'page',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const document = context.document as {solution?: string; solutionI18n?: {en?: string; ptBr?: string}} | undefined
+          const hasSolution = hasLocalizedValue(document?.solutionI18n) || Boolean(document?.solution?.trim())
+          return !hasSolution || value ? true : 'Choose where the main solution section should appear.'
+        }),
+    }),
+    defineField({
       name: 'gallery',
-      title: 'Gallery',
+      title: 'Content flow blocks',
       type: 'array',
+      description:
+        'Add images and optional inline text blocks in the exact order they should appear on the page.',
       of: [
-        {type: 'image'},
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+        },
         {
           type: 'object',
           name: 'solution',
-          title: 'Solution Block',
+          title: 'Inline text block',
           fields: [
             {
               name: 'text',
@@ -240,20 +307,34 @@ export default defineType({
             },
             {
               name: 'textI18n',
-              title: 'Localized Content',
+              title: 'Inline content',
               type: 'localizedText',
-              description: localizedTextDescription,
+              description:
+                'Use this for supporting copy between images. This does not replace the main solution section above.',
               validation: (Rule) =>
                 Rule.custom((value) =>
                   hasLocalizedValue(value)
                     ? true
-                    : 'Provide at least one localized content value for each solution block.'
+                    : 'Provide at least one localized content value for each inline text block.'
                 ),
             },
           ],
+          preview: {
+            select: {
+              ptBr: 'textI18n.ptBr',
+              en: 'textI18n.en',
+            },
+            prepare(selection) {
+              const text = selection.ptBr || selection.en || 'Empty inline text block'
+              return {
+                title: 'Inline text block',
+                subtitle: text.slice(0, 80),
+              }
+            },
+          },
         },
       ],
-      fieldset: 'content',
+      group: 'page',
       validation: (Rule) => Rule.required().min(1),
     }),
   ],

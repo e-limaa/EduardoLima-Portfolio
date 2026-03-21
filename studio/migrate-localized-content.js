@@ -49,6 +49,8 @@ async function migrateProjects() {
     titleI18n,
     metricLabel,
     metricLabelI18n,
+    metric,
+    metricI18n,
     role,
     roleI18n,
     client,
@@ -71,6 +73,7 @@ async function migrateProjects() {
     const localizedFields = [
       ['titleI18n', project.titleI18n, project.title],
       ['metricLabelI18n', project.metricLabelI18n, project.metricLabel],
+      ['metricI18n', project.metricI18n, project.metric],
       ['roleI18n', project.roleI18n, project.role],
       ['clientI18n', project.clientI18n, project.client],
       ['descriptionI18n', project.descriptionI18n, project.description],

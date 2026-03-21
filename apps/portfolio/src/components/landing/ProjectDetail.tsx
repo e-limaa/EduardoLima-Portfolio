@@ -44,6 +44,32 @@ export const ProjectDetail = () => {
   if (!project) return null
 
   const mainImageUrl = getImageUrl(project.mainImage)
+  const scrollReveal = {
+    initial: {opacity: 0, y: 28},
+    whileInView: {opacity: 1, y: 0},
+    viewport: {once: true, amount: 0.35},
+    transition: {duration: 0.7, ease: [0.22, 1, 0.36, 1]},
+  } as const
+  const shouldRenderMainSolution = Boolean(project.solution?.trim())
+  const renderMainSolution = () =>
+    shouldRenderMainSolution ? (
+      <section className="flex min-w-0 flex-1 flex-col gap-4">
+        <motion.h3
+          {...scrollReveal}
+          className="text-body-lg font-mono uppercase tracking-[0.18em] text-muted-foreground"
+        >
+          {t('project.solution')}
+        </motion.h3>
+        <motion.div
+          {...scrollReveal}
+          transition={{...scrollReveal.transition, delay: 0.18}}
+          className="text-base leading-[1.625] text-muted-foreground"
+        >
+          {project.solution}
+        </motion.div>
+      </section>
+    ) : null
+  const shouldRenderSolutionBeforeGallery = project.solutionPlacement !== 'afterGallery'
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary/20 transition-colors duration-300">
@@ -164,16 +190,44 @@ export const ProjectDetail = () => {
       <main className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 py-20">
         <div className="flex flex-col gap-16">
           <div className="flex flex-col gap-16">
-            <section>
-              <h3 className="text-heading-md font-bold text-foreground mb-6">{t('project.overview')}</h3>
-              <div className="text-heading-sm text-muted-foreground font-light leading-relaxed">
-                {project.description}
+            <section className="flex flex-col gap-16">
+              <div className="border-b border-border pb-12">
+                <motion.h3
+                  {...scrollReveal}
+                  className="mb-6 text-heading-sm font-bold tracking-tight text-foreground md:text-heading-md"
+                >
+                  {t('project.overview')}
+                </motion.h3>
+                <motion.div
+                  {...scrollReveal}
+                  transition={{...scrollReveal.transition, delay: 0.18}}
+                  className="max-w-none text-base font-normal leading-[1.625] text-muted-foreground md:max-w-[95%]"
+                >
+                  {project.description}
+                </motion.div>
               </div>
-            </section>
 
-            <section className="rounded-lg border border-border bg-card/70 p-8">
-              <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">{t('project.challenge')}</h3>
-              <div className="text-muted-foreground leading-relaxed">{project.challenge}</div>
+              <div className="flex flex-col gap-16 md:flex-row md:gap-16">
+                <section className="flex min-w-0 flex-1 flex-col gap-4">
+                  <motion.h3
+                    {...scrollReveal}
+                    className="text-body-lg font-mono uppercase tracking-[0.18em] text-muted-foreground"
+                  >
+                    {t('project.challenge')}
+                  </motion.h3>
+                  <motion.div
+                    {...scrollReveal}
+                    transition={{...scrollReveal.transition, delay: 0.18}}
+                    className="text-base leading-[1.625] text-muted-foreground"
+                  >
+                    {project.challenge}
+                  </motion.div>
+                </section>
+
+                {shouldRenderMainSolution && <div className="hidden w-px self-stretch rounded-full bg-muted md:block" />}
+
+                {shouldRenderSolutionBeforeGallery && renderMainSolution()}
+              </div>
             </section>
 
             <section>
@@ -186,10 +240,21 @@ export const ProjectDetail = () => {
                         initial={{opacity: 0, y: 20}}
                         whileInView={{opacity: 1, y: 0}}
                         viewport={{once: true}}
-                        className="my-8 rounded-lg border border-border bg-card/70 p-8"
+                        className="my-8 flex min-w-0 flex-col gap-4 md:max-w-[47.3%]"
                       >
-                        <h3 className="text-body-lg font-mono uppercase tracking-widest text-muted-foreground mb-4">{t('project.solution')}</h3>
-                        <div className="text-muted-foreground leading-relaxed">{item.text}</div>
+                        <motion.h3
+                          {...scrollReveal}
+                          className="text-body-lg font-mono uppercase tracking-[0.18em] text-muted-foreground"
+                        >
+                          {t('project.solution')}
+                        </motion.h3>
+                        <motion.div
+                          {...scrollReveal}
+                          transition={{...scrollReveal.transition, delay: 0.18}}
+                          className="text-base leading-[1.625] text-muted-foreground"
+                        >
+                          {item.text}
+                        </motion.div>
                       </motion.section>
                     )
                   }
@@ -216,6 +281,8 @@ export const ProjectDetail = () => {
                 })}
               </div>
             </section>
+
+            {!shouldRenderSolutionBeforeGallery && renderMainSolution()}
           </div>
         </div>
       </main>

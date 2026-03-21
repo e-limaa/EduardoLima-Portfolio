@@ -30,11 +30,15 @@ const projectFields = `
       "text": coalesce(textI18n[$locale], textI18n.ptBr, textI18n.en, text, "")
     }
   },
-  stack,
+  "stack": select(
+    defined(technologyStack) && count(technologyStack) > 0 => technologyStack[]->{ "label": coalesce(labelI18n[$locale], labelI18n.ptBr, labelI18n.en, name, "") }.label,
+    stack
+  ),
   year,
-  metric,
+  "metric": coalesce(metricI18n[$locale], metricI18n.ptBr, metricI18n.en, metric, ""),
   color,
   order,
+  "solutionPlacement": coalesce(solutionPlacement, "afterChallenge"),
   "title": coalesce(titleI18n[$locale], titleI18n.ptBr, titleI18n.en, title, ""),
   "category": ${categoryTitleExpression},
   "categoryKind": ${categoryKindExpression},

@@ -12,6 +12,7 @@ export interface SolutionBlock {
 }
 
 export type ProjectCategoryKind = 'ui' | 'study'
+export type ProjectSolutionPlacement = 'afterChallenge' | 'afterGallery'
 
 export interface Project {
   _id: string
@@ -25,6 +26,7 @@ export interface Project {
   description: string
   challenge: string
   solution: string
+  solutionPlacement?: ProjectSolutionPlacement | string
   mainImage: string | SanityImage
   thumbnail?: string | SanityImage
   gallery: Array<string | SanityImage | SolutionBlock>

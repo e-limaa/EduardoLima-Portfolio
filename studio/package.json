@@ -11,6 +11,7 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "migrate:localized": "node migrate-localized-content.js",
+    "migrate:technology-stack": "node migrate-technology-stack.js",
     "audit:localized": "node audit-localized-content.js"
   },
   "keywords": [

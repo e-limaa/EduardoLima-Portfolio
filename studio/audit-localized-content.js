@@ -17,6 +17,7 @@ const client = createClient({
 const projectFields = [
   'titleI18n',
   'metricLabelI18n',
+  'metricI18n',
   'roleI18n',
   'clientI18n',
   'descriptionI18n',
@@ -30,6 +31,7 @@ async function main() {
     title,
     titleI18n,
     metricLabelI18n,
+    metricI18n,
     roleI18n,
     clientI18n,
     descriptionI18n,
