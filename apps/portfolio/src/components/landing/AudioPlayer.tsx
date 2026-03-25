@@ -136,7 +136,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
         flex items-center gap-3 px-3 py-1.5 md:px-4 md:py-2 rounded-full 
         bg-card/80 backdrop-blur-md 
         border border-border/70 
-        shadow-lg transition-all duration-300
+        shadow-lg transition-[padding,background-color,border-color,box-shadow] duration-300
         ${isHovered ? "pr-4" : "pr-2"}
       `}>
                 {/* Track Info (Visible on Hover) */}

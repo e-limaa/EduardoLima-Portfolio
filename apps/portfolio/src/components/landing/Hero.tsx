@@ -166,7 +166,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-foreground leading-[0.9] pointer-events-auto"
+            className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-balance text-foreground leading-[0.9] pointer-events-auto"
           >
             <TrueFocus
               priority
@@ -209,7 +209,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="mt-8 text-body-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 font-light pointer-events-auto"
+            className="mt-8 max-w-lg mx-auto text-body-lg font-light text-pretty text-muted-foreground pointer-events-auto lg:mx-0"
           >
             {t("hero.description")}
           </motion.p>

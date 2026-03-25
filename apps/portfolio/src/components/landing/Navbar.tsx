@@ -88,7 +88,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
               ref={scrollRef}
               onScroll={checkScroll}
               style={maskImage ? { maskImage, WebkitMaskImage: maskImage } : undefined}
-              className="list-none m-0 -my-2 p-0 flex items-center gap-1.5 sm:gap-2 px-1 py-3 sm:-my-2 sm:px-2 sm:py-3 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transition-all"
+              className="list-none m-0 -my-2 p-0 flex items-center gap-1.5 sm:gap-2 px-1 py-3 sm:-my-2 sm:px-2 sm:py-3 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             >
               {navItems.map((item) => (
                 <li key={item.id} className="flex-shrink-0">

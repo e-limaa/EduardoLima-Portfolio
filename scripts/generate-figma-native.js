@@ -1,20 +1,56 @@
 const fs = require('fs');
 const path = require('path');
 
-// ── Read source tokens ──────────────────────────────────────────────
-const sourcePath = path.join(__dirname, '../limia-tokens.json');
-const tokens = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
+const rootDir = path.join(__dirname, '..');
+const primitivesPath = path.join(rootDir, 'packages', 'limia-tokens', 'tokens', 'primitives.json');
+const semanticPath = path.join(rootDir, 'packages', 'limia-tokens', 'tokens', 'semantic.json');
 
-// ── Helpers ─────────────────────────────────────────────────────────
+const primitives = JSON.parse(fs.readFileSync(primitivesPath, 'utf8'));
+const semantic = JSON.parse(fs.readFileSync(semanticPath, 'utf8'));
 
-/**
- * Convert hex color string to Figma's native color object.
- */
+function flattenObject(obj, prefix = '') {
+    const result = {};
+
+    Object.entries(obj).forEach(([key, value]) => {
+        const nextKey = prefix ? `${prefix}/${key}` : key;
+
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            Object.assign(result, flattenObject(value, nextKey));
+            return;
+        }
+
+        result[nextKey] = value;
+    });
+
+    return result;
+}
+
+function setNested(obj, keys, value) {
+    let current = obj;
+
+    for (let index = 0; index < keys.length - 1; index += 1) {
+        const key = keys[index];
+        if (!current[key]) current[key] = {};
+        current = current[key];
+    }
+
+    current[keys[keys.length - 1]] = value;
+}
+
+function isColorString(value) {
+    return typeof value === 'string' && (
+        value.startsWith('#') ||
+        value.startsWith('rgb') ||
+        value.startsWith('hsl') ||
+        value.startsWith('oklch')
+    );
+}
+
 function hexToFigmaColor(hex) {
     const clean = hex.replace('#', '');
-    const r = parseInt(clean.substring(0, 2), 16) / 255;
-    const g = parseInt(clean.substring(2, 4), 16) / 255;
-    const b = parseInt(clean.substring(4, 6), 16) / 255;
+    const r = parseInt(clean.slice(0, 2), 16) / 255;
+    const g = parseInt(clean.slice(2, 4), 16) / 255;
+    const b = parseInt(clean.slice(4, 6), 16) / 255;
 
     return {
         colorSpace: 'srgb',
@@ -24,9 +60,6 @@ function hexToFigmaColor(hex) {
     };
 }
 
-/**
- * Convert oklch() string to hex.
- */
 function oklchToHex(oklchStr) {
     const match = oklchStr.match(/oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/);
     if (!match) return null;
@@ -34,292 +67,288 @@ function oklchToHex(oklchStr) {
     const L = parseFloat(match[1]);
     const C = parseFloat(match[2]);
     const h = parseFloat(match[3]);
-
     const hRad = h * (Math.PI / 180);
     const a = C * Math.cos(hRad);
     const bLab = C * Math.sin(hRad);
 
     const l_ = L + 0.3963377774 * a + 0.2158037573 * bLab;
     const m_ = L - 0.1055613458 * a - 0.0638541728 * bLab;
-    const s_ = L - 0.0894841775 * a - 1.2914855480 * bLab;
+    const s_ = L - 0.0894841775 * a - 1.291485548 * bLab;
 
-    const l = l_ * l_ * l_;
-    const m = m_ * m_ * m_;
-    const s = s_ * s_ * s_;
+    const l = l_ ** 3;
+    const m = m_ ** 3;
+    const s = s_ ** 3;
 
     let rLin = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
     let gLin = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
-    let bLin = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+    let bLin = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
 
-    function toSRGB(c) {
-        return c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1.0 / 2.4) - 0.055;
+    function toSRGB(channel) {
+        return channel <= 0.0031308
+            ? 12.92 * channel
+            : 1.055 * Math.pow(channel, 1 / 2.4) - 0.055;
     }
 
     rLin = Math.max(0, Math.min(1, toSRGB(rLin)));
     gLin = Math.max(0, Math.min(1, toSRGB(gLin)));
     bLin = Math.max(0, Math.min(1, toSRGB(bLin)));
 
-    const rH = Math.round(rLin * 255).toString(16).padStart(2, '0');
-    const gH = Math.round(gLin * 255).toString(16).padStart(2, '0');
-    const bH = Math.round(bLin * 255).toString(16).padStart(2, '0');
+    const rHex = Math.round(rLin * 255).toString(16).padStart(2, '0');
+    const gHex = Math.round(gLin * 255).toString(16).padStart(2, '0');
+    const bHex = Math.round(bLin * 255).toString(16).padStart(2, '0');
 
-    return `#${rH}${gH}${bH}`;
+    return `#${rHex}${gHex}${bHex}`;
 }
 
-/**
- * Convert rem / px / calc values to a raw px number.
- */
 function toPx(value) {
     if (typeof value === 'number') return value;
     if (typeof value !== 'string') return value;
 
     if (value.startsWith('calc(')) {
-        let inner = value.slice(5, -1);
-        inner = inner.replace(/(\d+(?:\.\d+)?)rem/g, (_, v) => `${parseFloat(v) * 16}`);
-        inner = inner.replace(/px/g, '');
-        try { return eval(inner); } catch { return value; }
+        let expression = value.slice(5, -1);
+        expression = expression.replace(/(\d+(?:\.\d+)?)rem/g, (_, numberValue) => `${parseFloat(numberValue) * 16}`);
+        expression = expression.replace(/px/g, '');
+
+        try {
+            return Function(`return (${expression});`)();
+        } catch {
+            return value;
+        }
     }
-    if (value.includes('rem')) return parseFloat(value) * 16;
-    if (value.includes('px')) return parseFloat(value);
+
+    if (value.endsWith('rem')) return parseFloat(value) * 16;
+    if (value.endsWith('px')) return parseFloat(value);
 
     return value;
 }
 
-/**
- * Set a value at a nested path inside an object.
- */
-function setNested(obj, keys, value) {
-    let cur = obj;
-    for (let i = 0; i < keys.length - 1; i++) {
-        if (!cur[keys[i]]) cur[keys[i]] = {};
-        cur = cur[keys[i]];
-    }
-    cur[keys[keys.length - 1]] = value;
+const primitiveFlat = flattenObject(primitives);
+
+function resolvePrimitiveReference(reference) {
+    const slashKey = reference.replace(/\./g, '/');
+    return primitiveFlat[slashKey];
 }
 
-/**
- * Check if value is a color string.
- */
-function isColorString(v) {
-    return typeof v === 'string' &&
-        (v.startsWith('#') || v.startsWith('rgb') || v.startsWith('hsl') || v.startsWith('oklch'));
+function resolveSemanticValue(value) {
+    if (typeof value !== 'string') return value;
+
+    const aliasMatch = value.match(/^\{(.+)\}$/);
+    if (!aliasMatch) return value;
+
+    const resolved = resolvePrimitiveReference(aliasMatch[1]);
+    return resolved === undefined ? value : resolved;
 }
 
-// ── ARQUIVO 1: Primitives ───────────────────────────────────────────
+function resolveObject(obj) {
+    const result = Array.isArray(obj) ? [] : {};
 
-const primitivesTree = {};
-const primitiveLookup = {}; // for resolving semantic aliases
+    Object.entries(obj).forEach(([key, value]) => {
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            result[key] = resolveObject(value);
+            return;
+        }
 
-Object.entries(tokens).forEach(([flatKey, rawValue]) => {
-    if (!flatKey.startsWith('primitives/')) return;
+        result[key] = resolveSemanticValue(value);
+    });
 
-    const relKey = flatKey.replace('primitives/', '');
-    const segments = relKey.split('/');
+    return result;
+}
 
-    // Skip CSS var() references (e.g. fontFamily)
-    if (typeof rawValue === 'string' && rawValue.startsWith('var(')) return;
-
-    let resolved = rawValue;
-
-    // Convert oklch → hex
-    if (typeof resolved === 'string' && resolved.startsWith('oklch')) {
-        resolved = oklchToHex(resolved) || resolved;
+function normalizeFigmaValue(value) {
+    if (typeof value === 'string' && value.startsWith('oklch(')) {
+        return oklchToHex(value) || value;
     }
 
-    // Store for semantic alias resolution
-    primitiveLookup[relKey] = resolved;
+    return value;
+}
 
-    if (isColorString(resolved)) {
-        setNested(primitivesTree, segments, {
+function toFigmaTokenValue(value) {
+    const normalized = normalizeFigmaValue(value);
+
+    if (isColorString(normalized)) {
+        return {
             $type: 'color',
-            $value: hexToFigmaColor(resolved)
-        });
-    } else {
-        const px = toPx(resolved);
-        if (typeof px === 'number') {
-            setNested(primitivesTree, segments, { $type: 'number', $value: px });
-        } else {
-            setNested(primitivesTree, segments, { $type: 'string', $value: String(resolved) });
-        }
+            $value: hexToFigmaColor(normalized)
+        };
     }
-});
 
-// ── ARQUIVO 2: Semantic (Light + Dark, valores resolvidos + $description) ──
-
-const lightTree = {};
-const darkTree = {};
-
-// Track alias mappings for reference guide
-const aliasMappings = []; // { semantic, light, dark }
-
-// Collect all semantic keys (from light, we assume dark has same keys)
-const semanticKeys = new Set();
-Object.keys(tokens).forEach(k => {
-    if (k.startsWith('semantic/light/')) semanticKeys.add(k.replace('semantic/light/', ''));
-    if (k.startsWith('semantic/dark/')) semanticKeys.add(k.replace('semantic/dark/', ''));
-});
-
-// Build light and dark alias lookups
-const lightAliases = {};  // relKey → alias ref string
-const darkAliases = {};
-
-Object.entries(tokens).forEach(([flatKey, rawValue]) => {
-    if (flatKey.startsWith('semantic/light/')) {
-        const relKey = flatKey.replace('semantic/light/', '');
-        if (typeof rawValue === 'string' && rawValue.startsWith('{') && rawValue.endsWith('}')) {
-            lightAliases[relKey] = rawValue.slice(1, -1); // "color.zinc.100"
-        }
+    const px = toPx(normalized);
+    if (typeof px === 'number' && Number.isFinite(px)) {
+        return {
+            $type: 'number',
+            $value: px
+        };
     }
-    if (flatKey.startsWith('semantic/dark/')) {
-        const relKey = flatKey.replace('semantic/dark/', '');
-        if (typeof rawValue === 'string' && rawValue.startsWith('{') && rawValue.endsWith('}')) {
-            darkAliases[relKey] = rawValue.slice(1, -1);
-        }
-    }
-});
 
-function processSemanticTokens(prefix, target, aliasMap) {
-    Object.entries(tokens).forEach(([flatKey, rawValue]) => {
-        if (!flatKey.startsWith(prefix)) return;
+    return {
+        $type: 'string',
+        $value: String(normalized)
+    };
+}
 
-        const relKey = flatKey.replace(prefix, '');
-        const segments = relKey.split('/');
+function buildPrimitiveFigmaTree() {
+    const tree = {};
 
-        let resolved = rawValue;
-        let aliasRef = null;
+    Object.entries(primitiveFlat).forEach(([key, value]) => {
+        setNested(tree, key.split('/'), toFigmaTokenValue(value));
+    });
 
-        // Resolve alias references like "{color.zinc.100}" → lookup hex value
-        if (typeof resolved === 'string' && resolved.startsWith('{') && resolved.endsWith('}')) {
-            aliasRef = resolved.slice(1, -1);             // "color.zinc.100"
-            const lookupKey = aliasRef.replace(/\./g, '/'); // "color/zinc/100"
+    return tree;
+}
 
-            if (primitiveLookup[lookupKey] !== undefined) {
-                resolved = primitiveLookup[lookupKey];
-            }
-        }
+function buildSemanticFigmaTree(modeValues, rawModeValues) {
+    const tree = {};
+    const flatMode = flattenObject(modeValues);
 
-        // oklch fallback
-        if (typeof resolved === 'string' && resolved.startsWith('oklch')) {
-            resolved = oklchToHex(resolved) || resolved;
+    Object.entries(flatMode).forEach(([key, resolvedValue]) => {
+        const rawSegments = key.split('/');
+        const rawValue = rawSegments.reduce((current, segment) => current[segment], rawModeValues);
+        const tokenEntry = toFigmaTokenValue(resolvedValue);
+        const aliasMatch = typeof rawValue === 'string' && rawValue.match(/^\{(.+)\}$/);
+
+        if (aliasMatch) {
+            tokenEntry.$description = `Alias -> ${aliasMatch[1].replace(/\./g, '/')}`;
         }
 
-        // Build token entry with resolved values + description
-        let tokenEntry;
-        const aliasPath = aliasRef ? aliasRef.replace(/\./g, '/') : null;
-        const description = aliasPath ? `Alias → ${aliasPath}` : null;
+        setNested(tree, rawSegments, tokenEntry);
+    });
 
-        if (isColorString(resolved)) {
-            tokenEntry = { $type: 'color', $value: hexToFigmaColor(resolved) };
-        } else {
-            const px = toPx(resolved);
-            if (typeof px === 'number') {
-                tokenEntry = { $type: 'number', $value: px };
-            } else {
-                tokenEntry = { $type: 'string', $value: String(resolved) };
-            }
-        }
+    return tree;
+}
 
-        if (description) {
-            tokenEntry.$description = description;
-        }
+function buildAliasMappings() {
+    const lightFlat = flattenObject(semantic.light);
+    const darkFlat = flattenObject(semantic.dark);
+    const semanticKeys = Array.from(new Set([
+        ...Object.keys(lightFlat),
+        ...Object.keys(darkFlat)
+    ])).sort();
 
-        setNested(target, segments, tokenEntry);
+    return semanticKeys.map((key) => {
+        const lightRaw = lightFlat[key];
+        const darkRaw = darkFlat[key];
+        const lightAlias = typeof lightRaw === 'string' && lightRaw.match(/^\{(.+)\}$/)
+            ? lightRaw.slice(1, -1).replace(/\./g, '/')
+            : '(valor direto)';
+        const darkAlias = typeof darkRaw === 'string' && darkRaw.match(/^\{(.+)\}$/)
+            ? darkRaw.slice(1, -1).replace(/\./g, '/')
+            : '(valor direto)';
+
+        return {
+            semantic: key,
+            light: lightAlias,
+            dark: darkAlias
+        };
     });
 }
 
-processSemanticTokens('semantic/light/', lightTree, lightAliases);
-processSemanticTokens('semantic/dark/', darkTree, darkAliases);
+const semanticResolved = {
+    light: resolveObject(semantic.light),
+    dark: resolveObject(semantic.dark)
+};
 
-// Build mappings table
-semanticKeys.forEach(relKey => {
-    const lightRef = lightAliases[relKey];
-    const darkRef = darkAliases[relKey];
-    aliasMappings.push({
-        semantic: relKey,
-        light: lightRef ? lightRef.replace(/\./g, '/') : '(valor direto)',
-        dark: darkRef ? darkRef.replace(/\./g, '/') : '(valor direto)'
+const figmaVariablesFlat = {
+    primitives: Object.fromEntries(
+        Object.entries(primitiveFlat).map(([key, value]) => [key, normalizeFigmaValue(value)])
+    ),
+    semantic: {
+        light: Object.fromEntries(
+            Object.entries(flattenObject(semanticResolved.light)).map(([key, value]) => [key, normalizeFigmaValue(value)])
+        ),
+        dark: Object.fromEntries(
+            Object.entries(flattenObject(semanticResolved.dark)).map(([key, value]) => [key, normalizeFigmaValue(value)])
+        )
+    }
+};
+
+const consolidatedExport = {
+    ds: 'Limia',
+    generatedAt: new Date().toISOString(),
+    source: {
+        primitives: path.relative(rootDir, primitivesPath).replace(/\\/g, '/'),
+        semantic: path.relative(rootDir, semanticPath).replace(/\\/g, '/')
+    },
+    tokens: {
+        primitives,
+        semanticRaw: semantic,
+        semanticResolved
+    },
+    figmaVariablesFlat
+};
+
+const aliasMappings = buildAliasMappings();
+const groupedMappings = aliasMappings.reduce((accumulator, mapping) => {
+    const category = mapping.semantic.split('/')[0];
+    if (!accumulator[category]) accumulator[category] = [];
+    accumulator[category].push(mapping);
+    return accumulator;
+}, {});
+
+let aliasMapMarkdown = '# 🔗 Mapa de Aliases — Semantic → Primitives\n\n';
+aliasMapMarkdown += 'Após importar os JSONs no Figma, use esta tabela para criar os aliases manualmente.\n';
+aliasMapMarkdown += 'Para cada variável semântica, clique nela no Figma → troque o valor para **"Alias"** → selecione o primitivo indicado.\n\n';
+aliasMapMarkdown += '> **Dica**: No Figma, a descrição de cada variável semântica já contém o alias (ex: `Alias -> color/zinc/100`).\n\n';
+aliasMapMarkdown += '## Como importar\n\n';
+aliasMapMarkdown += '1. Importe `limia-figma-primitives.json` → cria collection **Primitives**\n';
+aliasMapMarkdown += '2. Importe `limia-figma-semantic-light.json` → cria collection **Semantic** (modo Light)\n';
+aliasMapMarkdown += '3. Importe `limia-figma-semantic-dark.json` → **na mesma collection Semantic** → cria modo **Dark** como coluna\n\n';
+
+Object.entries(groupedMappings).forEach(([category, mappings]) => {
+    const title = category.charAt(0).toUpperCase() + category.slice(1);
+    aliasMapMarkdown += `## ${title}\n\n`;
+    aliasMapMarkdown += '| Variável Semântica | Light → Primitivo | Dark → Primitivo |\n';
+    aliasMapMarkdown += '|---|---|---|\n';
+
+    mappings.forEach((mapping) => {
+        aliasMapMarkdown += `| \`${mapping.semantic}\` | \`${mapping.light}\` | \`${mapping.dark}\` |\n`;
     });
+
+    aliasMapMarkdown += '\n';
 });
 
-// ── Write files ─────────────────────────────────────────────────────
-
-const outDir = path.join(__dirname, '..');
-
-// File 1: Primitives (single mode)
-const primitivesOutput = {
-    ...primitivesTree,
+const primitiveFigmaOutput = {
+    ...buildPrimitiveFigmaTree(),
     $extensions: { 'com.figma.modeName': 'Primitives' }
 };
 
-// File 2a: Semantic Light (variables at root, not nested under "Light")
-const lightOutput = {
-    ...lightTree,
+const semanticLightFigmaOutput = {
+    ...buildSemanticFigmaTree(semanticResolved.light, semantic.light),
     $extensions: { 'com.figma.modeName': 'Light' }
 };
 
-// File 2b: Semantic Dark (same structure, different values)
-const darkOutput = {
-    ...darkTree,
+const semanticDarkFigmaOutput = {
+    ...buildSemanticFigmaTree(semanticResolved.dark, semantic.dark),
     $extensions: { 'com.figma.modeName': 'Dark' }
 };
 
 fs.writeFileSync(
-    path.join(outDir, 'limia-figma-primitives.json'),
-    JSON.stringify(primitivesOutput, null, 2)
+    path.join(rootDir, 'limia-ds-variables-for-figma.json'),
+    `${JSON.stringify(consolidatedExport, null, 2)}\n`
 );
 
 fs.writeFileSync(
-    path.join(outDir, 'limia-figma-semantic-light.json'),
-    JSON.stringify(lightOutput, null, 2)
+    path.join(rootDir, 'limia-figma-primitives.json'),
+    `${JSON.stringify(primitiveFigmaOutput, null, 2)}\n`
 );
 
 fs.writeFileSync(
-    path.join(outDir, 'limia-figma-semantic-dark.json'),
-    JSON.stringify(darkOutput, null, 2)
+    path.join(rootDir, 'limia-figma-semantic-light.json'),
+    `${JSON.stringify(semanticLightFigmaOutput, null, 2)}\n`
 );
 
-// File 3: Alias mapping guide (Markdown)
-let md = `# 🔗 Mapa de Aliases — Semantic → Primitives\n\n`;
-md += `Após importar os JSONs no Figma, use esta tabela para criar os aliases manualmente.\n`;
-md += `Para cada variável semântica, clique nela no Figma → troque o valor para **"Alias"** → selecione o primitivo indicado.\n\n`;
-md += `> **Dica**: No Figma, a descrição de cada variável semântica já contém o alias (ex: \`Alias → color/zinc/100\`).\n\n`;
-md += `## Como importar\n\n`;
-md += `1. Importe \`limia-figma-primitives.json\` → cria collection **Primitives**\n`;
-md += `2. Importe \`limia-figma-semantic-light.json\` → cria collection **Semantic** (modo Light)\n`;
-md += `3. Importe \`limia-figma-semantic-dark.json\` → **na mesma collection Semantic** → cria modo **Dark** como coluna\n\n`;
+fs.writeFileSync(
+    path.join(rootDir, 'limia-figma-semantic-dark.json'),
+    `${JSON.stringify(semanticDarkFigmaOutput, null, 2)}\n`
+);
 
-// Group by category
-const categories = {};
-aliasMappings.forEach(m => {
-    const cat = m.semantic.split('/')[0];
-    if (!categories[cat]) categories[cat] = [];
-    categories[cat].push(m);
-});
-
-Object.entries(categories).forEach(([cat, mappings]) => {
-    md += `## ${cat.charAt(0).toUpperCase() + cat.slice(1)}\n\n`;
-    md += `| Variável Semântica | Light → Primitivo | Dark → Primitivo |\n`;
-    md += `|---|---|---|\n`;
-    mappings.forEach(m => {
-        md += `| \`${m.semantic}\` | \`${m.light}\` | \`${m.dark}\` |\n`;
-    });
-    md += `\n`;
-});
-
-fs.writeFileSync(path.join(outDir, 'alias-map.md'), md);
-
-// Clean up old single semantic file
-const oldFile = path.join(outDir, 'limia-figma-semantic.json');
-if (fs.existsSync(oldFile)) fs.unlinkSync(oldFile);
+fs.writeFileSync(
+    path.join(rootDir, 'alias-map.md'),
+    aliasMapMarkdown
+);
 
 console.log('✅ Arquivos gerados com sucesso:');
-console.log('   → limia-figma-primitives.json      (collection: Primitives)');
-console.log('   → limia-figma-semantic-light.json   (collection: Semantic, modo: Light)');
-console.log('   → limia-figma-semantic-dark.json    (collection: Semantic, modo: Dark)');
-console.log('   → alias-map.md                      (guia de referência para aliases)');
-console.log('');
-console.log('📋 Para importar no Figma:');
-console.log('   1. Importe primitives → cria collection Primitives');
-console.log('   2. Importe semantic-light → cria collection Semantic (modo Light)');
-console.log('   3. Importe semantic-dark na MESMA collection Semantic → cria modo Dark');
-
+console.log('   → limia-ds-variables-for-figma.json');
+console.log('   → limia-figma-primitives.json');
+console.log('   → limia-figma-semantic-light.json');
+console.log('   → limia-figma-semantic-dark.json');
+console.log('   → alias-map.md');

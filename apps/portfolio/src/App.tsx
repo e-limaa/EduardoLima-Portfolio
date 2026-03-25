@@ -93,7 +93,7 @@ function AppShell({
         - bg-background e text-foreground mapeiam para as variáveis CSS que mudam com o tema 
         - transition-colors permite a troca suave entre dark/light mode
     */}
-      <div className="min-h-screen w-full overflow-x-hidden bg-background font-sans text-foreground selection:bg-primary/20 transition-colors duration-300">
+      <div className="min-h-screen w-full overflow-x-hidden bg-background font-sans text-foreground antialiased selection:bg-primary/20 transition-colors duration-300">
         <AnimatePresence>
           {!hasEntered && !shouldSkipIntro && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
         </AnimatePresence>
