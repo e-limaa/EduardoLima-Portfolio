@@ -7,7 +7,7 @@ import { cn } from "../lib/utils";
 import { t } from "../lib/token";
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-[color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive active:scale-95",
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-[color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter] disabled:pointer-events-none disabled:opacity-50 [&_.limia-icon]:pointer-events-none [&_.limia-icon]:text-current [&_.limia-icon]:shrink-0 [&_.limia-icon:not([class*='size-'])]:size-4 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive active:scale-95",
     {
         variants: {
             variant: {
@@ -23,9 +23,9 @@ const buttonVariants = cva(
                 link: "text-primary underline-offset-4 hover:underline",
             },
             size: {
-                default: "h-10 px-5 py-2 has-[>svg]:px-3 text-sm",
-                sm: "h-8 rounded-full gap-1.5 px-3 has-[>svg]:px-2.5 text-xs",
-                lg: "h-12 rounded-full px-8 has-[>svg]:px-6 text-base",
+                default: "h-10 px-5 py-2 has-[>.limia-icon]:px-3 text-sm",
+                sm: "h-8 rounded-full gap-1.5 px-3 has-[>.limia-icon]:px-2.5 text-xs",
+                lg: "h-12 rounded-full px-8 has-[>.limia-icon]:px-6 text-base",
                 xl: "h-14 rounded-full px-10 text-lg font-bold",
                 icon: "size-10 rounded-full",
                 "icon-xs": "size-7 rounded-full",

@@ -1,0 +1,66 @@
+import { Button, Icon } from '@limia/design-system';
+
+<ComponentPlayground
+  controls={[
+    { name: 'name', type: 'text', defaultValue: 'search' },
+    { name: 'size', type: 'text', defaultValue: '24px' }
+  ]}
+  codeTemplate={(props) => `
+import { Icon } from '@limia/design-system';
+
+export default function Example() {
+  return <Icon name="${props.name}" size="${props.size}" aria-hidden />;
+}
+  `}
+>
+  {(props) => <Icon {...props} aria-hidden />}
+</ComponentPlayground>
+
+## Visão geral
+
+`Icon` renderiza Google Material Symbols Outlined com cantos arredondados por meio dos estilos compartilhados do Limia. Use-o quando precisar de um primitivo único de ícone que herde cor e escale com a tipografia.
+
+## Uso
+
+Passe o nome de ligature publicado pelo Google Fonts, como `search`, `add`, `close` ou `arrow_forward`. Mantenha os ícones decorativos por padrão e adicione nome acessível no controle pai quando o ícone for a única affordance visível.
+
+<ComponentPreview>
+  <div className="flex flex-wrap items-center gap-4 text-foreground">
+    <Icon name="search" size={20} aria-hidden />
+    <Icon name="favorite" size={20} aria-hidden />
+    <Icon name="arrow_forward" size={20} aria-hidden />
+    <Button size="icon" variant="outline" aria-label="Criar item">
+      <Icon name="add" aria-hidden />
+    </Button>
+  </div>
+</ComponentPreview>
+
+## Estilo
+
+Os ícones devem herdar a cor do texto ao redor e se alinhar à ênfase semântica do componente pai. Evite misturar famílias de ícones no mesmo fluxo. Em superfícies de produto, prefira usar `Icon` dentro dos controles do Limia em vez de soltar texto de ligature bruto.
+
+<Callout type="info" title="Google Material Symbols">
+  No código, o Limia renderiza `Material Symbols Outlined` com cantos arredondados. No Figma deste workspace, ainda usamos fallback para a família `Material Icons`, então os nomes dos glyphs continuam alinhados mesmo sem a mesma fonte.
+</Callout>
+
+## Código
+
+Importe `Icon` de `@limia/design-system` e componha-o dentro de componentes como `Button`, triggers de `Select` ou empty states.
+
+```tsx
+import { Button, Icon } from "@limia/design-system";
+
+export function Example() {
+  return (
+    <Button size="icon" variant="outline" aria-label="Buscar">
+      <Icon name="search" aria-hidden />
+    </Button>
+  );
+}
+```
+
+## Acessibilidade
+
+- Ícones decorativos devem permanecer com `aria-hidden`.
+- Controles somente com ícone continuam precisando de nome acessível no pai, como `aria-label`.
+- Não confie apenas no significado do ícone quando a ação ou o status exigir texto explícito.

@@ -2,3 +2,68 @@
 
 @import "../../../../packages/limia-tokens/styles/tokens.css";
 @import "../../../../packages/limia-design-system/styles/globals.css";
+
+.chat-border-glow {
+  --chat-border-glow-x: 50%;
+  --chat-border-glow-y: 50%;
+  --chat-border-glow-opacity: 0;
+  position: relative;
+  isolation: isolate;
+}
+
+.chat-border-glow > * {
+  position: relative;
+  z-index: 1;
+}
+
+.chat-border-glow::before,
+.chat-border-glow::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease;
+}
+
+.chat-border-glow::before {
+  inset: 0;
+  padding: 1.5px;
+  background:
+    radial-gradient(
+      196px circle at var(--chat-border-glow-x) var(--chat-border-glow-y),
+      color-mix(in srgb, white 28%, var(--action-primary-hover)) 0%,
+      color-mix(in srgb, var(--action-primary-background) 100%, transparent) 18%,
+      color-mix(in srgb, var(--action-primary-background) 44%, transparent) 36%,
+      transparent 62%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--action-primary-background) 48%, transparent),
+      color-mix(in srgb, var(--action-primary-hover) 24%, transparent) 45%,
+      color-mix(in srgb, var(--action-primary-background) 40%, transparent)
+    );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 2;
+  opacity: calc(0.5 + (var(--chat-border-glow-opacity) * 0.68));
+}
+
+.chat-border-glow::after {
+  inset: 0;
+  background:
+    radial-gradient(
+      236px circle at var(--chat-border-glow-x) var(--chat-border-glow-y),
+      color-mix(in srgb, var(--action-primary-background) 32%, transparent) 0%,
+      color-mix(in srgb, var(--action-primary-background) 18%, transparent) 34%,
+      transparent 68%
+    );
+  filter: blur(20px);
+  opacity: calc(0.22 + (var(--chat-border-glow-opacity) * 0.4));
+  z-index: 0;
+}

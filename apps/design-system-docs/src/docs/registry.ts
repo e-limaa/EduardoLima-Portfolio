@@ -259,6 +259,26 @@ export const docsRegistry: DocPage[] = [
     ),
   }),
   defineDoc({
+    title: "docs.icon.title",
+    href: "/design-system/components/icon",
+    section: "Components",
+    kind: "component",
+    status: "beta",
+    description: "docs.icon.description",
+    resources: componentResources(
+      "Icon",
+      "packages/limia-design-system/src/components/icon.tsx, packages/limia-design-system/styles/globals.css",
+    ),
+    related: [
+      "/design-system/components/buttons",
+      "/design-system/components/inputs",
+    ],
+    component: React.lazy(() => import("./content/components/icon.mdx")),
+    componentPt: React.lazy(
+      () => import("./content/components/icon.pt-br.mdx"),
+    ),
+  }),
+  defineDoc({
     title: "docs.input.title",
     href: "/design-system/components/inputs",
     section: "Components",

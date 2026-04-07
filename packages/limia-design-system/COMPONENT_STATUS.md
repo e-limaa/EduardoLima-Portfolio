@@ -3,6 +3,7 @@
 | Component | Status | Version | Notes |
 | :--- | :--- | :--- | :--- |
 | **Button** | ✅ Stable | 1.0 | Full usage of `action` tokens. |
+| **Icon** | 🧪 Beta | 0.9 | Google Material Symbols Outlined wrapper with rounded corners in code and ligature fallback for Figma. |
 | **Input** | ✅ Stable | 1.0 | Accessible focus rings. |
 | **Card** | ✅ Stable | 1.0 | Semantic background/border. |
 | **Badge** | 🧪 Beta | 0.9 | Pending contrast review. |

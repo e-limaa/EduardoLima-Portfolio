@@ -235,12 +235,7 @@ export const Hero = () => {
         </div>
 
         <div className="col-span-1 lg:col-span-4 relative flex items-center justify-center lg:justify-end h-full pointer-events-auto min-h-[400px] order-3 lg:order-3">
-          <motion.div
-            className="relative z-20 w-full max-w-md"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
+          <div className="relative z-20 w-full max-w-md">
             {shouldLoadChatWidget ? (
               <React.Suspense fallback={<ChatWidgetPlaceholder />}>
                 <ChatWidget />
@@ -248,7 +243,7 @@ export const Hero = () => {
             ) : (
               <ChatWidgetPlaceholder />
             )}
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -271,7 +266,7 @@ function ChatWidgetPlaceholder() {
   return (
     <div
       aria-hidden="true"
-      className="flex h-[480px] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl backdrop-blur-xl md:h-[580px]"
+      className="flex h-[480px] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-card/80 shadow-2xl backdrop-blur-xl md:h-[580px]"
     >
       <div className="flex items-center gap-3 border-b border-border bg-layer-2 p-4">
         <div className="h-10 w-10 rounded-full border border-primary/30 bg-muted/50 shadow-sm" />

@@ -1,4 +1,4 @@
-import { Button } from '@limia/design-system';
+import { Button, Icon } from '@limia/design-system';
 
 <ComponentPlayground
   controls={[
@@ -56,19 +56,21 @@ Use one primary action per region whenever possible. When several actions compet
 
 Button styling communicates emphasis, not only brand. Size should reflect the surrounding density and the amount of text. Use `link` when the action should read as inline navigation instead of a surface-level CTA. Use icon sizes only when the action is widely recognizable or already labeled nearby.
 
+Icons inside `Button` inherit the same semantic foreground token as the label, so filled variants keep icon contrast aligned with the active button foreground. In Limia, that behavior is tuned for the font-based `Icon` component rather than SVG icons.
+
 <ComponentPreview>
   <div className="flex items-end gap-2">
     <Button size="icon-xs" variant="outline" title="Icon XS">
-      <span className="block h-3 w-3 rounded-full bg-current" />
+      <Icon name="add" aria-hidden />
     </Button>
     <Button size="icon-sm" variant="outline" title="Icon SM">
-      <span className="block h-4 w-4 rounded-full bg-current" />
+      <Icon name="search" aria-hidden />
     </Button>
     <Button size="icon-md" variant="outline" title="Icon MD">
-      <span className="block h-4 w-4 rounded-full bg-current" />
+      <Icon name="favorite" aria-hidden />
     </Button>
     <Button size="icon-lg" variant="outline" title="Icon LG">
-      <span className="block h-5 w-5 rounded-full bg-current" />
+      <Icon name="arrow_forward" aria-hidden />
     </Button>
   </div>
 </ComponentPreview>

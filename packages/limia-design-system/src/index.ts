@@ -1,4 +1,5 @@
 export * from "./components/button";
+export * from "./components/icon";
 export * from "./components/ui/badge";
 export * from "./components/input";
 export * from "./components/ui/textarea";

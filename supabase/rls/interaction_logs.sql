@@ -20,6 +20,7 @@ create index if not exists profiles_is_admin_idx on public.profiles(is_admin);
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
+set search_path = public
 as $$
 begin
   new.updated_at = now();

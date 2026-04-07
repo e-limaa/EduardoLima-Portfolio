@@ -258,8 +258,8 @@ const translations: Record<Language, Record<string, string>> = {
         "newsletter.page.diff.4": "Practical focus",
 
         // ChatWidget
-        "chat.msg1": "Hi! Welcome to my portfolio.",
-        "chat.msg2": "Ask me anything about my work, creative process, or experience.",
+        "chat.msg1": "Hi! I am Eduardo Lima's virtual version, trained to answer as he would about his trajectory, projects, and way of working.",
+        "chat.msg2": "Ask about projects, design decisions, behind-the-scenes context, results, or how he could collaborate with your team.",
         "chat.placeholder": "Type your message...",
         "chat.assistant": "AI Assistant",
 
@@ -513,8 +513,8 @@ const translations: Record<Language, Record<string, string>> = {
         "newsletter.page.diff.4": "Foco pratico",
 
         // ChatWidget
-        "chat.msg1": "Olá! Bem-vindo ao meu portfólio.",
-        "chat.msg2": "Pergunte qualquer coisa sobre meu trabalho, processo criativo ou experiência.",
+        "chat.msg1": "Olá! Eu sou a versão virtual do Eduardo Lima, treinada para responder como ele sobre sua trajetória, seus projetos e sua forma de trabalhar.",
+        "chat.msg2": "Pergunte sobre projetos, decisões de design, bastidores, resultados ou como ele poderia colaborar com o seu time.",
         "chat.placeholder": "Digite sua mensagem...",
         "chat.assistant": "AI Assistant",
 
