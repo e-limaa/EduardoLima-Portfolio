@@ -143,7 +143,11 @@ export default function App() {
   const [hasEntered, setHasEntered] = useState(() => {
     if (typeof window === "undefined") return location.hash.includes("figmacapture=");
 
-    return localStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true" || location.hash.includes("figmacapture=");
+    if (localStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true") {
+      localStorage.removeItem(WELCOME_SCREEN_STORAGE_KEY);
+    }
+
+    return sessionStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true" || location.hash.includes("figmacapture=");
   });
 
   useEffect(() => {
@@ -157,7 +161,7 @@ export default function App() {
   useEffect(() => {
     if (!hasEntered || typeof window === "undefined") return;
 
-    localStorage.setItem(WELCOME_SCREEN_STORAGE_KEY, "true");
+    sessionStorage.setItem(WELCOME_SCREEN_STORAGE_KEY, "true");
   }, [hasEntered]);
 
   return (

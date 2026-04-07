@@ -63,7 +63,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
     useEffect(() => {
         if (typeof window === "undefined") return;
 
-        const hasSeenWelcome = localStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true";
+        const hasSeenWelcome = sessionStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true";
         if (!hasSeenWelcome) return;
 
         setShowImmersiveHint(true);

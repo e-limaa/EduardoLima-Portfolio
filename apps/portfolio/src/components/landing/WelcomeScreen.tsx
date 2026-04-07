@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@limia/design-system-src/components/button";
@@ -10,10 +10,55 @@ interface WelcomeScreenProps {
     onEnter: () => void;
 }
 
+function TypewriterText({
+    text,
+    shouldStart,
+    speed = 18,
+    onComplete,
+}: {
+    text: string;
+    shouldStart: boolean;
+    speed?: number;
+    onComplete?: () => void;
+}) {
+    const [displayedText, setDisplayedText] = useState(shouldStart ? "" : text);
+    const completionRef = useRef(onComplete);
+
+    useEffect(() => {
+        completionRef.current = onComplete;
+    }, [onComplete]);
+
+    useEffect(() => {
+        if (!shouldStart) {
+            setDisplayedText(text);
+            return;
+        }
+
+        setDisplayedText("");
+        let index = 0;
+        const interval = window.setInterval(() => {
+            index += 1;
+            setDisplayedText(text.slice(0, index));
+
+            if (index >= text.length) {
+                window.clearInterval(interval);
+                completionRef.current?.();
+            }
+        }, speed);
+
+        return () => window.clearInterval(interval);
+    }, [shouldStart, speed, text]);
+
+    return <>{displayedText}</>;
+}
+
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
     const [progress, setProgress] = useState(0);
     const [showButton, setShowButton] = useState(false);
+    const [footerPhase, setFooterPhase] = useState<-1 | 0 | 1 | 2>(-1);
     const { t } = useLanguage();
+    const sessionNoticeTitle = t("sessionNotice.title");
+    const sessionNoticeBody = t("sessionNotice.body");
 
     useEffect(() => {
         // Lock body scroll
@@ -41,6 +86,15 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
             document.body.style.overflow = 'unset';
         };
     }, []);
+
+    useEffect(() => {
+        setFooterPhase(-1);
+        const timeoutId = window.setTimeout(() => {
+            setFooterPhase(0);
+        }, 250);
+
+        return () => window.clearTimeout(timeoutId);
+    }, [sessionNoticeTitle, sessionNoticeBody]);
 
     const handleEnter = () => {
         // Trigger the parent callback immediately, let AnimatePresence handle the visual exit
@@ -111,9 +165,29 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 2, duration: 1 }}
-                className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-20 px-4"
+                transition={{ delay: 0.15, duration: 0.5 }}
+                className="absolute bottom-6 left-0 z-20 flex h-auto w-full shrink-0 flex-col gap-14 px-4 text-center md:bottom-10"
             >
+                <div className="mx-auto max-w-[40rem]">
+                    <p className="font-mono text-[10px] text-foreground md:text-xs">
+                        <TypewriterText
+                            text={sessionNoticeTitle}
+                            shouldStart={footerPhase === 0}
+                            speed={20}
+                            onComplete={() => setFooterPhase(1)}
+                        />
+                    </p>
+                    <p className="mt-1 font-mono text-[10px] text-muted-foreground/80 md:text-xs">
+                        {footerPhase >= 1 ? (
+                            <TypewriterText
+                                text={sessionNoticeBody}
+                                shouldStart={footerPhase === 1}
+                                speed={12}
+                                onComplete={() => setFooterPhase(2)}
+                            />
+                        ) : null}
+                    </p>
+                </div>
                 <p className="font-mono text-[10px] text-muted-foreground/80 md:text-xs">
                     {t("welcome.audioHelp")}
                 </p>

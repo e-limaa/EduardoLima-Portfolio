@@ -173,6 +173,8 @@ const translations: Record<Language, Record<string, string>> = {
         "welcome.enter": "Access portfolio",
         "welcome.audioHelp": "Immersive audio experience. Control available in the bottom corner.",
         "audio.tooltip.immersive": "Press play for a more immersive experience.",
+        "sessionNotice.title": "Built by Eduardo Lima",
+        "sessionNotice.body": "This interface was designed and developed by Eduardo Lima himself, combining years of learning with AI support through Codex, Antigravity, and Figma, plus integrations with Supabase and n8n.",
 
         // Testimonials
         "testimonials.title": "What they say",
@@ -428,6 +430,8 @@ const translations: Record<Language, Record<string, string>> = {
         "welcome.enter": "Acessar portfólio",
         "welcome.audioHelp": "Experiência imersiva com áudio. Controle disponível no canto inferior.",
         "audio.tooltip.immersive": "Dê play para uma experiência mais imersiva.",
+        "sessionNotice.title": "Interface criada por Eduardo Lima",
+        "sessionNotice.body": "Toda esta interface foi criada pelo próprio Eduardo Lima, reunindo anos de aprendizado com apoio de IA usando Codex, Antigravity e Figma, além de integrações com Supabase e n8n.",
 
         // Testimonials
         "testimonials.title": "O que dizem",
