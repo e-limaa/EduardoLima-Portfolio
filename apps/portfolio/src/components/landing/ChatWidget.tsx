@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage, Button, Input } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
@@ -10,6 +10,10 @@ interface Message {
   sender: "user" | "bot";
   timestamp: Date;
 }
+
+type StoredMessage = Omit<Message, "timestamp"> & {
+  timestamp: string | number | Date;
+};
 
 const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{8,128}$/;
 const CHAT_MESSAGES_STORAGE_KEY = "chat_messages";
@@ -31,6 +35,86 @@ function createIntroMessages(t: (key: string) => string): Message[] {
       timestamp: new Date(),
     },
   ];
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isStoredMessage(value: unknown): value is StoredMessage {
+  return (
+    isRecord(value) &&
+    typeof value.id === "string" &&
+    typeof value.text === "string" &&
+    (value.sender === "user" || value.sender === "bot") &&
+    (typeof value.timestamp === "string" ||
+      typeof value.timestamp === "number" ||
+      value.timestamp instanceof Date)
+  );
+}
+
+function stringifyResponse(value: unknown) {
+  if (typeof value === "string") return value;
+  return JSON.stringify(value, null, 2);
+}
+
+function extractBotText(value: unknown): string {
+  const responseData = Array.isArray(value) ? value[0] : value;
+
+  if (typeof responseData === "string") {
+    return responseData;
+  }
+
+  if (!isRecord(responseData)) {
+    return "Desculpe, não entendi a resposta do servidor.";
+  }
+
+  const possibleContent =
+    responseData.output ??
+    responseData.text ??
+    responseData.message ??
+    responseData.response ??
+    responseData.answer;
+
+  if (typeof possibleContent === "string") {
+    return possibleContent;
+  }
+
+  if (isRecord(possibleContent)) {
+    const nestedText = possibleContent.text ?? possibleContent.message;
+    return typeof nestedText === "string"
+      ? nestedText
+      : stringifyResponse(possibleContent);
+  }
+
+  return stringifyResponse(responseData);
+}
+
+function parseSseEvents(buffer: string) {
+  const chunks = buffer.split("\n\n");
+  return {
+    events: chunks.slice(0, -1),
+    remaining: chunks[chunks.length - 1] || "",
+  };
+}
+
+function readSseEvent(rawEvent: string): { event: string; data: unknown } | null {
+  const lines = rawEvent.split("\n");
+  const eventLine = lines.find((line) => line.startsWith("event:"));
+  const dataLines = lines
+    .filter((line) => line.startsWith("data:"))
+    .map((line) => line.slice(5).trim());
+
+  if (dataLines.length === 0) return null;
+
+  try {
+    return {
+      event: eventLine ? eventLine.slice(6).trim() : "message",
+      data: JSON.parse(dataLines.join("\n")),
+    };
+  } catch {
+    return null;
+  }
 }
 
 function TypewriterText({
@@ -75,6 +159,7 @@ function TypewriterText({
 
 export const ChatWidget = () => {
   const { t, language } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
   const hasStoredMessagesRef = useRef(false);
 
   // Inicializa mensagens carregando da sessao atual do navegador ou usa o padrao
@@ -83,14 +168,18 @@ export const ChatWidget = () => {
     if (savedMessages) {
       hasStoredMessagesRef.current = true;
       try {
-        const parsed = JSON.parse(savedMessages);
+        const parsed: unknown = JSON.parse(savedMessages);
         // Converte strings de data de volta para objetos Date
-        return parsed.map((msg: any) => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp)
-        }));
+        if (Array.isArray(parsed)) {
+          return parsed.filter(isStoredMessage).map((msg) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp),
+          }));
+        }
       } catch (e) {
-        console.error("Failed to parse messages", e);
+        if (import.meta.env.DEV) {
+          console.error("Failed to parse messages", e);
+        }
       }
     }
     return createIntroMessages(t);
@@ -98,9 +187,17 @@ export const ChatWidget = () => {
 
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [introPhase, setIntroPhase] = useState<0 | 1 | 2>(() =>
     hasStoredMessagesRef.current ? 2 : 0
   );
+  const isResponding = isTyping || streamingMessageId !== null;
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setIntroPhase(2);
+    }
+  }, [shouldReduceMotion]);
 
   // Inicializa o session ID da sessao atual ou cria um novo
   const [sessionId] = useState(() => {
@@ -139,10 +236,10 @@ export const ChatWidget = () => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTo({
         top: scrollAreaRef.current.scrollHeight,
-        behavior: "smooth",
+        behavior: shouldReduceMotion ? "auto" : "smooth",
       });
     }
-  }, [messages, isTyping]);
+  }, [messages, isTyping, shouldReduceMotion]);
 
   useEffect(() => {
     const translatedIntroMessages = createIntroMessages(t);
@@ -184,8 +281,10 @@ export const ChatWidget = () => {
 
     setMessages((prev) => [...prev, newMessage]);
     const currentInput = inputValue;
+    let pendingBotMessageId: string | null = null;
     setInputValue("");
     setIsTyping(true);
+    setStreamingMessageId(null);
 
     try {
       const response = await fetch("/api/chat", {
@@ -195,7 +294,8 @@ export const ChatWidget = () => {
         },
         body: JSON.stringify({
           message: currentInput,
-          sessionId: sessionId
+          sessionId: sessionId,
+          stream: true,
         }),
       });
 
@@ -208,41 +308,92 @@ export const ChatWidget = () => {
         throw new Error(errorMessage);
       }
 
-      const data = await response.json();
-
-      let botText = "Desculpe, não entendi a resposta do servidor.";
-
-      // 1. Se for array (comportamento padrão do n8n às vezes), pega o primeiro item
-      const responseData = Array.isArray(data) ? data[0] : data;
-
-      // 2. Tenta extrair de campos comuns
-      if (typeof responseData === 'string') {
-        botText = responseData;
-      } else if (typeof responseData === 'object' && responseData !== null) {
-        // Tenta encontrar o campo de texto em várias propriedades possíveis
-        const possibleContent = responseData.output || responseData.text || responseData.message || responseData.response || responseData.answer;
-
-        if (typeof possibleContent === 'string') {
-          botText = possibleContent;
-        } else if (typeof possibleContent === 'object' && possibleContent !== null) {
-          // Se o conteúdo for um objeto (ex: JSON dentro de 'output'), tenta extrair texto dele ou stringify
-          botText = (possibleContent as any).text || (possibleContent as any).message || JSON.stringify(possibleContent, null, 2);
-        } else {
-          // Fallback: se não achou campos conhecidos, stringify do objeto todo (exceto se for vazio)
-          botText = JSON.stringify(responseData, null, 2);
-        }
-      }
-
+      const responseContentType = response.headers.get("content-type") || "";
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: botText,
+        text: "",
         sender: "bot",
         timestamp: new Date(),
       };
+      pendingBotMessageId = botResponse.id;
 
       setMessages((prev) => [...prev, botResponse]);
+
+      if (response.body && responseContentType.includes("text/event-stream")) {
+        setIsTyping(false);
+        setStreamingMessageId(botResponse.id);
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let streamedText = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const parsed = parseSseEvents(buffer);
+          buffer = parsed.remaining;
+
+          for (const rawEvent of parsed.events) {
+            const event = readSseEvent(rawEvent);
+            if (!event || !isRecord(event.data)) continue;
+
+            if (event.event === "delta") {
+              const delta = event.data.delta;
+              if (typeof delta !== "string") continue;
+
+              streamedText += delta;
+              setMessages((prev) =>
+                prev.map((message) =>
+                  message.id === botResponse.id
+                    ? { ...message, text: streamedText }
+                    : message,
+                ),
+              );
+            }
+
+            if (event.event === "done") {
+              const output = event.data.output;
+              if (typeof output === "string" && output) {
+                streamedText = output;
+                setMessages((prev) =>
+                  prev.map((message) =>
+                    message.id === botResponse.id
+                      ? { ...message, text: output }
+                      : message,
+                  ),
+                );
+              }
+              setStreamingMessageId(null);
+            }
+
+            if (event.event === "error") {
+              const message =
+                typeof event.data.error === "string"
+                  ? event.data.error
+                  : "Falha ao processar a resposta.";
+              throw new Error(message);
+            }
+          }
+        }
+
+        return;
+      }
+
+      const data: unknown = await response.json();
+      const botText = extractBotText(data);
+      setStreamingMessageId(null);
+      setMessages((prev) =>
+        prev.map((message) =>
+          message.id === botResponse.id ? { ...message, text: botText } : message,
+        ),
+      );
     } catch (error) {
-      console.error("Error sending message:", error);
+      if (import.meta.env.DEV) {
+        console.error("Error sending message:", error);
+      }
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
         text: `Desculpe, ocorreu um erro ao processar sua mensagem: ${error instanceof Error ? error.message : "falha desconhecida"
@@ -250,16 +401,23 @@ export const ChatWidget = () => {
         sender: "bot",
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, errorResponse]);
+      setMessages((prev) =>
+        pendingBotMessageId
+          ? prev.map((message) =>
+              message.id === pendingBotMessageId ? errorResponse : message,
+            )
+          : [...prev, errorResponse],
+      );
     } finally {
       setIsTyping(false);
+      setStreamingMessageId(null);
     }
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 20, scale: 0.95 }}
+      animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
       onPointerMove={handleGlowMove}
       onPointerLeave={handleGlowLeave}
@@ -269,7 +427,7 @@ export const ChatWidget = () => {
       <div className="flex items-center justify-between border-b border-border bg-layer-2 p-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10 border border-primary/30 shadow-sm">
-            <AvatarImage src="/assets/images/avatar-bot.webp" />
+            <AvatarImage src="/assets/images/avatar-bot.webp" alt="" />
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
           <div>
@@ -295,14 +453,15 @@ export const ChatWidget = () => {
           const shouldHideSecondIntroMessage = msg.id === "2" && introPhase === 0;
           const shouldTypeFirstIntroMessage = msg.id === "1" && introPhase === 0;
           const shouldTypeSecondIntroMessage = msg.id === "2" && introPhase === 1;
+          const isStreamingMessage = msg.sender === "bot" && msg.id === streamingMessageId;
 
           if (shouldHideSecondIntroMessage) return null;
 
           return (
             <motion.div
               key={msg.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
               className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
@@ -315,7 +474,7 @@ export const ChatWidget = () => {
                   <div className="mb-1">
                     <TypewriterText
                       text={msg.text}
-                      shouldStart
+                      shouldStart={!shouldReduceMotion}
                       onComplete={() => {
                         if (msg.id === "1") setIntroPhase(1);
                         if (msg.id === "2") setIntroPhase(2);
@@ -323,7 +482,8 @@ export const ChatWidget = () => {
                     />
                   </div>
                 ) : (
-                  msg.text.split('\n').map((line, i) => {
+                  <div className="mb-1">
+                    {msg.text.split('\n').map((line, i) => {
                     const trimmed = line.trim();
                     if (!trimmed) return <div key={i} className="h-2" />;
 
@@ -353,7 +513,11 @@ export const ChatWidget = () => {
                     }
 
                     return <div key={i} className="mb-1">{line}</div>;
-                  })
+                    })}
+                    {isStreamingMessage && (
+                      <span className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 rounded-full bg-current opacity-70 motion-safe:animate-pulse" />
+                    )}
+                  </div>
                 )}
               </div>
             </motion.div>
@@ -362,14 +526,14 @@ export const ChatWidget = () => {
 
         {isTyping && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             className="flex justify-start"
           >
             <div className="flex h-10 w-16 items-center justify-center gap-1 rounded-2xl rounded-bl-none border border-border bg-card/80 p-3">
-              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 animate-bounce [animation-delay:-0.3s]"></span>
-              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 animate-bounce [animation-delay:-0.15s]"></span>
-              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 animate-bounce"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 motion-safe:animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 motion-safe:animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 motion-safe:animate-bounce"></span>
             </div>
           </motion.div>
         )}
@@ -381,13 +545,15 @@ export const ChatWidget = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={t("chat.placeholder")}
+          aria-label={t("chat.inputLabel")}
+          disabled={isResponding}
           className="bg-input-background"
         />
         <Button
           type="submit"
           size="icon-md"
-          disabled={!inputValue.trim() || isTyping}
-          aria-label={t("chat.send") || "Send message"}
+          disabled={!inputValue.trim() || isResponding}
+          aria-label={t("chat.send")}
         >
           <Send className="h-4 w-4" />
         </Button>
