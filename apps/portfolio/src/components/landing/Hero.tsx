@@ -23,6 +23,7 @@ const ChatWidget = React.lazy(() =>
 
 export const Hero = () => {
   const [videoFailed, setVideoFailed] = React.useState(false);
+  const [videoReady, setVideoReady] = React.useState(false);
   const [isCoarsePointer, setIsCoarsePointer] = React.useState(false);
 
   const { t } = useLanguage();
@@ -118,19 +119,27 @@ export const Hero = () => {
             initial={{ opacity: 0, scale: 0.8, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative z-40 isolate lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
+            className="relative z-40 isolate aspect-[548/981] lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
           >
-            <img
-              src="/assets/images/Edu-image-mobile.webp"
-              alt="Eduardo Lima"
-              width={320}
-              height={573}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              sizes="250px"
-              className="block h-full w-full object-contain drop-shadow-2xl md:hidden"
-            />
+            <picture
+              className={`absolute inset-0 h-full w-full ${videoReady ? "md:hidden" : ""}`}
+            >
+              <source
+                media="(min-width: 768px)"
+                srcSet="/assets/images/Edu-image.webp"
+              />
+              <img
+                src="/assets/images/Edu-image-mobile.webp"
+                alt="Eduardo Lima"
+                width={320}
+                height={573}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                sizes="(min-width: 1280px) 405px, (min-width: 1024px) 360px, (min-width: 768px) 315px, 250px"
+                className="block h-full w-full object-contain drop-shadow-2xl"
+              />
+            </picture>
 
             {shouldLoadDesktopVideo && !videoFailed ? (
               <video
@@ -140,8 +149,12 @@ export const Hero = () => {
                 muted
                 playsInline
                 preload="auto"
-                onError={() => setVideoFailed(true)}
-                className="relative z-40 hidden h-auto w-full object-contain drop-shadow-2xl md:block"
+                onCanPlay={() => setVideoReady(true)}
+                onError={() => {
+                  setVideoFailed(true);
+                  setVideoReady(false);
+                }}
+                className={`absolute inset-0 z-40 hidden h-full w-full object-contain drop-shadow-2xl ${videoReady ? "md:block" : ""}`}
               />
             ) : null}
           </motion.div>
