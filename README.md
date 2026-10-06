@@ -1,102 +1,35 @@
 # Limia Workspace
 
-Monorepo com dois apps e dois pacotes:
+Monorepo com o portfolio, a documentação do Limia e os pacotes compartilhados do design system.
 
-- `apps/portfolio`: site principal
-- `apps/design-system-docs`: documentação do Limia
-- `packages/limia-design-system`: runtime React do design system
-- `packages/limia-tokens`: tokens e pipeline de geração
+- `apps/portfolio`: site, dashboard administrativo e API do chat/newsletter.
+- `apps/design-system-docs`: documentação do design system.
+- `packages/limia-design-system` e `packages/limia-tokens`: componentes e tokens compartilhados.
 
-## Desenvolvimento
-
-Instalação:
+## Desenvolvimento local
 
 ```bash
-npm install
-```
-
-Rodar o portfolio:
-
-```bash
+npm ci
 npm run dev:portfolio
 ```
 
-Rodar a documentação do Limia:
+O Vite encaminha `/api` para `PORTFOLIO_API_PROXY_TARGET`, cujo padrão local é `http://127.0.0.1:3010`. Execute a API também com `NODE_ENV=development`; nesse modo ela usa a porta `3010` por padrão. Configure PostgreSQL local e as variáveis descritas em [apps/portfolio/server/README.md](apps/portfolio/server/README.md).
 
 ```bash
-npm run dev:docs
+npm run build --workspace @limia/portfolio
+npm run test --prefix apps/portfolio/server --workspaces=false
 ```
 
-Build completo:
+## Portfolio no servidor
 
-```bash
-npm run build
-```
+O portfolio é servido pelo mesmo processo Node: ele entrega o build do site e as rotas `/api`, com PostgreSQL como banco. O container se conecta à rede Docker privada `postgres-apps`; a porta publicada fica limitada ao próprio servidor. As instruções de configuração, backup, restauração e publicação estão em [deploy/portfolio/README.md](deploy/portfolio/README.md).
 
-Notas de arquitetura:
+O ambiente de produção usa uma origem HTTPS, um papel PostgreSQL de aplicação com permissões DML restritas e um papel separado para aplicar migrações. Segredos ficam em arquivos protegidos no servidor e não entram no build do site. Após a migração, administradores fazem login novamente para criar uma sessão local.
 
-- os apps (`apps/portfolio` e `apps/design-system-docs`) resolvem `@limia/design-system` e `@limia/tokens` via aliases de source no Vite durante desenvolvimento e deploy
-- o runtime publicável continua sendo gerado pelo pacote em `packages/limia-design-system/dist`
-- as fontes do sistema são carregadas pelos apps host em `index.html`; o pacote do DS não injeta fontes externas
+## Documentação do design system
+
+`apps/design-system-docs` continua como aplicação estática independente. Seu deploy e domínio próprios não fazem parte do serviço de API do portfolio.
 
 ## Variáveis de ambiente
 
-Portfolio client:
-
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
-
-Portfolio serverless function:
-
-- `N8N_WEBHOOK_URL`
-- `N8N_WEBHOOK_SECRET`
-- `CHAT_ALLOWED_ORIGINS`
-
-Exemplo de `CHAT_ALLOWED_ORIGINS`:
-
-```text
-https://elimaj.com.br,https://limia.elimaj.com.br,https://<preview>.vercel.app
-```
-
-## Deploy na Vercel
-
-Crie dois projetos separados na Vercel:
-
-1. Portfolio
-   - Root Directory: `apps/portfolio`
-   - Production Domain: `elimaj.com.br`
-   - Config local: [apps/portfolio/vercel.json](C:/Users/dulim/Downloads/EduardoLima-Portfolio/apps/portfolio/vercel.json)
-
-2. Limia Docs
-   - Root Directory: `apps/design-system-docs`
-   - Production Domain: `limia.elimaj.com.br`
-   - Config local: [apps/design-system-docs/vercel.json](C:/Users/dulim/Downloads/EduardoLima-Portfolio/apps/design-system-docs/vercel.json)
-
-Importante:
-
-- a function de chat do portfolio vive em [apps/portfolio/api/chat.js](C:/Users/dulim/Downloads/EduardoLima-Portfolio/apps/portfolio/api/chat.js)
-- o docs app é estático e não depende de `/api`
-- o root do repositório não deve mais ser usado como projeto Vercel
-- sempre que o Vercel ficar com cache de build inconsistente, prefira `Redeploy` sem cache
-
-## Domínio e subdomínio
-
-Na Vercel:
-
-1. Adicione `elimaj.com.br` ao projeto do portfolio.
-2. Adicione `limia.elimaj.com.br` ao projeto de docs.
-3. Copie os registros DNS sugeridos pela Vercel para o provedor do domínio.
-
-Se o DNS estiver fora da Vercel, normalmente o subdomínio fica como `CNAME` apontando para o alvo informado pela plataforma.
-
-## Acesso do dashboard
-
-O dashboard depende de Supabase Auth e papel administrativo.
-
-- Claims suportadas: `app_metadata.role` com `admin|owner|superadmin`
-- Source of truth: tabela `profiles` com `role` e `is_admin`
-- Fallback opcional: claim JWT `app_metadata.role`
-
-Antes de produção, aplicar:
-
-- `supabase/rls/interaction_logs.sql`
+O navegador recebe apenas `VITE_POSTHOG_KEY` e `VITE_POSTHOG_HOST`, quando analytics estiver configurado. Chaves de banco, OpenAI, Telegram e integrações ficam somente no ambiente do servidor. Use [deploy/portfolio/env.example](deploy/portfolio/env.example) como referência e nunca versione valores preenchidos.

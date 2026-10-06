@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 // Import logos
 import PeninsulaLogo from "../../assets/logos/Peninsula.png";
@@ -21,18 +21,20 @@ const brands = [
 ];
 
 export const BrandMarquee = () => {
+  const shouldReduceMotion = useReducedMotion();
   const repeatedBrands = [...brands, ...brands, ...brands, ...brands];
+  const visibleBrands = shouldReduceMotion ? brands : repeatedBrands;
 
   return (
     <section aria-label="Brands and clients" className="relative z-20 w-full overflow-hidden border-y border-border-subtle bg-background py-10 transition-colors duration-300">
       <div className="flex">
         <motion.ul
           initial={{ x: 0 }}
-          animate={{ x: "-50%" }}
+          animate={shouldReduceMotion ? undefined : { x: "-50%" }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           className="list-none m-0 p-0 flex gap-16 whitespace-nowrap pr-16 items-center"
         >
-          {repeatedBrands.map((brand, i) => {
+          {visibleBrands.map((brand, i) => {
             const isDuplicate = i >= brands.length;
             return (
             <li

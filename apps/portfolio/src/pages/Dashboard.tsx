@@ -1,5 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { supabase } from '../lib/supabase';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import {
+    ApiError,
+    getAdminInteractions,
+    markAdminSessionRead,
+    notifyAuthInvalidated,
+    requestAuthRefresh,
+    logoutAdmin,
+    type InteractionRow,
+} from '../lib/portfolio-api';
 import { Alert, AlertDescription, AlertTitle, Badge, Button, Card, CardContent, CardHeader, CardTitle, Input, t as token } from '@limia/design-system';
 import { Search, MessageSquare, BarChart, User, Bot, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -15,16 +23,6 @@ interface ChatMessage {
     is_read: boolean;
 }
 
-// DB Interface (Row)
-interface InteractionLog {
-    id: string;
-    session_id: string | null;
-    user_message: string;
-    ai_response: string;
-    timestamp: string;
-    is_read: boolean;
-}
-
 export const Dashboard = () => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(true);
@@ -33,146 +31,174 @@ export const Dashboard = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchMessages();
+    const lifecycleRef = useRef(0);
+    const dataRevisionRef = useRef(0);
+    const fetchSequenceRef = useRef(0);
+    const activeFetchRef = useRef<number | null>(null);
+    const refreshQueuedRef = useRef(false);
+    const hasLoadedRef = useRef(false);
+    const authInvalidatedRef = useRef(false);
+    const markingSessionsRef = useRef(new Set<string>());
 
-        const channel = supabase
-            .channel('interaction_logs_changes')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'interaction_logs'
-                },
-                (payload) => {
-                    if (payload.eventType === 'INSERT') {
-                        const row = payload.new as InteractionLog;
-                        const sessionId = row.session_id || 'unknown';
-                        const timestamp = row.timestamp;
-                        const isRead = row.is_read;
-                        const newMessages: ChatMessage[] = [];
+    const fetchMessages = useCallback(async () => {
+        if (authInvalidatedRef.current) return;
+        if (document.visibilityState !== 'visible') return;
+        if (activeFetchRef.current !== null) {
+            refreshQueuedRef.current = true;
+            return;
+        }
 
-                        if (row.user_message) {
-                            newMessages.push({
-                                id: `${row.id}-user`,
-                                session_id: sessionId,
-                                content: row.user_message,
-                                role: 'user',
-                                created_at: timestamp,
-                                is_read: isRead
-                            });
-                        }
-                        if (row.ai_response) {
-                            newMessages.push({
-                                id: `${row.id}-ai`,
-                                session_id: sessionId,
-                                content: row.ai_response,
-                                role: 'assistant',
-                                created_at: timestamp,
-                                is_read: isRead
-                            });
-                        }
+        const fetchToken = ++fetchSequenceRef.current;
+        const lifecycle = lifecycleRef.current;
+        const revision = dataRevisionRef.current;
+        activeFetchRef.current = fetchToken;
+        if (!hasLoadedRef.current) setLoading(true);
 
-                        setMessages(prev => [...prev, ...newMessages]);
-                    } else if (payload.eventType === 'UPDATE') {
-                        const newRow = payload.new as InteractionLog;
-                        setMessages(prev => prev.map(msg => {
-                            if (msg.id.startsWith(newRow.id)) {
-                                return { ...msg, is_read: newRow.is_read };
-                            }
-                            return msg;
-                        }));
-                    }
+        try {
+            const { interactions } = await getAdminInteractions();
+            if (lifecycleRef.current !== lifecycle || dataRevisionRef.current !== revision) return;
+
+            const transformedMessages: ChatMessage[] = [];
+            [...interactions].sort((left, right) =>
+                new Date(left.timestamp).getTime() - new Date(right.timestamp).getTime()
+            ).forEach((row: InteractionRow) => {
+                const sessionId = row.session_id || 'unknown';
+
+                if (row.user_message) {
+                    transformedMessages.push({
+                        id: `${row.id}-user`,
+                        session_id: sessionId,
+                        content: row.user_message,
+                        role: 'user',
+                        created_at: row.timestamp,
+                        is_read: row.is_read,
+                    });
                 }
-            )
-            .subscribe();
 
-        return () => {
-            void supabase.removeChannel(channel);
-        };
+                if (row.ai_response) {
+                    transformedMessages.push({
+                        id: `${row.id}-ai`,
+                        session_id: sessionId,
+                        content: row.ai_response,
+                        role: 'assistant',
+                        created_at: row.timestamp,
+                        is_read: row.is_read,
+                    });
+                }
+            });
+
+            setMessages(transformedMessages);
+            setError(null);
+            hasLoadedRef.current = true;
+        } catch (err: unknown) {
+            if (lifecycleRef.current !== lifecycle || dataRevisionRef.current !== revision) return;
+
+            if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
+                authInvalidatedRef.current = true;
+                setMessages([]);
+                notifyAuthInvalidated(err.status);
+            } else {
+                console.error('Dashboard API error:', err);
+                setError(err instanceof Error ? err.message : 'Erro desconhecido ao carregar conversas.');
+            }
+            hasLoadedRef.current = true;
+        } finally {
+            if (lifecycleRef.current === lifecycle && activeFetchRef.current === fetchToken) {
+                activeFetchRef.current = null;
+                setLoading(false);
+                if (refreshQueuedRef.current) {
+                    refreshQueuedRef.current = false;
+                    queueMicrotask(() => void fetchMessages());
+                }
+            }
+        }
     }, []);
 
-    const fetchMessages = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const { data, error: sbError } = await supabase
-                .from('interaction_logs')
-                .select('*')
-                .order('timestamp', { ascending: true });
+    useEffect(() => {
+        lifecycleRef.current += 1;
+        let intervalId: number | undefined;
 
-            if (sbError) {
-                console.error('Supabase Error:', sbError);
-                setError(sbError.message);
-                setMessages([]);
-            } else {
-                const transformedMessages: ChatMessage[] = [];
-
-                (data as InteractionLog[] || []).forEach((row) => {
-                    const sessionId = row.session_id || 'unknown';
-                    const timestamp = row.timestamp;
-                    const isRead = row.is_read;
-
-                    if (row.user_message) {
-                        transformedMessages.push({
-                            id: `${row.id}-user`,
-                            session_id: sessionId,
-                            content: row.user_message,
-                            role: 'user',
-                            created_at: timestamp,
-                            is_read: isRead
-                        });
-                    }
-
-                    if (row.ai_response) {
-                        transformedMessages.push({
-                            id: `${row.id}-ai`,
-                            session_id: sessionId,
-                            content: row.ai_response,
-                            role: 'assistant',
-                            created_at: timestamp,
-                            is_read: isRead
-                        });
-                    }
-                });
-
-                setMessages(transformedMessages);
+        const stopPolling = () => {
+            if (intervalId !== undefined) {
+                window.clearInterval(intervalId);
+                intervalId = undefined;
             }
-        } catch (err: unknown) {
-            console.error("Unexpected fetch error:", err);
-            setError(err instanceof Error ? err.message : "Unknown error occurred");
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
 
-    // Mark session as read
+        const startPolling = () => {
+            if (document.visibilityState !== 'visible' || intervalId !== undefined) return;
+            void fetchMessages();
+            intervalId = window.setInterval(() => void fetchMessages(), 5000);
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                startPolling();
+            } else {
+                stopPolling();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        startPolling();
+
+        return () => {
+            lifecycleRef.current += 1;
+            activeFetchRef.current = null;
+            refreshQueuedRef.current = false;
+            stopPolling();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [fetchMessages]);
+
     const markSessionAsRead = async (sessionId: string) => {
-        // Optimistic UI update
-        setMessages(prev => prev.map(m =>
-            m.session_id === sessionId ? { ...m, is_read: true } : m
+        if (sessionId === 'unknown' || markingSessionsRef.current.has(sessionId)) return;
+        if (!messages.some((message) => message.session_id === sessionId && !message.is_read)) return;
+
+        markingSessionsRef.current.add(sessionId);
+        dataRevisionRef.current += 1;
+        setMessages(prev => prev.map(message =>
+            message.session_id === sessionId ? { ...message, is_read: true } : message
         ));
 
-        // Update DB
-        const { error } = await supabase
-            .from('interaction_logs')
-            .update({ is_read: true })
-            .eq('session_id', sessionId);
-
-        if (error) {
-            console.error('Error marking as read:', error);
+        try {
+            await markAdminSessionRead(sessionId);
+        } catch (markError) {
+            if (markError instanceof ApiError && (markError.status === 401 || markError.status === 403)) {
+                authInvalidatedRef.current = true;
+                setMessages([]);
+                notifyAuthInvalidated(markError.status);
+            } else {
+                console.error('Error marking session as read:', markError);
+                setError(markError instanceof Error ? markError.message : 'Nao foi possivel marcar a conversa como lida.');
+            }
+        } finally {
+            markingSessionsRef.current.delete(sessionId);
+            if (!authInvalidatedRef.current) void fetchMessages();
         }
     };
 
-    const handleSessionClick = (sid: string) => {
-        setSelectedSessionId(sid);
-        void markSessionAsRead(sid);
+    const handleSessionClick = (sessionId: string) => {
+        setSelectedSessionId(sessionId);
+        void markSessionAsRead(sessionId);
     };
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut();
-        setMessages([]);
+        try {
+            await logoutAdmin();
+            authInvalidatedRef.current = true;
+            setMessages([]);
+            notifyAuthInvalidated(401);
+        } catch (signOutError) {
+            if (signOutError instanceof ApiError && (signOutError.status === 401 || signOutError.status === 403)) {
+                authInvalidatedRef.current = true;
+                setMessages([]);
+                notifyAuthInvalidated(signOutError.status);
+            } else {
+                setError(signOutError instanceof Error ? signOutError.message : 'Nao foi possivel sair agora.');
+                requestAuthRefresh();
+            }
+        }
     };
 
     // Group messages by session
@@ -233,7 +259,7 @@ export const Dashboard = () => {
                     {/* Header */}
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-4">
-                            <Button variant="ghost" className="rounded-full w-10 h-10 p-0" onClick={() => navigate('/')}>
+                            <Button variant="ghost" className="min-h-11 min-w-11 rounded-full p-0" onClick={() => navigate('/')} aria-label="Voltar para o site">
                                 <ArrowLeft className="w-5 h-5" />
                             </Button>
                             <div>
@@ -306,13 +332,13 @@ export const Dashboard = () => {
                     {error && (
                         <Alert variant="destructive" className="mb-8 flex items-center justify-between">
                             <div>
-                                <AlertTitle>Erro ao carregar dados do Supabase</AlertTitle>
+                                <AlertTitle>Erro ao carregar conversas</AlertTitle>
                                 <AlertDescription>
                                     <p className="mt-1 font-mono text-sm">{error}</p>
-                                    <p className="mt-2 text-xs">Falha na conexao com interaction_logs.</p>
+                                    <p className="mt-2 text-xs">Falha na conexao com a API do portfolio.</p>
                                 </AlertDescription>
                             </div>
-                            <Button variant="outline" size="sm" onClick={fetchMessages}>
+                            <Button variant="outline" size="sm" onClick={() => void fetchMessages()}>
                                 Tentar Novamente
                             </Button>
                         </Alert>
@@ -378,10 +404,10 @@ export const Dashboard = () => {
                             <>
                                 <div className="flex items-center justify-between border-b border-border bg-muted/20 p-4">
                                     <div className="flex items-center gap-2">
-                                        <Button variant="ghost" size="icon" className="mr-1 h-8 w-8 lg:hidden" onClick={() => setSelectedSessionId(null)}>
+                                        <Button variant="ghost" size="icon" className="mr-1 min-h-11 min-w-11 lg:hidden" onClick={() => setSelectedSessionId(null)} aria-label="Voltar para sessões">
                                             <ArrowLeft className="w-4 h-4" />
                                         </Button>
-                                        <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+                                        <div className="h-2 w-2 motion-safe:animate-pulse rounded-full bg-primary" />
                                         <span className="font-mono text-sm text-muted-foreground">Session: {selectedSessionId}</span>
                                     </div>
                                     <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => setSelectedSessionId(null)}>

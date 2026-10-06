@@ -1,0 +1,144 @@
+services:
+  studio:
+    image: ${STUDIO_IMAGE:-portfolio-studio}
+    build:
+      context: ../..
+      dockerfile: deploy/portfolio/studio.Dockerfile
+    profiles:
+      - cms
+    expose:
+      - "3333"
+    networks:
+      n8n-edge:
+        aliases:
+          - ${STUDIO_DNS_ALIAS:-portfolio-studio}
+    init: true
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  app:
+    image: ${PORTFOLIO_IMAGE:-portfolio-app}
+    build:
+      context: ../..
+      dockerfile: deploy/portfolio/Dockerfile
+      args:
+        VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
+        VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in the protected environment file}
+      NODE_ENV: ${NODE_ENV:-production}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set PUBLIC_ORIGIN in the protected environment file}
+      PUBLIC_ORIGINS: ${PUBLIC_ORIGINS:-}
+      RATE_LIMIT_SECRET: ${RATE_LIMIT_SECRET:?Set RATE_LIMIT_SECRET in the protected environment file}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:?Set OPENAI_API_KEY in the protected environment file}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.5}
+      OPENAI_INSTRUCTIONS: ${OPENAI_INSTRUCTIONS:-}
+      OPENAI_MAX_OUTPUT_TOKENS: ${OPENAI_MAX_OUTPUT_TOKENS:-220}
+      OPENAI_MAX_OUTPUT_TOKENS_CAP: ${OPENAI_MAX_OUTPUT_TOKENS_CAP:-400}
+      OPENAI_STORE: ${OPENAI_STORE:-false}
+      NEWSLETTER_DELIVERY_ENABLED: ${NEWSLETTER_DELIVERY_ENABLED:-false}
+      NEWSLETTER_WEBHOOK_URL: ${NEWSLETTER_WEBHOOK_URL:-}
+      NEWSLETTER_WEBHOOK_SECRET: ${NEWSLETTER_WEBHOOK_SECRET:-}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      HOST: 0.0.0.0
+      PORT: 3000
+      PG_POOL_MAX: ${PG_POOL_MAX:-5}
+      CF_PROXY_CIDRS: ${CF_PROXY_CIDRS:-}
+      SESSION_SECONDS: ${SESSION_SECONDS:-43200}
+      CHAT_TIMEOUT_MS: ${CHAT_TIMEOUT_MS:-30000}
+      CHAT_DAILY_MESSAGES_PER_SESSION: ${CHAT_DAILY_MESSAGES_PER_SESSION:-30}
+      CHAT_DAILY_MESSAGES_PER_IP: ${CHAT_DAILY_MESSAGES_PER_IP:-60}
+      CHAT_CONCURRENCY_PER_IP: ${CHAT_CONCURRENCY_PER_IP:-2}
+      CHAT_GLOBAL_CONCURRENCY: ${CHAT_GLOBAL_CONCURRENCY:-5}
+    ports:
+      - "127.0.0.1:${HOST_PORT:-8010}:3000"
+    networks:
+      - postgres-apps
+      - n8n-edge
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+
+  migrate:
+    image: ${PORTFOLIO_IMAGE:-portfolio-app}
+    build:
+      context: ../..
+      dockerfile: deploy/portfolio/Dockerfile
+      args:
+        VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
+        VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
+    command: ["node", "apps/portfolio/server/migrate.js"]
+    profiles:
+      - tools
+    environment:
+      MIGRATION_DATABASE_URL: ${MIGRATION_DATABASE_URL:-}
+      MIGRATION_OWNER_ROLE: ${MIGRATION_OWNER_ROLE:-}
+    networks:
+      - postgres-apps
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: "no"
+
+  import:
+    image: ${PORTFOLIO_IMAGE:-portfolio-app}
+    build:
+      context: ../..
+      dockerfile: deploy/portfolio/Dockerfile
+    command: ["node", "scripts/portfolio/import-postgres.mjs", "--input", "/run/secrets/portfolio-export.json"]
+    profiles:
+      - tools
+    user: "${IMPORT_UID:-1000}:${IMPORT_GID:-1000}"
+    environment:
+      DATABASE_URL: ${MIGRATION_DATABASE_URL:-}
+      MIGRATION_OWNER_ROLE: ${MIGRATION_OWNER_ROLE:-}
+    volumes:
+      - type: bind
+        source: ${IMPORT_FILE:-/home/eduardo/portfolio/portfolio-export.json}
+        target: /run/secrets/portfolio-export.json
+        read_only: true
+    networks:
+      - postgres-apps
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: "no"
+
+networks:
+  postgres-apps:
+    name: postgres-apps
+    external: true
+  n8n-edge:
+    name: n8n_n8n_default
+    external: true

@@ -1,7 +1,7 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { type ControllerRenderProps, useForm } from "react-hook-form";
 import { Button, Input, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, toast } from "@limia/design-system";
-import { supabase } from "@/lib/supabase";
+import { ApiError, subscribeToNewsletter } from "@/lib/portfolio-api";
 import { Loader2 } from "lucide-react";
 import { useLanguage } from "../language-provider";
 
@@ -25,27 +25,20 @@ export const NewsletterModal = () => {
     const onSubmit = async (data: NewsletterFormValues) => {
         setIsLoading(true);
         try {
-            const { error } = await supabase
-                .from("newsletter_subscribers")
-                .insert([
-                    {
-                        name: data.name,
-                        email: data.email,
-                    },
-                ]);
-
-            if (error) throw error;
+            await subscribeToNewsletter(data);
 
             toast.success(t("newsletter.toast.success.title"), {
                 description: t("newsletter.toast.success.desc"),
             });
             setOpen(false);
             form.reset();
-        } catch (error: any) {
-            console.error("Error subscribing:", error);
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error("Error subscribing:", error);
+            }
+            const errorCode = error instanceof ApiError ? error.code : undefined;
 
-            // Check for unique constraint violation (Postgres error code 23505)
-            if (error?.code === '23505') {
+            if (errorCode === "EMAIL_EXISTS") {
                 toast.error(t("newsletter.toast.error.duplicateTitle"), {
                     description: t("newsletter.toast.error.duplicateDesc"),
                 });
@@ -79,7 +72,7 @@ export const NewsletterModal = () => {
                             control={form.control}
                             name="name"
                             rules={{ required: t("newsletter.form.nameRequired") }}
-                            render={({ field }: { field: any }) => (
+                            render={({ field }: { field: ControllerRenderProps<NewsletterFormValues, "name"> }) => (
                                 <FormItem>
                                     <FormLabel>{t("newsletter.form.name")}</FormLabel>
                                     <FormControl>
@@ -99,7 +92,7 @@ export const NewsletterModal = () => {
                                     message: t("newsletter.form.emailInvalid"),
                                 },
                             }}
-                            render={({ field }: { field: any }) => (
+                            render={({ field }: { field: ControllerRenderProps<NewsletterFormValues, "email"> }) => (
                                 <FormItem>
                                     <FormLabel>{t("newsletter.form.email")}</FormLabel>
                                     <FormControl>

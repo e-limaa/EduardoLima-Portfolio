@@ -9,6 +9,7 @@
   --chat-border-glow-opacity: 0;
   position: relative;
   isolation: isolate;
+  contain: paint;
 }
 
 .chat-border-glow > * {

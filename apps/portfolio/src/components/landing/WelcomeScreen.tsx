@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@limia/design-system-src/components/button";
 import { InteractiveGrid } from "@limia/design-system-src/components/interactive-grid";
@@ -53,8 +53,9 @@ function TypewriterText({
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
-    const [progress, setProgress] = useState(0);
-    const [showButton, setShowButton] = useState(false);
+    const shouldReduceMotion = useReducedMotion();
+    const [progress, setProgress] = useState(() => shouldReduceMotion ? 100 : 0);
+    const [showButton, setShowButton] = useState(() => Boolean(shouldReduceMotion));
     const [footerPhase, setFooterPhase] = useState<-1 | 0 | 1 | 2>(-1);
     const { t } = useLanguage();
     const sessionNoticeTitle = t("sessionNotice.title");
@@ -63,6 +64,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
     useEffect(() => {
         // Lock body scroll
         document.body.style.overflow = 'hidden';
+
+        if (shouldReduceMotion) {
+            setProgress(100);
+            setShowButton(true);
+            return () => {
+                document.body.style.overflow = 'unset';
+            };
+        }
 
         const duration = 3000; // 3 seconds
         const interval = 30;
@@ -85,16 +94,21 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
             // Restore body scroll
             document.body.style.overflow = 'unset';
         };
-    }, []);
+    }, [shouldReduceMotion]);
 
     useEffect(() => {
+        if (shouldReduceMotion) {
+            setFooterPhase(2);
+            return;
+        }
+
         setFooterPhase(-1);
         const timeoutId = window.setTimeout(() => {
             setFooterPhase(0);
         }, 250);
 
         return () => window.clearTimeout(timeoutId);
-    }, [sessionNoticeTitle, sessionNoticeBody]);
+    }, [sessionNoticeTitle, sessionNoticeBody, shouldReduceMotion]);
 
     const handleEnter = () => {
         // Trigger the parent callback immediately, let AnimatePresence handle the visual exit
@@ -114,8 +128,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
             <div className="w-full max-w-md px-8 flex flex-col items-center text-center relative z-10">
                 <motion.h1
                     className="text-4xl md:text-5xl font-bold tracking-tighter mb-4"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
+                    initial={shouldReduceMotion ? false : { y: 20, opacity: 0 }}
+                    animate={shouldReduceMotion ? undefined : { y: 0, opacity: 1 }}
                     transition={{ duration: 0.8 }}
                 >
                     Eduardo Lima<span className="text-primary">.</span>
@@ -123,8 +137,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
 
                 <motion.p
                     className="mb-12 whitespace-normal text-sm text-muted-foreground md:text-base md:whitespace-nowrap"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    initial={shouldReduceMotion ? false : { opacity: 0 }}
+                    animate={shouldReduceMotion ? undefined : { opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.8 }}
                 >
                     {t("welcome.subtitle")}
@@ -149,8 +163,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                         ) : (
                             <motion.div
                                 key="button"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+                                animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
                             >
                                 <Button onClick={handleEnter} size="lg" variant="outline" className="group">
                                     {t("welcome.enter")}
@@ -163,8 +177,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
             </div>
 
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
+                animate={shouldReduceMotion ? undefined : { opacity: 1 }}
                 transition={{ delay: 0.15, duration: 0.5 }}
                 className="absolute bottom-6 left-0 z-20 flex h-auto w-full shrink-0 flex-col gap-14 px-4 text-center md:bottom-10"
             >
@@ -172,16 +186,16 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                     <p className="font-mono text-[10px] text-foreground md:text-xs">
                         <TypewriterText
                             text={sessionNoticeTitle}
-                            shouldStart={footerPhase === 0}
+                            shouldStart={!shouldReduceMotion && footerPhase === 0}
                             speed={20}
                             onComplete={() => setFooterPhase(1)}
                         />
                     </p>
                     <p className="mt-1 font-mono text-[10px] text-muted-foreground/80 md:text-xs">
-                        {footerPhase >= 1 ? (
+                        {shouldReduceMotion || footerPhase >= 1 ? (
                             <TypewriterText
                                 text={sessionNoticeBody}
-                                shouldStart={footerPhase === 1}
+                                shouldStart={!shouldReduceMotion && footerPhase === 1}
                                 speed={12}
                                 onComplete={() => setFooterPhase(2)}
                             />

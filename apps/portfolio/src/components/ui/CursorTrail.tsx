@@ -9,6 +9,8 @@ export const CursorTrail = React.memo(() => {
     const FRICTION = 0.05;
 
     useEffect(() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce), (pointer: coarse), (hover: none)").matches) return;
+
         const canvas = canvasRef.current;
         if (!canvas) return;
 

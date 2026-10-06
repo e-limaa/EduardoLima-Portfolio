@@ -7,21 +7,7 @@ const rootDir = __dirname;
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, rootDir, "");
-  const webhookUrl = env.N8N_WEBHOOK_URL?.trim();
-  const webhookSecret = env.N8N_WEBHOOK_SECRET?.trim();
-
-  let chatProxyTarget: string | null = null;
-  let chatProxyPath: string | null = null;
-
-  if (webhookUrl) {
-    try {
-      const parsedWebhookUrl = new URL(webhookUrl);
-      chatProxyTarget = parsedWebhookUrl.origin;
-      chatProxyPath = `${parsedWebhookUrl.pathname}${parsedWebhookUrl.search}`;
-    } catch {
-      console.warn("[vite] N8N_WEBHOOK_URL is invalid. Local /api/chat proxy disabled.");
-    }
-  }
+  const apiProxyTarget = env.PORTFOLIO_API_PROXY_TARGET?.trim() || "http://127.0.0.1:3010";
 
   return {
     plugins: [react(), tailwindcss()],
@@ -41,48 +27,16 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(rootDir, "./src")
       }
     },
-    build: {
-      target: "esnext",
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes("node_modules")) {
-              if (id.includes("three")) return "vendor-three";
-              if (id.includes("@radix-ui") || id.includes("@floating-ui")) return "vendor-radix";
-              if (id.includes("lucide-react")) return "vendor-icons";
-              if (id.includes("recharts") || id.includes("d3-")) return "vendor-charts";
-              if (id.includes("@sanity")) return "vendor-sanity";
-              if (id.includes("@supabase")) return "vendor-supabase";
-              if (id.includes("swr")) return "vendor-swr";
-              if (id.includes("motion") || id.includes("framer-motion")) return "vendor-motion";
-              if (id.includes("react-router")) return "vendor-router";
-              return "vendor";
-            }
-            return undefined;
-          }
-        }
-      }
-    },
+    build: { target: "esnext" },
     server: {
       port: 3000,
       open: true,
-      proxy: chatProxyTarget && chatProxyPath
-        ? {
-            "/api/chat": {
-              target: chatProxyTarget,
-              changeOrigin: true,
-              secure: false,
-              rewrite: () => chatProxyPath,
-              configure: (proxy) => {
-                proxy.on("proxyReq", (proxyReq) => {
-                  if (webhookSecret) {
-                    proxyReq.setHeader("x-webhook-secret", webhookSecret);
-                  }
-                });
-              }
-            }
-          }
-        : undefined
+      proxy: {
+        "/api": {
+          target: apiProxyTarget,
+          changeOrigin: false
+        }
+      }
     }
   };
 });

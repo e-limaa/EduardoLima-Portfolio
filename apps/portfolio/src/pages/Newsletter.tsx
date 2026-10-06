@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Button, Input, Label, toast } from "@limia/design-system";
 import { ArrowRight } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useReducedMotion } from "motion/react";
 import { Navbar } from "../components/landing/Navbar";
-import { supabase } from "../lib/supabase";
+import { ApiError, subscribeToNewsletter } from "../lib/portfolio-api";
 import posthog from "posthog-js";
 import { useLanguage } from "../components/language-provider";
 
@@ -26,6 +27,7 @@ export const Newsletter = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
   const isInternal = location.state?.fromInternal;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,16 +43,7 @@ export const Newsletter = () => {
 
     setStatus("loading");
     try {
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .insert([
-          {
-            name,
-            email,
-          },
-        ]);
-
-      if (error) throw error;
+      await subscribeToNewsletter({ name, email });
 
       setStatus("success");
       setName("");
@@ -59,11 +52,14 @@ export const Newsletter = () => {
       toast.success(t("newsletter.page.toast.successTitle"), {
         description: t("newsletter.page.toast.successDescription"),
       });
-    } catch (error: any) {
-      console.error("Error subscribing:", error);
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error("Error subscribing:", error);
+      }
+      const errorCode = error instanceof ApiError ? error.code ?? "unknown_error" : "unknown_error";
       setStatus("error");
-      posthog.capture("Newsletter Subscription Failed", { error_code: error?.code || "unknown_error" });
-      if (error?.code === "23505") {
+      posthog.capture("Newsletter Subscription Failed", { error_code: errorCode });
+      if (errorCode === "EMAIL_EXISTS") {
         toast.error(t("newsletter.page.toast.duplicateTitle"), {
           description: t("newsletter.page.toast.duplicateDescription"),
         });
@@ -82,13 +78,13 @@ export const Newsletter = () => {
           onNavigate={(id) => {
             const element = document.getElementById(id);
             if (element) {
-              element.scrollIntoView({ behavior: "smooth" });
+              element.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
             } else {
               navigate("/", { replace: false });
               setTimeout(() => {
                 const targetElement = document.getElementById(id);
                 if (targetElement) {
-                  targetElement.scrollIntoView({ behavior: "smooth" });
+                  targetElement.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
                 }
               }, 100);
             }
@@ -97,8 +93,8 @@ export const Newsletter = () => {
       )}
 
       <div className="pointer-events-none absolute top-0 left-0 z-0 h-[900px] w-full">
-        <div className="absolute top-[-200px] left-[70%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]" />
-        <div className="absolute top-0 left-[20%] h-[500px] w-[500px] rounded-full bg-secondary/80 blur-[120px]" />
+        <div className="absolute top-[-160px] left-[70%] h-[360px] w-[360px] rounded-full bg-primary/10 blur-[80px]" />
+        <div className="absolute top-0 left-[20%] h-[360px] w-[360px] rounded-full bg-secondary/70 blur-[80px]" />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-10" />
       </div>
 

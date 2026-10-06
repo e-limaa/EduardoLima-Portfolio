@@ -2,4 +2,7 @@ node_modules
 build
 dist
 .env
+.env.*
+!**/.env.example
+tmp/portfolio-migration/
 .DS_Store

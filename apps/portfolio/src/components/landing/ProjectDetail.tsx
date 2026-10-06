@@ -1,5 +1,5 @@
 import {useEffect} from 'react'
-import {motion} from 'motion/react'
+import {motion, useReducedMotion} from 'motion/react'
 import {ArrowLeft, ArrowRight, Layers, Calendar, User, Building2} from 'lucide-react'
 import {useParams, useNavigate} from 'react-router-dom'
 import {ImageWithFallback} from '../figma/ImageWithFallback'
@@ -13,6 +13,7 @@ export const ProjectDetail = () => {
   const {slug} = useParams<{slug: string}>()
   const navigate = useNavigate()
   const {language, t} = useLanguage()
+  const shouldReduceMotion = useReducedMotion()
 
   const {project, isLoading: projectLoading} = useProjectBySlug(slug, language)
   const {navigation} = useAdjacentProjects(project?._id)
@@ -44,12 +45,19 @@ export const ProjectDetail = () => {
   if (!project) return null
 
   const mainImageUrl = getImageUrl(project.mainImage)
-  const scrollReveal = {
-    initial: {opacity: 0, y: 28},
-    whileInView: {opacity: 1, y: 0},
-    viewport: {once: true, amount: 0.35},
-    transition: {duration: 0.7, ease: [0.22, 1, 0.36, 1]},
-  } as const
+  const scrollReveal = shouldReduceMotion
+    ? ({
+        initial: false,
+        whileInView: undefined,
+        viewport: {once: true, amount: 0.35},
+        transition: {duration: 0},
+      } as const)
+    : ({
+        initial: {opacity: 0, y: 28},
+        whileInView: {opacity: 1, y: 0},
+        viewport: {once: true, amount: 0.35},
+        transition: {duration: 0.7, ease: [0.22, 1, 0.36, 1]},
+      } as const)
   const shouldRenderMainSolution = Boolean(project.solution?.trim())
   const renderMainSolution = () =>
     shouldRenderMainSolution ? (
@@ -119,8 +127,8 @@ export const ProjectDetail = () => {
         <div className="absolute bottom-0 left-0 w-full z-10">
           <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 pb-6 md:pb-20">
             <motion.div
-              initial={{y: 30, opacity: 0}}
-              animate={{y: 0, opacity: 1}}
+              initial={shouldReduceMotion ? false : {y: 30, opacity: 0}}
+              animate={shouldReduceMotion ? undefined : {y: 0, opacity: 1}}
               transition={{duration: 0.8, delay: 0.2}}
             >
               <span className={`inline-block mb-4 rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-mono uppercase tracking-widest text-transparent backdrop-blur-md bg-clip-text bg-gradient-to-r ${project.color}`}>
@@ -135,8 +143,8 @@ export const ProjectDetail = () => {
             </TextReveal>
 
             <motion.div
-              initial={{opacity: 0}}
-              animate={{opacity: 1}}
+              initial={shouldReduceMotion ? false : {opacity: 0}}
+              animate={shouldReduceMotion ? undefined : {opacity: 1}}
               transition={{delay: 0.6}}
               className="mt-8 flex w-full flex-wrap items-center gap-8 border-t border-border pt-8 text-sm md:gap-16 md:text-base"
             >
@@ -237,8 +245,8 @@ export const ProjectDetail = () => {
                     return (
                       <motion.section
                         key={`solution-${idx}`}
-                        initial={{opacity: 0, y: 20}}
-                        whileInView={{opacity: 1, y: 0}}
+                        initial={shouldReduceMotion ? false : {opacity: 0, y: 20}}
+                        whileInView={shouldReduceMotion ? undefined : {opacity: 1, y: 0}}
                         viewport={{once: true}}
                         className="my-8 flex min-w-0 flex-col gap-4 md:max-w-[47.3%]"
                       >
@@ -263,8 +271,8 @@ export const ProjectDetail = () => {
                   return (
                     <motion.div
                       key={`gallery-${idx}`}
-                      initial={{opacity: 0, y: 20}}
-                      whileInView={{opacity: 1, y: 0}}
+                      initial={shouldReduceMotion ? false : {opacity: 0, y: 20}}
+                      whileInView={shouldReduceMotion ? undefined : {opacity: 1, y: 0}}
                       transition={{delay: 0.1}}
                       viewport={{once: true}}
                       className="overflow-hidden rounded-lg border border-border"
@@ -287,9 +295,11 @@ export const ProjectDetail = () => {
         </div>
       </main>
 
-      <div
-        className="group relative w-full cursor-pointer overflow-hidden border-t border-border bg-card/60 py-20 transition-colors"
+      <button
+        type="button"
+        className="group relative block w-full overflow-hidden border-t border-border bg-card/60 py-20 text-center transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-default disabled:opacity-60"
         onClick={() => navigation.nextId && handleNext(navigation.nextId)}
+        disabled={!navigation.nextId}
       >
         <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-foreground/5 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
 
@@ -304,7 +314,7 @@ export const ProjectDetail = () => {
             </div>
           </div>
         </div>
-      </div>
+      </button>
     </div>
   )
 }

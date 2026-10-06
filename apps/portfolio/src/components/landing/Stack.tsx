@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Figma, Code, Database, Layers, Zap, PenTool } from "lucide-react";
 import { SectionHeader, Section, Card, CardContent, CardTitle, CardDescription } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
@@ -15,6 +15,7 @@ const tools = [
 
 export const Stack = () => {
     const { t } = useLanguage();
+    const shouldReduceMotion = useReducedMotion();
 
     return (
         <Section id="stack" className="py-16 md:py-32">
@@ -29,16 +30,16 @@ export const Stack = () => {
                 {tools.map((tool, index) => (
                     <motion.li
                         key={tool.name}
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={shouldReduceMotion ? false : { opacity: 0, y: 50 }}
+                        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
-                        whileHover={{ y: -10, scale: 1.02 }}
+                        whileHover={shouldReduceMotion ? undefined : { y: -10, scale: 1.02 }}
                         className="group"
                     >
                         <Card className="relative h-full overflow-hidden border-border bg-card/70 shadow-sm transition-colors duration-500 hover:border-primary/30">
                             <CardContent className="flex h-full flex-col items-start bg-gradient-to-b from-muted/60 to-transparent p-8 transition-colors duration-500 group-hover:from-muted">
                                 <motion.div
-                                    animate={{ y: [0, -5, 0] }}
+                                    animate={shouldReduceMotion ? undefined : { y: [0, -5, 0] }}
                                     transition={{ duration: 3 + (index % 3) * 0.4, repeat: Infinity, ease: "easeInOut" }}
                                     className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-background/80 text-muted-foreground transition-all duration-500 group-hover:text-primary group-hover:shadow-lg"
                                 >

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, useReducedMotion } from "motion/react";
 import { Hero } from "./components/landing/Hero";
 import { Navbar } from "./components/landing/Navbar";
 import { ThemeProvider, useTheme } from "./components/theme-provider";
@@ -25,11 +25,12 @@ const RequireAdmin = React.lazy(() => import("./components/auth/RequireAdmin").t
 const LandingPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
 
   const handleNavigate = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
     }
   };
 
@@ -45,7 +46,7 @@ const LandingPage = () => {
       const element = document.getElementById(id);
       if (!element) return false;
 
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
       return true;
     };
 
@@ -53,7 +54,7 @@ const LandingPage = () => {
 
     const timeoutId = window.setTimeout(scrollToHash, 150);
     return () => window.clearTimeout(timeoutId);
-  }, [location.hash]);
+  }, [location.hash, shouldReduceMotion]);
 
   return (
     <>
@@ -84,7 +85,8 @@ function AppShell({
     delayMs: 1200,
   });
   const shouldMountAmbientChrome =
-    (hasEntered || shouldSkipIntro) && (!isHomeRoute || deferredHomeChrome);
+    (hasEntered || shouldSkipIntro) &&
+    (!isHomeRoute || deferredHomeChrome);
 
   return (
     <>

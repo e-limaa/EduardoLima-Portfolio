@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@limia/design-system-src/components/button";
 import { InteractiveGrid } from "@limia/design-system-src/components/interactive-grid";
 import { TrueFocus } from "@limia/design-system-src/components/true-focus";
@@ -10,7 +10,11 @@ import { useLanguage } from "../language-provider";
 import { useDeferredActivation } from "../../lib/use-deferred-activation";
 import posthog from "posthog-js";
 
-const LIQUID_ETHER_COLORS = ["#2563eb", "#5089fb", "#0735c0"];
+const LIQUID_ETHER_COLORS = [
+  "var(--action-primary-background)",
+  "var(--action-primary-hover)",
+  "var(--action-primary-active)",
+];
 
 const LiquidEtherBackground = React.lazy(() =>
   import("@limia/design-system-src/components/liquid-ether").then((module) => ({
@@ -25,6 +29,7 @@ export const Hero = () => {
   const [videoFailed, setVideoFailed] = React.useState(false);
   const [videoReady, setVideoReady] = React.useState(false);
   const [isCoarsePointer, setIsCoarsePointer] = React.useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const { t } = useLanguage();
   const shouldActivateBackground = useDeferredActivation({
@@ -68,7 +73,7 @@ export const Hero = () => {
     posthog.capture("Hero CTA Clicked", { type: "projects" });
     const element = document.getElementById("projects");
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
     }
   };
 
@@ -78,7 +83,7 @@ export const Hero = () => {
       className="relative isolate min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pt-0 md:pb-0 perspective-[1000px]"
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {shouldActivateBackground && (
+        {shouldActivateBackground && !shouldReduceMotion && (
           <React.Suspense fallback={null}>
             <LiquidEtherBackground
               autoIntensity={1.4}
@@ -101,12 +106,12 @@ export const Hero = () => {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -20 }}
+        animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="fixed top-6 left-0 right-0 z-50 pointer-events-none"
       >
-        <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 text-center lg:text-left">
+          <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 text-left min-[480px]:text-center lg:text-left">
           <span className="text-heading-sm font-semibold text-foreground tracking-tight pointer-events-auto inline-block">
             Eduardo Lima<span className="text-primary">.</span>
           </span>
@@ -116,8 +121,8 @@ export const Hero = () => {
       <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 z-10 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 items-center relative">
         <div className="col-span-1 lg:col-span-3 relative h-[400px] lg:h-[600px] flex items-end justify-center z-10 order-1 lg:order-2 pointer-events-none mt-4 lg:mt-0">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8, y: 50 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
             className="relative z-40 isolate aspect-[548/981] lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
           >
@@ -141,7 +146,7 @@ export const Hero = () => {
               />
             </picture>
 
-            {shouldLoadDesktopVideo && !videoFailed ? (
+            {shouldLoadDesktopVideo && !videoFailed && !shouldReduceMotion ? (
               <video
                 src="https://audio-assets.vercel.app/Edu-video.webm"
                 autoPlay
@@ -162,8 +167,8 @@ export const Hero = () => {
 
         <div className="col-span-1 lg:col-span-5 flex flex-col gap-6 text-center lg:text-left pointer-events-none z-20 order-2 lg:order-1 -mt-20 lg:mt-0">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8 }}
             className="flex justify-center lg:justify-start"
           >
@@ -176,8 +181,8 @@ export const Hero = () => {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-display-xl md:text-display-2xl font-bold tracking-tighter text-balance text-foreground leading-[0.9] pointer-events-auto"
           >
@@ -219,8 +224,8 @@ export const Hero = () => {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
             className="mt-8 max-w-lg mx-auto text-body-lg font-light text-pretty text-muted-foreground pointer-events-auto lg:mx-0"
           >
@@ -228,8 +233,8 @@ export const Hero = () => {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
             className="flex flex-wrap gap-4 justify-center lg:justify-start mt-4 pointer-events-auto mb-10 lg:mb-0"
           >
@@ -261,9 +266,9 @@ export const Hero = () => {
       </div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{ delay: 1.5, duration: 2, repeat: Infinity }}
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
+        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: [0, 10, 0] }}
+        transition={shouldReduceMotion ? { delay: 1.5, duration: 0.2 } : { delay: 1.5, duration: 2, repeat: Infinity }}
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
       >
         <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">

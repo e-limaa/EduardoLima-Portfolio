@@ -174,7 +174,7 @@ const translations: Record<Language, Record<string, string>> = {
         "welcome.audioHelp": "Immersive audio experience. Control available in the bottom corner.",
         "audio.tooltip.immersive": "Press play for a more immersive experience.",
         "sessionNotice.title": "Built by Eduardo Lima",
-        "sessionNotice.body": "This interface was designed and developed by Eduardo Lima himself, combining years of learning with AI support through Codex, Antigravity, and Figma, plus integrations with Supabase and n8n.",
+        "sessionNotice.body": "This interface was designed and developed by Eduardo Lima himself, combining years of learning with AI support through Codex, Antigravity, and Figma, plus integrations with PostgreSQL and n8n.",
 
         // Testimonials
         "testimonials.title": "What they say",
@@ -263,6 +263,8 @@ const translations: Record<Language, Record<string, string>> = {
         "chat.msg1": "Hi! I am Eduardo Lima's virtual version, trained to answer as he would about his trajectory, projects, and way of working.",
         "chat.msg2": "Ask about projects, design decisions, behind-the-scenes context, results, or how he could collaborate with your team.",
         "chat.placeholder": "Type your message...",
+        "chat.inputLabel": "Message for Eduardo Lima's AI assistant",
+        "chat.send": "Send message",
         "chat.assistant": "AI Assistant",
 
         // ProjectDetail
@@ -431,7 +433,7 @@ const translations: Record<Language, Record<string, string>> = {
         "welcome.audioHelp": "Experiência imersiva com áudio. Controle disponível no canto inferior.",
         "audio.tooltip.immersive": "Dê play para uma experiência mais imersiva.",
         "sessionNotice.title": "Interface criada por Eduardo Lima",
-        "sessionNotice.body": "Toda esta interface foi criada pelo próprio Eduardo Lima, reunindo anos de aprendizado com apoio de IA usando Codex, Antigravity e Figma, além de integrações com Supabase e n8n.",
+        "sessionNotice.body": "Toda esta interface foi criada pelo próprio Eduardo Lima, reunindo anos de aprendizado com apoio de IA usando Codex, Antigravity e Figma, além de integrações com PostgreSQL e n8n.",
 
         // Testimonials
         "testimonials.title": "O que dizem",
@@ -520,6 +522,8 @@ const translations: Record<Language, Record<string, string>> = {
         "chat.msg1": "Olá! Eu sou a versão virtual do Eduardo Lima, treinada para responder como ele sobre sua trajetória, seus projetos e sua forma de trabalhar.",
         "chat.msg2": "Pergunte sobre projetos, decisões de design, bastidores, resultados ou como ele poderia colaborar com o seu time.",
         "chat.placeholder": "Digite sua mensagem...",
+        "chat.inputLabel": "Mensagem para o assistente de IA do Eduardo Lima",
+        "chat.send": "Enviar mensagem",
         "chat.assistant": "AI Assistant",
 
         // ProjectDetail

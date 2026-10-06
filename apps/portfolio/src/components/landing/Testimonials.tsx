@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Quote } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage, Section, Card, CardContent, SectionHeader } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
@@ -26,11 +26,12 @@ const testimonials = [
 
 export const Testimonials = () => {
   const { t } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <Section className="py-32 bg-background" container={false}>
       {/* Background blob */}
-      <div className="pointer-events-none absolute left-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-primary/10 blur-[120px] mix-blend-screen animate-pulse"></div>
+      <div className="pointer-events-none absolute left-0 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-primary/10 blur-[80px] mix-blend-screen motion-safe:animate-pulse"></div>
 
       <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 relative z-10">
         <SectionHeader
@@ -45,8 +46,8 @@ export const Testimonials = () => {
           {testimonials.map((testimonial, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+              whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
               className="group"
             >
@@ -60,7 +61,7 @@ export const Testimonials = () => {
 
                   <div className="flex items-center gap-4">
                     <Avatar>
-                      <AvatarImage src={testimonial.img} />
+                      <AvatarImage src={testimonial.img} alt="" />
                       <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
                     </Avatar>
                     <div>

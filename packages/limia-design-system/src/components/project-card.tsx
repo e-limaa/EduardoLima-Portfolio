@@ -1,5 +1,5 @@
 import { type MouseEvent, useState } from "react";
-import { motion, useMotionValue } from "motion/react";
+import { motion, useMotionValue, useReducedMotion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -26,6 +26,7 @@ export const ProjectCard = ({
 }: ProjectCardProps) => {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
+    const shouldReduceMotion = useReducedMotion();
     const [isHovered, setIsHovered] = useState(false);
     const [imgSrc, setImgSrc] = useState(image);
 
@@ -47,10 +48,10 @@ export const ProjectCard = ({
     return (
         <motion.article
             className={cn(
-                "relative group w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-black dark:bg-zinc-900 cursor-none",
+                "relative group w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-black cursor-none outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 className
             )}
-            whileHover={{ y: -10 }}
+            whileHover={shouldReduceMotion ? undefined : { y: -10 }}
             transition={{ duration: 0.5, ease: "circOut" }}
             onMouseMove={handleMouseMove}
             onClick={onClick}
@@ -72,29 +73,29 @@ export const ProjectCard = ({
             }}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {isHovered && (
+            {isHovered && !shouldReduceMotion && (
                 <motion.div
-                    className="hidden md:flex absolute pointer-events-none z-50 w-12 h-12 rounded-full bg-blue-600/90 backdrop-blur-sm items-center justify-center shadow-lg shadow-blue-600/20"
+                    className="hidden md:flex absolute pointer-events-none z-50 w-12 h-12 rounded-full bg-primary/90 backdrop-blur-sm items-center justify-center shadow-lg shadow-primary/20"
                     style={{
                         left: mouseX,
                         top: mouseY,
                         x: "-50%",
                         y: "-50%",
                     }}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.5 }}
+                    animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.5 }}
                     transition={{ duration: 0.2 }}
                 >
-                    <ArrowUpRight className="w-5 h-5 text-white" />
+                    <ArrowUpRight className="w-5 h-5 text-primary-foreground" />
                 </motion.div>
             )}
 
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-700 z-10" />
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-700 z-10" />
 
             <motion.div
                 className="absolute inset-0 w-full h-full"
-                whileHover={{ scale: 1.05 }}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
                 transition={{ duration: 0.7 }}
             >
                 <img
@@ -106,14 +107,14 @@ export const ProjectCard = ({
                 />
             </motion.div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent opacity-90 z-10" />
 
             <div className="absolute bottom-0 left-0 p-8 md:p-12 z-20 w-full transform transition-transform duration-500 group-hover:translate-y-[-10px]">
                 <div className="flex flex-col gap-4">
                     <div className="overflow-hidden">
                         <motion.span
-                            initial={{ y: 20, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
+                            initial={shouldReduceMotion ? false : { y: 20, opacity: 0 }}
+                            whileInView={shouldReduceMotion ? undefined : { y: 0, opacity: 1 }}
                             className={cn(
                                 "text-transparent bg-clip-text bg-gradient-to-r font-bold tracking-widest text-sm uppercase inline-block",
                                 color
@@ -127,9 +128,9 @@ export const ProjectCard = ({
                         {title}
                     </h3>
 
-                    <div className="flex items-center justify-between mt-4 border-t border-white/10 pt-6 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="flex items-center justify-between mt-4 border-t border-white/20 pt-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
                         {metric && (
-                            <span className="font-mono text-sm text-white/80">
+                            <span className="font-mono text-sm text-white/90">
                                 {metric}
                             </span>
                         )}

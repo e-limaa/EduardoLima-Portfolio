@@ -1,5 +1,4 @@
 import React from "react";
-import type { Session } from "@supabase/supabase-js";
 import {
   Button,
   Card,
@@ -10,16 +9,15 @@ import {
   Input,
   Label,
 } from "@limia/design-system";
-import { supabase } from "@/lib/supabase";
+import {
+  ApiError,
+  AUTH_INVALIDATED_EVENT,
+  getAuthSession,
+  loginAdmin,
+  logoutAdmin,
+} from "@/lib/portfolio-api";
 
-const resolveIsAdmin = async () => {
-  // Source of truth stays server-side (RLS function + profiles table).
-  const { data, error } = await supabase.rpc("is_dashboard_admin");
-  if (error) {
-    return false;
-  }
-  return data === true;
-};
+type AuthState = "checking" | "signed-out" | "allowed" | "denied" | "error";
 
 const DashboardSignIn = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   const [email, setEmail] = React.useState("");
@@ -32,20 +30,21 @@ const DashboardSignIn = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
     setError(null);
     setSubmitting(true);
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-
-    if (signInError) {
-      setError("Falha no login. Verifique suas credenciais.");
+    try {
+      await loginAdmin({ email: email.trim(), password });
+      setPassword("");
+      await onSuccess();
+    } catch (loginError) {
+      if (loginError instanceof ApiError && loginError.status === 403) {
+        setError("Sua conta nao possui permissao de administrador.");
+      } else if (loginError instanceof ApiError && loginError.status === 401) {
+        setError("Falha no login. Verifique suas credenciais.");
+      } else {
+        setError("Nao foi possivel entrar agora. Tente novamente.");
+      }
+    } finally {
       setSubmitting(false);
-      return;
     }
-
-    setPassword("");
-    await onSuccess();
-    setSubmitting(false);
   };
 
   return (
@@ -94,13 +93,26 @@ const DashboardSignIn = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   );
 };
 
-const DashboardUnauthorized = () => {
+const DashboardUnauthorized = ({ onSignedOut }: { onSignedOut: () => Promise<void> }) => {
   const [signingOut, setSigningOut] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const handleSignOut = async () => {
     setSigningOut(true);
-    await supabase.auth.signOut();
-    setSigningOut(false);
+    setError(null);
+    try {
+      await logoutAdmin();
+      await onSignedOut();
+    } catch (logoutError) {
+      if (logoutError instanceof ApiError && logoutError.status === 401) {
+        await onSignedOut();
+      } else {
+        setError("Nao foi possivel encerrar a sessao. Tente novamente.");
+        await onSignedOut();
+      }
+    } finally {
+      setSigningOut(false);
+    }
   };
 
   return (
@@ -112,7 +124,8 @@ const DashboardUnauthorized = () => {
             Sua conta nao possui permissao de administrador para visualizar este dashboard.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
+          {error && <p className="text-sm text-destructive">{error}</p>}
           <Button className="w-full" variant="outline" onClick={handleSignOut} disabled={signingOut}>
             {signingOut ? "Saindo..." : "Sair"}
           </Button>
@@ -123,50 +136,56 @@ const DashboardUnauthorized = () => {
 };
 
 export const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
-  const [loading, setLoading] = React.useState(true);
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [authState, setAuthState] = React.useState<AuthState>("checking");
+  const [authError, setAuthError] = React.useState<string | null>(null);
+  const requestId = React.useRef(0);
 
   const refreshAuthState = React.useCallback(async () => {
-    setLoading(true);
-    const { data } = await supabase.auth.getSession();
-    const nextSession = data.session;
-    setSession(nextSession);
+    const currentRequest = ++requestId.current;
+    setAuthState("checking");
+    setAuthError(null);
 
-    if (!nextSession?.user) {
-      setIsAdmin(false);
-      setLoading(false);
-      return;
+    try {
+      const { user } = await getAuthSession();
+      if (requestId.current !== currentRequest) return;
+      setAuthState(user?.is_admin === true ? "allowed" : "denied");
+    } catch (error) {
+      if (requestId.current !== currentRequest) return;
+
+      if (error instanceof ApiError && error.status === 401) {
+        setAuthState("signed-out");
+      } else if (error instanceof ApiError && error.status === 403) {
+        setAuthState("denied");
+      } else {
+        setAuthError("Nao foi possivel validar seu acesso. Verifique a conexao e tente novamente.");
+        setAuthState("error");
+      }
     }
-
-    const allowed = await resolveIsAdmin();
-    setIsAdmin(allowed);
-    setLoading(false);
   }, []);
 
   React.useEffect(() => {
-    let mounted = true;
-
-    const init = async () => {
-      await refreshAuthState();
-    };
-
-    void init();
-
-    const { data: authSubscription } = supabase.auth.onAuthStateChange(() => {
-      if (!mounted) {
+    const handleAuthInvalidated = (event: Event) => {
+      const status = (event as CustomEvent<{ status?: number }>).detail?.status;
+      if (status !== 401 && status !== 403) {
+        void refreshAuthState();
         return;
       }
-      void refreshAuthState();
-    });
+
+      requestId.current += 1;
+      setAuthError(null);
+      setAuthState(status === 403 ? "denied" : "signed-out");
+    };
+
+    window.addEventListener(AUTH_INVALIDATED_EVENT, handleAuthInvalidated);
+    void refreshAuthState();
 
     return () => {
-      mounted = false;
-      authSubscription.subscription.unsubscribe();
+      requestId.current += 1;
+      window.removeEventListener(AUTH_INVALIDATED_EVENT, handleAuthInvalidated);
     };
   }, [refreshAuthState]);
 
-  if (loading) {
+  if (authState === "checking") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
         <p className="text-sm text-muted-foreground">Validando acesso...</p>
@@ -174,14 +193,31 @@ export const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!session) {
+  if (authState === "error") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background p-4 text-foreground">
+        <Card className="w-full max-w-md border-border/70 bg-card/95 shadow-xl backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">Falha ao validar acesso</CardTitle>
+            <CardDescription>{authError}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full" variant="outline" onClick={() => void refreshAuthState()}>
+              Tentar novamente
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (authState === "signed-out") {
     return <DashboardSignIn onSuccess={refreshAuthState} />;
   }
 
-  if (!isAdmin) {
-    return <DashboardUnauthorized />;
+  if (authState === "denied") {
+    return <DashboardUnauthorized onSignedOut={refreshAuthState} />;
   }
 
   return <>{children}</>;
 };
-
