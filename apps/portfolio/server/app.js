@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import { HttpError, hashIp, isAdmin, newSessionToken, requireOrigin, sessionCookie, sessionHash, sessionToken, validateChat, validateContact, validateEmail } from './security.js';
 import { runChat, notifyTelegram, notifyContactTelegram } from './chat.js';
 import { createSanityProjectsGateway, isValidProjectSlug, sanityLocaleFromAppLanguage } from './sanity-projects.js';
+import { logger as defaultLogger } from './log.js';
 
 const defaultStatic = fileURLToPath(new URL('../dist',import.meta.url));
 const dummyPasswordHash = bcrypt.hashSync('non-existent-user-placeholder',10);
@@ -13,6 +14,17 @@ const publicUser = user => ({id:user.id,email:user.email,role:user.role || 'user
 const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.woff':'font/woff','.woff2':'font/woff2','.webm':'video/webm','.mp4':'video/mp4','.pdf':'application/pdf'};
 const csp="default-src 'self'; script-src 'self' 'unsafe-inline' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://mxq3x3cp.apicdn.sanity.io https://cdn.sanity.io https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://app.posthog.com; media-src 'self' https://audio-assets.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'";
 
+const safePath = req => { try {return new URL(req.url,'http://localhost').pathname.slice(0,200);} catch {return 'invalid';} };
+// Access log without query strings, IPs, cookies or bodies. Static assets and
+// healthy healthchecks are skipped to keep the log readable.
+function accessLog(req,res,logger) {
+  const started=process.hrtime.bigint();
+  res.once('finish',()=>{
+    const path=safePath(req);
+    if(path.startsWith('/assets/') || (path==='/api/health' && res.statusCode===200)) return;
+    logger.info?.('http.request',{method:req.method,path,status:res.statusCode,ms:Number((process.hrtime.bigint()-started)/1000000n)});
+  });
+}
 export function json(res,status,body) {
   res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});
   res.end(JSON.stringify(body));
@@ -48,9 +60,10 @@ async function currentUser(req,repository,config,admin=false) {
   return publicUser(user);
 }
 
-export function createApp({repository,config,chat=runChat,telegram=notifyTelegram,contactTelegram=notifyContactTelegram,logger=console,sanity=createSanityProjectsGateway()}) {
+export function createApp({repository,config,chat=runChat,telegram=notifyTelegram,contactTelegram=notifyContactTelegram,logger=defaultLogger,sanity=createSanityProjectsGateway()}) {
   const staticRoot=path.resolve(config.staticDir || defaultStatic);
   return createServer(async(req,res)=>{
+    accessLog(req,res,logger);
     res.setHeader('X-Content-Type-Options','nosniff');
     res.setHeader('X-Frame-Options','DENY');
     res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
@@ -73,13 +86,13 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
           const locale=sanityLocaleFromAppLanguage(appLanguage);
           if (!locale) throw new HttpError(400,'Invalid project language.');
           try {return publicJson(res,200,{projects:await sanity.list(locale)});}
-          catch {logger.error('[projects] Sanity query failed');throw new HttpError(503,'Projects are temporarily unavailable.');}
+          catch(error) {logger.error('projects.list_failed',error);throw new HttpError(503,'Projects are temporarily unavailable.');}
         }
         if (route==='/api/projects/navigation' && method==='GET') {
           const currentId=url.searchParams.get('currentId') || '';
           if (!isValidProjectSlug(currentId)) throw new HttpError(400,'Invalid project ID.');
           try {return publicJson(res,200,await sanity.adjacent(currentId));}
-          catch {logger.error('[projects] Sanity navigation query failed');throw new HttpError(503,'Project navigation is temporarily unavailable.');}
+          catch(error) {logger.error('projects.navigation_failed',error);throw new HttpError(503,'Project navigation is temporarily unavailable.');}
         }
         const projectRoute=route.match(/^\/api\/projects\/([^/]+)$/);
         if (projectRoute && method==='GET') {
@@ -95,7 +108,7 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
             return publicJson(res,200,{project});
           } catch(error) {
             if (error instanceof HttpError) throw error;
-            logger.error('[projects] Sanity project query failed');
+            logger.error('projects.detail_failed',error);
             throw new HttpError(503,'Project is temporarily unavailable.');
           }
         }
@@ -139,6 +152,16 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
           await repository.markRead(sessionId);
           return json(res,200,{ok:true});
         }
+        if (route==='/api/admin/contacts' && method==='GET') {
+          await currentUser(req,repository,config,true);
+          return json(res,200,{contacts:await repository.contacts()});
+        }
+        const contactReadRoute=route.match(/^\/api\/admin\/contacts\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/read$/i);
+        if (contactReadRoute && method==='PATCH') {
+          await currentUser(req,repository,config,true);
+          await repository.markContactRead(contactReadRoute[1].toLowerCase());
+          return json(res,200,{ok:true});
+        }
         if (route==='/api/newsletter' && method==='POST') {
           const body=await readJson(req);
           const email=validateEmail(body.email);
@@ -153,7 +176,7 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
           const contact=validateContact(await readJson(req));
           await repository.rate(`contact:${hashIp(req,config)}`,3600,5);
           await repository.contact(contact);
-          contactTelegram(contact).catch(()=>logger.error('[contact] Telegram notification failed'));
+          contactTelegram(contact).catch(error=>logger.error('contact.telegram_failed',error));
           return json(res,201,{ok:true});
         }
         if (route==='/api/chat' && method==='POST') {
@@ -182,9 +205,10 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
             await repository.completeChat(reservation,{sessionId:body.sessionId,message:body.message,answer});
             if(body.stream) {sendEvent('done',{output:answer});res.end();}
             else json(res,200,{output:answer});
-            telegram({sessionId:body.sessionId,message:body.message,answer}).catch(()=>logger.error('[chat] Telegram notification failed'));
+            telegram({sessionId:body.sessionId,message:body.message,answer}).catch(error=>logger.error('chat.telegram_failed',error));
           } catch(error) {
-            await repository.failChat(reservation).catch(()=>logger.error('[chat] reservation finalization failed'));
+            await repository.failChat(reservation).catch(failure=>logger.error('chat.reservation_finalize_failed',failure));
+            if(!(error instanceof HttpError)) logger.error(controller.signal.aborted?'chat.aborted':'chat.failed',error,{stream:body.stream});
             if(res.destroyed) return;
             const status=error instanceof HttpError?error.status:controller.signal.aborted?504:502;
             const message=error instanceof HttpError?error.message:status===504?'Request timed out. Please try again.':'Failed to process chat request.';
@@ -214,7 +238,7 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
       res.end(method==='HEAD'?undefined:content);
     } catch(error) {
       if(res.destroyed || res.headersSent) return;
-      if (!(error instanceof HttpError)) logger.error('[api] request failed');
+      if (!(error instanceof HttpError)) logger.error('request.failed',error,{method:req.method,path:safePath(req)});
       const status=error instanceof HttpError?error.status:503;
       const message=error instanceof HttpError?error.message:'Service temporarily unavailable.';
       json(res,status,{error:message,message,...(error.code && error instanceof HttpError?{code:error.code}:{})});

@@ -137,3 +137,24 @@ export function markAdminSessionRead(sessionId: string) {
     method: "PATCH",
   });
 }
+
+export interface ContactRow {
+  id: string;
+  created_at: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  company: string | null;
+  message: string;
+  is_read: boolean;
+}
+
+export function getAdminContacts() {
+  return apiRequest<{ contacts: ContactRow[] }>("/api/admin/contacts");
+}
+
+export function markAdminContactRead(id: string) {
+  return apiRequest<{ ok: true }>(`/api/admin/contacts/${encodeURIComponent(id)}/read`, {
+    method: "PATCH",
+  });
+}

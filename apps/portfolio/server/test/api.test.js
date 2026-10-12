@@ -17,7 +17,7 @@ test('development API defaults to the Vite proxy port without changing productio
 const user={id:'00000000-0000-0000-0000-000000000001',email:'admin@example.com',role:'admin',is_admin:false,password_hash:await bcrypt.hash('password',4)};
 function repository(overrides={}) {
   const sessions=new Map();
-  return {health:async()=>{},rate:async()=>{},findUser:async()=>user,session:async hash=>sessions.get(hash),createSession:async(hash)=>sessions.set(hash,user),revokeSession:async hash=>sessions.delete(hash),interactions:async()=>[{id:'interaction'}],markRead:async()=>{},newsletter:async()=>{},contact:async()=>{},reserveChat:async()=>'reservation',history:async()=>[],knowledge:async()=>[],completeChat:async()=>{},failChat:async()=>{},...overrides};
+  return {health:async()=>{},rate:async()=>{},findUser:async()=>user,session:async hash=>sessions.get(hash),createSession:async(hash)=>sessions.set(hash,user),revokeSession:async hash=>sessions.delete(hash),interactions:async()=>[{id:'interaction'}],markRead:async()=>{},newsletter:async()=>{},contact:async()=>{},contacts:async()=>[{id:'00000000-0000-0000-0000-0000000000aa',name:'Ana',is_read:false}],markContactRead:async()=>{},reserveChat:async()=>'reservation',history:async()=>[],knowledge:async()=>[],completeChat:async()=>{},failChat:async()=>{},...overrides};
 }
 async function withServer(repo,run,overrides={}) {
   const app=createApp({repository:repo,config,logger:{error:()=>{}},telegram:async()=>{},chat:async()=>'answer',...overrides});
@@ -99,12 +99,44 @@ test('contact form stores normalized messages, notifies, rate limits and validat
     assert.notEqual((await request('/api/contact',mutation({name:'Ana',phone:'11999990000',message:'Oi'}))).status,201);
   });
 });
+test('admin contact inbox lists messages and marks one read, only for admins',async()=>{
+  const marked=[];
+  await withServer(repository({markContactRead:async id=>marked.push(id)}),async request=>{
+    assert.equal((await request('/api/admin/contacts')).status,401);
+    const login=await request('/api/auth/login',mutation({email:user.email,password:'password'}));
+    const headers={Cookie:login.headers.get('set-cookie').split(';')[0]};
+    const list=await request('/api/admin/contacts',{headers});
+    assert.equal(list.status,200);assert.equal((await list.json()).contacts[0].name,'Ana');
+    const id='00000000-0000-0000-0000-0000000000AA';
+    assert.equal((await request(`/api/admin/contacts/${id}/read`,{method:'PATCH',headers})).status,403); // Origin required.
+    assert.equal((await request(`/api/admin/contacts/${id}/read`,{method:'PATCH',headers:{...headers,Origin:config.origin}})).status,200);
+    assert.equal((await request('/api/admin/contacts/not-a-uuid/read',{method:'PATCH',headers:{...headers,Origin:config.origin}})).status,404);
+    assert.deepEqual(marked,[id.toLowerCase()]);
+  });
+  await withServer(repository({session:async()=>({...user,role:'user',is_admin:false})}),async request=>{
+    assert.equal((await request('/api/admin/contacts',{headers:{Cookie:`${config.cookieName}=${'a'.repeat(43)}`}})).status,403);
+  });
+});
 test('malformed admin session IDs are rejected as bad requests',async()=>{
   await withServer(repository(),async request=>{
     const login=await request('/api/auth/login',mutation({email:user.email,password:'password'}));
     const headers={Cookie:login.headers.get('set-cookie').split(';')[0],Origin:config.origin};
     assert.equal((await request('/api/admin/sessions/%E0%A4%A/read',{method:'PATCH',headers})).status,400);
   });
+});
+test('access log omits query strings and errors carry the underlying cause',async()=>{
+  const infos=[];const errors=[];
+  const logger={info:(event,fields)=>infos.push({event,...fields}),error:(event,error,fields)=>errors.push({event,message:error?.message,...fields})};
+  const sanity={list:async()=>{throw new Error('Sanity CDN 500');},bySlug:async()=>undefined,adjacent:async()=>({})};
+  await withServer(repository(),async request=>{
+    assert.equal((await request('/api/projects?locale=en&email=someone@example.com')).status,503);
+    assert.equal((await request('/api/health')).status,200);
+  },{logger,sanity});
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(infos.map(entry=>[entry.event,entry.method,entry.path,entry.status]),[['http.request','GET','/api/projects',503]]);
+  assert.equal(typeof infos[0].ms,'number');
+  assert.doesNotMatch(JSON.stringify(infos),/someone|email|locale/);
+  assert.deepEqual(errors,[{event:'projects.list_failed',message:'Sanity CDN 500'}]);
 });
 test('published projects are available through same-origin public routes',async()=>{
   const calls=[];
