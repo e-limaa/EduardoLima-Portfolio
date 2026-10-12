@@ -8,6 +8,7 @@ import { LanguageProvider } from "./components/language-provider";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { Toaster } from "@limia/design-system-src/components/ui/sonner";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
+import { readStorage, removeStorage, writeStorage } from "./lib/safe-storage";
 import { useDeferredActivation } from "./lib/use-deferred-activation";
 import posthog from "posthog-js";
 
@@ -147,13 +148,13 @@ function AppShell({
 export default function App() {
   const location = useLocation();
   const [hasEntered, setHasEntered] = useState(() => {
-    if (typeof window === "undefined") return location.hash.includes("figmacapture=");
+    if (typeof window === "undefined") return false;
 
-    if (localStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true") {
-      localStorage.removeItem(WELCOME_SCREEN_STORAGE_KEY);
+    if (readStorage(WELCOME_SCREEN_STORAGE_KEY) === "true") {
+      removeStorage(WELCOME_SCREEN_STORAGE_KEY);
     }
 
-    return sessionStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true" || location.hash.includes("figmacapture=");
+    return readStorage(WELCOME_SCREEN_STORAGE_KEY, "session") === "true";
   });
 
   useEffect(() => {
@@ -168,7 +169,7 @@ export default function App() {
   useEffect(() => {
     if (!hasEntered || typeof window === "undefined") return;
 
-    sessionStorage.setItem(WELCOME_SCREEN_STORAGE_KEY, "true");
+    writeStorage(WELCOME_SCREEN_STORAGE_KEY, "true", "session");
   }, [hasEntered]);
 
   return (

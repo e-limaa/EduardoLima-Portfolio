@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { DEFAULT_LANGUAGE, type AppLanguage } from "../lib/i18n"
+import { DEFAULT_LANGUAGE, parseAppLanguage, type AppLanguage } from "../lib/i18n"
+import { readStorage, writeStorage } from "../lib/safe-storage"
 type Language = AppLanguage
 
 type LanguageProviderProps = {
@@ -197,6 +198,15 @@ const translations: Record<Language, Record<string, string>> = {
         "contact.form.desc": "Description",
         "contact.form.descPlaceholder": "How can I help you?",
         "contact.form.submit": "Send message",
+        "contact.form.sending": "Sending...",
+        "contact.form.email": "Email",
+        "contact.form.emailPlaceholder": "you@company.com",
+        "contact.form.reachRequired": "Fill in your email or phone so I can reply.",
+        "contact.toast.successTitle": "Message sent!",
+        "contact.toast.successDesc": "Thanks for reaching out. I'll get back to you soon.",
+        "contact.toast.errorTitle": "Your message wasn't sent",
+        "contact.toast.errorDesc": "Something went wrong. Please try again in a moment.",
+        "contact.toast.rateLimitDesc": "Too many messages in a short time. Please try again later.",
 
         // NewsletterModal
         "newsletter.trigger": "AI Newsletter",
@@ -456,6 +466,15 @@ const translations: Record<Language, Record<string, string>> = {
         "contact.form.desc": "Descrição",
         "contact.form.descPlaceholder": "Como posso ajudar?",
         "contact.form.submit": "Enviar mensagem",
+        "contact.form.sending": "Enviando...",
+        "contact.form.email": "Email",
+        "contact.form.emailPlaceholder": "voce@empresa.com",
+        "contact.form.reachRequired": "Preencha seu email ou telefone para eu poder responder.",
+        "contact.toast.successTitle": "Mensagem enviada!",
+        "contact.toast.successDesc": "Obrigado pelo contato. Respondo em breve.",
+        "contact.toast.errorTitle": "Sua mensagem não foi enviada",
+        "contact.toast.errorDesc": "Algo deu errado. Tente novamente em instantes.",
+        "contact.toast.rateLimitDesc": "Muitas mensagens em pouco tempo. Tente novamente mais tarde.",
 
         // NewsletterModal
         "newsletter.trigger": "Newsletter IA",
@@ -550,16 +569,16 @@ export function LanguageProvider({
     ...props
 }: LanguageProviderProps) {
     const [language, setLanguage] = useState<Language>(
-        () => (localStorage.getItem(storageKey) as Language) || defaultLanguage
+        () => parseAppLanguage(readStorage(storageKey)) ?? defaultLanguage
     )
 
     useEffect(() => {
-        localStorage.setItem(storageKey, language)
+        writeStorage(storageKey, language)
         document.documentElement.lang = language
     }, [language, storageKey])
 
     const t = (key: string) => {
-        return translations[language][key] || key
+        return translations[language]?.[key] || key
     }
 
     const value = {

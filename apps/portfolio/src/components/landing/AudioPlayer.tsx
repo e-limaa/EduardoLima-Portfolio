@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Play, Pause, Volume2, VolumeX, Music } from "lucide-react";
 import { useLanguage } from "../language-provider";
 import { WELCOME_SCREEN_STORAGE_KEY } from "../../lib/storage-keys";
+import { readStorage } from "../../lib/safe-storage";
 
 const PLAYLIST = [
     {
@@ -63,7 +64,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
     useEffect(() => {
         if (typeof window === "undefined") return;
 
-        const hasSeenWelcome = sessionStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true";
+        const hasSeenWelcome = readStorage(WELCOME_SCREEN_STORAGE_KEY, "session") === "true";
         if (!hasSeenWelcome) return;
 
         setShowImmersiveHint(true);

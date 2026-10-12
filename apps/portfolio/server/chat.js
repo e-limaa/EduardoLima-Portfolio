@@ -65,6 +65,8 @@ const knowledgeTool = {
   strict: true,
 };
 
+// The last round must answer with text: a tool call there would leave no output.
+const toolChoiceForRound = (round) => (round >= MAX_TOOL_ROUNDS - 1 ? "none" : "auto");
 const getPositiveIntegerEnv = (name,fallback) => { const n=Number(process.env[name]); return Number.isInteger(n)&&n>0?n:fallback; };
 const getMaxOutputTokens = () => Math.min(getPositiveIntegerEnv('OPENAI_MAX_OUTPUT_TOKENS',220),getPositiveIntegerEnv('OPENAI_MAX_OUTPUT_TOKENS_CAP',400));
 const rankKnowledge = (rows, query) => { const terms=String(query).toLowerCase().split(/\s+/).filter(term=>term.length>2); const ranked=rows.map(row=>({row,score:terms.reduce((sum,term)=>sum+(JSON.stringify(row).toLowerCase().includes(term)?1:0),0)})).sort((a,b)=>b.score-a.score).slice(0,6).map(item=>item.row); return JSON.stringify({found:ranked.length>0,query,items:ranked}); };
@@ -216,7 +218,7 @@ const runResponseWithTools = async ({
         instructions,
         input,
         tools: [knowledgeTool],
-        tool_choice: "auto",
+        tool_choice: toolChoiceForRound(round),
         max_output_tokens: maxOutputTokens,
         store: shouldStoreResponses,
         ...(shouldStoreResponses
@@ -264,12 +266,12 @@ const runResponseWithTools = async ({
   return text;
 };
 
-const createResponsePayload = ({ model, instructions, input, maxOutputTokens, shouldStoreResponses }) => ({
+const createResponsePayload = ({ model, instructions, input, maxOutputTokens, shouldStoreResponses, round }) => ({
   model,
   instructions,
   input,
   tools: [knowledgeTool],
-  tool_choice: "auto",
+  tool_choice: toolChoiceForRound(round),
   max_output_tokens: maxOutputTokens,
   store: shouldStoreResponses,
   ...(shouldStoreResponses
@@ -336,6 +338,7 @@ const runStreamingResponseWithTools = async ({
         input,
         maxOutputTokens,
         shouldStoreResponses,
+        round,
       }),
       signal,
       (delta) => {
@@ -343,6 +346,10 @@ const runStreamingResponseWithTools = async ({
         onTextDelta(delta);
       },
     );
+
+    // Text streamed before a tool call was already shown to the visitor, so it
+    // belongs in the persisted answer too.
+    fullText += roundText;
 
     const toolResult = await appendToolOutputs({
       input,
@@ -353,7 +360,6 @@ const runStreamingResponseWithTools = async ({
 
     if (!toolResult.hasToolCalls) {
       finalResponse = response;
-      fullText += roundText;
       break;
     }
 
@@ -378,8 +384,14 @@ export async function runChat({repository,context,message,sessionId,signal,onDel
   return onDelta ? runStreamingResponseWithTools({...options,onTextDelta:onDelta}) : runResponseWithTools(options);
 }
 export async function notifyTelegram({sessionId,message,answer}) {
+  return sendTelegram(['Nova interacao no chat do portfolio','Sessao: '+sessionId,'','Visitante: '+message,'','Assistente: '+answer].join('\n'));
+}
+export async function notifyContactTelegram({name,email,phone,company,message}) {
+  return sendTelegram(['Nova mensagem de contato no portfolio','Nome: '+name,email?'Email: '+email:null,phone?'Telefone: '+phone:null,company?'Empresa: '+company:null,'',message].filter(line=>line!==null).join('\n'));
+}
+async function sendTelegram(fullText) {
   if(!process.env.TELEGRAM_BOT_TOKEN||!process.env.TELEGRAM_CHAT_ID) return;
-  const text=['Nova interacao no chat do portfolio','Sessao: '+sessionId,'','Visitante: '+message,'','Assistente: '+answer].join('\n').slice(0,3900);
+  const text=fullText.slice(0,3900);
   const response=await fetch('https://api.telegram.org/bot'+process.env.TELEGRAM_BOT_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:process.env.TELEGRAM_CHAT_ID,text,disable_web_page_preview:true}),signal:AbortSignal.timeout(5000)});
   if(!response.ok) throw new Error('Telegram notification failed.');
 }

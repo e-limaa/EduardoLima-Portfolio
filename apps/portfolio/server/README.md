@@ -23,6 +23,7 @@ Optional runtime environment:
 | `PG_POOL_MAX` | `5`, bounded at 20 |
 | `SESSION_SECONDS` | `43200` (12 hours), bounded at 7 days |
 | `CF_PROXY_CIDRS` | Empty: all client forwarding headers ignored. Configure only verified cloudflared peer IPs/CIDRs on an isolated network; do not trust all Docker/LAN networks. |
+| `CF_PROXY_HOSTS` | Empty. Comma-separated DNS names of the cloudflared peers (for example its Docker service name). Resolved at startup and every 60 seconds; only those exact addresses may supply `cf-connecting-ip`. Preferred over `CF_PROXY_CIDRS` on a shared Docker network. Production logs a warning when both are empty, because every tunnelled visitor then shares one rate-limit bucket. |
 | `CHAT_TIMEOUT_MS` | `30000`, maximum 120000 |
 | `CHAT_DAILY_MESSAGES_PER_SESSION` | `30` |
 | `CHAT_DAILY_MESSAGES_PER_IP` | `60` |
@@ -42,6 +43,7 @@ Browser mutations require an exact matching `Origin` from `PUBLIC_ORIGIN` or `PU
 API contracts:
 
 - `POST /api/newsletter {name?,email}`: 201 `{ok:true}`; duplicate email 409 `{error,message,code:"EMAIL_EXISTS"}`. Case-insensitive uniqueness is enforced; source import must verify case variants before insertion.
+- `POST /api/contact {name,message,email?,phone?,company?}`: 201 `{ok:true}`. Name, message and at least one of email/phone are required (400 with code `CONTACT_REQUIRED` or `CONTACT_REACH_REQUIRED`). Limited to 5 per hour per client IP. Messages are stored in `contact_messages` (the runtime role can only insert) and sent to Telegram when configured.
 - `POST /api/auth/login {email,password}`: 200 `{user:{id,email,role,is_admin}}` and session cookie; invalid credentials 401.
 - `GET /api/auth/session`: same user envelope or 401.
 - `POST /api/auth/logout`: 204 and cleared session cookie. A JSON body is unnecessary, but Origin is mandatory.
@@ -56,4 +58,4 @@ New subscribers and their `newsletter_outbox` rows are inserted in one transacti
 
 Run `npm test --prefix apps/portfolio/server --workspaces=false` for meaningful HTTP/security tests without paid generation or messages. To include SQL/concurrency tests, set `TEST_DATABASE_URL` to a disposable PostgreSQL connection allowed to create schemas; the suite creates and drops only its random `portfolio_test_*` schema, never application tables. It verifies duplicate/rollback outbox behavior, imported rows without events, concurrent quota reservations, session-ID bypass prevention, durable chat history and atomic minute limits.
 
-Independent administrator recovery: create a protected file (0600 on Linux) with the new password, set `RESET_PASSWORD_EMAIL` and `RESET_PASSWORD_FILE` plus runtime `DATABASE_URL`, then run `npm run reset-password --prefix apps/portfolio/server --workspaces=false` from the protected operator environment. The command accepts no secret arguments, hashes with bcrypt cost 12, updates only an existing administrator account and revokes all its sessions transactionally. Remove the password file immediately afterward. Passwords must fit bcrypt's 72-byte UTF-8 limit; imports preserve bcrypt hashes unchanged.
+Independent administrator recovery: create a protected file (0600 on Linux) with the new password, set `RESET_PASSWORD_EMAIL` and `RESET_PASSWORD_FILE` plus the privileged `MIGRATION_DATABASE_URL` (and `MIGRATION_OWNER_ROLE` when migrations use it; the runtime role is deliberately read-only on `app_users`), then run `npm run reset-password --prefix apps/portfolio/server --workspaces=false` from the protected operator environment. The command accepts no secret arguments, hashes with bcrypt cost 12, updates only an existing administrator account and revokes all its sessions transactionally. Remove the password file immediately afterward. Passwords must fit bcrypt's 72-byte UTF-8 limit; imports preserve bcrypt hashes unchanged.

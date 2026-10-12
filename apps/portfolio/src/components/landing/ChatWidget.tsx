@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage, Button, Input } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
+import { readStorage, removeStorage, writeStorage } from "../../lib/safe-storage";
 
 interface Message {
   id: string;
@@ -164,7 +165,7 @@ export const ChatWidget = () => {
 
   // Inicializa mensagens carregando da sessao atual do navegador ou usa o padrao
   const [messages, setMessages] = useState<Message[]>(() => {
-    const savedMessages = sessionStorage.getItem(CHAT_MESSAGES_STORAGE_KEY);
+    const savedMessages = readStorage(CHAT_MESSAGES_STORAGE_KEY, "session");
     if (savedMessages) {
       hasStoredMessagesRef.current = true;
       try {
@@ -201,7 +202,7 @@ export const ChatWidget = () => {
 
   // Inicializa o session ID da sessao atual ou cria um novo
   const [sessionId] = useState(() => {
-    const savedSession = sessionStorage.getItem(CHAT_SESSION_ID_STORAGE_KEY);
+    const savedSession = readStorage(CHAT_SESSION_ID_STORAGE_KEY, "session");
     if (savedSession && SESSION_ID_PATTERN.test(savedSession)) {
       return savedSession;
     }
@@ -217,18 +218,18 @@ export const ChatWidget = () => {
 
   // Remove persistencia antiga para nao restaurar conversas depois de reabrir o navegador.
   useEffect(() => {
-    localStorage.removeItem(CHAT_MESSAGES_STORAGE_KEY);
-    localStorage.removeItem(CHAT_SESSION_ID_STORAGE_KEY);
+    removeStorage(CHAT_MESSAGES_STORAGE_KEY);
+    removeStorage(CHAT_SESSION_ID_STORAGE_KEY);
   }, []);
 
   // Salva o Session ID apenas na sessao atual do navegador
   useEffect(() => {
-    sessionStorage.setItem(CHAT_SESSION_ID_STORAGE_KEY, sessionId);
+    writeStorage(CHAT_SESSION_ID_STORAGE_KEY, sessionId, "session");
   }, [sessionId]);
 
   // Salva as mensagens apenas na sessao atual do navegador
   useEffect(() => {
-    sessionStorage.setItem(CHAT_MESSAGES_STORAGE_KEY, JSON.stringify(messages));
+    writeStorage(CHAT_MESSAGES_STORAGE_KEY, JSON.stringify(messages), "session");
   }, [messages]);
 
   // Efeito para scrollar para o fundo sempre que mensagens mudarem ou status de digitação mudar

@@ -34,6 +34,23 @@ export function validateEmail(value) {
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new HttpError(400, 'Email inválido.');
   return email;
 }
+export function validateContact(body) {
+  const text = (value, max, label) => {
+    const result = typeof value === 'string' ? value.trim() : '';
+    if (result.length > max) throw new HttpError(400, `${label} is too long.`);
+    return result || null;
+  };
+  const name = text(body.name, 120, 'Name');
+  const rawEmail = text(body.email, 254, 'Email');
+  const email = rawEmail ? validateEmail(rawEmail) : null;
+  const phone = text(body.phone, 40, 'Phone');
+  const company = text(body.company, 120, 'Company');
+  const message = text(body.message, 4000, 'Message');
+  if (phone && !/^[0-9+()\-.\s]{6,40}$/.test(phone)) throw new HttpError(400, 'Invalid phone number.');
+  if (!name || !message) throw new HttpError(400, 'Name and message are required.', 'CONTACT_REQUIRED');
+  if (!email && !phone) throw new HttpError(400, 'Email or phone is required.', 'CONTACT_REACH_REQUIRED');
+  return {name, email, phone, company, message};
+}
 export function validateChat(body) {
   const message = typeof body.message === 'string' ? body.message.trim() : '';
   const sessionId = typeof body.sessionId === 'string' ? body.sessionId.trim() : '';

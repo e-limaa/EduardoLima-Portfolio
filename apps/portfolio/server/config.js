@@ -1,4 +1,4 @@
-import { BlockList, isIP } from 'node:net';
+import { buildTrustedProxies, parseProxyCidrs, parseProxyHosts } from './trusted-proxies.js';
 
 export const positiveInteger = (value, fallback, max = 100000) => {
   const n = Number(value);
@@ -23,15 +23,10 @@ export function loadConfig(env = process.env) {
     }
   }
   if (!env.RATE_LIMIT_SECRET || env.RATE_LIMIT_SECRET.length < 32) throw new Error('RATE_LIMIT_SECRET requires at least 32 characters.');
-  const trustedProxies = new BlockList();
-  for (const range of (env.CF_PROXY_CIDRS || '').split(',').filter(Boolean)) {
-    const [ip, prefix] = range.trim().split('/');
-    const family = isIP(ip);
-    if (!family) throw new Error('Invalid CF_PROXY_CIDRS.');
-    const type = family === 4 ? 'ipv4' : 'ipv6';
-    if (prefix === undefined) trustedProxies.addAddress(ip, type);
-    else trustedProxies.addSubnet(ip, Number(prefix), type);
-  }
+  const trustedProxyCidrs = parseProxyCidrs(env.CF_PROXY_CIDRS);
+  const trustedProxyHosts = parseProxyHosts(env.CF_PROXY_HOSTS);
+  // Hosts resolve asynchronously at startup (see refreshTrustedProxies).
+  const trustedProxies = buildTrustedProxies(trustedProxyCidrs);
   const newsletterDeliveryEnabled = env.NEWSLETTER_DELIVERY_ENABLED === 'true';
   let newsletterWebhookUrl = '';
   let newsletterWebhookSecret = '';
@@ -51,7 +46,7 @@ export function loadConfig(env = process.env) {
   return {
     databaseUrl: env.DATABASE_URL, origin: origin.origin, allowedOrigins, secureCookie: production || origin.protocol === 'https:',
     cookieName: production || origin.protocol === 'https:' ? '__Host-portfolio_session' : 'portfolio_session',
-    rateSecret: env.RATE_LIMIT_SECRET, trustedProxies,
+    rateSecret: env.RATE_LIMIT_SECRET, trustedProxies, trustedProxyCidrs, trustedProxyHosts, production,
     host: env.HOST || '0.0.0.0', port: positiveInteger(env.PORT, env.NODE_ENV === 'development' ? 3010 : 3000, 65535),
     poolMax: positiveInteger(env.PG_POOL_MAX, 5, 20),
     sessionSeconds: positiveInteger(env.SESSION_SECONDS, 43200, 604800),

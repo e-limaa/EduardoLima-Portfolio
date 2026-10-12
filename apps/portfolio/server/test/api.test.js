@@ -5,6 +5,7 @@ import { loadConfig } from '../config.js';
 import { createApp } from '../app.js';
 import { isAdmin, requestIp, sessionHash } from '../security.js';
 import { createSanityProjectsGateway } from '../sanity-projects.js';
+import { refreshTrustedProxies } from '../trusted-proxies.js';
 
 const config=loadConfig({NODE_ENV:'test',DATABASE_URL:'postgres://example',PUBLIC_ORIGIN:'http://localhost:3000',RATE_LIMIT_SECRET:'a'.repeat(32)});
 test('development API defaults to the Vite proxy port without changing production',()=>{
@@ -16,7 +17,7 @@ test('development API defaults to the Vite proxy port without changing productio
 const user={id:'00000000-0000-0000-0000-000000000001',email:'admin@example.com',role:'admin',is_admin:false,password_hash:await bcrypt.hash('password',4)};
 function repository(overrides={}) {
   const sessions=new Map();
-  return {health:async()=>{},rate:async()=>{},findUser:async()=>user,session:async hash=>sessions.get(hash),createSession:async(hash)=>sessions.set(hash,user),revokeSession:async hash=>sessions.delete(hash),interactions:async()=>[{id:'interaction'}],markRead:async()=>{},newsletter:async()=>{},reserveChat:async()=>'reservation',history:async()=>[],knowledge:async()=>[],completeChat:async()=>{},failChat:async()=>{},...overrides};
+  return {health:async()=>{},rate:async()=>{},findUser:async()=>user,session:async hash=>sessions.get(hash),createSession:async(hash)=>sessions.set(hash,user),revokeSession:async hash=>sessions.delete(hash),interactions:async()=>[{id:'interaction'}],markRead:async()=>{},newsletter:async()=>{},contact:async()=>{},reserveChat:async()=>'reservation',history:async()=>[],knowledge:async()=>[],completeChat:async()=>{},failChat:async()=>{},...overrides};
 }
 async function withServer(repo,run,overrides={}) {
   const app=createApp({repository:repo,config,logger:{error:()=>{}},telegram:async()=>{},chat:async()=>'answer',...overrides});
@@ -78,6 +79,32 @@ test('newsletter accepts the configured www alias and rejects unlisted origins',
     const unlisted=await request('/api/newsletter',{...mutation({email:'test@example.com'}),headers:{Origin:'http://other.localhost:3000','Content-Type':'application/json'}});
     assert.equal(unlisted.status,403);
   },{config:aliasConfig});
+});
+test('contact form stores normalized messages, notifies, rate limits and validates reachability',async()=>{
+  const stored=[];const notified=[];const scopes=[];
+  await withServer(repository({contact:async data=>stored.push(data),rate:async scope=>scopes.push(scope)}),async request=>{
+    const created=await request('/api/contact',mutation({name:' Ana ',email:' ANA@EXAMPLE.COM ',phone:'',company:' ACME ',message:' Quero um site '}));
+    assert.equal(created.status,201);
+    assert.deepEqual(stored,[{name:'Ana',email:'ana@example.com',phone:null,company:'ACME',message:'Quero um site'}]);
+    assert.deepEqual(notified,stored);
+    assert.match(scopes[0],/^contact:[0-9a-f]{64}$/);
+    const noReach=await request('/api/contact',mutation({name:'Ana',message:'Oi'}));
+    assert.equal(noReach.status,400);assert.equal((await noReach.json()).code,'CONTACT_REACH_REQUIRED');
+    assert.equal((await request('/api/contact',mutation({name:'Ana',phone:'abc',message:'Oi'}))).status,400);
+    assert.equal((await request('/api/contact',mutation({name:'Ana',phone:'(11) 99999-0000',message:'x'.repeat(4001)}))).status,400);
+    assert.equal((await request('/api/contact',mutation({name:'Ana',email:'ana@example.com',message:'Oi'},{Origin:'https://evil.example'}))).status,403);
+    assert.equal(stored.length,1);
+  },{contactTelegram:async data=>{notified.push(data);}});
+  await withServer(repository({rate:async()=>{throw Object.assign(new Error('limited'),{status:429});}}),async request=>{
+    assert.notEqual((await request('/api/contact',mutation({name:'Ana',phone:'11999990000',message:'Oi'}))).status,201);
+  });
+});
+test('malformed admin session IDs are rejected as bad requests',async()=>{
+  await withServer(repository(),async request=>{
+    const login=await request('/api/auth/login',mutation({email:user.email,password:'password'}));
+    const headers={Cookie:login.headers.get('set-cookie').split(';')[0],Origin:config.origin};
+    assert.equal((await request('/api/admin/sessions/%E0%A4%A/read',{method:'PATCH',headers})).status,400);
+  });
 });
 test('published projects are available through same-origin public routes',async()=>{
   const calls=[];
@@ -157,6 +184,20 @@ test('proxy headers are ignored unless peer is explicitly trusted; secure produc
   assert.equal(isAdmin({...user,role:'owner'}),true);assert.equal(sessionHash('token').length,64);
 });
 
+test('named cloudflared peers are trusted by resolved address only, and lookup failure trusts nothing',async()=>{
+  const req=peer=>({socket:{remoteAddress:peer},headers:{'cf-connecting-ip':'203.0.113.9'}});
+  const named=loadConfig({NODE_ENV:'production',DATABASE_URL:'postgres://example',PUBLIC_ORIGIN:'https://example.com',RATE_LIMIT_SECRET:'a'.repeat(32),CF_PROXY_HOSTS:'cloudflared'});
+  assert.deepEqual(named.trustedProxyHosts,['cloudflared']);
+  assert.equal(requestIp(req('172.18.0.5'),named),'172.18.0.5'); // Nothing trusted before resolution.
+  assert.deepEqual(await refreshTrustedProxies(named,async host=>{assert.equal(host,'cloudflared');return [{address:'172.18.0.5',family:4}];}),['172.18.0.5']);
+  assert.equal(requestIp(req('::ffff:172.18.0.5'),named),'203.0.113.9');
+  assert.equal(requestIp(req('172.18.0.6'),named),'172.18.0.6'); // Another container on the shared network.
+  await refreshTrustedProxies(named,async()=>{throw new Error('ENOTFOUND');});
+  assert.equal(requestIp(req('172.18.0.5'),named),'172.18.0.5');
+  const base={NODE_ENV:'production',DATABASE_URL:'postgres://example',PUBLIC_ORIGIN:'https://example.com',RATE_LIMIT_SECRET:'a'.repeat(32)};
+  assert.throws(()=>loadConfig({...base,CF_PROXY_HOSTS:'bad host/'}),/CF_PROXY_HOSTS/);
+  assert.throws(()=>loadConfig({...base,CF_PROXY_CIDRS:'10.0.0.0/99'}),/CF_PROXY_CIDRS/);
+});
 test('newsletter delivery requires a URL-safe shared secret when enabled',()=>{
   const base={NODE_ENV:'production',DATABASE_URL:'postgres://example',PUBLIC_ORIGIN:'https://example.com',RATE_LIMIT_SECRET:'a'.repeat(32),NEWSLETTER_DELIVERY_ENABLED:'true',NEWSLETTER_WEBHOOK_URL:'https://n8n.elimaj.com.br/webhook/novo-inscrito-newsletter'};
   assert.throws(()=>loadConfig(base),/NEWSLETTER_WEBHOOK_SECRET/);

@@ -98,6 +98,21 @@ export function subscribeToNewsletter(input: NewsletterSubscription) {
   });
 }
 
+export interface ContactMessage {
+  name: string;
+  email?: string;
+  phone?: string;
+  company?: string;
+  message: string;
+}
+
+export function sendContactMessage(input: ContactMessage) {
+  return apiRequest<{ ok: true }>("/api/contact", {
+    method: "POST",
+    body: input,
+  });
+}
+
 export function loginAdmin(input: { email: string; password: string }) {
   return apiRequest<{ user: ApiUser }>("/api/auth/login", {
     method: "POST",

@@ -42,6 +42,8 @@ export function createRepository(pool, config) {
       await client.query(`INSERT INTO newsletter_outbox(subscriber_id,payload) VALUES($1,$2::jsonb)`,[subscriber.id,JSON.stringify({type:'INSERT',table:'newsletter_subscribers',schema:'public',record:subscriber,old_record:null})]);
       return subscriber;
     }),
+    // No RETURNING: the runtime role has INSERT-only access to contact messages.
+    contact: async ({name,email,phone,company,message}) => pool.query('INSERT INTO contact_messages(name,email,phone,company,message) VALUES($1,$2,$3,$4,$5)',[name,email,phone,company,message]),
     claimNewsletterEvent: async () => transaction(pool, async client => {
       const event = (await client.query(`SELECT id,payload,attempts FROM newsletter_outbox
         WHERE delivered_at IS NULL AND next_attempt_at<=now()

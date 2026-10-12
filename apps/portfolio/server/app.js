@@ -3,8 +3,8 @@ import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import bcrypt from 'bcryptjs';
-import { HttpError, hashIp, isAdmin, newSessionToken, requireOrigin, sessionCookie, sessionHash, sessionToken, validateChat, validateEmail } from './security.js';
-import { runChat, notifyTelegram } from './chat.js';
+import { HttpError, hashIp, isAdmin, newSessionToken, requireOrigin, sessionCookie, sessionHash, sessionToken, validateChat, validateContact, validateEmail } from './security.js';
+import { runChat, notifyTelegram, notifyContactTelegram } from './chat.js';
 import { createSanityProjectsGateway, isValidProjectSlug, sanityLocaleFromAppLanguage } from './sanity-projects.js';
 
 const defaultStatic = fileURLToPath(new URL('../dist',import.meta.url));
@@ -48,7 +48,7 @@ async function currentUser(req,repository,config,admin=false) {
   return publicUser(user);
 }
 
-export function createApp({repository,config,chat=runChat,telegram=notifyTelegram,logger=console,sanity=createSanityProjectsGateway()}) {
+export function createApp({repository,config,chat=runChat,telegram=notifyTelegram,contactTelegram=notifyContactTelegram,logger=console,sanity=createSanityProjectsGateway()}) {
   const staticRoot=path.resolve(config.staticDir || defaultStatic);
   return createServer(async(req,res)=>{
     res.setHeader('X-Content-Type-Options','nosniff');
@@ -133,7 +133,8 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
         const readRoute=route.match(/^\/api\/admin\/sessions\/([^/]+)\/read$/);
         if (readRoute && method==='PATCH') {
           await currentUser(req,repository,config,true);
-          const sessionId=decodeURIComponent(readRoute[1]);
+          let sessionId;
+          try {sessionId=decodeURIComponent(readRoute[1]);} catch {throw new HttpError(400,'Invalid session ID.');}
           if (!sessionId || sessionId.length>128) throw new HttpError(400,'Invalid session ID.');
           await repository.markRead(sessionId);
           return json(res,200,{ok:true});
@@ -146,6 +147,13 @@ export function createApp({repository,config,chat=runChat,telegram=notifyTelegra
           await repository.rate(`newsletter:${hashIp(req,config)}`,3600,10);
           try {await repository.newsletter(name || null,email);}
           catch(error) {if(error.code==='23505') throw new HttpError(409,'Este email já está cadastrado.','EMAIL_EXISTS'); throw error;}
+          return json(res,201,{ok:true});
+        }
+        if (route==='/api/contact' && method==='POST') {
+          const contact=validateContact(await readJson(req));
+          await repository.rate(`contact:${hashIp(req,config)}`,3600,5);
+          await repository.contact(contact);
+          contactTelegram(contact).catch(()=>logger.error('[contact] Telegram notification failed'));
           return json(res,201,{ok:true});
         }
         if (route==='/api/chat' && method==='POST') {

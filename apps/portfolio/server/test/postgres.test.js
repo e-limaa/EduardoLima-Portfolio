@@ -55,6 +55,9 @@ test('real PostgreSQL: concurrent quotas, IP bypass, transactional outbox, sessi
     await repo.revokeSession('hash');
     await assert.rejects(repo.completeChat(reservation,{sessionId:'session-one',message:'duplicate',answer:'duplicate'}));
     assert.equal((await repo.interactions()).length,1);
+    await repo.contact({name:'Visitor',email:'visitor@example.com',phone:null,company:null,message:'Hello'});
+    assert.equal((await pool.query('SELECT count(*)::int AS count FROM contact_messages')).rows[0].count,1);
+    await assert.rejects(pool.query("INSERT INTO contact_messages(name,message) VALUES('No reach','Hello')"));
     // Minute rate UPSERT is atomic across separate clients.
     const rates=await Promise.allSettled(Array.from({length:10},()=>repo.rate('parallel',60,3)));
     assert.equal(rates.filter(result=>result.status==='fulfilled').length,3);
