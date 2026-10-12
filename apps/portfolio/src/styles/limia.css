@@ -3,6 +3,65 @@
 @import "../../../../packages/limia-tokens/styles/tokens.css";
 @import "../../../../packages/limia-design-system/styles/globals.css";
 
+.proposal-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--border-default) 44%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--border-default) 44%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 76%);
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .proposal-page {
+    --background-default: #ffffff;
+    --background-surface: #ffffff;
+    --background-muted: #f4f4f5;
+    --background-layer-1: #ffffff;
+    --background-layer-2: #f4f4f5;
+    --text-primary: #18181b;
+    --text-secondary: #3f3f46;
+    --text-muted: #52525b;
+    --border-default: #d4d4d8;
+    --action-primary-background: #2563eb;
+    --action-primary-foreground: #ffffff;
+    background: white !important;
+    color: #18181b !important;
+  }
+
+  .proposal-page header,
+  .proposal-page main {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .proposal-page section {
+    min-height: auto;
+    break-inside: avoid;
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  .proposal-page article,
+  .proposal-page dl {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
+
 .chat-border-glow {
   --chat-border-glow-x: 50%;
   --chat-border-glow-y: 50%;

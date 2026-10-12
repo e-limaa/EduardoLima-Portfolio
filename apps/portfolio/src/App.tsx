@@ -16,6 +16,7 @@ import posthog from "posthog-js";
 const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
 const Dashboard = React.lazy(() => import("./pages/Dashboard").then(module => ({ default: module.Dashboard })));
 const Newsletter = React.lazy(() => import("./pages/Newsletter").then(module => ({ default: module.Newsletter })));
+const UxUiProposal = React.lazy(() => import("./pages/UxUiProposal").then(module => ({ default: module.UxUiProposal })));
 const LandingSections = React.lazy(() => import("./components/landing/LandingSections").then(module => ({ default: module.LandingSections })));
 const MouseSpotlight = React.lazy(() => import("./components/landing/MouseSpotlight").then(module => ({ default: module.MouseSpotlight })));
 const AudioPlayer = React.lazy(() => import("./components/landing/AudioPlayer").then(module => ({ default: module.AudioPlayer })));
@@ -79,12 +80,14 @@ function AppShell({
   const location = useLocation();
   const { theme } = useTheme();
   const isHomeRoute = location.pathname === "/";
+  const isProposalRoute = location.pathname.startsWith("/proposta/");
   const deferredHomeChrome = useDeferredActivation({
     enabled: isHomeRoute,
     waitForLoad: true,
     delayMs: 1200,
   });
   const shouldMountAmbientChrome =
+    !isProposalRoute &&
     (hasEntered || shouldSkipIntro) &&
     (!isHomeRoute || deferredHomeChrome);
 
@@ -122,6 +125,7 @@ function AppShell({
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<LandingPage />} />
               <Route path="/newsletter" element={<Newsletter />} />
+              <Route path="/proposta/consultoria-ux-ui" element={<UxUiProposal />} />
 
               <Route path="/project/:slug" element={<ProjectDetail />} />
               <Route
@@ -158,7 +162,8 @@ export default function App() {
 
   // Dashboard skips the intro flow.
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const shouldSkipIntro = isDashboard;
+  const isProposal = location.pathname.startsWith('/proposta/');
+  const shouldSkipIntro = isDashboard || isProposal;
 
   useEffect(() => {
     if (!hasEntered || typeof window === "undefined") return;
