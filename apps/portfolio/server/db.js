@@ -1,9 +1,10 @@
 import pg from 'pg';
 import { HttpError } from './security.js';
+import { logger } from './log.js';
 
 export function createPool(config) {
   const pool = new pg.Pool({connectionString: config.databaseUrl, max: config.poolMax, connectionTimeoutMillis: 5000, idleTimeoutMillis: 30000, statement_timeout: 10000, application_name: 'portfolio-api'});
-  pool.on('error', () => console.error('[database] idle connection failure'));
+  pool.on('error', error => logger.error('database.idle_connection_failed', error));
   return pool;
 }
 export async function transaction(pool, work) {
@@ -42,6 +43,10 @@ export function createRepository(pool, config) {
       await client.query(`INSERT INTO newsletter_outbox(subscriber_id,payload) VALUES($1,$2::jsonb)`,[subscriber.id,JSON.stringify({type:'INSERT',table:'newsletter_subscribers',schema:'public',record:subscriber,old_record:null})]);
       return subscriber;
     }),
+    // No RETURNING: the runtime role has INSERT-only access to contact messages.
+    contact: async ({name,email,phone,company,message}) => pool.query('INSERT INTO contact_messages(name,email,phone,company,message) VALUES($1,$2,$3,$4,$5)',[name,email,phone,company,message]),
+    contacts: async () => (await pool.query('SELECT id,created_at,name,email,phone,company,message,is_read FROM contact_messages ORDER BY created_at DESC,id DESC LIMIT 200')).rows,
+    markContactRead: async id => pool.query('UPDATE contact_messages SET is_read=true WHERE id=$1',[id]),
     claimNewsletterEvent: async () => transaction(pool, async client => {
       const event = (await client.query(`SELECT id,payload,attempts FROM newsletter_outbox
         WHERE delivered_at IS NULL AND next_attempt_at<=now()

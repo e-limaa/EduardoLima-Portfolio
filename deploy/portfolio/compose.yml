@@ -19,6 +19,11 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   app:
     image: ${PORTFOLIO_IMAGE:-portfolio-app}
@@ -49,6 +54,7 @@ services:
       PORT: 3000
       PG_POOL_MAX: ${PG_POOL_MAX:-5}
       CF_PROXY_CIDRS: ${CF_PROXY_CIDRS:-}
+      CF_PROXY_HOSTS: ${CF_PROXY_HOSTS:-}
       SESSION_SECONDS: ${SESSION_SECONDS:-43200}
       CHAT_TIMEOUT_MS: ${CHAT_TIMEOUT_MS:-30000}
       CHAT_DAILY_MESSAGES_PER_SESSION: ${CHAT_DAILY_MESSAGES_PER_SESSION:-30}
@@ -69,6 +75,11 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     healthcheck:
       test:
         - CMD

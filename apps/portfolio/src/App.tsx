@@ -8,6 +8,7 @@ import { LanguageProvider } from "./components/language-provider";
 import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { Toaster } from "@limia/design-system-src/components/ui/sonner";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
+import { readStorage, removeStorage, writeStorage } from "./lib/safe-storage";
 import { useDeferredActivation } from "./lib/use-deferred-activation";
 import posthog from "posthog-js";
 
@@ -16,6 +17,7 @@ import posthog from "posthog-js";
 const ProjectDetail = React.lazy(() => import("./components/landing/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
 const Dashboard = React.lazy(() => import("./pages/Dashboard").then(module => ({ default: module.Dashboard })));
 const Newsletter = React.lazy(() => import("./pages/Newsletter").then(module => ({ default: module.Newsletter })));
+const UxUiProposal = React.lazy(() => import("./pages/UxUiProposal").then(module => ({ default: module.UxUiProposal })));
 const LandingSections = React.lazy(() => import("./components/landing/LandingSections").then(module => ({ default: module.LandingSections })));
 const MouseSpotlight = React.lazy(() => import("./components/landing/MouseSpotlight").then(module => ({ default: module.MouseSpotlight })));
 const AudioPlayer = React.lazy(() => import("./components/landing/AudioPlayer").then(module => ({ default: module.AudioPlayer })));
@@ -79,12 +81,14 @@ function AppShell({
   const location = useLocation();
   const { theme } = useTheme();
   const isHomeRoute = location.pathname === "/";
+  const isProposalRoute = location.pathname.startsWith("/proposta/");
   const deferredHomeChrome = useDeferredActivation({
     enabled: isHomeRoute,
     waitForLoad: true,
     delayMs: 1200,
   });
   const shouldMountAmbientChrome =
+    !isProposalRoute &&
     (hasEntered || shouldSkipIntro) &&
     (!isHomeRoute || deferredHomeChrome);
 
@@ -122,6 +126,7 @@ function AppShell({
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<LandingPage />} />
               <Route path="/newsletter" element={<Newsletter />} />
+              <Route path="/proposta/consultoria-ux-ui" element={<UxUiProposal />} />
 
               <Route path="/project/:slug" element={<ProjectDetail />} />
               <Route
@@ -143,13 +148,13 @@ function AppShell({
 export default function App() {
   const location = useLocation();
   const [hasEntered, setHasEntered] = useState(() => {
-    if (typeof window === "undefined") return location.hash.includes("figmacapture=");
+    if (typeof window === "undefined") return false;
 
-    if (localStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true") {
-      localStorage.removeItem(WELCOME_SCREEN_STORAGE_KEY);
+    if (readStorage(WELCOME_SCREEN_STORAGE_KEY) === "true") {
+      removeStorage(WELCOME_SCREEN_STORAGE_KEY);
     }
 
-    return sessionStorage.getItem(WELCOME_SCREEN_STORAGE_KEY) === "true" || location.hash.includes("figmacapture=");
+    return readStorage(WELCOME_SCREEN_STORAGE_KEY, "session") === "true";
   });
 
   useEffect(() => {
@@ -158,12 +163,13 @@ export default function App() {
 
   // Dashboard skips the intro flow.
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const shouldSkipIntro = isDashboard;
+  const isProposal = location.pathname.startsWith('/proposta/');
+  const shouldSkipIntro = isDashboard || isProposal;
 
   useEffect(() => {
     if (!hasEntered || typeof window === "undefined") return;
 
-    sessionStorage.setItem(WELCOME_SCREEN_STORAGE_KEY, "true");
+    writeStorage(WELCOME_SCREEN_STORAGE_KEY, "true", "session");
   }, [hasEntered]);
 
   return (

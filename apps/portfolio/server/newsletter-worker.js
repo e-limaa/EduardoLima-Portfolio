@@ -1,3 +1,5 @@
+import { logger } from './log.js';
+
 export async function deliverNewsletterEvent(repository,config,fetchImpl=fetch) {
   if(!config.newsletterDeliveryEnabled) return false;
   const event=await repository.claimNewsletterEvent();
@@ -17,7 +19,9 @@ export async function deliverNewsletterEvent(repository,config,fetchImpl=fetch) 
     });
     status=response.status;
     delivered=response.ok;
-  } catch {}
+  } catch(error) {
+    logger.warn('newsletter.delivery_failed',{eventId:event.id,attempt:event.attempts,error:error?.name==='TimeoutError'?'timeout':'network'});
+  }
   await repository.finishNewsletterEvent(event,{delivered,status});
   return delivered;
 }

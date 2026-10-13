@@ -10,6 +10,8 @@ Copie `env.example` para `/home/eduardo/portfolio/staging.env` e `/home/eduardo/
 
 Staging usa `NODE_ENV=development`, `PUBLIC_ORIGIN=http://127.0.0.1:8010` e a porta 8010 para permitir a validação local por túnel SSH. Produção usa `NODE_ENV=production`, origem HTTPS pública e a porta 8011. O script seleciona o ambiente e verifica a porta. A rota pública no Cloudflare Tunnel deve apontar para `http://portfolio-production_app_1:3000` somente após validar a aplicação e a rede privada.
 
+Defina `CF_PROXY_HOSTS` com o nome DNS do container do `cloudflared` na rede `n8n_n8n_default` (o nome do serviço ou um alias; confira com `docker inspect` no container do túnel). A API resolve esse nome na inicialização e a cada minuto e só aceita o cabeçalho `cf-connecting-ip` vindo desses endereços exatos. Os demais containers da rede compartilhada, como o n8n, continuam sem poder informar o IP do visitante. Sem essa variável, todo o tráfego do túnel chega com o IP do `cloudflared` e os limites de login, chat, newsletter e contato passam a valer para todos os visitantes juntos. Em produção, a API registra um aviso no log quando a variável está vazia.
+
 Mantenha no arquivo protegido os valores atuais de `OPENAI_API_KEY`, `OPENAI_MODEL` e `OPENAI_INSTRUCTIONS`, além dos demais limites já definidos. `OPENAI_STORE` permanece `false`. A entrega da newsletter fica desligada por padrão; quando habilitada, a API entrega o envelope compatível com o webhook do n8n, inclui o ID estável do evento, autentica com `NEWSLETTER_WEBHOOK_SECRET` e agenda retries com atraso. Antes de habilitar em produção, configure autenticação e deduplicação persistente no consumidor usando esse ID: a outbox oferece entrega pelo menos uma vez, então um timeout depois do aceite pode repetir o email. Telegram só envia notificações se ambos os valores forem configurados.
 
 ## Publicar uma versão
@@ -26,7 +28,7 @@ Depois de validar staging, publique a mesma revisão em produção:
 bash deploy/portfolio/deploy.sh production /home/eduardo/portfolio/production.env
 ```
 
-O script constrói a imagem, aplica as migrações pendentes pelo papel proprietário e só então inicia/atualiza o serviço. Em produção ele também constrói e inicia o container estático do Studio; staging não habilita esse serviço para evitar edição acidental do dataset de produção. Ele não recria o container do PostgreSQL nem altera seu volume compartilhado. Verifique a saúde local com `curl -fsS http://127.0.0.1:8010/api/health` em staging ou `curl -fsS http://127.0.0.1:8011/api/health` em produção. A resposta inclui o estado da conexão, sem dados de usuários.
+O script guarda a imagem em uso como `:previous`, constrói a nova, aplica as migrações pendentes pelo papel proprietário e sobe a imagem nova num container temporário (`<projeto>_preflight`, sem porta publicada) até o healthcheck ficar `healthy`. Se o preflight falhar, o app em execução não é tocado. Depois troca o container (a indisponibilidade fica restrita ao stop/start) e espera o healthcheck; se o novo container não ficar saudável, volta sozinho para a imagem `:previous`. As migrações aplicadas permanecem, por isso elas precisam continuar compatíveis com a versão anterior. O script usa `docker compose` v2 quando disponível; com o `docker-compose` 1.29 os serviços são sempre removidos antes do `up`, o que evita o erro `KeyError: 'ContainerConfig'` no Docker atual. Em produção ele também constrói e inicia o container estático do Studio; staging não habilita esse serviço para evitar edição acidental do dataset de produção. Ele não recria o container do PostgreSQL nem altera seu volume compartilhado. Verifique a saúde local com `curl -fsS http://127.0.0.1:8010/api/health` em staging ou `curl -fsS http://127.0.0.1:8011/api/health` em produção. A resposta inclui o estado da conexão, sem dados de usuários.
 
 ## Importar a exportação protegida
 
@@ -54,4 +56,12 @@ O manifesto contém o SHA-256 do arquivo. Para uma restauração de ensaio, conf
 bash scripts/portfolio/verify-restore.sh /home/eduardo/portfolio/backups/portfolio-staging-<timestamp>-<id>.dump /home/eduardo/portfolio/staging.env
 ```
 
-Esse procedimento demonstra a leitura do arquivo e a restauração lógica no servidor. Retenção e cópia fora do servidor ainda precisam ser configuradas no serviço de backup adotado.
+Esse procedimento demonstra a leitura do arquivo e a restauração lógica no servidor.
+
+### Backup agendado
+
+`scripts/portfolio/backup-scheduled.sh` gera os dumps de produção e staging, mantém 14 dias (sempre ao menos os 3 mais recentes de cada ambiente; ajuste com `PORTFOLIO_BACKUP_RETENTION_DAYS` e `PORTFOLIO_BACKUP_MIN_KEEP`) e só apaga dumps antigos quando a rodada inteira deu certo. Com `PORTFOLIO_BACKUP_RSYNC_TARGET` definido, copia os dumps para fora do servidor via rsync. Mantenha `/home/eduardo/portfolio/current` apontando para a release ativa (`ln -sfn release-<data> /home/eduardo/portfolio/current`) e agende no crontab do usuário:
+
+```cron
+15 4 * * * /home/eduardo/portfolio/current/scripts/portfolio/backup-scheduled.sh >> /home/eduardo/portfolio/backups/scheduled.log 2>&1
+```
