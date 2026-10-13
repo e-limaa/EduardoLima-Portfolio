@@ -106,8 +106,8 @@ export const Storytelling = () => {
                 viewport={{ once: true, margin: "-20%" }}
                 className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_auto_1fr] lg:gap-10 items-center"
               >
-                <div className={`order-1 ${isEven ? "lg:order-1 lg:text-right lg:pr-8" : "lg:order-3 lg:text-left lg:pl-8"}`}>
-                  <motion.div variants={getTextVariants(isEven, shouldReduceMotion)}>
+                <div className={`order-1 ${isEven ? "lg:order-1 lg:pr-8" : "lg:order-3 lg:text-left lg:pl-8"}`}>
+                  <motion.div variants={getTextVariants(isEven, shouldReduceMotion)} className={isEven ? "lg:ml-auto lg:max-w-xl" : "lg:max-w-xl"}>
                     <span className={`text-sm font-mono font-bold tracking-widest uppercase mb-2 block ${item.color}`}>
                       {t(`story.${item.id}.year`)}
                     </span>

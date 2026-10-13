@@ -32,9 +32,13 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
     return () => observer.disconnect()
   }, [shouldLoadProjects])
 
+  // Only offer the UX Research tab when there is research to show; an empty
+  // tab reads as missing work.
+  const hasStudies = projects.some((project) => project.categoryKind === 'study')
+  const currentTab = hasStudies ? activeTab : 'ui'
   const filteredProjects = projects.filter((project) => {
     const isStudy = project.categoryKind === 'study'
-    return activeTab === 'study' ? isStudy : !isStudy
+    return currentTab === 'study' ? isStudy : !isStudy
   })
 
   const featuredProjects = filteredProjects.slice(0, 6)
@@ -43,14 +47,15 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
     <div id="projects" ref={sectionRef}>
       <Section className="pt-16 pb-8 md:pt-32">
         <SectionHeader
-          title={activeTab === 'study' ? t('projects.tab.ux') : t('projects.tab.ui')}
+          title={t('projects.title')}
           description={t('projects.description')}
           index="01"
           label={t('projects.label')}
         >
+          {hasStudies && (
           <ToggleGroup
             type="single"
-            value={activeTab}
+            value={currentTab}
             onValueChange={(value) => value && setActiveTab(value as 'ui' | 'study')}
             variant="outline"
             className="no-cursor-trail rounded-full border border-border/70 bg-card/80 p-1"
@@ -62,6 +67,7 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
               {t('projects.tab.ux')}
             </ToggleGroupItem>
           </ToggleGroup>
+          )}
         </SectionHeader>
 
         {!shouldLoadProjects || loading ? (
@@ -93,6 +99,7 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
                   image={getImageUrl(project.thumbnail || project.mainImage)}
                   metric={project.metric}
                   color={project.color}
+                  ctaLabel={t('projects.viewCase')}
                   onClick={() => onProjectClick && onProjectClick(project.slug.current)}
                 />
               </li>

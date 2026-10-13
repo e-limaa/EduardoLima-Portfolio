@@ -106,7 +106,8 @@ const translations: Record<Language, Record<string, string>> = {
         "hero.cta": "View Projects",
 
         // Landing Page: Projects
-        "projects.title": "Projects",
+        "projects.title": "Selected work",
+        "projects.viewCase": "View case",
         "projects.label": "Projects",
         "projects.description": "A selection of work that defines my approach.",
         "projects.tab.ux": "UX Research",
@@ -162,7 +163,7 @@ const translations: Record<Language, Record<string, string>> = {
         "stack.tool.adobe": "Robust visuals and editing",
 
         // Landing Page: CTA
-        "cta.title": "Let's talk?",
+        "cta.title": "Let's talk",
         "cta.label": "Contact",
         "cta.description": "Always open to new projects, collaborations, or a good chat about design and technology.",
         "cta.button.email": "Get in touch",
@@ -374,7 +375,8 @@ const translations: Record<Language, Record<string, string>> = {
         "hero.cta": "Ver Projetos",
 
         // Landing Page: Projects
-        "projects.title": "Projetos",
+        "projects.title": "Projetos selecionados",
+        "projects.viewCase": "Ver case",
         "projects.label": "Projetos",
         "projects.description": "Uma seleção de trabalhos que definem minha abordagem.",
         "projects.tab.ux": "Pesquisas UX",
@@ -430,7 +432,7 @@ const translations: Record<Language, Record<string, string>> = {
         "stack.tool.adobe": "Visual robusto e edição",
 
         // Landing Page: CTA
-        "cta.title": "Vamos conversar?",
+        "cta.title": "Vamos conversar",
         "cta.label": "Contato",
         "cta.description": "Sempre aberto a novos projetos, colaborações ou um bom papo sobre design e tecnologia.",
         "cta.button.email": "Entrar em contato",
