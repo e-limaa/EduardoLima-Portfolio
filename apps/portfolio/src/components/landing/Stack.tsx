@@ -41,7 +41,7 @@ export const Stack = () => {
                                 <motion.div
                                     animate={shouldReduceMotion ? undefined : { y: [0, -5, 0] }}
                                     transition={{ duration: 3 + (index % 3) * 0.4, repeat: Infinity, ease: "easeInOut" }}
-                                    className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-background/80 text-muted-foreground transition-all duration-500 group-hover:text-primary group-hover:shadow-lg"
+                                    className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-background/80 text-muted-foreground transition-[color,box-shadow] duration-500 group-hover:text-primary group-hover:shadow-lg"
                                 >
                                     <tool.icon className="w-8 h-8" />
                                 </motion.div>

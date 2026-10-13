@@ -100,7 +100,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
 
     return (
         <motion.div
-            className="fixed top-4 right-4 md:bottom-7 md:right-7 md:top-auto z-50 flex items-center gap-2"
+            className="absolute top-4 right-4 md:fixed md:bottom-7 md:right-7 md:top-auto z-50 flex items-center gap-2"
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}

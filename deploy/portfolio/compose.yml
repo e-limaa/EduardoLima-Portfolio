@@ -33,6 +33,11 @@ services:
       args:
         VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
         VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
+        VITE_WHATSAPP_NUMBER: ${VITE_WHATSAPP_NUMBER:-}
+        VITE_LINKEDIN_URL: ${VITE_LINKEDIN_URL:-}
+        VITE_GITHUB_URL: ${VITE_GITHUB_URL:-}
+        VITE_INSTAGRAM_URL: ${VITE_INSTAGRAM_URL:-}
+        VITE_TWITTER_URL: ${VITE_TWITTER_URL:-}
     environment:
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in the protected environment file}
       NODE_ENV: ${NODE_ENV:-production}
@@ -99,6 +104,11 @@ services:
       args:
         VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
         VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
+        VITE_WHATSAPP_NUMBER: ${VITE_WHATSAPP_NUMBER:-}
+        VITE_LINKEDIN_URL: ${VITE_LINKEDIN_URL:-}
+        VITE_GITHUB_URL: ${VITE_GITHUB_URL:-}
+        VITE_INSTAGRAM_URL: ${VITE_INSTAGRAM_URL:-}
+        VITE_TWITTER_URL: ${VITE_TWITTER_URL:-}
     command: ["node", "apps/portfolio/server/migrate.js"]
     profiles:
       - tools

@@ -9,6 +9,8 @@ export interface ProjectCardProps {
     image: string;
     metric?: string;
     color: string; // e.g., "from-blue-500 to-cyan-500"
+    /** Visible call to action, also used in the accessible name. */
+    ctaLabel?: string;
     onClick?: () => void;
     className?: string;
 }
@@ -21,6 +23,7 @@ export const ProjectCard = ({
     image,
     metric,
     color,
+    ctaLabel = "View case",
     onClick,
     className
 }: ProjectCardProps) => {
@@ -57,7 +60,7 @@ export const ProjectCard = ({
             onClick={onClick}
             role={onClick ? "button" : undefined}
             tabIndex={onClick ? 0 : undefined}
-            aria-label={onClick ? `Open project ${title}` : undefined}
+            aria-label={onClick ? `${ctaLabel}: ${title}` : undefined}
             onKeyDown={(e) => {
                 if (!onClick) return;
                 if (e.key === "Enter" || e.key === " ") {
@@ -128,15 +131,15 @@ export const ProjectCard = ({
                         {title}
                     </h3>
 
-                    <div className="flex items-center justify-between mt-4 border-t border-white/20 pt-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="flex items-center justify-between gap-4 mt-4 border-t border-white/20 pt-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
                         {metric && (
-                            <span className="font-mono text-sm text-white/90">
+                            <span className="min-w-0 font-mono text-sm text-white/90">
                                 {metric}
                             </span>
                         )}
 
-                        <div className="flex items-center gap-2 text-white font-medium">
-                            <span className="text-sm uppercase tracking-wider">Ver Case</span>
+                        <div className="ml-auto flex shrink-0 items-center gap-2 text-white font-medium">
+                            <span className="whitespace-nowrap text-sm uppercase tracking-wider">{ctaLabel}</span>
                             <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform duration-300" />
                         </div>
                     </div>

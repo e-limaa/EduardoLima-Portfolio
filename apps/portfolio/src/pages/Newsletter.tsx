@@ -7,21 +7,7 @@ import { Navbar } from "../components/landing/Navbar";
 import { ApiError, subscribeToNewsletter } from "../lib/portfolio-api";
 import posthog from "posthog-js";
 import { useLanguage } from "../components/language-provider";
-
-const socialLinks = [
-  {
-    label: "Github",
-    href: import.meta.env.VITE_GITHUB_URL?.trim() || "https://github.com",
-  },
-  {
-    label: "Instagram",
-    href: import.meta.env.VITE_INSTAGRAM_URL?.trim() || "https://instagram.com",
-  },
-  {
-    label: "Twitter",
-    href: import.meta.env.VITE_TWITTER_URL?.trim() || "https://x.com",
-  },
-];
+import { socialLinks } from "../lib/social-links";
 
 export const Newsletter = () => {
   const { t } = useLanguage();
