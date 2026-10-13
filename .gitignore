@@ -6,3 +6,11 @@ dist
 !**/.env.example
 tmp/portfolio-migration/
 .DS_Store
+
+# Local scratch output (never commit)
+tmp/
+tmp-*/
+.tmp-*
+output/
+*.log
+*.trace.json.gz

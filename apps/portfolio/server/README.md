@@ -49,6 +49,10 @@ API contracts:
 - `POST /api/auth/logout`: 204 and cleared session cookie. A JSON body is unnecessary, but Origin is mandatory.
 - `GET /api/admin/interactions`: `{interactions:[...]}`, sorted newest first. Frontend polls every 5 seconds.
 - `PATCH /api/admin/sessions/:id/read`: marks that session's rows read and returns `{ok:true}`. Body optional; Origin mandatory.
+- `GET /api/admin/contacts`: `{contacts:[{id,created_at,name,email,phone,company,message,is_read}]}`, newest 200 first. The dashboard polls every 30 seconds while visible.
+- `PATCH /api/admin/contacts/:uuid/read`: marks one contact message read and returns `{ok:true}`. Origin mandatory. The runtime role can only update `is_read`.
+
+Logs are JSON lines on stdout/stderr (`docker logs`). Every API and page request is logged as `http.request` with method, path (no query string), status and duration; static assets and healthy `/api/health` checks are skipped. Failures carry the error message, PostgreSQL SQLSTATE code and a short stack, never request bodies, emails, cookies or tokens.
 - `GET /api/health`: 200 `{ok:true,database:"ready"}` or 503 `{ok:false,database:"unavailable"}`. No version, credential, row count or user data is disclosed.
 - `POST /api/chat {message,sessionId,stream?}`: existing `{output}` response or SSE `delta {delta}`, `done {output}`, `error {error}`. Pre-stream input/quota faults use HTTP 400/429. Provider faults use 502 or timeout 504 for JSON. Once SSE HTTP 200 starts, failures are reported as SSE error because headers cannot change. A success/done response occurs only after the interaction transaction commits.
 

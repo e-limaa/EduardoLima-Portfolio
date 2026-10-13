@@ -28,6 +28,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (!process.env.MIGRATION_DATABASE_URL) throw new Error('MIGRATION_DATABASE_URL is required (DDL owner connection, separate from runtime).');
   const pool = new pg.Pool({connectionString:process.env.MIGRATION_DATABASE_URL,max:1});
   try { await migrate(pool); console.log('Application migrations applied.'); }
-  catch { console.error('Migration failed. Verify database state and privileges.'); process.exitCode=1; }
+  catch(error) { console.error(`Migration failed: ${error?.message || 'unknown error'}${error?.code ? ` (${error.code})` : ''}. Verify database state and privileges.`); process.exitCode=1; }
   finally { await pool.end(); }
 }

@@ -1,15 +1,19 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import {
     ApiError,
+    getAdminContacts,
     getAdminInteractions,
+    markAdminContactRead,
     markAdminSessionRead,
     notifyAuthInvalidated,
     requestAuthRefresh,
     logoutAdmin,
+    type ContactRow,
     type InteractionRow,
 } from '../lib/portfolio-api';
 import { Alert, AlertDescription, AlertTitle, Badge, Button, Card, CardContent, CardHeader, CardTitle, Input, t as token } from '@limia/design-system';
-import { Search, MessageSquare, BarChart, User, Bot, ArrowLeft } from 'lucide-react';
+import { Search, MessageSquare, BarChart, User, Bot, ArrowLeft, Inbox } from 'lucide-react';
+import { ContactInbox } from './ContactInbox';
 import { useNavigate } from 'react-router-dom';
 import { BarChart as RechartsBar, Bar, ResponsiveContainer } from 'recharts';
 
@@ -39,6 +43,63 @@ export const Dashboard = () => {
     const hasLoadedRef = useRef(false);
     const authInvalidatedRef = useRef(false);
     const markingSessionsRef = useRef(new Set<string>());
+
+    const [view, setView] = useState<'chat' | 'contacts'>('chat');
+    const [contacts, setContacts] = useState<ContactRow[]>([]);
+    const [contactsLoading, setContactsLoading] = useState(true);
+    const unreadContacts = contacts.filter((contact) => !contact.is_read).length;
+
+    const handleAuthError = useCallback((err: unknown) => {
+        if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
+            authInvalidatedRef.current = true;
+            setMessages([]);
+            setContacts([]);
+            notifyAuthInvalidated(err.status);
+            return true;
+        }
+        return false;
+    }, []);
+
+    const fetchContacts = useCallback(async () => {
+        if (authInvalidatedRef.current || document.visibilityState !== 'visible') return;
+        try {
+            const { contacts: rows } = await getAdminContacts();
+            setContacts(rows);
+        } catch (err: unknown) {
+            if (!handleAuthError(err)) {
+                console.error('Dashboard contacts error:', err);
+                setError(err instanceof Error ? err.message : 'Erro desconhecido ao carregar contatos.');
+            }
+        } finally {
+            setContactsLoading(false);
+        }
+    }, [handleAuthError]);
+
+    // Contacts change rarely: poll every 30 seconds while the tab is visible.
+    useEffect(() => {
+        void fetchContacts();
+        const intervalId = window.setInterval(() => void fetchContacts(), 30000);
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') void fetchContacts();
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+        return () => {
+            window.clearInterval(intervalId);
+            document.removeEventListener('visibilitychange', handleVisibility);
+        };
+    }, [fetchContacts]);
+
+    const markContactAsRead = async (contact: ContactRow) => {
+        setContacts((prev) => prev.map((row) => row.id === contact.id ? { ...row, is_read: true } : row));
+        try {
+            await markAdminContactRead(contact.id);
+        } catch (markError) {
+            if (!handleAuthError(markError)) {
+                setError(markError instanceof Error ? markError.message : 'Nao foi possivel marcar o contato como lido.');
+                void fetchContacts();
+            }
+        }
+    };
 
     const fetchMessages = useCallback(async () => {
         if (authInvalidatedRef.current) return;
@@ -255,9 +316,9 @@ export const Dashboard = () => {
     return (
         <div className={`bg-background text-foreground p-4 md:p-8 flex flex-col ${selectedSessionId ? 'h-screen overflow-hidden' : 'min-h-screen lg:h-screen lg:overflow-hidden'}`}>
             <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col min-h-0">
-                <div className={selectedSessionId ? 'hidden lg:block' : ''}>
+                <div className={selectedSessionId && view === 'chat' ? 'hidden lg:block' : ''}>
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-8">
+                    <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <Button variant="ghost" className="min-h-11 min-w-11 rounded-full p-0" onClick={() => navigate('/')} aria-label="Voltar para o site">
                                 <ArrowLeft className="w-5 h-5" />
@@ -266,6 +327,36 @@ export const Dashboard = () => {
                                 <h1 className="text-2xl font-bold tracking-tight">Chat Dashboard</h1>
                                 <p className="text-muted-foreground text-sm">Monitoramento de conversas do projeto Bio</p>
                             </div>
+                        </div>
+
+                        <div role="tablist" aria-label="Seção do painel" className="flex gap-1 rounded-full border border-border bg-muted/30 p-1">
+                            <Button
+                                role="tab"
+                                aria-selected={view === 'chat'}
+                                variant={view === 'chat' ? 'default' : 'ghost'}
+                                size="sm"
+                                className="rounded-full"
+                                onClick={() => setView('chat')}
+                            >
+                                <MessageSquare className="mr-2 h-4 w-4" />
+                                Conversas
+                            </Button>
+                            <Button
+                                role="tab"
+                                aria-selected={view === 'contacts'}
+                                variant={view === 'contacts' ? 'default' : 'ghost'}
+                                size="sm"
+                                className="rounded-full"
+                                onClick={() => setView('contacts')}
+                            >
+                                <Inbox className="mr-2 h-4 w-4" />
+                                Contatos
+                                {unreadContacts > 0 && (
+                                    <Badge className="ml-2 h-5 min-w-5 rounded-full px-1 text-[10px]" aria-label={`${unreadContacts} não lidos`}>
+                                        {unreadContacts}
+                                    </Badge>
+                                )}
+                            </Button>
                         </div>
 
                         <div className="flex gap-4 text-sm text-muted-foreground">
@@ -288,7 +379,7 @@ export const Dashboard = () => {
                     </div>
 
                     {/* Analytics Row */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    {view === 'chat' && (<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                         <Card className="border-border bg-card/95">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">Total de Mensagens</CardTitle>
@@ -325,26 +416,29 @@ export const Dashboard = () => {
                                 </ResponsiveContainer>
                             </CardContent>
                         </Card>
-                    </div>
+                    </div>)}
 
 
                     {/* Error Alert */}
                     {error && (
                         <Alert variant="destructive" className="mb-8 flex items-center justify-between">
                             <div>
-                                <AlertTitle>Erro ao carregar conversas</AlertTitle>
+                                <AlertTitle>Erro ao carregar dados do painel</AlertTitle>
                                 <AlertDescription>
                                     <p className="mt-1 font-mono text-sm">{error}</p>
                                     <p className="mt-2 text-xs">Falha na conexao com a API do portfolio.</p>
                                 </AlertDescription>
                             </div>
-                            <Button variant="outline" size="sm" onClick={() => void fetchMessages()}>
+                            <Button variant="outline" size="sm" onClick={() => { setError(null); void fetchMessages(); void fetchContacts(); }}>
                                 Tentar Novamente
                             </Button>
                         </Alert>
                     )}
                 </div>
 
+                {view === 'contacts' ? (
+                    <ContactInbox contacts={contacts} loading={contactsLoading} onOpen={(contact) => void markContactAsRead(contact)} />
+                ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
                     {/* Sidebar - Session List */}
                     <Card className={`flex h-full flex-col overflow-hidden border-border bg-card/95 ${selectedSessionId ? 'hidden lg:flex' : 'flex'}`}>
@@ -449,7 +543,7 @@ export const Dashboard = () => {
                             </div>
                         )}
                     </Card>
-                </div>
+                </div>)}
             </div>
         </div >
     );
