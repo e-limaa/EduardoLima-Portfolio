@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import {motion, useReducedMotion} from 'motion/react'
 import {ArrowLeft, ArrowRight, Layers, Calendar, User, Building2} from 'lucide-react'
-import {useParams, useNavigate} from 'react-router-dom'
+import {useParams, useNavigate, useLocation, Link} from 'react-router-dom'
 import {ImageWithFallback} from '../figma/ImageWithFallback'
 import {Button, TextReveal} from '@limia/design-system'
 
@@ -12,18 +12,22 @@ import {Navbar} from './Navbar'
 export const ProjectDetail = () => {
   const {slug} = useParams<{slug: string}>()
   const navigate = useNavigate()
+  const location = useLocation()
   const {language, t} = useLanguage()
   const shouldReduceMotion = useReducedMotion()
 
-  const {project, isLoading: projectLoading} = useProjectBySlug(slug, language)
+  const {project, isLoading: projectLoading, isError: projectError} = useProjectBySlug(slug, language)
   const {navigation} = useAdjacentProjects(project?._id)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [slug])
 
+  // A visitor who opened the case from a shared link has no in-app history:
+  // going "back" would leave the site, so send them to the projects section.
   const handleBack = () => {
-    navigate(-1)
+    if (location.key === 'default') navigate('/#projects')
+    else navigate(-1)
   }
 
   const handleNext = (nextId: string) => {
@@ -42,7 +46,24 @@ export const ProjectDetail = () => {
     )
   }
 
-  if (!project) return null
+  if (!project) {
+    return (
+      <section className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-6 text-center text-foreground">
+        <p className="font-mono text-sm uppercase tracking-widest text-muted-foreground">
+          {projectError ? t('project.errorLabel') : '404'}
+        </p>
+        <h1 className="text-heading-lg font-semibold text-balance">
+          {projectError ? t('project.errorTitle') : t('project.notFoundTitle')}
+        </h1>
+        <p className="max-w-md text-muted-foreground text-pretty">
+          {projectError ? t('project.errorDesc') : t('project.notFoundDesc')}
+        </p>
+        <Button asChild>
+          <Link to="/#projects">{t('project.seeAll')}</Link>
+        </Button>
+      </section>
+    )
+  }
 
   const mainImageUrl = getImageUrl(project.mainImage)
   const scrollReveal = shouldReduceMotion
@@ -195,7 +216,7 @@ export const ProjectDetail = () => {
         </div>
       </header>
 
-      <main className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 py-20">
+      <div className="w-full max-w-[2000px] mx-auto px-4 md:px-8 xl:px-12 py-20">
         <div className="flex flex-col gap-16">
           <div className="flex flex-col gap-16">
             <section className="flex flex-col gap-16">
@@ -293,7 +314,7 @@ export const ProjectDetail = () => {
             {!shouldRenderSolutionBeforeGallery && renderMainSolution()}
           </div>
         </div>
-      </main>
+      </div>
 
       <button
         type="button"

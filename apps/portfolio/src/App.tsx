@@ -9,6 +9,7 @@ import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { Toaster } from "@limia/design-system-src/components/ui/sonner";
 import { WELCOME_SCREEN_STORAGE_KEY } from "./lib/storage-keys";
 import { readStorage, removeStorage, writeStorage } from "./lib/safe-storage";
+import { backgroundAudio } from "./lib/background-audio";
 import { useDeferredActivation } from "./lib/use-deferred-activation";
 import posthog from "posthog-js";
 
@@ -101,7 +102,13 @@ function AppShell({
     */}
       <div className="min-h-screen w-full overflow-x-hidden bg-background font-sans text-foreground antialiased selection:bg-primary/20 transition-colors duration-300">
         <AnimatePresence>
-          {!hasEntered && !shouldSkipIntro && <WelcomeScreen onEnter={() => setHasEntered(true)} />}
+          {!hasEntered && !shouldSkipIntro && <WelcomeScreen
+              onEnter={() => {
+                // Must run inside the click: iOS blocks audio started later.
+                backgroundAudio.start();
+                setHasEntered(true);
+              }}
+            />}
         </AnimatePresence>
 
         {shouldMountAmbientChrome && (
@@ -117,11 +124,11 @@ function AppShell({
 
         {!shouldSkipIntro && shouldMountAmbientChrome && (
           <React.Suspense fallback={null}>
-            <AudioPlayer shouldPlay={hasEntered} />
+            <AudioPlayer />
           </React.Suspense>
         )}
 
-        <main className="z-10" key={hasEntered ? "entered" : "loading"}>
+        <main className="z-10">
           <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-foreground">Carregando...</div>}>
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<LandingPage />} />
