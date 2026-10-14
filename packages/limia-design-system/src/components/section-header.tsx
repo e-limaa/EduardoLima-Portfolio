@@ -24,7 +24,7 @@ export const SectionHeader = ({
 }: SectionHeaderProps) => {
     return (
         <header className={cn(
-            "mb-10 flex flex-col gap-6 border-b border-border pb-10 md:mb-20 md:flex-row md:items-end md:justify-between",
+            "mb-10 flex flex-col gap-6 border-b border-border pb-8 md:mb-14 md:pb-10 md:flex-row md:items-end md:justify-between",
             align === "center" && "text-center md:text-left",
             className
         )}>

@@ -21,7 +21,7 @@ export const Section = ({
     return (
         <section
             className={cn(
-                "py-16 md:py-32 relative overflow-hidden bg-background transition-colors duration-300",
+                "py-16 md:py-24 relative overflow-hidden bg-background transition-colors duration-300",
                 className
             )}
             {...props}

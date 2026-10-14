@@ -110,6 +110,20 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
         return () => window.clearTimeout(timeoutId);
     }, [sessionNoticeTitle, sessionNoticeBody, shouldReduceMotion]);
 
+    const enterButtonRef = useRef<HTMLButtonElement>(null);
+
+    // While the welcome dialog is open the page behind it must not be reachable
+    // by keyboard or screen readers.
+    useEffect(() => {
+        const main = document.querySelector("main");
+        main?.setAttribute("inert", "");
+        return () => main?.removeAttribute("inert");
+    }, []);
+
+    useEffect(() => {
+        if (showButton) enterButtonRef.current?.focus();
+    }, [showButton]);
+
     const handleEnter = () => {
         // Trigger the parent callback immediately, let AnimatePresence handle the visual exit
         onEnter();
@@ -117,6 +131,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
 
     return (
         <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="welcome-title"
             className="fixed inset-0 z-[100] flex h-[100dvh] flex-col items-center justify-center overflow-hidden bg-background text-foreground"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
@@ -127,6 +144,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
 
             <div className="w-full max-w-md px-8 flex flex-col items-center text-center relative z-10">
                 <motion.h1
+                    id="welcome-title"
                     className="text-4xl md:text-5xl font-bold tracking-tighter mb-4"
                     initial={shouldReduceMotion ? false : { y: 20, opacity: 0 }}
                     animate={shouldReduceMotion ? undefined : { y: 0, opacity: 1 }}
@@ -166,7 +184,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                                 initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
                                 animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
                             >
-                                <Button onClick={handleEnter} size="lg" variant="outline" className="group">
+                                <Button ref={enterButtonRef} onClick={handleEnter} size="lg" className="group">
                                     {t("welcome.enter")}
                                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
@@ -183,7 +201,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                 className="absolute bottom-6 left-0 z-20 flex h-auto w-full shrink-0 flex-col gap-14 px-4 text-center md:bottom-10"
             >
                 <div className="mx-auto max-w-[40rem]">
-                    <p className="font-mono text-[10px] text-foreground md:text-xs">
+                    <p className="font-mono text-xs text-foreground md:text-sm">
                         <TypewriterText
                             text={sessionNoticeTitle}
                             shouldStart={!shouldReduceMotion && footerPhase === 0}
@@ -191,7 +209,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                             onComplete={() => setFooterPhase(1)}
                         />
                     </p>
-                    <p className="mt-1 font-mono text-[10px] text-muted-foreground/80 md:text-xs">
+                    <p className="mt-1 font-mono text-xs text-muted-foreground md:text-sm">
                         {shouldReduceMotion || footerPhase >= 1 ? (
                             <TypewriterText
                                 text={sessionNoticeBody}
@@ -202,7 +220,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                         ) : null}
                     </p>
                 </div>
-                <p className="font-mono text-[10px] text-muted-foreground/80 md:text-xs">
+                <p className="font-mono text-xs text-muted-foreground md:text-sm">
                     {t("welcome.audioHelp")}
                 </p>
             </motion.div>

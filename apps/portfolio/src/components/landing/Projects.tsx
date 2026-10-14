@@ -45,7 +45,7 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
 
   return (
     <div id="projects" ref={sectionRef}>
-      <Section className="pt-16 pb-8 md:pt-32">
+      <Section className="pt-16 pb-8 md:pt-24">
         <SectionHeader
           title={t('projects.title')}
           description={t('projects.description')}

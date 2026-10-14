@@ -18,7 +18,14 @@ import { ApiError, sendContactMessage } from "../../lib/portfolio-api";
 
 const emptyForm = { name: "", email: "", phone: "", company: "", message: "" };
 
-export function ContactFormModal({ children }: { children: React.ReactNode }) {
+export function ContactFormModal({
+  children,
+  initialMessage,
+}: {
+  children: React.ReactNode;
+  /** Pre-fills an empty message, e.g. when opened from a service card. */
+  initialMessage?: string;
+}) {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
@@ -71,7 +78,15 @@ export function ContactFormModal({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (next && initialMessage) {
+          setForm((current) => (current.message.trim() ? current : { ...current, message: initialMessage }));
+        }
+        setOpen(next);
+      }}
+    >
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>

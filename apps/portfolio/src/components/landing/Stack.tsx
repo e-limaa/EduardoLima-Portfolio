@@ -18,7 +18,7 @@ export const Stack = () => {
     const shouldReduceMotion = useReducedMotion();
 
     return (
-        <Section id="stack" className="py-16 md:py-32">
+        <Section id="stack" className="py-16 md:py-24">
             <SectionHeader
                 title={t("stack.title")}
                 description={t("stack.description")}

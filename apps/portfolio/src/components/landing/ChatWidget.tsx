@@ -194,6 +194,8 @@ export const ChatWidget = () => {
   });
 
   const [inputValue, setInputValue] = useState("");
+  // Finished replies only: announcing every streamed chunk would flood screen readers.
+  const [liveAnnouncement, setLiveAnnouncement] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [introPhase, setIntroPhase] = useState<0 | 1 | 2>(() =>
@@ -383,11 +385,13 @@ export const ChatWidget = () => {
 
         // A stream that closes without any text would leave an empty bubble.
         if (!streamedText.trim()) throw new ChatRequestError(0);
+        setLiveAnnouncement(streamedText);
         return;
       }
 
       const data: unknown = await response.json();
       const botText = extractBotText(data);
+      setLiveAnnouncement(botText);
       setStreamingMessageId(null);
       setMessages((prev) =>
         prev.map((message) =>
@@ -408,6 +412,7 @@ export const ChatWidget = () => {
         sender: "bot",
         timestamp: new Date(),
       };
+      setLiveAnnouncement(errorResponse.text);
       setMessages((prev) =>
         pendingBotMessageId
           ? prev.map((message) =>
@@ -450,9 +455,15 @@ export const ChatWidget = () => {
 
       </div>
 
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {liveAnnouncement}
+      </p>
+
       {/* Messages */}
       <div
         ref={scrollAreaRef}
+        role="log"
+        aria-label={t("chat.historyLabel")}
         className="flex-1 space-y-4 overflow-y-auto p-4"
       >
         {messages.map((msg) => {
@@ -537,7 +548,8 @@ export const ChatWidget = () => {
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             className="flex justify-start"
           >
-            <div className="flex h-10 w-16 items-center justify-center gap-1 rounded-2xl rounded-bl-none border border-border bg-card/80 p-3">
+            <div role="status" className="flex h-10 w-16 items-center justify-center gap-1 rounded-2xl rounded-bl-none border border-border bg-card/80 p-3">
+              <span className="sr-only">{t("chat.typing")}</span>
               <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 motion-safe:animate-bounce [animation-delay:-0.3s]"></span>
               <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 motion-safe:animate-bounce [animation-delay:-0.15s]"></span>
               <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/70 motion-safe:animate-bounce"></span>
