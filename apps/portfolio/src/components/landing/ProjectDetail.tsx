@@ -5,7 +5,8 @@ import {useParams, useNavigate, useLocation, Link} from 'react-router-dom'
 import {ImageWithFallback} from '../figma/ImageWithFallback'
 import {Button, TextReveal} from '@limia/design-system'
 
-import {getImageUrl, useProjectBySlug, useAdjacentProjects} from '../../lib/project-service'
+import {getImageSrcSet, getImageUrl, useProjectBySlug, useAdjacentProjects} from '../../lib/project-service'
+import type {SanityImage} from '../../lib/sanity-types'
 import {useLanguage} from '../language-provider'
 import {Navbar} from './Navbar'
 
@@ -65,7 +66,9 @@ export const ProjectDetail = () => {
     )
   }
 
-  const mainImageUrl = getImageUrl(project.mainImage)
+  const mainImageUrl = getImageUrl(project.mainImage, 1920)
+  const galleryImageCount = project.gallery?.filter((item) => !(typeof item === 'object' && '_type' in item && item._type === 'solution')).length ?? 0
+  let galleryImageIndex = 0
   const scrollReveal = shouldReduceMotion
     ? ({
         initial: false,
@@ -120,6 +123,8 @@ export const ProjectDetail = () => {
             variant="outline"
             size="icon"
             className="group bg-background/70 backdrop-blur-md"
+            aria-label={t('project.prevCase')}
+            title={t('project.prevCase')}
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           </Button>
@@ -129,6 +134,8 @@ export const ProjectDetail = () => {
             variant="outline"
             size="icon"
             className="group bg-background/70 backdrop-blur-md"
+            aria-label={t('project.nextCase')}
+            title={t('project.nextCase')}
           >
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Button>
@@ -139,10 +146,16 @@ export const ProjectDetail = () => {
         <div className="absolute inset-0 w-full h-full">
           <ImageWithFallback
             src={mainImageUrl}
-            alt={project.title}
+            srcSet={getImageSrcSet(project.mainImage)}
+            sizes="100vw"
+            alt=""
+            /* React 18 only forwards the lowercase attribute. */
+            {...({fetchpriority: 'high'} as Record<string, string>)}
             className="w-full h-full object-cover opacity-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background from-8% via-background/30 via-28% to-transparent to-70%" />
+          {/* Covers often carry their own logos and type: fade them out behind the title block. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background from-15% via-background/80 via-45% to-background/10" />
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-background/70 via-background/20 to-transparent md:block" />
         </div>
 
         <div className="absolute bottom-0 left-0 w-full z-10">
@@ -288,24 +301,36 @@ export const ProjectDetail = () => {
                     )
                   }
 
-                  const imgUrl = getImageUrl(item)
+                  galleryImageIndex += 1
+                  const image = typeof item === 'object' ? (item as SanityImage) : undefined
+                  const caption = image?.caption?.trim()
+                  const alt = image?.alt?.trim() || caption ||
+                    t('project.galleryAlt')
+                      .replace('{title}', project.title)
+                      .replace('{index}', String(galleryImageIndex))
+                      .replace('{total}', String(galleryImageCount))
                   return (
-                    <motion.div
+                    <motion.figure
                       key={`gallery-${idx}`}
                       initial={shouldReduceMotion ? false : {opacity: 0, y: 20}}
                       whileInView={shouldReduceMotion ? undefined : {opacity: 1, y: 0}}
                       transition={{delay: 0.1}}
                       viewport={{once: true}}
-                      className="overflow-hidden rounded-lg border border-border"
+                      className="m-0 flex flex-col gap-3"
                     >
-                      <div className="w-full h-full">
-                        <ImageWithFallback
-                          src={imgUrl}
-                          alt={`${project.title} galeria ${idx + 1}`}
-                          className="w-full h-auto"
-                        />
-                      </div>
-                    </motion.div>
+                      <ImageWithFallback
+                        src={getImageUrl(item, 1920)}
+                        srcSet={getImageSrcSet(item)}
+                        sizes="(min-width: 2000px) 1900px, 100vw"
+                        alt={alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-auto w-full rounded-lg outline outline-1 -outline-offset-1 outline-foreground/10"
+                      />
+                      {caption && (
+                        <figcaption className="text-sm text-muted-foreground text-pretty">{caption}</figcaption>
+                      )}
+                    </motion.figure>
                   )
                 })}
               </div>

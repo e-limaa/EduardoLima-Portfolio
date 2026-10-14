@@ -292,6 +292,20 @@ export default defineType({
           options: {
             hotspot: true,
           },
+          fields: [
+            defineField({
+              name: 'caption',
+              title: 'Caption',
+              type: 'localizedString',
+              description: 'Short context shown under the image, e.g. "Mobile checkout, step 2".',
+            }),
+            defineField({
+              name: 'alt',
+              title: 'Alternative text',
+              type: 'localizedString',
+              description: 'What the image shows, for screen readers. Falls back to the caption.',
+            }),
+          ],
         },
         {
           type: 'object',

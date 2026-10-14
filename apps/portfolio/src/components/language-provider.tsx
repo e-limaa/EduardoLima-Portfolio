@@ -282,6 +282,9 @@ const translations: Record<Language, Record<string, string>> = {
 
         // ProjectDetail
         "project.back": "Back",
+        "project.prevCase": "Previous case",
+        "project.nextCase": "Next case",
+        "project.galleryAlt": "{title}: image {index} of {total}",
         "project.notFoundTitle": "This case doesn't exist",
         "project.notFoundDesc": "The link may be outdated or the project may have been removed.",
         "project.errorLabel": "Error",
@@ -559,6 +562,9 @@ const translations: Record<Language, Record<string, string>> = {
 
         // ProjectDetail
         "project.back": "Voltar",
+        "project.prevCase": "Case anterior",
+        "project.nextCase": "Próximo case",
+        "project.galleryAlt": "{title}: imagem {index} de {total}",
         "project.notFoundTitle": "Este case não existe",
         "project.notFoundDesc": "O link pode estar desatualizado ou o projeto foi removido.",
         "project.errorLabel": "Erro",

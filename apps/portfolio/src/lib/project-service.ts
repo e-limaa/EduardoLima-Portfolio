@@ -77,10 +77,18 @@ export const useProjectBySlug = (slug: string | undefined, language: AppLanguage
   }
 }
 
-export const getImageUrl = (image: any): string => {
+export const getImageUrl = (image: any, width?: number): string => {
   if (!image) return ''
   if (typeof image === 'string') return image
-  return urlFor(image).url()
+  const builder = urlFor(image)
+  return (width ? builder.width(width) : builder).url()
+}
+
+// Sanity resizes on the CDN, so phones no longer download 1920 px originals.
+const SRCSET_WIDTHS = [480, 768, 1080, 1440, 1920]
+export const getImageSrcSet = (image: any): string | undefined => {
+  if (!image || typeof image === 'string') return undefined
+  return SRCSET_WIDTHS.map((width) => `${urlFor(image).width(width).url()} ${width}w`).join(', ')
 }
 
 export const getAdjacentProjects = async (currentId: string): Promise<ProjectNavigation> => {
