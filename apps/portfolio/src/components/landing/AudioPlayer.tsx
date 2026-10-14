@@ -1,65 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Play, Pause, Volume2, VolumeX, Music } from "lucide-react";
 import { useLanguage } from "../language-provider";
 import { WELCOME_SCREEN_STORAGE_KEY } from "../../lib/storage-keys";
 import { readStorage } from "../../lib/safe-storage";
+import { PLAYLIST, backgroundAudio } from "../../lib/background-audio";
 
-const PLAYLIST = [
-    {
-        title: "Rollercoastin - Roddy Ricch (Instrumental)",
-        src: "https://audio-assets.vercel.app/Rollercoastin.mp3",
-    },
-    {
-        title: "Awake - Tycho",
-        src: "https://audio-assets.vercel.app/Tycho-Awake.mp3",
-    },
-    {
-        title: "Photosynthesis",
-        src: "https://audio-assets.vercel.app/Carbon Based Lifeforms - Photosynthesis.mp3",
-    },
-];
-
-interface AudioPlayerProps {
-    shouldPlay: boolean;
-}
-
-export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-    const [isMuted, setIsMuted] = useState(false);
+// Controls for the shared background audio. Playback itself starts from the
+// welcome screen's Enter click (see lib/background-audio.ts).
+export const AudioPlayer: React.FC = () => {
+    const { isPlaying, isMuted, trackIndex: currentTrackIndex } = useSyncExternalStore(
+        backgroundAudio.subscribe,
+        backgroundAudio.getState,
+        backgroundAudio.getState,
+    );
     const [isHovered, setIsHovered] = useState(false);
     const [showImmersiveHint, setShowImmersiveHint] = useState(false);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { t } = useLanguage();
     const shouldReduceMotion = useReducedMotion();
-
-    useEffect(() => {
-        if (shouldPlay && audioRef.current) {
-            audioRef.current.volume = 0.1; // Start at 10% volume
-            const playPromise = audioRef.current.play();
-
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        setIsPlaying(true);
-                    })
-                    .catch(() => {
-                        setIsPlaying(false);
-                    });
-            }
-        }
-    }, [shouldPlay]);
-
-    useEffect(() => {
-        if (audioRef.current) {
-            if (isPlaying) {
-                audioRef.current.play().catch(() => setIsPlaying(false));
-            } else {
-                audioRef.current.pause();
-            }
-        }
-    }, [isPlaying, currentTrackIndex]);
 
     useEffect(() => {
         if (typeof window === "undefined") return;
@@ -78,24 +36,12 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
 
     const togglePlay = () => {
         setShowImmersiveHint(false);
-        setIsPlaying(!isPlaying);
-    };
-
-    const nextTrack = () => {
-        setCurrentTrackIndex((prev) => (prev + 1) % PLAYLIST.length);
-        setIsPlaying(true);
+        backgroundAudio.toggle();
     };
 
     const toggleMute = () => {
         setShowImmersiveHint(false);
-        if (audioRef.current) {
-            audioRef.current.muted = !isMuted;
-            setIsMuted(!isMuted);
-        }
-    };
-
-    const handleEnded = () => {
-        nextTrack();
+        backgroundAudio.toggleMute();
     };
 
     return (
@@ -110,13 +56,6 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ shouldPlay }) => {
             }}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <audio
-                ref={audioRef}
-                preload="none"
-                src={PLAYLIST[currentTrackIndex].src}
-                onEnded={handleEnded}
-            />
-
             <AnimatePresence>
                 {showImmersiveHint && (
                     <motion.div

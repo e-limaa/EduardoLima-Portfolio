@@ -158,6 +158,13 @@ function TypewriterText({
   return <>{displayedText}</>;
 }
 
+// HTTP status of a failed chat request; 0 for network or stream failures.
+class ChatRequestError extends Error {
+  constructor(public readonly status: number) {
+    super(`Chat request failed with status ${status}`);
+  }
+}
+
 export const ChatWidget = () => {
   const { t, language } = useLanguage();
   const shouldReduceMotion = useReducedMotion();
@@ -227,10 +234,12 @@ export const ChatWidget = () => {
     writeStorage(CHAT_SESSION_ID_STORAGE_KEY, sessionId, "session");
   }, [sessionId]);
 
-  // Salva as mensagens apenas na sessao atual do navegador
+  // Salva as mensagens apenas na sessao atual do navegador, uma vez por resposta
+  // (nao a cada trecho recebido durante o streaming).
   useEffect(() => {
+    if (streamingMessageId !== null) return;
     writeStorage(CHAT_MESSAGES_STORAGE_KEY, JSON.stringify(messages), "session");
-  }, [messages]);
+  }, [messages, streamingMessageId]);
 
   // Efeito para scrollar para o fundo sempre que mensagens mudarem ou status de digitação mudar
   useEffect(() => {
@@ -301,12 +310,7 @@ export const ChatWidget = () => {
       });
 
       if (!response.ok) {
-        const errorPayload = await response.json().catch(() => null);
-        const errorMessage =
-          typeof errorPayload?.error === "string"
-            ? errorPayload.error
-            : "Não foi possível enviar a mensagem.";
-        throw new Error(errorMessage);
+        throw new ChatRequestError(response.status);
       }
 
       const responseContentType = response.headers.get("content-type") || "";
@@ -371,15 +375,14 @@ export const ChatWidget = () => {
             }
 
             if (event.event === "error") {
-              const message =
-                typeof event.data.error === "string"
-                  ? event.data.error
-                  : "Falha ao processar a resposta.";
-              throw new Error(message);
+              await reader.cancel().catch(() => {});
+              throw new ChatRequestError(0);
             }
           }
         }
 
+        // A stream that closes without any text would leave an empty bubble.
+        if (!streamedText.trim()) throw new ChatRequestError(0);
         return;
       }
 
@@ -397,8 +400,11 @@ export const ChatWidget = () => {
       }
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: `Desculpe, ocorreu um erro ao processar sua mensagem: ${error instanceof Error ? error.message : "falha desconhecida"
-          }`,
+        text: t(
+          error instanceof ChatRequestError && error.status === 429
+            ? "chat.error.rateLimit"
+            : "chat.error.generic",
+        ),
         sender: "bot",
         timestamp: new Date(),
       };

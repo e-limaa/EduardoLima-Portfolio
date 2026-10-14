@@ -23,6 +23,8 @@ if (posthogKey) {
   posthog.init(posthogKey, {
     api_host: posthogHost,
     person_profiles: "identified_only", // Options: 'always', 'identified_only', ou 'never'
+    // App.tsx captures $pageview on every route change, including the first one.
+    capture_pageview: false,
   });
 }
 
