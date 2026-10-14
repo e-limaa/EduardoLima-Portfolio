@@ -4,6 +4,7 @@ export interface SanityImage {
     _type: 'reference'
   }
   alt?: string
+  caption?: string
 }
 
 export interface SolutionBlock {

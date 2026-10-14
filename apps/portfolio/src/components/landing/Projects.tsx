@@ -96,7 +96,7 @@ export const Projects = ({onProjectClick}: {onProjectClick?: (id: string) => voi
                 <ProjectCard
                   title={project.title}
                   category={project.category}
-                  image={getImageUrl(project.thumbnail || project.mainImage)}
+                  image={getImageUrl(project.thumbnail || project.mainImage, 1080)}
                   metric={project.metric}
                   color={project.color}
                   ctaLabel={t('projects.viewCase')}

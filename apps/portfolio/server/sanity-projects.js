@@ -25,6 +25,10 @@ const projectFields = `
   thumbnail,
   gallery[]{
     ...,
+    _type == "image" => {
+      "caption": coalesce(caption[$locale], caption.ptBr, caption.en),
+      "alt": coalesce(alt[$locale], alt.ptBr, alt.en)
+    },
     _type == "solution" => {
       ...,
       "text": coalesce(textI18n[$locale], textI18n.ptBr, textI18n.en, text, "")
