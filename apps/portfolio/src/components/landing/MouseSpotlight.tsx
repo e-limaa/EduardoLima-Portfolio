@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useSpring } from 'motion/react';
+import { motion, useReducedMotion, useSpring } from 'motion/react';
 
 export const MouseSpotlight = () => {
   const [mounted, setMounted] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   // Use spring for smooth trailing effect like in the reference
   const mouseX = useSpring(0, { stiffness: 100, damping: 30 });
@@ -11,16 +12,17 @@ export const MouseSpotlight = () => {
   useEffect(() => {
     setMounted(true);
     const handleMouseMove = (e: MouseEvent) => {
-      // Center the spotlight
-      mouseX.set(e.clientX - 250);
-      mouseY.set(e.clientY - 250);
+      // Half of the 420px glow, so it is centred on the pointer.
+      mouseX.set(e.clientX - 210);
+      mouseY.set(e.clientY - 210);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseX, mouseY]);
 
-  if (!mounted) return null;
+  // A glow trailing the pointer is decorative motion: skip it when reduced motion is requested.
+  if (!mounted || shouldReduceMotion) return null;
 
   return (
     <motion.div

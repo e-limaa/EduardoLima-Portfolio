@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Linkedin, Mail } from "lucide-react";
 import { InteractiveGrid, Button, SectionHeader } from "@limia/design-system";
 import { ContactFormModal } from "./ContactFormModal";
@@ -11,6 +11,7 @@ const contactIconClass = "mr-2 h-5 w-5";
 
 export const CTA = () => {
   const { t } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
   const openExternal = (url?: string) => {
     if (!url) return;
     window.open(url, "_blank", "noopener,noreferrer");
@@ -19,7 +20,7 @@ export const CTA = () => {
   return (
     <footer
       id="contact"
-      className="relative isolate overflow-hidden border-t border-border bg-background pt-16 pb-28 transition-colors duration-300 sm:pb-36 md:pt-32"
+      className="relative isolate overflow-hidden border-t border-border bg-background pt-16 pb-28 transition-colors duration-300 sm:pb-36 md:pt-24"
     >
       <InteractiveGrid variant="subtle" className="z-0" />
       <div className="pointer-events-none absolute inset-0 bg-[url('/noise.svg')] opacity-20" />
@@ -36,8 +37,8 @@ export const CTA = () => {
           />
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
             className="mx-auto grid max-w-sm gap-4 lg:max-w-5xl lg:auto-cols-fr lg:grid-flow-col"

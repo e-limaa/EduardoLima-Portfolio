@@ -134,7 +134,7 @@ export const Storytelling = () => {
                 <div className={`order-3 ${isEven ? "lg:order-3 lg:pl-8" : "lg:order-1 lg:pr-8"}`}>
                   <motion.div
                     variants={getMediaVariants(isEven, shouldReduceMotion)}
-                    className="aspect-[3/2] overflow-hidden rounded-2xl bg-muted/30 shadow-sm transition-colors duration-500"
+                    className="aspect-[3/2] overflow-hidden rounded-2xl bg-muted/30 shadow-sm outline outline-1 -outline-offset-1 outline-foreground/10 transition-colors duration-500"
                   >
                     <motion.div variants={getImageVariants(shouldReduceMotion)} className="w-full h-full">
                       <ImageWithFallback

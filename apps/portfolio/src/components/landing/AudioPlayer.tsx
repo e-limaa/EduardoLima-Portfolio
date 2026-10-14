@@ -55,6 +55,10 @@ export const AudioPlayer: React.FC = () => {
                 setShowImmersiveHint(false);
             }}
             onMouseLeave={() => setIsHovered(false)}
+            onFocus={() => setIsHovered(true)}
+            onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsHovered(false);
+            }}
         >
             <AnimatePresence>
                 {showImmersiveHint && (

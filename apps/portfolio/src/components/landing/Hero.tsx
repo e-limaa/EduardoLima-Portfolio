@@ -124,7 +124,7 @@ export const Hero = () => {
             initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8, y: 50 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative z-40 isolate aspect-[548/981] lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[360px] xl:w-[405px]"
+            className="relative z-40 isolate aspect-[548/981] lg:absolute lg:bottom-[-50px] lg:-ml-12 w-[250px] md:w-[315px] lg:w-[300px] xl:w-[405px]"
           >
             <picture
               className={`absolute inset-0 h-full w-full ${videoReady ? "md:hidden" : ""}`}
