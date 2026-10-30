@@ -26,7 +26,7 @@ export const BrandMarquee = () => {
   const visibleBrands = shouldReduceMotion ? brands : repeatedBrands;
 
   return (
-    <section aria-label="Brands and clients" className="relative z-20 w-full overflow-hidden border-y border-border-subtle bg-background py-10 transition-colors duration-300">
+    <section aria-label="Brands and clients" className="relative z-20 flex h-full w-full items-center justify-center overflow-hidden border-y border-border-subtle bg-background transition-colors duration-300">
       <div className="flex">
         <motion.ul
           initial={{ x: 0 }}
