@@ -480,7 +480,7 @@ export const ChatWidget = () => {
               key={msg.id}
               initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
               animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}${msg.id === "2" ? " items-center" : ""}`}
             >
               <div
                 className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.sender === "user"
@@ -580,4 +580,3 @@ export const ChatWidget = () => {
     </motion.div>
   );
 };
-

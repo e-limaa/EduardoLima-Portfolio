@@ -238,7 +238,7 @@ export const Hero = () => {
             transition={{ delay: 0.8 }}
             className="flex flex-wrap gap-4 justify-center lg:justify-start mt-4 pointer-events-auto mb-10 lg:mb-0"
           >
-            <Button asChild size="lg" className="shadow-lg">
+            <Button asChild size="lg" className="border-ring shadow-lg">
               <a href="#projects" onClick={handleScrollToProjects}>
                 {t("hero.cta")}
                 <ArrowRight className="h-4 w-4" />

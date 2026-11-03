@@ -129,7 +129,7 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
                   checkedLabel="PT"
                   aria-label={language === "pt-br" ? "Selecionar idioma" : "Select language"}
                   title={language === "pt-br" ? "Selecionar idioma" : "Select language"}
-                  className="h-11"
+                  className="h-14 w-24 p-1.5 [&>span]:size-10 [&_[data-slot=text-switch-thumb]]:left-1.5 [&_[data-slot=text-switch-thumb]]:top-1.5 [&_[data-slot=text-switch-thumb]]:size-10 [&_[data-slot=text-switch-thumb][data-state=checked]]:translate-x-11"
                 />
 
                 <div aria-hidden className="mx-1 h-6 w-px flex-shrink-0 bg-border sm:mx-2" />
@@ -145,5 +145,4 @@ export const Navbar = ({ onNavigate }: { onNavigate?: (id: string) => void }) =>
     </div>
   );
 };
-
 
