@@ -1,0 +1,11 @@
+[Unit]
+Description=Check Portfolio main for a validated release every two minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=2min
+AccuracySec=15s
+Unit=portfolio-autodeploy.service
+
+[Install]
+WantedBy=timers.target

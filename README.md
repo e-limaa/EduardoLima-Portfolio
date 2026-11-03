@@ -26,6 +26,8 @@ O portfolio é servido pelo mesmo processo Node: ele entrega o build do site e a
 
 O ambiente de produção usa uma origem HTTPS, um papel PostgreSQL de aplicação com permissões DML restritas e um papel separado para aplicar migrações. Segredos ficam em arquivos protegidos no servidor e não entram no build do site. Após a migração, administradores fazem login novamente para criar uma sessão local.
 
+O fluxo de publicação automática está em [deploy/portfolio/README.md](deploy/portfolio/README.md#publicação-automática-após-merge): o GitHub valida o PR e a `main`; uma rotina instalada com aprovação humana no servidor publica a revisão da `main` após o CI passar, com backup e rollback por healthcheck.
+
 ## Documentação do design system
 
 `apps/design-system-docs` continua como aplicação estática independente. Seu deploy e domínio próprios não fazem parte do serviço de API do portfolio.

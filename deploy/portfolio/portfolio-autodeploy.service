@@ -1,0 +1,26 @@
+[Unit]
+Description=Publish Portfolio main after successful GitHub CI
+Wants=network-online.target
+After=network-online.target docker.service
+Requires=docker.service
+ConditionPathExists=/home/eduardo/portfolio/production.env
+
+[Service]
+Type=oneshot
+User=eduardo
+Group=eduardo
+WorkingDirectory=/home/eduardo/portfolio
+ExecStart=/usr/bin/python3 /usr/local/lib/portfolio-autodeploy/auto-deploy.py
+Environment=DOCKER_CONFIG=/home/eduardo/portfolio/autodeploy/docker
+Environment=PYTHONUNBUFFERED=1
+UMask=0077
+TimeoutStartSec=45min
+KillMode=control-group
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/eduardo/portfolio
+
+[Install]
+WantedBy=multi-user.target

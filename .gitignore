@@ -14,3 +14,5 @@ tmp-*/
 output/
 *.log
 *.trace.json.gz
+__pycache__/
+*.pyc
