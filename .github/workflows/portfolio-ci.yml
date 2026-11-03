@@ -1,0 +1,48 @@
+name: Portfolio CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/portfolio/server/package-lock.json
+            studio/package-lock.json
+      - name: Validate deployment controller
+        run: |
+          python3 -m unittest discover -s deploy/portfolio/tests -v
+          bash -n deploy/portfolio/deploy.sh deploy/portfolio/install-autodeploy.sh
+      - name: Test API
+        run: |
+          npm ci --prefix apps/portfolio/server --workspaces=false --ignore-scripts --no-audit --no-fund
+          npm test --prefix apps/portfolio/server --workspaces=false
+      - name: Build portfolio
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build --workspace @limia/portfolio
+      - name: Build Studio
+        run: |
+          npm ci --prefix studio --workspaces=false --no-audit --no-fund
+          npm run build --prefix studio --workspaces=false

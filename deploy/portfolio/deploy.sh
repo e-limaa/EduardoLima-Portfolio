@@ -39,6 +39,13 @@ mode="$(stat -c '%a' -- "$env_file")"
   exit 1
 }
 
+# Share the same lock across manual deployments and the automatic publisher.
+umask 077
+exec 9>"$(dirname -- "$env_file")/.deploy-${environment}.lock"
+flock -n 9 || { printf 'Another %s deployment is running.\n' "$environment" >&2; exit 1; }
+# Preserve the underscore DNS names already used by the Cloudflare Tunnel.
+export COMPOSE_COMPATIBILITY=1
+
 export HOST_PORT="$(python3 - "$env_file" "$default_port" <<'PY'
 import sys
 
@@ -80,8 +87,8 @@ else
   compose_bin=(docker-compose)
 fi
 compose=("${compose_bin[@]}" --project-name "$project" --env-file "$env_file" -f "$script_dir/compose.yml" "${profile_args[@]}")
-app_container="${project}_app_1"
 preflight_container="${project}_preflight"
+studio_preflight="${project}_studio_preflight"
 
 wait_healthy() {
   local container="$1" timeout="$2" status=""
@@ -96,9 +103,22 @@ wait_healthy() {
   return 1
 }
 
-# Keep the image that is serving traffic so a failed release can roll back.
-if docker image inspect "$PORTFOLIO_IMAGE:latest" >/dev/null 2>&1; then
-  docker tag "$PORTFOLIO_IMAGE:latest" "$PORTFOLIO_IMAGE:previous"
+# Snapshot the images actually serving traffic, including after a failed build.
+save_running_image() {
+  local service="$1" image="$2" container image_id
+  container="$("${compose[@]}" ps -q "$service")"
+  if [[ -n "$container" ]]; then
+    image_id="$(docker inspect --format '{{.Image}}' "$container")"
+    docker tag "$image_id" "$image:previous"
+    return 0
+  fi
+  return 1
+}
+app_previous=false
+studio_previous=false
+save_running_image app "$PORTFOLIO_IMAGE" && app_previous=true
+if [[ "$environment" == production ]]; then
+  save_running_image studio "$STUDIO_IMAGE" && studio_previous=true
 fi
 
 "${compose[@]}" build app
@@ -118,25 +138,50 @@ if ! wait_healthy "$preflight_container" 120; then
 fi
 docker rm -f "$preflight_container" >/dev/null
 
-# Swap. Downtime is limited to the stop/start of the container itself.
-"${compose[@]}" rm --stop --force app
-"${compose[@]}" up -d --no-deps app
-if ! wait_healthy "$app_container" 120; then
-  if docker image inspect "$PORTFOLIO_IMAGE:previous" >/dev/null 2>&1; then
-    printf 'Rolling back %s to the previous image. Applied migrations are kept.\n' "$environment" >&2
-    docker tag "$PORTFOLIO_IMAGE:previous" "$PORTFOLIO_IMAGE:latest"
-    "${compose[@]}" rm --stop --force app
-    "${compose[@]}" up -d --no-deps app
-    wait_healthy "$app_container" 120 || printf 'Rollback did not become healthy either. Check the server now.\n' >&2
+if [[ "$environment" == production ]]; then
+  docker rm -f "$studio_preflight" >/dev/null 2>&1 || true
+  "${compose[@]}" run -d --no-deps --name "$studio_preflight" studio >/dev/null
+  if ! wait_healthy "$studio_preflight" 120; then
+    docker rm -f "$studio_preflight" >/dev/null 2>&1 || true
+    printf 'Studio preflight failed; running services were not touched.\n' >&2
+    exit 1
   fi
-  exit 1
+  docker rm -f "$studio_preflight" >/dev/null
 fi
 
+app_swapped=false
+studio_swapped=false
+rollback_service() {
+  local service="$1" image="$2"
+  docker tag "$image:previous" "$image:latest"
+  "${compose[@]}" rm --stop --force "$service"
+  "${compose[@]}" up -d --no-deps "$service"
+  wait_healthy "$("${compose[@]}" ps -q "$service")" 120 || printf 'Rollback of %s failed; check the server.\n' "$service" >&2
+}
+deployment_failed() {
+  local code="$1"
+  trap - ERR
+  set +e
+  printf 'Release failed; restoring previous running images. Applied migrations are kept.\n' >&2
+  if "$studio_swapped" && "$studio_previous"; then rollback_service studio "$STUDIO_IMAGE"; fi
+  if "$app_swapped" && "$app_previous"; then rollback_service app "$PORTFOLIO_IMAGE"; fi
+  exit "$code"
+}
+trap 'deployment_failed "$?"' ERR
+
+# Swap. Downtime is limited to the stop/start of the container itself.
+app_swapped=true
+"${compose[@]}" rm --stop --force app
+"${compose[@]}" up -d --no-deps app
+wait_healthy "$("${compose[@]}" ps -q app)" 120
+
 if [[ "$environment" == production ]]; then
+  studio_swapped=true
   "${compose[@]}" rm --stop --force studio
   "${compose[@]}" up -d --no-deps studio
-  wait_healthy "${project}_studio_1" 120 || exit 1
+  wait_healthy "$("${compose[@]}" ps -q studio)" 120
 fi
+trap - ERR
 
 printf 'Deployment finished for %s on 127.0.0.1:%s.\n' "$environment" "$HOST_PORT"
 printf 'Check health with: curl -fsS http://127.0.0.1:%s/api/health\n' "$HOST_PORT"

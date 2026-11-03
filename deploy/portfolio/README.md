@@ -30,6 +30,50 @@ bash deploy/portfolio/deploy.sh production /home/eduardo/portfolio/production.en
 
 O script guarda a imagem em uso como `:previous`, constrói a nova, aplica as migrações pendentes pelo papel proprietário e sobe a imagem nova num container temporário (`<projeto>_preflight`, sem porta publicada) até o healthcheck ficar `healthy`. Se o preflight falhar, o app em execução não é tocado. Depois troca o container (a indisponibilidade fica restrita ao stop/start) e espera o healthcheck; se o novo container não ficar saudável, volta sozinho para a imagem `:previous`. As migrações aplicadas permanecem, por isso elas precisam continuar compatíveis com a versão anterior. O script usa `docker compose` v2 quando disponível; com o `docker-compose` 1.29 os serviços são sempre removidos antes do `up`, o que evita o erro `KeyError: 'ContainerConfig'` no Docker atual. Em produção ele também constrói e inicia o container estático do Studio; staging não habilita esse serviço para evitar edição acidental do dataset de produção. Ele não recria o container do PostgreSQL nem altera seu volume compartilhado. Verifique a saúde local com `curl -fsS http://127.0.0.1:8010/api/health` em staging ou `curl -fsS http://127.0.0.1:8011/api/health` em produção. A resposta inclui o estado da conexão, sem dados de usuários.
 
+## Publicação automática após merge
+
+O workflow `.github/workflows/portfolio-ci.yml` testa a API e o controlador de deploy e compila o portfolio e o Studio nos PRs para `main` e nos pushes para `main`. Abrir o PR não publica em produção. Depois do merge, a rotina do servidor verifica a `main` a cada dois minutos e exige que o **mesmo SHA** tenha um run de `Portfolio CI` acionado por `push`, concluído com sucesso. Se outro merge cancelar um CI antigo, a rotina aguarda o CI da revisão mais recente. Pushes diretos na `main` também passam pelo mesmo fluxo; para exigir PR, configure proteção de branch no GitHub.
+
+A rotina usa somente conexões HTTPS de saída para o repositório público. Ela não precisa de token do GitHub, chave SSH de produção no GitHub ou runner instalado no servidor. A publicação usa `/home/eduardo/portfolio/production.env`, já protegido no servidor, inclusive para os argumentos públicos do build. Se o repositório se tornar privado, a consulta e o fetch param até a autenticação ser configurada separadamente.
+
+Cada publicação cria uma pasta própria em `/home/eduardo/portfolio/releases`, salva um backup do PostgreSQL antes de executar o deploy e só atualiza o link `current` e o estado de sucesso depois que o script termina. `previous` guarda o destino anterior de `current`. Não há limpeza automática de releases ou imagens: monitore espaço e faça a retenção com um plano específico. O banco e os segredos não ficam dentro das releases.
+
+O script testa app e Studio em containers temporários antes da troca e preserva as imagens realmente em uso. Uma falha ao iniciar ou validar o app ou o Studio tenta restaurar as imagens anteriores de ambos os serviços afetados. Migrações aplicadas permanecem e precisam ser compatíveis com a versão anterior; o dump é a recuperação disponível para o banco. O deploy tem uma breve interrupção durante a troca de containers. Um lock impede duas publicações simultâneas; não execute o deploy manual enquanto a rotina estiver em andamento.
+
+### Instalação única no Elimaj
+
+A instalação exige um plano concreto aprovado pelo humano pelo cliente `Solicitar-servidor.ps1`. O instalador não altera SSH, sudoers ou grupos e exige que `eduardo` já tenha o acesso Docker necessário ao deploy existente. O código do controlador fica fixado em `/usr/local/lib/portfolio-autodeploy`, de propriedade de root: novos merges não substituem esse controlador. Atualizá-lo exige outro plano aprovado.
+
+Após incorporar estes arquivos na `main`, execute **pelo fluxo de aprovação**, em uma cópia da revisão revisada:
+
+```bash
+bash deploy/portfolio/install-autodeploy.sh
+```
+
+O instalador habilita apenas `portfolio-autodeploy.timer`. Na primeira rodada, a rotina pode publicar a `main` atual se o respectivo CI já passou; ela não exige um novo merge depois da instalação. A aprovação dessa rotina autoriza as futuras publicações automáticas desse repositório e branch. Os jobs de CI continuam em runners do GitHub e não recebem segredos de produção.
+
+### Acompanhar, pausar e recuperar
+
+```bash
+systemctl status portfolio-autodeploy.timer portfolio-autodeploy.service
+journalctl -u portfolio-autodeploy.service -n 100 --no-pager
+cat /home/eduardo/portfolio/autodeploy/status.json
+```
+
+O estado informa `attempted_sha`, `deployed_sha`, `result` e a release concluída. Uma revisão com falha ou uma execução interrompida não é repetida automaticamente. O próximo commit validado pode publicar normalmente. Depois de diagnosticar a causa, uma repetição explícita da `main` atual pode ser executada pelo humano como `eduardo`, com o mesmo lock do controlador:
+
+```bash
+python3 /usr/local/lib/portfolio-autodeploy/auto-deploy.py --retry-failed
+```
+
+Para impedir novas rodadas, desabilite o timer. Isso não interrompe uma publicação em andamento e não reverte a versão já publicada:
+
+```bash
+sudo systemctl disable --now portfolio-autodeploy.timer
+```
+
+Para reverter o app e o Studio, use `deploy.sh production` no destino revisado de `previous` pelo fluxo aprovado. Migrações não são desfeitas automaticamente. Se rollback ou restauração de banco forem necessários, diagnostique e aprove um plano específico antes de executá-los.
+
 ## Importar a exportação protegida
 
 Coloque o JSON descriptografado em `/home/eduardo/portfolio/portfolio-export.json`, com modo `600` e proprietário correspondente ao `IMPORT_UID`/`IMPORT_GID` configurado. A importação só aceita os cinco arrays canônicos `users`, `profiles`, `newsletter_subscribers`, `interaction_logs` e `agent_knowledge`; rejeita campos inesperados, emails duplicados sem distinção entre maiúsculas e minúsculas, referências de perfil ausentes e hashes fora do formato bcrypt. Os metadados de autenticação que poderiam carregar papéis controlados pelo usuário não são importados. IDs e horários são preservados.
