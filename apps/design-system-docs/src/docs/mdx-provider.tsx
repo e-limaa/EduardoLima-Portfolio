@@ -125,8 +125,8 @@ const components = {
     />
   ),
   pre: (props: any) => (
-    <div className="mb-4 mt-6 overflow-hidden rounded-lg border bg-muted/50 p-4">
-      <pre className="overflow-x-auto py-4" {...props} />
+    <div className="mb-4 mt-6 overflow-hidden rounded-lg border border-border bg-muted/50">
+      <pre className="overflow-x-auto p-4 text-sm" {...props} />
     </div>
   ),
   a: (props: any) => (
@@ -137,7 +137,7 @@ const components = {
   ),
   hr: (props: any) => <hr className="my-8 border-border" {...props} />,
   table: (props: any) => (
-    <div className="my-6 w-full overflow-y-auto">
+    <div className="my-6 w-full overflow-x-auto">
       <table className="w-full" {...props} />
     </div>
   ),
