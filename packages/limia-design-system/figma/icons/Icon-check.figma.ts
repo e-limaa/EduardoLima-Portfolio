@@ -1,0 +1,11 @@
+// url=https://www.figma.com/design/3G44RO1AEAHhWV2A5qfdzd/Limia?node-id=2691-43
+// source=packages/limia-design-system/src/components/icon.tsx
+// component=Icon
+import figma from 'figma'
+
+export default {
+  example: figma.tsx`<Icon name="check" />`,
+  imports: ['import { Icon } from "@limia/design-system"'],
+  id: 'icon-check',
+  metadata: { nestable: true, props: { name: 'check' } },
+}

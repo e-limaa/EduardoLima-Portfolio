@@ -95,11 +95,20 @@ function resolveTokens(obj) {
 
 // The Test Matrix
 // Each entry defines a Foreground and Background token path to check.
+// `min` defaults to 4.5 (WCAG 1.4.3 text); use 3 for non-text UI such as borders and focus rings (WCAG 1.4.11).
 const CHECKS = [
     { fg: 'text.primary', bg: 'background.default', name: 'Body Text vs Background' },
     { fg: 'text.primary', bg: 'background.surface', name: 'Body Text vs Surface' },
     { fg: 'text.secondary', bg: 'background.default', name: 'Secondary Text vs Background' },
+    { fg: 'text.muted', bg: 'background.surface', name: 'Muted Text vs Surface' },
+    { fg: 'text.muted', bg: 'background.default', name: 'Muted Text vs Background' },
+    { fg: 'text.muted', bg: 'background.muted', name: 'Muted Text vs Muted' },
+    { fg: 'text.danger', bg: 'background.surface', name: 'Danger Text vs Surface' },
+    { fg: 'text.danger', bg: 'background.default', name: 'Danger Text vs Background' },
+    { fg: 'text.danger', bg: 'background.muted', name: 'Danger Text vs Muted' },
     { fg: 'action.primary.foreground', bg: 'action.primary.background', name: 'Primary Button' },
+    { fg: 'action.secondary.foreground', bg: 'action.secondary.background', name: 'Secondary Button' },
+    { fg: 'action.accent.foreground', bg: 'action.accent.background', name: 'Accent Highlight' },
     { fg: 'action.destructive.foreground', bg: 'action.destructive.background', name: 'Destructive Button' },
     { fg: 'support.info.foreground', bg: 'support.info.background', name: 'Info Surface' },
     { fg: 'support.success.foreground', bg: 'support.success.background', name: 'Success Surface' },
@@ -109,6 +118,10 @@ const CHECKS = [
     { fg: 'support.success.subtle-foreground', bg: 'support.success.subtle', name: 'Success Subtle Surface' },
     { fg: 'support.warning.subtle-foreground', bg: 'support.warning.subtle', name: 'Warning Subtle Surface' },
     { fg: 'support.danger.subtle-foreground', bg: 'support.danger.subtle', name: 'Danger Subtle Surface' },
+    { fg: 'border.input', bg: 'background.surface', name: 'Input Border vs Surface', min: 3 },
+    { fg: 'border.input', bg: 'background.default', name: 'Input Border vs Background', min: 3 },
+    { fg: 'action.ring', bg: 'background.surface', name: 'Focus Ring vs Surface', min: 3 },
+    { fg: 'action.ring', bg: 'background.default', name: 'Focus Ring vs Background', min: 3 },
 ];
 
 function checkMode(modeName, tokens) {
@@ -131,13 +144,14 @@ function checkMode(modeName, tokens) {
         const bgLum = getLuminance(...bgRgb);
 
         const ratio = getContrast(fgLum, bgLum);
-        const passed = ratio >= 4.5;
+        const min = check.min ?? 4.5;
+        const passed = ratio >= min;
         const score = ratio.toFixed(2);
 
         if (passed) {
             console.log(`  ✅ ${check.name.padEnd(25)}: ${score}:1`);
         } else {
-            console.error(`  ❌ ${check.name.padEnd(25)}: ${score}:1 (Expected 4.5:1)`);
+            console.error(`  ❌ ${check.name.padEnd(25)}: ${score}:1 (Expected ${min}:1)`);
             console.error(`     FG: ${check.fg} (${fgHex})`);
             console.error(`     BG: ${check.bg} (${bgHex})`);
             errors++;

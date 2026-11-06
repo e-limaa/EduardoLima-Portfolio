@@ -55,7 +55,7 @@ const CALLOUT_STYLES = {
         border: 'border-destructive/20',
         bg: 'bg-destructive/10',
         icon: XCircle,
-        iconColor: 'text-destructive',
+        iconColor: 'text-danger-text',
         iconBg: 'bg-destructive/15',
         label: 'Danger',
     },
@@ -98,7 +98,7 @@ export const DoDont = ({ type, title, children }: DoDontProps) => {
                 <div
                     className={cn(
                         "flex h-8 w-8 items-center justify-center rounded-full",
-                        isDo ? "bg-primary/10 text-primary" : "bg-destructive/15 text-destructive",
+                        isDo ? "bg-primary/10 text-primary" : "bg-destructive/15 text-danger-text",
                     )}
                 >
                     {isDo ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
@@ -108,7 +108,7 @@ export const DoDont = ({ type, title, children }: DoDontProps) => {
                         {isDo ? "Do" : "Don't"}
                     </Badge>
                     <h4 className={cn("font-bold uppercase tracking-wider text-xs",
-                        isDo ? "text-primary" : "text-destructive"
+                        isDo ? "text-primary" : "text-danger-text"
                     )}>
                         {title || (isDo ? "Do" : "Don't")}
                     </h4>

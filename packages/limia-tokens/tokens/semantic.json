@@ -14,14 +14,15 @@
         "text": {
             "primary": "{color.zinc.900}",
             "secondary": "{color.zinc.700}",
-            "muted": "{color.zinc.500}",
+            "muted": "{color.zinc.600}",
+            "danger": "{color.red.700}",
             "inverse": "{color.white}",
             "on-color": "{color.white}",
             "on-color-subtle": "{color.zinc.900}"
         },
         "border": {
             "default": "{color.zinc.200}",
-            "input": "{color.zinc.200}",
+            "input": "{color.zinc.500}",
             "subtle": "{color.zinc.100}",
             "strong": "{color.zinc.300}",
             "inverse": "{color.zinc.700}"
@@ -111,13 +112,14 @@
             "primary": "{color.zinc.50}",
             "secondary": "{color.zinc.300}",
             "muted": "{color.zinc.400}",
+            "danger": "{color.red.400}",
             "inverse": "{color.zinc.900}",
             "on-color": "{color.white}",
             "on-color-subtle": "{color.zinc.50}"
         },
         "border": {
             "default": "{color.zinc.800}",
-            "input": "{color.zinc.800}",
+            "input": "{color.zinc.500}",
             "subtle": "{color.zinc.900}",
             "strong": "{color.zinc.700}",
             "inverse": "{color.zinc.200}"
@@ -138,7 +140,7 @@
                 "foreground": "{color.zinc.50}"
             },
             "accent": {
-                "background": "{color.brand.500}",
+                "background": "{color.brand.600}",
                 "foreground": "{color.white}"
             },
             "ring": "{color.brand.600}"

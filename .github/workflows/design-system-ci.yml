@@ -1,0 +1,57 @@
+name: Design System CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/**'
+      - 'apps/design-system-docs/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/design-system-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/**'
+      - 'apps/design-system-docs/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/design-system-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: design-system-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install
+        run: npm ci --no-audit --no-fund
+      - name: Build tokens
+        run: npm run build:tokens
+      - name: Generated token files are up to date
+        run: |
+          git diff --exit-code -- packages/limia-tokens/styles packages/limia-tokens/src \
+            || (echo "::error::Run 'npm run build:tokens' and commit the generated files." && exit 1)
+      - name: Token integrity tests
+        run: npm run test:tokens
+      - name: Contrast checks (WCAG)
+        run: npm run test:a11y
+      - name: Build design system
+        run: npm run build:design-system
+      - name: Build docs
+        run: npm run build --workspace @limia/design-system-docs

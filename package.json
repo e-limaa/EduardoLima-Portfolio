@@ -12,8 +12,9 @@
     "build:tokens": "npm run build --workspace @limia/tokens",
     "build:design-system": "npm run build --workspace @limia/design-system",
     "check-parity": "node scripts/check-i18n-parity.js",
+    "test:tokens": "npm run test --workspace @limia/tokens",
     "test:a11y": "npm run test:a11y --workspace @limia/tokens",
-    "check": "npm run check-parity && npm run test:a11y",
+    "check": "npm run check-parity && npm run test:tokens && npm run test:a11y",
     "build": "npm run build:tokens && npm run build:design-system && npm run check-parity && npm run build --workspace @limia/design-system-docs && npm run build --workspace @limia/portfolio",
     "install:workspaces": "npm install"
   },
