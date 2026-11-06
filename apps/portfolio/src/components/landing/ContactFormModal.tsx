@@ -111,7 +111,7 @@ export function ContactFormModal({
             <Input id="phone" name="phone" type="tel" maxLength={40} autoComplete="tel" value={form.phone} onChange={update("phone")} placeholder="(00) 00000-0000" aria-describedby={reachError ? "contact-reach-error" : undefined} aria-invalid={reachError || undefined} className="h-11 bg-input-background" />
           </div>
           {reachError && (
-            <p id="contact-reach-error" role="alert" className="-mt-2 text-sm text-destructive">
+            <p id="contact-reach-error" role="alert" className="-mt-2 text-sm text-danger-text">
               {t("contact.form.reachRequired")}
             </p>
           )}

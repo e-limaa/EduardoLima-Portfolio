@@ -6,7 +6,7 @@
 | **Icon** | 🧪 Beta | 0.9 | Google Material Symbols Outlined wrapper with rounded corners in code and ligature fallback for Figma. |
 | **Input** | ✅ Stable | 1.0 | Accessible focus rings. |
 | **Card** | ✅ Stable | 1.0 | Semantic background/border. |
-| **Badge** | 🧪 Beta | 0.9 | Pending contrast review. |
+| **Badge** | 🧪 Beta | 0.9 | Variant tokens pass `npm run test:a11y` (light and dark). |
 | **Avatar** | 🧪 Beta | 0.9 | Public export for profile and testimonial media. |
 | **Accordion** | 🧪 Beta | 0.9 | Disclosure primitive with semantic borders and motion states. |
 | **Alert Dialog** | 🧪 Beta | 0.9 | Confirmation overlay for destructive or irreversible decisions. |
@@ -33,9 +33,18 @@
 | **Toggle Group** | 🧪 Beta | 0.9 | Structured pressed-state set for single or multiple selection. |
 | **Tooltip** | 🧪 Beta | 0.9 | Compact contextual guidance with action token contrast. |
 | **Dialog** | 🚧 Draft | 0.5 | Migration in progress. |
+| **Textarea** | ⚪ Unreviewed | — | Exported and documented; status not yet assessed. |
+| **Label** | ⚪ Unreviewed | — | Exported and documented; status not yet assessed. |
+| **Form** | ⚪ Unreviewed | — | react-hook-form helpers; error text uses `text-danger-text`. |
+| **Text Reveal** | ⚪ Unreviewed | — | Exported and documented; status not yet assessed. |
+| **Interactive Grid** | ⚪ Unreviewed | — | Exported and documented; status not yet assessed. |
+| **Section** | ⚪ Unreviewed | — | Portfolio layout wrapper; status not yet assessed. |
+| **Section Header** | ⚪ Unreviewed | — | Portfolio section intro; status not yet assessed. |
+| **Project Card** | ⚪ Unreviewed | — | Portfolio case card; status not yet assessed. |
 
 ## Legend
 -   ✅ **Stable:** Safe for production use. API is frozen.
 -   🧪 **Beta:** Feature complete, under testing.
 -   🚧 **Draft:** Experimental. Do not use.
 -   ⛔️ **Deprecated:** Will be removed soon.
+-   ⚪ **Unreviewed:** Exported and documented, but the team has not assigned a lifecycle status yet.

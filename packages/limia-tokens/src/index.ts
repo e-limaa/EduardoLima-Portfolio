@@ -16,6 +16,7 @@ export const tokens = {
   "text.primary": "var(--text-primary)",
   "text.secondary": "var(--text-secondary)",
   "text.muted": "var(--text-muted)",
+  "text.danger": "var(--text-danger)",
   "text.inverse": "var(--text-inverse)",
   "text.on-color": "var(--text-on-color)",
   "text.on-color-subtle": "var(--text-on-color-subtle)",

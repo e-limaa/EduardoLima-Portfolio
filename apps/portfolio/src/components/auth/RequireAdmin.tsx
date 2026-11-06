@@ -82,7 +82,7 @@ const DashboardSignIn = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
                 required
               />
             </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
+            {error && <p className="text-sm text-danger-text">{error}</p>}
             <Button type="submit" disabled={submitting || !email || !password}>
               {submitting ? "Entrando..." : "Entrar"}
             </Button>
@@ -125,7 +125,7 @@ const DashboardUnauthorized = ({ onSignedOut }: { onSignedOut: () => Promise<voi
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-sm text-danger-text">{error}</p>}
           <Button className="w-full" variant="outline" onClick={handleSignOut} disabled={signingOut}>
             {signingOut ? "Saindo..." : "Sair"}
           </Button>

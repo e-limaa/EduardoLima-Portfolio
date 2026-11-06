@@ -42,7 +42,11 @@
 
     --border: var(--border-default);
     --input: var(--border-input);
+    --input-background: transparent;
+    --switch-background: var(--input);
     --ring: var(--action-ring);
+
+    --danger-text: var(--text-danger);
 
     --info: var(--support-info-background);
     --info-foreground: var(--support-info-foreground);
@@ -88,17 +92,7 @@
     --sidebar-ring: var(--sidebar-ring);
 }
 
-/* Responsive Fluid Typography for Mobile (SM) */
-@media (max-width: 767px) {
-    :root {
-        --text-display-2xl: 3rem; /* 48px - Was 72px */
-        --text-display-xl: 2.25rem; /* 36px - Was 60px */
-        --text-display-lg: 1.875rem; /* 30px - Was 48px */
-        --text-heading-xl: 1.5rem; /* 24px - Was 36px */
-        --text-heading-lg: 1.25rem; /* 20px - Was 30px */
-        --text-heading-md: 1.125rem; /* 18px - Was 24px */
-    }
-}
+/* Mobile typography scale is generated from tokens (typography.scaleMobile) in @limia/tokens/styles/tokens.css */
 
 .dark {
     /*
@@ -138,7 +132,11 @@
 
     --border: var(--border-default);
     --input: var(--border-input);
+    --input-background: transparent;
+    --switch-background: var(--input);
     --ring: var(--action-ring);
+
+    --danger-text: var(--text-danger);
 
     --info: var(--support-info-background);
     --info-foreground: var(--support-info-foreground);
@@ -205,6 +203,7 @@
     --color-accent-foreground: var(--accent-foreground);
     --color-destructive: var(--destructive);
     --color-destructive-foreground: var(--destructive-foreground);
+    --color-danger-text: var(--danger-text);
     --color-border: var(--border);
     --color-border-subtle: var(--border-subtle);
     --color-border-strong: var(--border-strong);
@@ -237,10 +236,6 @@
     --color-chart-3: var(--chart-3);
     --color-chart-4: var(--chart-4);
     --color-chart-5: var(--chart-5);
-    --radius-sm: calc(var(--radius) - 4px);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) + 4px);
     --color-sidebar: var(--sidebar);
     --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar-primary: var(--sidebar-primary);
@@ -315,62 +310,62 @@
     /* Typography Utilities */
     .text-display-2xl {
         font-size: var(--text-display-2xl);
-        line-height: 1.1;
-        letter-spacing: -0.02em;
+        line-height: var(--leading-display-2xl);
+        letter-spacing: var(--tracking-display-2xl);
     }
 
     .text-display-xl {
         font-size: var(--text-display-xl);
-        line-height: 1.1;
-        letter-spacing: -0.02em;
+        line-height: var(--leading-display-xl);
+        letter-spacing: var(--tracking-display-xl);
     }
 
     .text-display-lg {
         font-size: var(--text-display-lg);
-        line-height: 1.1;
-        letter-spacing: -0.02em;
+        line-height: var(--leading-display-lg);
+        letter-spacing: var(--tracking-display-lg);
     }
 
     .text-heading-xl {
         font-size: var(--text-heading-xl);
-        line-height: 1.2;
-        letter-spacing: -0.01em;
+        line-height: var(--leading-heading-xl);
+        letter-spacing: var(--tracking-heading-xl);
     }
 
     .text-heading-lg {
         font-size: var(--text-heading-lg);
-        line-height: 1.2;
-        letter-spacing: -0.01em;
+        line-height: var(--leading-heading-lg);
+        letter-spacing: var(--tracking-heading-lg);
     }
 
     .text-heading-md {
         font-size: var(--text-heading-md);
-        line-height: 1.3;
+        line-height: var(--leading-heading-md);
     }
 
     .text-heading-sm {
         font-size: var(--text-heading-sm);
-        line-height: 1.3;
+        line-height: var(--leading-heading-sm);
     }
 
     .text-body-lg {
         font-size: var(--text-body-lg);
-        line-height: 1.5;
+        line-height: var(--leading-body-lg);
     }
 
     .text-body-md {
         font-size: var(--text-body-md);
-        line-height: 1.6;
+        line-height: var(--leading-body-md);
     }
 
     .text-body-sm {
         font-size: var(--text-body-sm);
-        line-height: 1.6;
+        line-height: var(--leading-body-sm);
     }
 
     .text-caption {
         font-size: var(--text-caption);
-        line-height: 1.5;
+        line-height: var(--leading-caption);
     }
 
     /* Custom Scrollbar */

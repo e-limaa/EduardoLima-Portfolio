@@ -59,7 +59,7 @@ Currently, error states are handled by adding `aria-invalid` or specific classes
 
 <ComponentPreview>
   <div className="grid w-full max-w-sm items-center gap-1.5">
-    <Label htmlFor="email-error" className="text-destructive">Email</Label>
+    <Label htmlFor="email-error" className="text-danger-text">Email</Label>
     <Input 
       type="email" 
       id="email-error" 
@@ -67,7 +67,7 @@ Currently, error states are handled by adding `aria-invalid` or specific classes
       className="border-destructive focus-visible:ring-destructive/30"
       defaultValue="invalid-email"
     />
-    <p className="text-xs text-destructive">Please enter a valid email address.</p>
+    <p className="text-xs text-danger-text">Please enter a valid email address.</p>
   </div>
 </ComponentPreview>
 

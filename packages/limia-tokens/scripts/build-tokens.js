@@ -140,11 +140,55 @@ if (primitives.typography && primitives.typography.scale) {
     }
 }
 
+// Add Radius
+if (primitives.radius) {
+    cssContent += `\n    /* Radius */\n`;
+    const flatRadius = flattenObject(primitives.radius);
+    for (const key in flatRadius) {
+        cssContent += `    --radius-${key}: ${flatRadius[key]};\n`;
+    }
+}
+
+// Add Shadows
+if (primitives.shadow) {
+    cssContent += `\n    /* Shadows */\n`;
+    const flatShadow = flattenObject(primitives.shadow);
+    for (const key in flatShadow) {
+        cssContent += `    --shadow-${key}: ${flatShadow[key]};\n`;
+    }
+}
+
+// Add Line Heights and Letter Spacing (per typography role)
+if (primitives.typography && primitives.typography.lineHeight) {
+    cssContent += `\n    /* Line Heights */\n`;
+    const flatLeading = flattenObject(primitives.typography.lineHeight);
+    for (const key in flatLeading) {
+        cssContent += `    --leading-${key}: ${flatLeading[key]};\n`;
+    }
+}
+if (primitives.typography && primitives.typography.letterSpacing) {
+    cssContent += `\n    /* Letter Spacing */\n`;
+    const flatTracking = flattenObject(primitives.typography.letterSpacing);
+    for (const key in flatTracking) {
+        cssContent += `    --tracking-${key}: ${flatTracking[key]};\n`;
+    }
+}
+
 // Add Semantic Light (default)
 const lightTokens = resolvedSemantic.light || {};
 cssContent += `\n    /* Semantic - Light */\n`;
 cssContent += toCssVars(lightTokens, '    ');
 cssContent += `}\n`;
+
+// Add Mobile Typography Scale (below the md breakpoint)
+if (primitives.typography && primitives.typography.scaleMobile) {
+    cssContent += `\n@media (max-width: 767px) {\n    :root {\n        /* Typography Scale - Mobile */\n`;
+    const flatScaleMobile = flattenObject(primitives.typography.scaleMobile);
+    for (const key in flatScaleMobile) {
+        cssContent += `        --text-${key}: ${flatScaleMobile[key]};\n`;
+    }
+    cssContent += `    }\n}\n`;
+}
 
 // Add Semantic Dark
 if (resolvedSemantic.dark) {
