@@ -26,7 +26,7 @@ export function DesignSystemDocsPage({
         resources={doc.resources}
       />
 
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_18rem] xl:items-start">
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_18rem] xl:items-start">
         <div data-doc-body className="min-w-0 space-y-8">
           <React.Suspense
             fallback={

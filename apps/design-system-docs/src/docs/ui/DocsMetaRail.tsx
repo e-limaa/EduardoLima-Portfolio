@@ -45,7 +45,7 @@ export function DocsMetaRail({ doc, className }: DocsMetaRailProps) {
   return (
     <aside
       className={cn(
-        "space-y-6 rounded-2xl border border-border bg-card/30 p-5 xl:sticky xl:top-8",
+        "min-w-0 space-y-6 rounded-2xl border border-border bg-card/30 p-5 xl:sticky xl:top-8",
         className,
       )}
     >

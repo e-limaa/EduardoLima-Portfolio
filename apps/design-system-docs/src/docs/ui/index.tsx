@@ -134,7 +134,7 @@ export const ComponentPreview = ({ children, className }: { children: ReactNode,
 
 // --- Token Table (Simple) ---
 export const TokenTable = ({ tokens }: { tokens: { name: string, value: string, usage: string }[] }) => (
-    <div className="my-6 w-full overflow-y-auto rounded-xl border border-border">
+    <div className="my-6 w-full overflow-x-auto rounded-xl border border-border">
         <table className="w-full text-sm">
             <thead>
                 <tr className="border-b border-border bg-muted/50 text-left">
