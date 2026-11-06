@@ -33,7 +33,23 @@ Thank you for helping evolve our Design System! Follow these guidelines to ensur
 -   **Styles:** Figma effect styles `shadow/*` and text styles `typography/*` mirror `shadow.*`, `typography.scale`, `lineHeight` and `letterSpacing`.
 -   **Code Connect:** templates live in `figma/*.figma.ts` (config: `figma.config.json`). When a component's props change, update its template. Publish with `npx figma connect publish` (requires the Figma library to be published and a Figma access token).
 
-## 4. Versioning
+## 4. Changing a component in Figma
+
+Figma, code and Code Connect must keep describing the same component. A Figma-only change never reaches production: the React component is what ships. CI checks tokens, contrast and builds, but it does **not** detect drift between Figma and code — follow the checklist for your kind of change.
+
+| Change in Figma | What to do |
+| :--- | :--- |
+| **Visual, using existing variables** (e.g. `border/default` → `border/strong`, `spacing/3` → `spacing/4`) | Apply the same change to the component in `src/components/`. Republish the Figma library. Code Connect: nothing. |
+| **Needs a new token** | Add it to `packages/limia-tokens/tokens/*.json` first, mirror it as a Figma variable (same name, `.` → `_`, WEB code syntax `var(--…)`), run `npm run build:tokens` and `npm run check`, then follow the row above. |
+| **Component properties** (new variant value, renamed property, new `Show X` boolean or text property) | Add/adjust the matching React prop. Update `figma/<Name>.figma.ts`: every variant value must be mapped in `getEnum`, and renamed properties break the template until fixed. Republish the library, then run `npx --package=@figma/code-connect@latest figma connect publish`. |
+| **Renamed layers used by templates** (`Icon`, `Icon Start`, `Glyph`, `Trigger`, `Action`, …) | Update the matching `findInstance('…')` in the template and republish Code Connect. |
+| **Component deleted and recreated** | Its node id changes: update the `// url=…node-id=` header of the template and republish Code Connect. Prefer editing the existing component over recreating it. |
+
+After any of the above:
+-   Update the component's documentation sheet in Figma and its `.pt-br.mdx` / `.mdx` page in `apps/design-system-docs`.
+-   Record the change under `## [Unreleased]` in `CHANGELOG.md`, and update `COMPONENT_STATUS.md` if the status changed.
+
+## 5. Versioning
 
 We use **Semantic Versioning**.
 -   **Breaking Change?** Bump MAJOR.
