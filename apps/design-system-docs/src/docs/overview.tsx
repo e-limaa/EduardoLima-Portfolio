@@ -47,7 +47,7 @@ export function DesignSystemOverview() {
         </div>
       </section>
 
-      <section className="grid gap-6 md:grid-cols-3">
+      <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Card className="border-border bg-card/70">
           <CardHeader>
             <CardTitle>{t("docs.overview.card.architecture.title")}</CardTitle>
@@ -84,7 +84,7 @@ export function DesignSystemOverview() {
           </p>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           {groupedDocs.map(({ section, items }) => {
             const Icon = sectionIcons[section as keyof typeof sectionIcons];
 
