@@ -6,7 +6,6 @@ import type {
   DocKind,
   DocPage,
   DocResources,
-  DocSection,
   DocStatus,
 } from "./types";
 

@@ -144,7 +144,7 @@ function buildComponentSections(doc: DocPage, title: string, description: string
   };
 }
 
-function buildFoundationSections(doc: DocPage, title: string, description: string) {
+function buildFoundationSections(doc: DocPage, description: string) {
   return {
     overview: (
       <>
@@ -255,7 +255,7 @@ function buildGovernanceSections(doc: DocPage, description: string) {
   };
 }
 
-function buildGettingStartedSections(doc: DocPage, description: string) {
+function buildGettingStartedSections(description: string) {
   return {
     overview: <p>{description}</p>,
     setup: (
@@ -280,15 +280,12 @@ function buildGettingStartedSections(doc: DocPage, description: string) {
 }
 
 function getSections(doc: DocPage, title: string, description: string) {
-  const builders: Record<
-    DocKind,
-    ReturnType<typeof buildComponentSections>
-  > = {
+  const builders: Record<DocKind, Partial<Record<string, React.ReactNode>>> = {
     component: buildComponentSections(doc, title, description),
-    foundation: buildFoundationSections(doc, title, description),
+    foundation: buildFoundationSections(doc, description),
     pattern: buildPatternSections(doc, description),
     governance: buildGovernanceSections(doc, description),
-    "getting-started": buildGettingStartedSections(doc, description),
+    "getting-started": buildGettingStartedSections(description),
   };
 
   return builders[doc.kind];
@@ -333,7 +330,7 @@ export function DocsGeneratedChapters({ doc }: { doc: DocPage }) {
   return (
     <>
       {missing.map((chapter) => {
-        const content = sections[chapter.id as keyof typeof sections];
+        const content = sections[chapter.id];
         if (!content) return null;
 
         return (
