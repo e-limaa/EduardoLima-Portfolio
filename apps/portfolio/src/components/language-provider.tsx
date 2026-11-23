@@ -171,6 +171,27 @@ const translations: Record<Language, Record<string, string>> = {
         "cta.button.email": "Get in touch",
         "cta.button.linkedin": "Connect on LinkedIn",
 
+        // Landing Page: Studio Redesign Micro-copy
+        "brands.eyebrow": "Brands & products shaped along the way",
+        "projects.featured": "Featured case",
+        "projects.emptyCta": "Ask about recent work",
+        "projects.error": "Projects are temporarily unavailable right now. Reach out and I'll gladly walk you through recent case studies.",
+        "services.studioNote": "From early discovery to scalable tokens and production React interfaces.",
+        "services.design.tags": "Discovery,Flows & UI",
+        "services.system.tags": "Tokens,Figma & Docs",
+        "services.consulting.tags": "UX Audit,Conversion",
+        "services.dev.tags": "React & Tailwind,Prototypes",
+        "story.prev": "Previous phase",
+        "story.next": "Next phase",
+        "stack.category.design": "Interface",
+        "stack.category.ai": "AI & Agents",
+        "stack.category.systems": "Architecture",
+        "stack.category.engineering": "Engineering",
+        "stack.category.workflows": "Workflows",
+        "stack.category.visual": "Visual Craft",
+        "cta.availability": "Available for select projects & collaborations",
+        "cta.footer.builtWith": "Crafted with Limia DS · React & Tailwind",
+
         // --- PHASE 2 COMPONENTS ---
         // WelcomeScreen
         "welcome.subtitle": "Transforming complexity into simple and intelligent experiences.",
@@ -454,6 +475,27 @@ const translations: Record<Language, Record<string, string>> = {
         "cta.description": "Sempre aberto a novos projetos, colaborações ou um bom papo sobre design e tecnologia.",
         "cta.button.email": "Entrar em contato",
         "cta.button.linkedin": "Conectar no LinkedIn",
+
+        // Landing Page: Studio Redesign Micro-copy
+        "brands.eyebrow": "Marcas e produtos que ajudei a construir",
+        "projects.featured": "Case em destaque",
+        "projects.emptyCta": "Conversar sobre cases recentes",
+        "projects.error": "Os projetos estão temporariamente indisponíveis no momento. Fale comigo e terei prazer em apresentar meus cases recentes.",
+        "services.studioNote": "Da descoberta inicial até tokens escaláveis e interfaces React em produção.",
+        "services.design.tags": "Descoberta,Fluxos & UI",
+        "services.system.tags": "Tokens,Figma & Docs",
+        "services.consulting.tags": "Auditoria UX,Conversão",
+        "services.dev.tags": "React & Tailwind,Protótipos",
+        "story.prev": "Fase anterior",
+        "story.next": "Próxima fase",
+        "stack.category.design": "Interface",
+        "stack.category.ai": "IA & Agentes",
+        "stack.category.systems": "Arquitetura",
+        "stack.category.engineering": "Engenharia",
+        "stack.category.workflows": "Workflows",
+        "stack.category.visual": "Craft Visual",
+        "cta.availability": "Disponível para projetos selecionados e colaborações",
+        "cta.footer.builtWith": "Feito com Limia DS · React & Tailwind",
 
         // --- PHASE 2 COMPONENTS ---
         // WelcomeScreen

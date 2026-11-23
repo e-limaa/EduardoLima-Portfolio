@@ -127,3 +127,110 @@
   opacity: calc(0.22 + (var(--chat-border-glow-opacity) * 0.4));
   z-index: 0;
 }
+
+.studio-glow-surface {
+  --studio-x: 50%;
+  --studio-y: 0%;
+  --studio-active: 0;
+  position: relative;
+  isolation: isolate;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--border-default) 80%, transparent);
+}
+
+.studio-glow-surface > :not([data-studio-bg]) {
+  position: relative;
+  z-index: 1;
+}
+
+.studio-glow-surface::before,
+.studio-glow-surface::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.studio-glow-surface::before {
+  padding: 1px;
+  background:
+    radial-gradient(
+      260px circle at var(--studio-x) var(--studio-y),
+      color-mix(in srgb, white 24%, var(--action-primary-hover)) 0%,
+      color-mix(in srgb, var(--action-primary-background) 92%, transparent) 24%,
+      color-mix(in srgb, var(--action-primary-background) 34%, transparent) 48%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--border-strong) 85%, transparent) 0%,
+      color-mix(in srgb, var(--border-default) 55%, transparent) 100%
+    );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 2;
+  opacity: calc(0.2 + var(--studio-active) * 0.8);
+  transition: opacity 240ms ease;
+}
+
+.studio-glow-surface::after {
+  background: radial-gradient(
+    320px circle at var(--studio-x) var(--studio-y),
+    color-mix(in srgb, var(--action-primary-background) 12%, transparent) 0%,
+    transparent 72%
+  );
+  opacity: calc(var(--studio-active) * 1);
+  transition: opacity 280ms ease;
+  z-index: 0;
+}
+
+:root:not(.dark) .studio-glow-surface::after {
+  background: radial-gradient(
+    320px circle at var(--studio-x) var(--studio-y),
+    color-mix(in srgb, var(--action-primary-background) 8%, transparent) 0%,
+    transparent 72%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-glow-surface::before {
+    opacity: 0.2;
+  }
+
+  .studio-glow-surface::after {
+    opacity: 0;
+  }
+}
+
+.studio-marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+@keyframes studio-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.studio-marquee-track {
+  animation: studio-marquee 34s linear infinite;
+  will-change: transform;
+}
+
+.studio-marquee-wrap:hover .studio-marquee-track,
+.studio-marquee-wrap:focus-within .studio-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-marquee-track {
+    animation: none;
+  }
+}
