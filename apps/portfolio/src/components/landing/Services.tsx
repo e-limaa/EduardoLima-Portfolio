@@ -1,69 +1,181 @@
-import { Layout, Component, Search, Code2, ArrowRight } from "lucide-react";
-import { SectionHeader, Section } from "@limia/design-system";
+import { motion, useReducedMotion } from "motion/react";
+import { ArrowRight, ArrowUpRight, Code2, Component, Layout, Search } from "lucide-react";
+import { Button, Section } from "@limia/design-system";
 import { useLanguage } from "../language-provider";
 import { ContactFormModal } from "./ContactFormModal";
+import { StudioSectionHeader } from "./StudioSectionHeader";
+import { useStudioGlow } from "./useStudioGlow";
 
 const services = [
   {
+    index: "01",
     titleKey: "services.design.title",
     descriptionKey: "services.design.desc",
+    tagsKey: "services.design.tags",
     icon: Layout,
-    hoverColorClass: "group-hover:text-primary",
   },
   {
+    index: "02",
     titleKey: "services.system.title",
     descriptionKey: "services.system.desc",
+    tagsKey: "services.system.tags",
     icon: Component,
-    hoverColorClass: "group-hover:text-primary",
   },
   {
+    index: "03",
     titleKey: "services.consulting.title",
     descriptionKey: "services.consulting.desc",
+    tagsKey: "services.consulting.tags",
     icon: Search,
-    hoverColorClass: "group-hover:text-primary",
   },
   {
+    index: "04",
     titleKey: "services.dev.title",
     descriptionKey: "services.dev.desc",
+    tagsKey: "services.dev.tags",
     icon: Code2,
-    hoverColorClass: "group-hover:text-primary",
   },
 ];
 
-export const Services = () => {
+function ServiceCard({
+  service,
+  cardIndex,
+}: {
+  service: (typeof services)[number];
+  cardIndex: number;
+}) {
   const { t } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
+  const glow = useStudioGlow();
+  const serviceTitle = t(service.titleKey);
+  const tags = t(service.tagsKey)
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
 
   return (
-    <Section id="services" className="py-16 md:py-24">
-      <SectionHeader
-        title={t("services.title")}
-        description={t("services.description")}
-        index="02"
-        label={t("services.label")}
-        align="left"
+    <motion.li
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, delay: cardIndex * 0.08 }}
+      onPointerMove={glow.onPointerMove}
+      onPointerLeave={glow.onPointerLeave}
+      className="studio-glow-surface group flex h-full min-h-[300px] flex-col justify-between rounded-3xl bg-layer-1/80 p-7 shadow-sm backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 md:p-8"
+    >
+      <div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex h-13 w-13 items-center justify-center rounded-2xl border border-border/80 bg-layer-2/90 text-primary transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:shadow-[0_0_24px_color-mix(in_oklab,var(--action-primary-background)_28%,transparent)]">
+            <service.icon aria-hidden="true" className="h-6 w-6" />
+          </div>
+          <span className="font-mono text-xs text-muted-foreground/80">
+            {service.index}
+          </span>
+        </div>
+
+        <h3 className="mt-7 text-heading-md font-semibold tracking-tight text-foreground">
+          {serviceTitle}
+        </h3>
+        <p className="mt-3 text-body-md leading-relaxed text-pretty text-muted-foreground">
+          {t(service.descriptionKey)}
+        </p>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-border/80 bg-layer-2/70 px-3 py-1 font-mono text-[11px] text-muted-foreground"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-7 border-t border-border/60 pt-5">
+        <ContactFormModal
+          initialMessage={t("services.prefill").replace("{service}", serviceTitle)}
+        >
+          <button
+            type="button"
+            className="group/btn flex min-h-11 w-full items-center justify-between gap-3 rounded-xl text-left text-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            aria-label={`${t("services.itemCta")}: ${serviceTitle}`}
+          >
+            <span>{t("services.itemCta")}</span>
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-layer-2 text-foreground transition-all duration-300 group-hover/btn:border-primary group-hover/btn:bg-primary group-hover/btn:text-primary-foreground">
+              <ArrowRight
+                aria-hidden="true"
+                className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-0.5"
+              />
+            </span>
+          </button>
+        </ContactFormModal>
+      </div>
+    </motion.li>
+  );
+}
+
+export const Services = () => {
+  const { t } = useLanguage();
+  const noteGlow = useStudioGlow();
+
+  return (
+    <Section id="services" className="scroll-mt-12 py-20 md:py-28">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-16 left-[6%] h-[380px] w-[380px] rounded-full bg-primary/10 blur-[140px]"
       />
 
-      <ul className="mt-12 grid list-none grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border bg-border p-0 shadow-sm md:grid-cols-2">
-        {services.map((service) => (
-          <li key={service.titleKey} className="group flex flex-col bg-card/70 p-8 transition-colors duration-500 hover:bg-card md:p-12">
-            <service.icon aria-hidden="true" className={`w-8 h-8 text-muted-foreground ${service.hoverColorClass} transition-colors duration-500 mb-6`} />
-            <h3 className="text-heading-md font-bold text-foreground mb-4">{t(service.titleKey)}</h3>
-            <p className="text-body-md text-muted-foreground leading-relaxed text-pretty">{t(service.descriptionKey)}</p>
-            <ContactFormModal initialMessage={t("services.prefill").replace("{service}", t(service.titleKey))}>
-              <button
-                type="button"
-                className="mt-8 inline-flex min-h-11 items-center gap-2 self-start rounded-full text-sm font-medium text-primary underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                aria-label={`${t("services.itemCta")}: ${t(service.titleKey)}`}
-              >
-                {t("services.itemCta")}
-                <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+        <div className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
+          <StudioSectionHeader
+            align="stack"
+            title={t("services.title")}
+            description={t("services.description")}
+            index="02"
+            label={t("services.label")}
+            className="mb-8"
+          />
+
+          <div
+            onPointerMove={noteGlow.onPointerMove}
+            onPointerLeave={noteGlow.onPointerLeave}
+            className="studio-glow-surface rounded-3xl bg-surface-glass p-6 shadow-lg sm:p-7"
+          >
+            <div className="flex items-start gap-3">
+              <span
+                aria-hidden="true"
+                className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary shadow-[0_0_12px_var(--action-primary-background)]"
+              />
+              <p className="text-body-sm leading-relaxed text-pretty text-muted-foreground">
+                {t("services.studioNote")}
+              </p>
+            </div>
+
+            <ContactFormModal>
+              <Button size="lg" className="group mt-5 w-full justify-between">
+                <span>{t("services.cta")}</span>
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </Button>
             </ContactFormModal>
-          </li>
-        ))}
-      </ul>
+          </div>
+        </div>
+
+        <div className="lg:col-span-8">
+          <ul className="m-0 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-2">
+            {services.map((service, cardIndex) => (
+              <ServiceCard
+                key={service.titleKey}
+                service={service}
+                cardIndex={cardIndex}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
     </Section>
   );
 };
-
-
