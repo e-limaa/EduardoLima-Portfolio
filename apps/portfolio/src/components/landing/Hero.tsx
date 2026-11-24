@@ -2,7 +2,7 @@ import React from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@limia/design-system-src/components/button";
 import { InteractiveGrid } from "@limia/design-system-src/components/interactive-grid";
-import { TrueFocus } from "@limia/design-system-src/components/true-focus";
+import { TrueFocus } from "./effects/true-focus";
 import { Badge } from "@limia/design-system-src/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const LIQUID_ETHER_COLORS = [
 ];
 
 const LiquidEtherBackground = React.lazy(() =>
-  import("@limia/design-system-src/components/liquid-ether").then((module) => ({
+  import("./effects/liquid-ether").then((module) => ({
     default: module.LiquidEther,
   }))
 );
