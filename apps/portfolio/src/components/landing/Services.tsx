@@ -61,11 +61,11 @@ function ServiceCard({
       transition={{ duration: 0.45, delay: cardIndex * 0.08 }}
       onPointerMove={glow.onPointerMove}
       onPointerLeave={glow.onPointerLeave}
-      className="studio-glow-surface group flex h-full min-h-[300px] flex-col justify-between rounded-3xl bg-layer-1/80 p-7 shadow-sm backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 md:p-8"
+      className="studio-glow-surface group flex h-full flex-col justify-between rounded-3xl bg-layer-1/80 p-8 shadow-sm backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 lg:p-10"
     >
       <div>
         <div className="flex items-center justify-between gap-4">
-          <div className="flex h-13 w-13 items-center justify-center rounded-2xl border border-border/80 bg-layer-2/90 text-primary transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:shadow-[0_0_24px_color-mix(in_oklab,var(--action-primary-background)_28%,transparent)]">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-border/80 bg-layer-2/90 text-primary transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:shadow-[0_0_24px_color-mix(in_oklab,var(--action-primary-background)_28%,transparent)]">
             <service.icon aria-hidden="true" className="h-6 w-6" />
           </div>
           <span className="font-mono text-xs text-muted-foreground/80">
@@ -73,14 +73,14 @@ function ServiceCard({
           </span>
         </div>
 
-        <h3 className="mt-7 text-heading-md font-semibold tracking-tight text-foreground">
+        <h3 className="mt-8 text-heading-md md:text-heading-lg font-semibold tracking-tight text-foreground">
           {serviceTitle}
         </h3>
-        <p className="mt-3 text-body-md leading-relaxed text-pretty text-muted-foreground">
+        <p className="mt-3 max-w-xl text-body-md leading-relaxed text-pretty text-muted-foreground">
           {t(service.descriptionKey)}
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-6 flex flex-wrap gap-2">
           {tags.map((tag) => (
             <span
               key={tag}
@@ -92,7 +92,7 @@ function ServiceCard({
         </div>
       </div>
 
-      <div className="mt-7 border-t border-border/60 pt-5">
+      <div className="mt-8 border-t border-border/60 pt-5">
         <ContactFormModal
           initialMessage={t("services.prefill").replace("{service}", serviceTitle)}
         >
@@ -117,7 +117,6 @@ function ServiceCard({
 
 export const Services = () => {
   const { t } = useLanguage();
-  const noteGlow = useStudioGlow();
 
   return (
     <Section id="services" className="scroll-mt-12 py-20 md:py-28">
@@ -126,56 +125,32 @@ export const Services = () => {
         className="pointer-events-none absolute -top-16 left-[6%] h-[380px] w-[380px] rounded-full bg-primary/10 blur-[140px]"
       />
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
-          <StudioSectionHeader
-            align="stack"
-            title={t("services.title")}
-            description={t("services.description")}
-            index="02"
-            label={t("services.label")}
-            className="mb-8"
+      <StudioSectionHeader
+        title={t("services.title")}
+        description={t("services.description")}
+        index="02"
+        label={t("services.label")}
+      >
+        <ContactFormModal>
+          <Button size="lg" className="group gap-2">
+            <span>{t("services.cta")}</span>
+            <ArrowUpRight
+              aria-hidden="true"
+              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </Button>
+        </ContactFormModal>
+      </StudioSectionHeader>
+
+      <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-2">
+        {services.map((service, cardIndex) => (
+          <ServiceCard
+            key={service.titleKey}
+            service={service}
+            cardIndex={cardIndex}
           />
-
-          <div
-            onPointerMove={noteGlow.onPointerMove}
-            onPointerLeave={noteGlow.onPointerLeave}
-            className="studio-glow-surface rounded-3xl bg-surface-glass p-6 shadow-lg sm:p-7"
-          >
-            <div className="flex items-start gap-3">
-              <span
-                aria-hidden="true"
-                className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary shadow-[0_0_12px_var(--action-primary-background)]"
-              />
-              <p className="text-body-sm leading-relaxed text-pretty text-muted-foreground">
-                {t("services.studioNote")}
-              </p>
-            </div>
-
-            <ContactFormModal>
-              <Button size="lg" className="group mt-5 w-full justify-between">
-                <span>{t("services.cta")}</span>
-                <ArrowUpRight
-                  aria-hidden="true"
-                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </Button>
-            </ContactFormModal>
-          </div>
-        </div>
-
-        <div className="lg:col-span-8">
-          <ul className="m-0 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-2">
-            {services.map((service, cardIndex) => (
-              <ServiceCard
-                key={service.titleKey}
-                service={service}
-                cardIndex={cardIndex}
-              />
-            ))}
-          </ul>
-        </div>
-      </div>
+        ))}
+      </ul>
     </Section>
   );
 };
