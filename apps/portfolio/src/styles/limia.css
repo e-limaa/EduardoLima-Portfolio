@@ -234,3 +234,10 @@
     animation: none;
   }
 }
+
+body:has(.project-quick-view) [data-slot="dialog-overlay"] {
+  background-color: rgb(0 0 0 / 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  z-index: 70;
+}

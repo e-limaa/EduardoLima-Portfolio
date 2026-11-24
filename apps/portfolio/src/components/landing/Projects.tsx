@@ -1,75 +1,33 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, FolderKanban, Sparkles } from "lucide-react";
+import { ArrowUpRight, Eye, FolderKanban, Layers } from "lucide-react";
 import { Button, Section, cn } from "@limia/design-system";
 import { getImageSrcSet, getImageUrl, useProjects } from "../../lib/project-service";
 import type { Project } from "../../lib/sanity-types";
 import { useLanguage } from "../language-provider";
 import { ContactFormModal } from "./ContactFormModal";
+import {
+  ProjectQuickViewModal,
+  extractProjectGalleryImages,
+} from "./ProjectQuickViewModal";
 import { StudioSectionHeader } from "./StudioSectionHeader";
 import { useStudioGlow } from "./useStudioGlow";
 
 const FALLBACK_IMAGE_SRC =
-  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDkwOTBiIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTcxNzJiIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9InVybCgjZykiLz48L3N2Zz4=";
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDkwOTBiIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTcxNzJiIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjUwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9InVybCgjZykiLz48L3N2Zz4=";
 
-function getProjectGridLayout(count: number, index: number) {
-  let spanClass = "lg:col-span-6";
-
-  if (count === 1) {
-    spanClass = "md:col-span-2 lg:col-span-12";
-  } else if (count === 2) {
-    spanClass = index === 0 ? "lg:col-span-7" : "lg:col-span-5";
-  } else if (count === 3) {
-    spanClass =
-      index === 0
-        ? "lg:col-span-7"
-        : index === 1
-          ? "lg:col-span-5"
-          : "md:col-span-2 lg:col-span-12";
-  } else if (count === 4) {
-    spanClass = index === 0 || index === 3 ? "lg:col-span-7" : "lg:col-span-5";
-  } else if (count === 5) {
-    spanClass =
-      index === 0
-        ? "lg:col-span-7"
-        : index === 1
-          ? "lg:col-span-5"
-          : index === 4
-            ? "md:col-span-2 lg:col-span-4"
-            : "lg:col-span-4";
-  } else {
-    spanClass =
-      index === 0 || index === 3
-        ? "lg:col-span-7"
-        : index === 1 || index === 2
-          ? "lg:col-span-5"
-          : "lg:col-span-6";
-  }
-
-  const isLead =
-    count === 1 ||
-    (count === 3 && index === 2) ||
-    index === 0 ||
-    (count >= 4 && index === 3);
-
-  return { spanClass, isLead };
-}
-
-function StudioProjectCard({
+function ProjectGalleryCard({
   project,
   index,
-  isLead,
-  ctaLabel,
-  featuredLabel,
+  onPreview,
   onSelect,
 }: {
   project: Project;
   index: number;
-  isLead: boolean;
-  ctaLabel: string;
-  featuredLabel: string;
+  onPreview: () => void;
   onSelect?: (slug: string) => void;
 }) {
+  const { t } = useLanguage();
   const shouldReduceMotion = useReducedMotion();
   const glow = useStudioGlow();
   const resolvedImage = getImageUrl(project.thumbnail || project.mainImage, 1080);
@@ -82,112 +40,129 @@ function StudioProjectCard({
     setUseFallback(!resolvedImage);
   }, [resolvedImage]);
 
+  const screenCount = extractProjectGalleryImages(project).length;
+
   return (
     <motion.article
       initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
       whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.5, delay: Math.min(index, 3) * 0.08 }}
+      transition={{ duration: 0.45, delay: Math.min(index, 2) * 0.08 }}
       onPointerMove={glow.onPointerMove}
       onPointerLeave={glow.onPointerLeave}
-      className="studio-glow-surface group h-full overflow-hidden rounded-[1.75rem] bg-layer-1/85 shadow-xl transition-transform duration-300 hover:-translate-y-1"
+      className="studio-glow-surface group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-layer-1/85 shadow-lg backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1.5"
     >
       <button
         type="button"
-        onClick={() => onSelect?.(project.slug.current)}
-        aria-label={`${ctaLabel}: ${project.title}`}
-        className={cn(
-          "relative flex h-full w-full flex-col justify-between overflow-hidden text-left focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/60",
-          isLead ? "min-h-[420px] md:min-h-[480px] lg:min-h-[520px]" : "min-h-[420px] md:min-h-[480px]"
-        )}
+        onClick={onPreview}
+        aria-label={`${t("projects.quickView")}: ${project.title}`}
+        className="relative block aspect-[5/6] w-full overflow-hidden border-b border-border/60 bg-layer-2 text-left focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-ring/60"
       >
-        <div aria-hidden="true" className="absolute inset-0 overflow-hidden bg-zinc-950">
-          <img
-            src={imgSrc}
-            srcSet={!useFallback ? resolvedSrcSet : undefined}
-            sizes={
-              isLead
-                ? "(min-width: 1024px) 58vw, 100vw"
-                : "(min-width: 1024px) 42vw, (min-width: 768px) 50vw, 100vw"
-            }
-            alt=""
-            loading="lazy"
-            decoding="async"
-            onError={() => {
-              setUseFallback(true);
-              setImgSrc(FALLBACK_IMAGE_SRC);
-            }}
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/20" />
-        </div>
+        <img
+          src={imgSrc}
+          srcSet={!useFallback ? resolvedSrcSet : undefined}
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+          alt={project.title}
+          loading="lazy"
+          decoding="async"
+          onError={() => {
+            setUseFallback(true);
+            setImgSrc(FALLBACK_IMAGE_SRC);
+          }}
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
 
-        <div className="relative z-10 flex w-full flex-wrap items-center justify-between gap-2 p-6 md:p-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded-full border border-white/15 bg-black/55 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-white backdrop-blur-md">
-              {project.category}
-            </span>
-            {index === 0 && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/85 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-primary-foreground backdrop-blur-md">
-                <Sparkles aria-hidden="true" className="h-3 w-3" />
-                {featuredLabel}
-              </span>
-            )}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 bottom-4 inline-flex translate-y-1.5 items-center gap-1.5 rounded-full border border-white/15 bg-black/75 px-3.5 py-2 text-xs font-medium text-white opacity-0 shadow-lg backdrop-blur-md transition-all duration-300 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
+        >
+          <Eye className="h-3.5 w-3.5" />
+          <span>{t("projects.quickView")}</span>
+        </span>
+      </button>
+
+      <div className="flex flex-1 flex-col justify-between gap-4 p-5 xl:p-6">
+        <div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="min-w-0 truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              <span className="font-semibold text-primary">{`0${index + 1}`}</span>
+              {project.client || project.category ? (
+                <>
+                  <span aria-hidden="true" className="mx-1.5 text-border-strong">
+                    ·
+                  </span>
+                  <span>{project.client || project.category}</span>
+                </>
+              ) : null}
+            </p>
+
+            <div className="flex shrink-0 items-center gap-2">
+              {project.year && (
+                <span className="font-mono text-[11px] text-muted-foreground">
+                  {project.year}
+                </span>
+              )}
+              {screenCount > 0 && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-border/70 bg-layer-2/80 px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground">
+                  <Layers aria-hidden="true" className="h-3 w-3" />
+                  <span>
+                    {t("projects.screensCount").replace("{count}", String(screenCount))}
+                  </span>
+                </span>
+              )}
+            </div>
           </div>
 
-          {project.year && (
-            <span className="inline-flex items-center rounded-full border border-white/15 bg-black/55 px-3 py-1 font-mono text-xs text-white/85 backdrop-blur-md">
-              {project.year}
-            </span>
-          )}
-        </div>
-
-        <div className="relative z-10 mt-auto w-full p-6 md:p-8">
-          {project.client && (
-            <p className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-white/70">
-              {project.client}
-            </p>
-          )}
-
-          <h3 className="text-heading-md md:text-heading-lg font-bold tracking-tight text-white">
+          <h3 className="mt-2.5 text-heading-sm md:text-heading-md font-bold leading-snug tracking-tight text-foreground">
             {project.title}
           </h3>
 
-          {isLead && project.description && (
-            <p className="mt-2.5 line-clamp-2 max-w-xl text-body-sm md:text-body-md leading-relaxed text-white/75">
-              {project.description}
-            </p>
-          )}
-
-          <div className="mt-5 flex items-center justify-between gap-4 border-t border-white/15 pt-4">
-            {project.metric ? (
-              <span className="min-w-0 truncate rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 font-mono text-xs text-white backdrop-blur-md md:text-sm">
+          {project.metric && (
+            <div className="mt-3 flex items-center gap-2 rounded-xl border border-border/70 bg-layer-2/75 px-3 py-2 text-xs">
+              <span
+                aria-hidden="true"
+                className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary shadow-[0_0_8px_var(--action-primary-background)]"
+              />
+              <span className="truncate font-mono text-foreground/90">
                 {project.metric}
               </span>
-            ) : (
-              <span />
-            )}
-
-            <span className="ml-auto inline-flex shrink-0 items-center gap-3 text-sm font-medium text-white">
-              <span className="hidden whitespace-nowrap font-mono text-xs uppercase tracking-wider text-white/85 sm:inline">
-                {ctaLabel}
-              </span>
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/15 text-white transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
-                <ArrowUpRight
-                  aria-hidden="true"
-                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </span>
-            </span>
-          </div>
+            </div>
+          )}
         </div>
-      </button>
+
+        <div className="mt-auto grid grid-cols-2 gap-2.5 border-t border-border/60 pt-4">
+          <Button
+            type="button"
+            variant="outline"
+            size="default"
+            onClick={onPreview}
+            className="w-full justify-center gap-1.5 px-3 text-xs xl:text-sm"
+          >
+            <Eye aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+            <span>{t("projects.quickView")}</span>
+          </Button>
+
+          <Button
+            type="button"
+            size="default"
+            onClick={() => onSelect?.(project.slug.current)}
+            className="group/case w-full justify-center gap-1.5 px-3 text-xs xl:text-sm"
+          >
+            <span>{t("projects.viewCase")}</span>
+            <ArrowUpRight
+              aria-hidden="true"
+              className="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover/case:translate-x-0.5 group-hover/case:-translate-y-0.5"
+            />
+          </Button>
+        </div>
+      </div>
     </motion.article>
   );
 }
 
 export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => void }) => {
   const [activeTab, setActiveTab] = useState<"ui" | "study">("ui");
+  const [quickViewIndex, setQuickViewIndex] = useState<number | null>(null);
   const [shouldLoadProjects, setShouldLoadProjects] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const { language, t } = useLanguage();
@@ -227,6 +202,10 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
   });
 
   const featuredProjects = filteredProjects.slice(0, 6);
+
+  useEffect(() => {
+    setQuickViewIndex(null);
+  }, [currentTab]);
 
   return (
     <div id="projects" ref={sectionRef} className="scroll-mt-12">
@@ -294,31 +273,24 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
 
             <ul
               aria-hidden="true"
-              className="m-0 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-2 lg:grid-cols-12"
+              className="m-0 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-2 lg:grid-cols-3"
             >
-              {[
-                "lg:col-span-7 min-h-[420px] md:min-h-[480px] lg:min-h-[520px]",
-                "lg:col-span-5 min-h-[420px] md:min-h-[480px]",
-                "lg:col-span-5 min-h-[420px] md:min-h-[480px]",
-                "lg:col-span-7 min-h-[420px] md:min-h-[480px] lg:min-h-[520px]",
-              ].map((skeletonClass, index) => (
+              {Array.from({ length: 3 }).map((_, index) => (
                 <li
                   key={index}
-                  className={cn(
-                    "flex flex-col justify-between overflow-hidden rounded-[1.75rem] border border-border/70 bg-layer-1/60 p-6 backdrop-blur-xl md:p-8",
-                    skeletonClass
-                  )}
+                  className="flex flex-col overflow-hidden rounded-[1.75rem] border border-border/70 bg-layer-1/60 backdrop-blur-xl"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="h-7 w-28 rounded-full bg-muted/60" />
-                    <div className="h-7 w-14 rounded-full bg-muted/45" />
-                  </div>
-                  <div className="space-y-3 pt-12">
-                    <div className="h-3 w-24 rounded-full bg-muted/50" />
-                    <div className="h-8 w-3/4 rounded-full bg-muted/60" />
-                    <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-4">
-                      <div className="h-7 w-32 rounded-full bg-muted/45" />
-                      <div className="h-10 w-10 rounded-full bg-muted/50" />
+                  <div className="aspect-[5/6] w-full bg-muted/40" />
+                  <div className="flex flex-1 flex-col gap-4 p-5 xl:p-6">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="h-3 w-28 rounded-full bg-muted/50" />
+                      <div className="h-5 w-20 rounded-full bg-muted/45" />
+                    </div>
+                    <div className="h-6 w-3/4 rounded-full bg-muted/60" />
+                    <div className="h-8 w-full rounded-xl bg-muted/40" />
+                    <div className="grid grid-cols-2 gap-2.5 border-t border-border/50 pt-4">
+                      <div className="h-10 rounded-full bg-muted/45" />
+                      <div className="h-10 rounded-full bg-muted/55" />
                     </div>
                   </div>
                 </li>
@@ -350,28 +322,28 @@ export const Projects = ({ onProjectClick }: { onProjectClick?: (id: string) => 
             </div>
           </div>
         ) : (
-          <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-2 lg:grid-cols-12">
-            {featuredProjects.map((project, index) => {
-              const { spanClass, isLead } = getProjectGridLayout(
-                featuredProjects.length,
-                index
-              );
-              return (
-                <li key={project._id} className={spanClass}>
-                  <StudioProjectCard
-                    project={project}
-                    index={index}
-                    isLead={isLead}
-                    ctaLabel={t("projects.viewCase")}
-                    featuredLabel={t("projects.featured")}
-                    onSelect={onProjectClick}
-                  />
-                </li>
-              );
-            })}
+          <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-2 lg:grid-cols-3">
+            {featuredProjects.map((project, index) => (
+              <li key={project._id}>
+                <ProjectGalleryCard
+                  project={project}
+                  index={index}
+                  onPreview={() => setQuickViewIndex(index)}
+                  onSelect={onProjectClick}
+                />
+              </li>
+            ))}
           </ul>
         )}
       </Section>
+
+      <ProjectQuickViewModal
+        projects={featuredProjects}
+        activeProjectIndex={quickViewIndex}
+        onClose={() => setQuickViewIndex(null)}
+        onSelectProjectIndex={setQuickViewIndex}
+        onOpenFullCase={(slug) => onProjectClick?.(slug)}
+      />
     </div>
   );
 };
